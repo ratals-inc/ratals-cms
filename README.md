@@ -144,6 +144,7 @@ Under the Ratals Business License:
 
 View full license details:
 https://www.ratals.com/license/
+https://www.ratals.com/business-license/
 
 ---
 
