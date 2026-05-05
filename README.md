@@ -155,6 +155,7 @@ View full license details:
 - Documentation: https://www.ratals.com/tutorials/
 - License Keys: https://www.ratals.com/account/license-keys/
 - Notices: https://www.ratals.com/notices/
+- Credits & Dependencies: https://www.ratals.com/credits/
 - Pricing: https://www.ratals.com/pricing/
 
 ---
