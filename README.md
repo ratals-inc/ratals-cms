@@ -29,7 +29,7 @@ Instead of stitching together multiple platforms, Ratals allows you to manage yo
 - Purchase orders and receiving workflows
 
 ### Platform & Performance
-- Self-hosted
+- Self-hosted with One-Click internal updates
 - Optimized for high performance and low latency
 - Works with Nginx, Apache, or LiteSpeed
 - Designed for scalability
@@ -39,6 +39,16 @@ Instead of stitching together multiple platforms, Ratals allows you to manage yo
 - Hook system for safe customization
 - Clean codebase and file structure
 - Full control over database and logic
+
+---
+
+## Effortless Maintenance
+
+Ratals includes a native, smart update system built directly into the core.
+- **Smart License Updates** - The system identifies your active licenses to deliver the appropriate updates. The CMS core remains up-to-date for everyone, while Business modules (ERP, eCommerce, AI) are updated for active license holders.
+- **Real-time Notifications** - Receive update alerts and security messages directly in your admin dashboard.
+- **Environment Safety Checks** - To ensure total compatibility, the system automatically verifies your PHP and MySQL versions before the update button is even displayed.
+- **Data Integrity** - Updates are designed to swap system files and intelligently manage database schema changes—adding or updating core columns while  **preserving your custom columns**, configurations, and media.
 
 ---
 
@@ -113,10 +123,10 @@ _Add screenshots here:_
 
 Ratals is built on a few core principles:
 
-- **Data & Platform Sovereignty** - You own your server and your data. Unlike SaaS, your website stays online even if you choose not to renew a business license.
-- **Developer Freedom** – No restrictions on customization or deployment
-- **All-in-One System** – CMS, commerce, and operations in one platform
-- **Performance Matters** – Fast load times and efficient backend processing
+- **Data & Platform Sovereignty** - You own your server and your data. Unlike SaaS, your website stays online even if you choose not to renew a business license. Our internal update system ensures your platform stays modern and secure without ever losing control of your infrastructure.
+- **Developer Freedom** – No restrictions on customization or deployment.
+- **All-in-One System** – CMS, commerce, and operations in one platform.
+- **Performance Matters** – Fast load times and efficient backend processing.
 
 ---
 
