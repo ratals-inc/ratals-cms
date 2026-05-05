@@ -143,8 +143,8 @@ Under the Ratals Business License:
 **In short:** You own your system and data. You are licensed to use the advanced Ratals Business features.
 
 View full license details:
-https://www.ratals.com/license/
-https://www.ratals.com/business-license/
+- https://www.ratals.com/license/
+- https://www.ratals.com/business-license/
 
 ---
 
