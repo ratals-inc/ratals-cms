@@ -63,7 +63,7 @@ Instead of stitching together multiple platforms, Ratals allows you to manage yo
 
 Ratals can be installed in two ways depending on your experience level.
 
-### Option 1: Recommended (Most Users – ZIP Install)
+### Option 1: Recommended (Most Users - ZIP Install)
 
 1. Download the latest release ZIP from GitHub
 
@@ -73,7 +73,7 @@ Ratals can be installed in two ways depending on your experience level.
 
 4. Configure your domain to point to the project directory
 
-5. Open your browser and visit: https://yourdomain.com
+5. Open your browser and visit your domain
 
 6. The installer will automatically load and guide you through:
    - Database connection setup
@@ -111,10 +111,10 @@ _Add screenshots here:_
 
 Ratals is built on a few core principles:
 
-- **Ownership First** – You retain full ownership of your data and infrastructure
+- **Data & Platform Sovereignty** - You own your server and your data. Unlike SaaS, your website stays online even if you choose not to renew a business license.
+- **Developer Freedom** – No restrictions on customization or deployment
 - **All-in-One System** – CMS, commerce, and operations in one platform
 - **Performance Matters** – Fast load times and efficient backend processing
-- **Developer Freedom** – No restrictions on customization or deployment
 
 ---
 
@@ -122,9 +122,9 @@ Ratals is built on a few core principles:
 
 Ratals uses a dual-license model:
 
-### Open Source Core (MIT License)
-- The core CMS framework is released under the MIT License
-- You are free to use, modify, distribute, and deploy it
+### Open Source Core (Apache 2.0 License)
+- The core CMS framework is released under the Apache 2.0 License
+- You are free to use, modify, distribute, and deploy it based on Apache 2.0 License
 
 ### Business Modules (Commercial License)
 Advanced features such as ERP, eCommerce, and AI modules are provided under a commercial license.
@@ -133,18 +133,19 @@ Under the Ratals Business License:
 - You are granted a usage license for the software
 - You do not obtain ownership of the proprietary business modules
 - The source code remains the intellectual property of Ratals Inc.
-- Redistribution, resale, or re-licensing is not permitted
+- Redistribution, resale, or re-licensing is not permitted.
+- Safe Harbor: You may deploy these modules to a single contracted client, provided that a valid Ratals Business License has been purchased by the client for their instance.
 
 ### What This Means Practically
 - You fully own and control your installation and data
 - You can modify the open-source core freely
-- Business modules are licensed for use within your organization
+- Business modules are licensed for use within your organization or deployed for a specific client project.
 
 **In short:** You own your system and data. You are licensed to use the advanced Ratals Business features.
 
 View full license details:
-- https://www.ratals.com/license/
-- https://www.ratals.com/business-license/
+- Apache 2.0 License: https://www.ratals.com/license/
+- Ratals Business License: https://www.ratals.com/business-license/
 
 ---
 
@@ -160,7 +161,7 @@ View full license details:
 
 ## Contributing
 
-Contributions, issues, and feature requests are welcome.
+We welcome contributions to the Ratals Core. Please see our Contributing Guide for more details. For security vulnerabilities, please email support@ratals.com instead of opening a public issue.
 
 ---
 
