@@ -85,12 +85,15 @@ Ratals can be installed in two ways depending on your experience level.
 
 5. Open your browser and visit your domain
 
-6. The installer will automatically load and guide you through:
+6. Server Configuration (Nginx Users Only):
+   - **Nginx Users:** You must manually configure your server block for routing to work. [Get the Nginx Configuration Guide here](https://www.ratals.com/tutorials/installation/setting-up-ratals-on-nginx/).
+
+8. The installer will automatically load and guide you through:
    - Database connection setup
    - Initial system configuration
    - Admin account creation
 
-7. Once completed, you will be redirected to your dashboard
+9. Once completed, you will be redirected to your dashboard
 
 > If the installer does not appear, verify your server configuration and file upload.
 
