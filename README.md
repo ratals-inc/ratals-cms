@@ -138,11 +138,11 @@ Ratals is built on a few core principles:
 Ratals uses a dual-license model:
 
 ### Open Source Core (Apache 2.0 License)
-- The core CMS framework is released under the Apache 2.0 License
+- Ratals core CMS framework is released under the Apache 2.0 License
 - You are free to use, modify, distribute, and deploy it based on Apache 2.0 License
 
 ### Business Modules (Commercial License)
-Advanced features such as ERP, eCommerce, and AI modules are provided under a commercial license.
+Advanced features such as Commerce, ERP, and AI modules are provided under the Ratals Business commercial license.
 
 Under the Ratals Business License:
 - You are granted a usage license for the software
