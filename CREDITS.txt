@@ -1,0 +1,199 @@
+============================================================
+RATALS INC.
+CREDITS FILE
+============================================================
+
+This Credits file provides information about third-party libraries
+and external services used within the Ratals Inc. software.
+
+This list is provided for transparency and compliance purposes and
+may not be exhaustive. Dependencies may be added, removed, or updated
+over time.
+
+============================================================
+Third-Party Libraries and Licenses
+============================================================
+
+The following third-party libraries are included in this software.
+Each library remains the property of its respective owner and is
+used in accordance with its respective license terms.
+
+------------------------------------------------------------
+1. Library Name: FPDF
+------------------------------------------------------------
+Copyright: Olivier Plathey
+
+License: Permissive License (No known usage restrictions)
+
+Description:
+FPDF is distributed under a permissive license that allows free use,
+modification, and distribution in both commercial and non-commercial
+applications.
+
+Library Path:
+/sites/libraries/fpdf
+
+License Path:
+/sites/libraries/fpdf/license
+
+License Notes:
+FPDF is provided under a permissive license allowing unrestricted
+use, modification, and distribution.
+
+Reference:
+http://www.fpdf.org/en/FAQ.php
+
+Library URL:
+http://www.fpdf.org/
+
+------------------------------------------------------------
+2. Library Name: jQuery
+------------------------------------------------------------
+Version: 3.7.1
+
+Copyright:
+OpenJS Foundation and other contributors
+
+License: MIT License
+
+Library Path:
+/sites/libraries/jquery-3.7.1.min.js
+
+License Path:
+License details are included within the source file.
+
+License URL:
+https://jquery.com/license/
+
+Library URL:
+https://jquery.com/
+
+------------------------------------------------------------
+3. Library Name: jQuery UI
+------------------------------------------------------------
+Version: 1.14.1
+
+Copyright:
+OpenJS Foundation and other contributors
+
+License: MIT License
+
+Library Path:
+/sites/libraries/jquery-ui-1.14.1
+
+License Path:
+/sites/libraries/jquery-ui-1.14.1/LICENSE
+
+License URL:
+https://jquery.com/license/
+
+Library URL:
+https://jqueryui.com/
+
+------------------------------------------------------------
+License Notice (MIT)
+------------------------------------------------------------
+The above MIT-licensed libraries are provided under the terms of the
+MIT License. The full license text is included within the respective
+library files and must be retained in all copies or substantial
+portions of the software, as required by the MIT License.
+
+============================================================
+Third-Party API Connections
+============================================================
+
+This software integrates with third-party APIs to provide additional
+functionality. These services are external to Ratals Inc. and are
+subject to their own terms, conditions, and availability.
+
+Ratals Inc. does not control and is not responsible for the behavior,
+availability, security, or policy changes of these third-party services.
+
+Use of third-party APIs is subject to change without notice by the
+respective providers.
+
+------------------------------------------------------------
+1. API Name: Authorize.Net
+------------------------------------------------------------
+API File Path:
+/admin/commerce/api/authorize-net.php
+
+Certificate Path:
+/admin/commerce/api/authorize-net-cert.pem
+
+Documentation:
+https://developer.authorize.net/api/reference/index.html
+
+------------------------------------------------------------
+2. API Name: PayPal
+------------------------------------------------------------
+API File Path:
+/admin/commerce/api/paypal.php
+
+Documentation:
+https://developer.paypal.com/api/rest/
+
+------------------------------------------------------------
+3. API Name: USPS (United States Postal Service)
+------------------------------------------------------------
+API File Path:
+/admin/commerce/api/parcel-usps.php
+
+Documentation:
+https://developer.usps.com/apis
+
+Shipping Rates Documentation:
+https://developers.usps.com/domesticpricesv3#tag/Resources/operation/post-base-rates-search
+
+------------------------------------------------------------
+4. API Name: UPS (United Parcel Service)
+------------------------------------------------------------
+API File Path:
+/admin/commerce/api/parcel-ups.php
+
+Documentation:
+https://developer.ups.com/?loc=en_US
+
+Shipping Rates Documentation:
+https://developer.ups.com/tag/Rating?loc=en_US
+
+------------------------------------------------------------
+5. API Name: TForce Freight
+------------------------------------------------------------
+API File Path:
+/admin/commerce/api/freight-tforce.php
+
+Documentation:
+https://developer.tforcefreight.com/apis
+
+Shipping Rates Documentation:
+https://developer.tforcefreight.com/api-details#api=rating-v1&operation=get-rate
+
+============================================================
+General Disclaimer
+============================================================
+
+All third-party libraries, trademarks, and services referenced in this
+software are the property of their respective owners.
+
+Ratals Inc. does not claim ownership of any third-party components.
+
+Use of third-party libraries and APIs is subject to their respective
+licenses and terms of service.
+
+Ratals Inc. shall not be liable for any issues arising from the
+use, modification, or distribution, including but not limited to,
+third-party software components or external API services.
+
+Third-party components are provided "as is" without warranties of any
+kind from Ratals Inc.
+
+Users are responsible for ensuring their own compliance with applicable
+third-party licenses and service terms.
+
+Third-party software is provided under its respective licenses.
+Ratals Inc. makes no claim of ownership over third-party code.
+
+============================================================
+End of NOTICE
+============================================================
