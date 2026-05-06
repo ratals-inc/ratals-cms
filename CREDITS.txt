@@ -191,7 +191,7 @@ kind from Ratals Inc.
 Users are responsible for ensuring their own compliance with applicable
 third-party licenses and service terms.
 
-TThird-party software is provided under its respective licenses.
+Third-party software is provided under its respective licenses.
 Ratals Inc. makes no claim of ownership over third-party code.
 
 ============================================================
