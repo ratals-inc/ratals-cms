@@ -103,7 +103,7 @@ Ratals can be installed in two ways depending on your experience level.
 
 1. Clone the repository from GitHub: `git clone https://github.com/Ratals-Inc/Ratals.git`
 
-2. Navigate into the project directory: `cd Ratals`
+2. Navigate into the project directory to see the downloaded files: `cd Ratals`
 
 3. Follow the same installation steps as above
 
