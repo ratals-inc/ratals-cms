@@ -48,7 +48,7 @@ Ratals includes a native, smart update system built directly into the core.
 - **Smart License Updates** - The system identifies your active licenses to deliver the appropriate updates. The CMS core remains up-to-date for everyone, while Business modules (Commerce, ERP, AI) are updated for active license holders.
 - **Real-time Notifications** - Receive update alerts and security messages directly in your admin dashboard.
 - **Environment Safety Checks** - To ensure total compatibility, the system automatically verifies your PHP and MySQL versions before the update button is even displayed.
-- **Data Integrity** - Updates are designed to swap system files and intelligently manage database schema changes—adding or updating core columns while  **preserving your custom columns**, configurations, and media.
+- **Data Integrity** - Updates are designed to swap system files and intelligently manage database schema changes - adding or updating core columns while  **preserving your custom columns**, configurations, and media.
 
 ---
 
