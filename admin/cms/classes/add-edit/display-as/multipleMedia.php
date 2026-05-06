@@ -1,0 +1,38 @@
+<?php
+//Copyright (c) 2025-2026 Ratals Inc.
+//Licensed under the Apache License, Version 2.0
+//Full License & Terms: https://www.ratals.com/license/
+
+if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/display-as/multipleMedia.php'))
+{
+	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/display-as/multipleMedia.php');
+}
+else
+{
+	if(!class_exists('multipleMediaAeda'))
+	{
+		class multipleMediaAeda
+		{
+			public function multipleMediaAeda($table_name, $admin_field, &$post_values, &$errors)
+			{
+				if(isset($_POST[$table_name][$admin_field["column_name"]]) && !empty($_POST[$table_name][$admin_field["column_name"]]))
+				{
+					$media_string = '';
+					foreach($_POST[$table_name][$admin_field["column_name"]] as $media_array)
+					{
+						$media_string .= $media_array[0].'~||~'.$media_array[1].'*||*';
+					}
+					$post_values[$table_name][$admin_field["column_name"]] = trim($media_string, '*||*');
+				}
+			}
+		}
+		
+		$class_multipleMediaAeda = new multipleMediaAeda();
+	}
+	
+	
+	if($_SESSION['admin_type'] == 'add' || $_SESSION['admin_type'] == 'edit')
+	{
+		$class_multipleMediaAeda->multipleMediaAeda($table_name, $admin_field, $post_values, $errors);
+	}
+}

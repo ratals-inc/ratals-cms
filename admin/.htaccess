@@ -1,0 +1,104 @@
+#Copyright (c) 2025-2026 Ratals Inc.
+#Licensed under the Apache License, Version 2.0
+#Full License & Terms: https://www.ratals.com/license/
+
+#This file is only used by Apache or LiteSpeed web servers. Nginx ignores this .htaccess file.
+#Rewrite rules do NOT apply to Nginx and must be configured manually in your Nginx server block.
+#For instructions, see the Nginx installation guide: https://www.ratals.com/blog/setting-up-ratals-on-nginx/
+
+############################################################
+#Automatically include admin session check for all PHP files in /admin
+############################################################
+#Set to "none" during install/update so server-side update scripts can run without errors.
+#This value is replaced with the correct absolute path durning install/updates.
+php_value auto_prepend_file none
+
+RewriteEngine on
+
+############################################################
+#ADMIN DIRECTORY ACCESS CONTROL
+############################################################
+#Direct access to /admin URLs is blocked.
+#The 403 response is handled in:
+#/core/session-check-admin.php and this .htaccess file.
+
+############################################################
+#REQUIRED SESSION CHECKS
+############################################################
+#Backend (required for all admin-access files):
+#require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
+#
+#Frontend (use when connecting to frontend logic):
+#require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-frontend.php');
+
+############################################################
+# AJAX ACCESS (WHITELIST)
+############################################################
+#Only specific AJAX paths are allowed below.
+#Every allowed /admin file MUST include:
+#/core/session-check-admin.php
+#to ensure the user is authenticated.
+
+#-------------------
+#CMS
+#-------------------
+RewriteCond %{REQUEST_URI} /cms/includes/notices/(ajax|start-update|update|update-progress|unset-progress-session)\.php$ [NC]
+RewriteRule .* - [L]
+
+RewriteCond %{THE_REQUEST} /YOUR_ADMIN_URL_PATH/
+RewriteRule ^cms/includes/admin-fields/ajax/.*\.php$ - [L,NC]
+
+RewriteCond %{THE_REQUEST} /YOUR_ADMIN_URL_PATH/
+RewriteRule ^cms/includes/editor/editor\.js$ - [L,NC]
+
+RewriteCond %{THE_REQUEST} /YOUR_ADMIN_URL_PATH/
+RewriteRule ^cms/includes/media-popup-ajax\.php$ - [L,NC]
+
+RewriteCond %{THE_REQUEST} /YOUR_ADMIN_URL_PATH/
+RewriteRule ^cms/includes/stylesheet\.css$ - [L,NC]
+
+RewriteCond %{THE_REQUEST} /YOUR_ADMIN_URL_PATH/
+RewriteRule ^cms/layouts/(static|table)/ajax/.*\.php$ - [L,NC]
+
+#-------------------
+#Commerce
+#-------------------
+RewriteCond %{THE_REQUEST} /YOUR_ADMIN_URL_PATH/
+RewriteRule ^commerce/layouts/(static|table)/ajax/.*\.php$ - [L,NC]
+
+#-------------------
+#ERP
+#-------------------
+RewriteCond %{THE_REQUEST} /YOUR_ADMIN_URL_PATH/
+RewriteRule ^erp/includes/admin-fields/ajax/.*\.php$ - [L,NC]
+
+RewriteCond %{THE_REQUEST} /YOUR_ADMIN_URL_PATH/
+RewriteRule ^erp/layouts/(static|table)/ajax/.*\.php$ - [L,NC]
+
+############################################################
+#DEFAULT DENY
+############################################################
+#Any request not explicitly allowed above will return 403 when attempting to access /admin paths.
+RewriteRule ^(cms|commerce|erp|ai|temp_extract)/ - [F,L,NC]
+
+<FilesMatch "(?i)^(?:\.htaccess|\.user\.ini)$">
+    Require all denied
+</FilesMatch>
+
+############################################################
+#Redirect all URL request to /admin/index.php file to load admin.
+############################################################
+RewriteCond %{REQUEST_FILENAME} !-f 
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteRule . index.php
+
+#Set upload limits for media uploads when Apache is configured with mod_php.
+#This will override the php.ini file only if Apache is running with mod_php.
+#If your Apache server is configured with PHP-FPM or FastCGI, these limits will not be applied.
+#In those cases, you need to set these values directly in your php.ini file.
+<IfModule mod_php.c>
+    php_value upload_max_filesize 512M
+    php_value post_max_size 512M
+    php_value max_file_uploads 20
+	php_value max_input_vars 100000
+</IfModule>

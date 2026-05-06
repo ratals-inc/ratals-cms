@@ -1,0 +1,76 @@
+#Copyright (c) 2025-2026 Ratals Inc.
+#Licensed under the Apache License, Version 2.0
+#Full License & Terms: https://www.ratals.com/license/
+
+#This file is only used by Apache or LiteSpeed web servers. Nginx ignores this .htaccess file.
+#Rewrite rules do NOT apply to Nginx and must be configured manually in your Nginx server block.
+#For instructions, see the Nginx installation guide: https://www.ratals.com/blog/setting-up-ratals-on-nginx/
+
+RewriteEngine on
+
+############################################################
+#Test if AllowOverride is working
+############################################################
+SetEnv RATALSEERP_ALLOWOVERRIDE_TEST "enabled"
+
+############################################################
+#Automatically include frontend session check for all PHP files in the main site
+############################################################
+php_value auto_prepend_file none
+
+############################################################
+##SECURE ADMIN DIRECTORY ACCESS
+############################################################
+#If you change your admin URL, in the admin login area, the "RewriteRule ^YOUR__ADMIN__URL__PATH" will be updated below, as well as in the database.
+#It will be updated in the database here: database_name > sites > admin_directory.
+
+#Admin directory access rules:
+#First redirect admin-directory-name to have a trailing slash. This ensures its treaded as a directory so /admin/index.php loads correctly.
+#Second, internally rewrite /admin-directory-name/* requests to serve content from /admin/. Browser URL stays as /admin-directory-name/*, but files are loaded from /admin/.
+
+RewriteRule ^YOUR_ADMIN_URL_PATH$ /YOUR_ADMIN_URL_PATH/ [R=301,L]
+RewriteRule ^YOUR_ADMIN_URL_PATH(/.*)?$ /admin/$1 [L,NC,QSA]
+
+############################################################
+#Deny access to listed directories and anything inside them
+############################################################
+RewriteRule ^(core|hooks|storage)/ - [F,L,NC]
+
+############################################################
+#Deny access to listed files (case-insensitive)
+############################################################
+<FilesMatch "(?i)^(?:\.htaccess|\.user\.ini)$">
+    Require all denied
+</FilesMatch>
+
+############################################################
+#BLOCK DIRECT ACCESS TO REAL ADMIN MODULES
+############################################################
+RewriteRule ^admin/(cms|commerce|erp|ai|temp_extract)/ - [F,L,NC]
+
+############################################################
+#Redirect all URL request to /index.php file so site loads
+############################################################
+RewriteCond %{REQUEST_FILENAME} !-f 
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteRule . index.php
+
+############################################################
+#File Compression
+############################################################
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain text/css text/xml application/xml application/json application/javascript image/svg+xml
+</IfModule>
+
+############################################################
+#Cache Control
+############################################################
+<IfModule mod_headers.c>
+    #Keep connections alive so once connected, site loads fast.
+    Header set Connection keep-alive
+
+    #Cache static assets for 1 year
+    <FilesMatch "\.(jpg|jpeg|png|gif|svg|ico|webp|avif|bmp|css|js|woff|woff2|ttf|otf|eot)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+</IfModule>
