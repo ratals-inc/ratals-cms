@@ -48,7 +48,7 @@ Ratals includes a native, smart update system built directly into the core.
 - **Smart License Updates** - The system identifies your active licenses to deliver the appropriate updates. The CMS core remains up-to-date for everyone, while Business modules (Commerce, ERP, AI) are updated for active license holders.
 - **Real-time Notifications** - Receive update alerts and security messages directly in your admin dashboard.
 - **Environment Safety Checks** - To ensure total compatibility, the system automatically verifies your PHP and MySQL versions before the update button is even displayed.
-- **Data Integrity** - Updates are designed to swap system files and intelligently manage database schema changes - adding or updating core columns while  **preserving your custom columns**, configurations, and media.
+- **Data Integrity** - Updates are designed to swap system files and intelligently manage database schema changes - adding or updating core columns while **preserving your custom columns**, configurations, and media.
 
 ---
 
@@ -88,12 +88,12 @@ Ratals can be installed in two ways depending on your experience level.
 6. Server Configuration (Nginx Users Only):
    - **Nginx Users:** You must manually configure your server block for routing to work. [Get the Nginx Configuration Guide here](https://www.ratals.com/tutorials/installation/setting-up-ratals-on-nginx/).
 
-8. The installer will automatically load and guide you through:
+7. The installer will automatically load and guide you through:
    - Database connection setup
    - Initial system configuration
    - Admin account creation
 
-9. Once completed, you will be redirected to your dashboard
+8. Once completed, you will be redirected to your dashboard
 
 > If the installer does not appear, verify your server configuration and file upload.
 
