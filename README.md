@@ -2,7 +2,7 @@
 
 ## Overview
 
-Ratals is a self-hosted, open-source platform that combines a CMS, eCommerce system, and ERP into a single unified solution. It is built for developers and businesses that want full control over their infrastructure, data, and workflows - without relying on fragmented SaaS tools.
+Ratals is an open-source PHP CMS, eCommerce platform, and ERP system built for self-hosted businesses and developers who want full control over their website, accounting, inventory, data, infrastructure, and workflows - without relying on fragmented SaaS tools.
 
 Instead of stitching together multiple platforms, Ratals allows you to manage your website, sales, inventory, and accounting in one system.
 
@@ -101,7 +101,7 @@ Ratals can be installed in two ways depending on your experience level.
 
 ### Option 2: Developers (Git Install)
 
-1. Clone the repository from GitHub: `git clone https://github.com/ratals-inc/ratals-core.git`
+1. Clone the repository from GitHub: `git clone https://github.com/ratals-inc/ratals-cms.git`
 
 2. Navigate into the project directory to see the downloaded files: `cd Ratals`
 

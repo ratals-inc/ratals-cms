@@ -31,7 +31,8 @@ else
 					}
 				}
 				
-				if($_SESSION['admin_table_name'] == "custom_fields_options" && ((isset($custom_field_type) && $custom_field_type['field_type'] == 'Content Field' && $custom_field_type['display_as'] != 'multipleMedia' && $custom_field_type['display_as'] != 'singleMedia') ||  (isset($custom_field_type) && $custom_field_type['field_type'] == 'Inventory Attribute' && $custom_field_type['display_as'] != 'boxes' && $custom_field_type['display_as'] != 'swatch') ||  (isset($custom_field_type) && $custom_field_type['field_type'] == 'Product Option' && $custom_field_type['display_as'] != 'boxes' && $custom_field_type['display_as'] != 'swatch')))
+				if(
+				   $_SESSION['admin_table_name'] == "custom_fields_options" && ((isset($custom_field_type) && $custom_field_type['field_type'] == 'Content Field' && $custom_field_type['display_as'] != 'multipleMedia' && $custom_field_type['display_as'] != 'singleMedia') ||  (isset($custom_field_type) && $custom_field_type['field_type'] == 'Inventory Attribute' && $custom_field_type['display_as'] != 'swatch') ||  (isset($custom_field_type) && $custom_field_type['field_type'] == 'Product Option' && $custom_field_type['display_as'] != 'swatch')))
 				{
 					echo '
 					<input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'" type="hidden" value="">';

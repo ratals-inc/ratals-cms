@@ -364,8 +364,8 @@ ui-sortable-handle { margin: 0px!important; padding: 0px!important; }
 .edit-field ul.multiple-media li.media img { max-width: 100%; max-height: 200px; height: auto; margin: 0 auto; display: block; }
 .edit-field ul.multiple-media li.media video { max-width: 100%; max-height: 200px; height: auto; margin: 0 auto; display: block; }
 .edit-field ul.multiple-media li.media .tag input { margin-bottom: 5px; max-width: 400px; }
-.edit-field ul.multiple-media li .move { position: absolute; top: 4px; left: 4px; font-size: 14px; color: #07344a; font-weight: 900; cursor: move; background-color: #e0e0e0; padding: 5px; border-radius: 25px; z-index: 1; }
-.edit-field ul.multiple-media li .close { position: absolute; top: 4px; right: 4px; font-size: 16px; color: #07344a; font-weight: 900; cursor: pointer; background-color: #e0e0e0; padding: 3px 5px 5px 6px; border-radius: 50px; z-index: 1; }
+.edit-field ul.multiple-media li .move { position: absolute; top: 0px; left: 0px; font-size: 14px; color: #07344a; font-weight: 900; cursor: move; background-color: #e0e0e0; padding: 5px 5px 1px 5px; border-radius: 25px; z-index: 1; }
+.edit-field ul.multiple-media li .close { position: absolute; top: 0px; right: 0px; font-size: 16px; color: #07344a; font-weight: 900; cursor: pointer; background-color: #e0e0e0; padding: 5px 5px 1px 5px; border-radius: 50px; z-index: 1; }
 .edit-field ul.multiple-media li svg { width: 18px; }
 .edit-field ul.multiple-media li .close svg { width: 20px; }
 .edit-field ul.multiple-media li .close svg path { fill: #07344a; }
@@ -582,8 +582,8 @@ ui-sortable-handle { margin: 0px!important; padding: 0px!important; }
 .edit-wrapper .button-left button.add-group-link { background-color: #07344a; border: none; padding: 6px 10px; color: #fff; border-radius: 3px; cursor: pointer; font-size: 16px; }
 .edit-wrapper .button-left button { background-color: #07344a; border: none; padding: 6px 10px; color: #fff; border-radius: 3px; cursor: pointer; font-size: 16px; }
 .toggle-group-table { padding: 0px 7px 7px 7px; }
-.sub-items-slider { display: none; padding: 4px; background-color: #c9c9c9; }
-.sub-items-slider-options { padding-bottom: 4px; font-weight: 600; font-size: 15px; }
+.sub-items-slider { padding: 10px; background-color: #dfdfdf; border-radius: 5px; margin-bottom: 7px; }
+.sub-items-slider-options { padding-bottom: 4px; font-weight: 600; }
 .edit-wrapper .edit-field textarea.groups-group_content { display: block; margin-bottom: 4px; }
 
 /*Display Media*/

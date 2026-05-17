@@ -71,13 +71,13 @@ foreach($data_array['sub_items'] as $group)
 			<style nonce=\"".NONCE."\">
 			.sub-items-outter-wrapper-".$slider_unqiue_counter." { ".$group['outter_css_box_styles']." }
 			.sub-items-inner-wrapper-".$slider_unqiue_counter." { ".$group['inner_css_box_styles']." }
-			.slider_".$slider_unqiue_counter.".sub-items ul.flex-".$columns_to_display." { display: flex; align-items: flex-start; gap: 0px; padding: 0; margin: 0; }
+			.slider_".$slider_unqiue_counter.".sub-items ul.flex-".$columns_to_display." { display: flex; align-items: flex-start; gap: ".$sub_items_grid_gap."px; padding: 0; margin: 0; }
 			.slider_".$slider_unqiue_counter.".sub-items ul.flex-".$columns_to_display." > li { list-style-type: none; background-color: transparent; }
-			.slider_".$slider_unqiue_counter." .container { width: ".$calculate_columns_based_on_device."%; padding: 0px ".$sub_items_grid_gap."px; } 
+			.slider_".$slider_unqiue_counter." .container { width: ".$calculate_columns_based_on_device."%; }
 			.slider_".$slider_unqiue_counter.".sub-items .img a { background-color: #f3f3f3; border-radius: 10px; }
 			".$set_pagination_over_image."
 			".$set_pagination_alignment."
-			.slider_".$slider_unqiue_counter." .thumbnail img { width: ".$group['pagination_thumbnail_width']."px; } 
+			.slider_".$slider_unqiue_counter." .thumbnail { width: ".$group['pagination_thumbnail_width']."px; } 
 			.slider_".$slider_unqiue_counter." .slider-pager { gap: ".$group['pagination_margin']."px; }
 			</style>";
 			
@@ -86,7 +86,7 @@ foreach($data_array['sub_items'] as $group)
 			var videoIconSrc = `".$_SESSION['media_video_icon_no_picture_tag']."`;
 			var FileIconSrc = `".$_SESSION['media_file_icon_no_picture_tag']."`;
 			document.addEventListener('DOMContentLoaded', function () {
-			slider('.slider_".$slider_unqiue_counter."', '".strtolower($group['auto_slide_media'])."', '".strtolower($group['display_pagination'])."', '".strtolower($group['display_thumbnails'])."', '".strtolower($group['slide_all_at_once'])."', ".$columns_to_display.", ".$group['slide_speed'].", ".$group['pause_time'].", 200, ".$columns_to_display.", ".count($group['group_rows']).", videoIconSrc, FileIconSrc);
+			slider('.slider_".$slider_unqiue_counter."', '".strtolower($group['auto_slide_media'])."', '".strtolower($group['display_pagination'])."', '".strtolower($group['display_thumbnails'])."', '".strtolower($group['slide_all_at_once'])."', ".$columns_to_display.", ".$group['slide_speed'].", ".$group['pause_time'].", ".$sub_items_grid_gap.", 200, ".$columns_to_display.", ".count($group['group_rows']).", videoIconSrc, FileIconSrc);
 			});
 			</script>";
 			
@@ -143,9 +143,9 @@ foreach($data_array['sub_items'] as $group)
 		foreach($group['group_rows'] as $group_items) 
 		{
 			$sub_item_media = '';
-			if(!empty($group_items["media_type"]))
+			if(!empty($group_items['media_html_code']))
 			{
-				$sub_item_media = mediaId($group_items['media_id'], $group['lazy_load_media'], $group['fetch_priority'], $group_items['media_tag']);
+				$sub_item_media = $group_items['media_html_code'];
 			}
 			
 			if($group_items['type'] == 'products' || $group_items['type'] == 'inventory')
@@ -314,15 +314,8 @@ foreach($data_array['sub_items'] as $group)
 				<!-- End Item -->'; 
 			}
 			
-			//This allows us to set pager spots within the html so there aren layout shifts. The slider.js, updates the placeholders.
-			$numner_of_pagers_placeholder = 1;
-			if(!empty($group['group_rows']))
-			{
-				$numner_of_pagers_placeholder = ceil(count($group['group_rows']) / $columns_to_display);
-			}
-			
-			//Add thumbnails to variable of $slider_pager.
-			if($group['display_pagination'] == 'Yes' && $pager_counter <= $numner_of_pagers_placeholder)
+			//Add pagers to slider.
+			if($group['display_pagination'] == 'Yes')
 			{
 				if(isset($group_items["media_type"]))
 				{

@@ -713,20 +713,20 @@ else
 				
 				if($assignment_table == 'assignments_sub_items' || ($commerce_installed && $assignment_table == 'assignments_products'))
 				{
-					//Get the assignment table rows impacted by this custom field change.
+					//Update inventroy on the assignment table rows impacted by this custom field change.
 					if($_SESSION['admin_table_name'] == 'custom_fields' && isset($_GET['rid']) && !empty($_GET['rid']))
 					{
 						$custom_field_id = $_GET['rid'];
 						$custom_field_option_id = '';
 						
-						$sql_select_assignments_rows = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', $assignment_table, 'WHERE `inventory_attribute_value_ids` LIKE ?', ['%,'.$_GET['rid'].':%']);
+						$sql_select_assignments_rows = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', $assignment_table, 'WHERE `inventory_attribute_value_ids` LIKE ? AND `type` = ?', ['%,'.$_GET['rid'].':%', 'inventory']);
 					}
 					elseif($_SESSION['admin_table_name'] == 'custom_fields_options' && isset($_GET['sub-page-rid']) && !empty($_GET['sub-page-rid']) && isset($_GET['rid']) && !empty($_GET['rid']))
 					{
 						$custom_field_id = $_GET['sub-page-rid'];
 						$custom_field_option_id = $_GET['rid'];
 						
-						$sql_select_assignments_rows = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', $assignment_table, 'WHERE `inventory_attribute_value_ids` LIKE ?', ['%,'.$_GET['sub-page-rid'].':'.$_GET['rid'].',%']);
+						$sql_select_assignments_rows = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', $assignment_table, 'WHERE `inventory_attribute_value_ids` LIKE ? AND `type` = ?', ['%,'.$_GET['sub-page-rid'].':'.$_GET['rid'].',%', 'inventory']);
 					}
 				}
 				
@@ -752,7 +752,7 @@ else
 						}
 					}
 					
-					//Get custom field values
+					//Get custom field url values
 					$custom_field_url_names = array();
 					$custom_field_option_url_names = array();
 					if(!empty($inventory_attribute_ids))
@@ -770,27 +770,25 @@ else
 									$custom_field_url_names[$inventory_attribute_id][$key] = $custom_field_name[$key]['admin_name'] ?? '';
 								}
 							}
-						}
-						
-						//Start get custom field url values
-						$sql_get_custom_field_options = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'custom_fields_options', 'WHERE `custom_fields_id` = ?', [$inventory_attribute_id]);
-						if(!empty($sql_get_custom_field_options))
-						{
-							foreach($sql_get_custom_field_options as $sql_get_custom_field_option)
+							
+							$sql_get_custom_field_options = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'custom_fields_options', 'WHERE `custom_fields_id` = ?', [$inventory_attribute_id]);
+							if(!empty($sql_get_custom_field_options))
 							{
-								$option_data = JSON_DECODE($sql_get_custom_field_option['option_data'] ?? '', true);
-								
-								if(!empty($option_data))
+								foreach($sql_get_custom_field_options as $sql_get_custom_field_option)
 								{
-									foreach($option_data as $key => $value)
+									$option_data = JSON_DECODE($sql_get_custom_field_option['option_data'] ?? '', true);
+									
+									if(!empty($option_data))
 									{
-										$custom_field_option_url_name = $option_data[$key]['value'] ?? '';
-										$custom_field_option_url_names[$inventory_attribute_id][$sql_get_custom_field_option['id']][$key] = $custom_field_option_url_name;
+										foreach($option_data as $key => $value)
+										{
+											$custom_field_option_url_name = $option_data[$key]['value'] ?? '';
+											$custom_field_option_url_names[$inventory_attribute_id][$sql_get_custom_field_option['id']][$key] = $custom_field_option_url_name;
+										}
 									}
 								}
 							}
 						}
-						//End get custom field url values
 					}
 					
 					//Create inventory url to update assignment tables
@@ -809,8 +807,9 @@ else
 								
 								if(isset($custom_field_url_names[$inventory_attribute_id[0]][$sites_language_array[$sql_select_assignments_row['site_id']]]) && !empty($custom_field_url_names[$inventory_attribute_id[0]][$sites_language_array[$sql_select_assignments_row['site_id']]]) && isset($custom_field_option_url_names[$inventory_attribute_id[0]][$inventory_attribute_id[1]][$sites_language_array[$sql_select_assignments_row['site_id']]]) && !empty($custom_field_option_url_names[$inventory_attribute_id[0]][$inventory_attribute_id[1]][$sites_language_array[$sql_select_assignments_row['site_id']]]))
 								{
-									echo $inventory_attribute_url .= $custom_field_url_names[$inventory_attribute_id[0]][$sites_language_array[$sql_select_assignments_row['site_id']]].'='.$custom_field_option_url_names[$inventory_attribute_id[0]][$inventory_attribute_id[1]][$sites_language_array[$sql_select_assignments_row['site_id']]].'&';
+									$inventory_attribute_url .= $custom_field_url_names[$inventory_attribute_id[0]][$sites_language_array[$sql_select_assignments_row['site_id']]].'='.$custom_field_option_url_names[$inventory_attribute_id[0]][$inventory_attribute_id[1]][$sites_language_array[$sql_select_assignments_row['site_id']]].'&';
 								}
+								
 							}
 						}
 						

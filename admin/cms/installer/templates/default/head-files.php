@@ -8,8 +8,8 @@ if(in_array('head-files.php', $data_array['active_template_includes'])) { ?>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preload" href="[FILE_PATH]stylesheet.css" as="style">
 <link rel="stylesheet" href="[FILE_PATH]stylesheet.css">
-<link rel="preload" href="/sites/libraries/jquery-3.7.1.min.js" as="script" crossorigin="anonymous">
-<script src="/sites/libraries/jquery-3.7.1.min.js" crossorigin="anonymous" nonce="<?php echo NONCE; ?>"></script>
+<link rel="preload" href="/sites/libraries/jquery-3.7.1.min.js" as="script" nonce="<?php echo NONCE; ?>">
+<script src="/sites/libraries/jquery-3.7.1.min.js" nonce="<?php echo NONCE; ?>"></script>
 <script async src="[FILE_PATH]scripts.js" nonce="<?php echo NONCE; ?>"></script>
 <?php if(!empty($favicon_16px_16px)) { ?><link rel="icon" type="image/png" sizes="16x16" href="<?php echo $favicon_16px_16px; ?>"><?php } ?>
 <?php if(!empty($favicon_32px_32px)) { ?><link rel="icon" type="image/png" sizes="32x32" href="<?php echo $favicon_32px_32px; ?>"><?php } ?>

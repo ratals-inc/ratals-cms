@@ -165,6 +165,7 @@ if(in_array('slider.php', $data_array['active_template_includes'])) { ?>
 								$slider_link_close = '</a>';
 							}
 							
+							//Add pagers to slider.
 							if($slider['slider_settings']['use_pagination'] == 'Yes')
 							{
 								if($slider_items["desktop_media_type"] == 'Image')

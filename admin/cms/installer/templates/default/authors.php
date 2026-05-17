@@ -31,7 +31,7 @@ include_once('sites/functions.php');
 {
   "@context": "https://schema.org",
   "@type": "Person",
-  "@id": "<?php echo $data_array['author_personal_website_url']; ?>#me",
+  "@id": "<?php echo $data_array['author_personal_website_url']; ?>",
   "name": "<?php echo $data_array['author_name']; ?>",
   "url": "<?php echo $data_array['pages_url']; ?>",
   <?php 
@@ -42,7 +42,7 @@ include_once('sites/functions.php');
       $same_as_urls = array_filter($same_as_urls);
       if(!empty($same_as_urls))
 	  {
-          echo '"sameAs": ' . json_encode(array_values($same_as_urls), JSON_UNESCAPED_SLASHES) . ',
+          echo '"sameAs": '.json_encode(array_values($same_as_urls), JSON_UNESCAPED_SLASHES).',
 ';
       }
   }

@@ -167,6 +167,7 @@ else
 						  }
 						  $counter ++;
 						  $multiple_media_counter++;
+						  $_SESSION['multiple_media_counter'] = $multiple_media_counter;
 					  }
 				  }
 				  $swatch_media_data .= '<input name="next_media_counter" id="selectedMediaId" type="hidden" value="'.($multiple_media_counter - 1).'">';

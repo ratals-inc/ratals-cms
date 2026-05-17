@@ -43,7 +43,8 @@ else
 					}
 				}
 				
-				if((isset($custom_field_type) && ($custom_field_type['display_as'] == 'boxes' || $custom_field_type['display_as'] == 'swatch')) || (isset($form_field_type) && $form_field_type['form_field_type'] == 'Swatch'))
+				//Only swatches validate for a color or media to be set in the dropdown.
+				if((isset($custom_field_type) && $custom_field_type['display_as'] == 'swatch') || (isset($form_field_type) && $form_field_type['form_field_type'] == 'Swatch'))
 				{
 					if(empty($post_values[$table_name]['display']))
 					{

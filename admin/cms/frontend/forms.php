@@ -765,6 +765,8 @@ else
 									}
 									
 									$jquery_selection .= "$('.".$sql_form_rows['form_name_class']." .".$key."-".$values['value']."').addClass('form-field-selected');
+									//Recalculate slider widths after showing hidden slider
+									window.dispatchEvent(new Event('resize'));
 									";
 								}
 								elseif($key == 'swatch_data_array')
@@ -873,7 +875,7 @@ else
 						$set_thumbnail_width = '';
 						if($data_array['slider_settings']['thumbnail_width'] !== NULL)
 						{
-							$set_thumbnail_width = ' .slider_'.$slider_counter.' .thumbnail img { width: '.$data_array['slider_settings']['thumbnail_width'].'px; }';
+							$set_thumbnail_width = ' .slider_'.$slider_counter.' .thumbnail { width: '.$data_array['slider_settings']['thumbnail_width'].'px; }';
 						}
 						
 						$slider_media_count = 1; //If both inventory and product page media empty, set count of 1 for default media.
@@ -928,7 +930,7 @@ else
 							//Set css and call slider js based on slider settings.
 							$slider_media .= "
 							<style nonce=\"".NONCE."\">
-							.slider_".$slider_counter." .container { width: calc(100% / ".$slides_in_viewport."); padding: 0px ".($data_array['slider_settings']['slide_margin'])."px; } .slider_".$slider_counter." .slider-pager { padding: ".($data_array['slider_settings']['pagination_margin'])."px 0px; }".$set_pagination_over_image.$set_pagination_center.$set_thumbnail_width.$set_pagination_gap."
+							.slider_".$slider_counter." .slider-holder { gap: ".($data_array['slider_settings']['slide_margin'] ?? 0)."px; } .slider_".$slider_counter." .container { width: calc(100% / ".$slides_in_viewport."); } .slider_".$slider_counter." .slider-pager { padding: ".($data_array['slider_settings']['pagination_margin'])."px 0px; }".$set_pagination_over_image.$set_pagination_center.$set_thumbnail_width.$set_pagination_gap."
 							</style>
 							<script nonce=\"".NONCE."\">
 							var videoIconSrc = `".$_SESSION['media_video_icon_no_picture_tag']."`;
@@ -936,12 +938,12 @@ else
 							if(document.readyState === 'loading')
 							{
 								document.addEventListener('DOMContentLoaded', function () {
-									slider('.slider_".$slider_counter."', '".strtolower($data_array['slider_settings']['should_auto_slide'])."', '".strtolower($data_array['slider_settings']['use_pagination'])."', '".strtolower($data_array['slider_settings']['use_thumbnails'])."', '".strtolower($data_array['slider_settings']['slide_all_at_once'])."', ".$slides_in_viewport.", ".$data_array['slider_settings']['slide_speed'].", ".$data_array['slider_settings']['pause_time'].", ".$data_array['slider_settings']['min_slide_width'].", ".$slides_in_viewport.", ".$slider_media_count.", videoIconSrc, FileIconSrc);
+									slider('.slider_".$slider_counter."', '".strtolower($data_array['slider_settings']['should_auto_slide'])."', '".strtolower($data_array['slider_settings']['use_pagination'])."', '".strtolower($data_array['slider_settings']['use_thumbnails'])."', '".strtolower($data_array['slider_settings']['slide_all_at_once'])."', ".$slides_in_viewport.", ".$data_array['slider_settings']['slide_speed'].", ".$data_array['slider_settings']['pause_time'].", ".$data_array['slider_settings']['slide_margin'].", ".$data_array['slider_settings']['min_slide_width'].", ".$slides_in_viewport.", ".$slider_media_count.", videoIconSrc, FileIconSrc);
 								});
 							}
 							else
 							{
-								slider('.slider_".$slider_counter."', '".strtolower($data_array['slider_settings']['should_auto_slide'])."', '".strtolower($data_array['slider_settings']['use_pagination'])."', '".strtolower($data_array['slider_settings']['use_thumbnails'])."', '".strtolower($data_array['slider_settings']['slide_all_at_once'])."', ".$slides_in_viewport.", ".$data_array['slider_settings']['slide_speed'].", ".$data_array['slider_settings']['pause_time'].", ".$data_array['slider_settings']['min_slide_width'].", ".$slides_in_viewport.", ".$slider_media_count.", videoIconSrc, FileIconSrc);
+								slider('.slider_".$slider_counter."', '".strtolower($data_array['slider_settings']['should_auto_slide'])."', '".strtolower($data_array['slider_settings']['use_pagination'])."', '".strtolower($data_array['slider_settings']['use_thumbnails'])."', '".strtolower($data_array['slider_settings']['slide_all_at_once'])."', ".$slides_in_viewport.", ".$data_array['slider_settings']['slide_speed'].", ".$data_array['slider_settings']['pause_time'].", ".$data_array['slider_settings']['slide_margin'].", ".$data_array['slider_settings']['min_slide_width'].", ".$slides_in_viewport.", ".$slider_media_count.", videoIconSrc, FileIconSrc);
 							}
 							</script>";
 						
@@ -977,6 +979,8 @@ else
 						$slider_counter++;
 					}
 				}
+				
+				include_once($_SERVER['DOCUMENT_ROOT'].'/sites/slider-js.php');
 				
 				echo "
 				<script nonce=\"".NONCE."\">
@@ -1111,7 +1115,7 @@ else
 				$set_thumbnail_width = '';
 				if($data_array['slider_settings']['thumbnail_width'] !== NULL)
 				{
-					$set_thumbnail_width = ' .slider_'.$data_array['record_id'].' .thumbnail img { width: '.$data_array['slider_settings']['thumbnail_width'].'px; }';
+					$set_thumbnail_width = ' .slider_'.$data_array['record_id'].' .thumbnail { width: '.$data_array['slider_settings']['thumbnail_width'].'px; }';
 				}
 				
 				$slider_media_count = 1; //If both inventory and product page media empty, set count of 1 for default media.
@@ -1162,7 +1166,7 @@ else
 					//Set css and call slider js based on slider settings.
 					$slider_media = "
 					<style nonce=\"".NONCE."\">
-					.slider_".$data_array['record_id']." .container { width: calc(100% / ".$slides_in_viewport."); padding: 0px ".($data_array['slider_settings']['slide_margin'])."px; } .slider_".$data_array['record_id']." .slider-pager { padding: ".($data_array['slider_settings']['pagination_margin'])."px 0px; }".$set_pagination_over_image.$set_pagination_center.$set_thumbnail_width.$set_pagination_gap."
+					.slider_".$data_array['record_id']." .slider-holder { gap: ".($data_array['slider_settings']['slide_margin'] ?? 0)."px; } .slider_".$data_array['record_id']." .container { width: calc(100% / ".$slides_in_viewport."); } .slider_".$data_array['record_id']." .slider-pager { padding: ".($data_array['slider_settings']['pagination_margin'])."px 0px; }".$set_pagination_over_image.$set_pagination_center.$set_thumbnail_width.$set_pagination_gap."
 					</style>
 					<script nonce=\"".NONCE."\">
 					var videoIconSrc = `".$_SESSION['media_video_icon_no_picture_tag']."`;
@@ -1170,12 +1174,12 @@ else
 					if(document.readyState === 'loading')
 					{
 						document.addEventListener('DOMContentLoaded', function () {
-							slider('.slider_".$data_array['record_id']."', '".strtolower($data_array['slider_settings']['should_auto_slide'])."', '".strtolower($data_array['slider_settings']['use_pagination'])."', '".strtolower($data_array['slider_settings']['use_thumbnails'])."', '".strtolower($data_array['slider_settings']['slide_all_at_once'])."', ".$slides_in_viewport.", ".$data_array['slider_settings']['slide_speed'].", ".$data_array['slider_settings']['pause_time'].", ".$data_array['slider_settings']['min_slide_width'].", ".$slides_in_viewport.", ".$slider_media_count.", videoIconSrc, FileIconSrc);
+							slider('.slider_".$data_array['record_id']."', '".strtolower($data_array['slider_settings']['should_auto_slide'])."', '".strtolower($data_array['slider_settings']['use_pagination'])."', '".strtolower($data_array['slider_settings']['use_thumbnails'])."', '".strtolower($data_array['slider_settings']['slide_all_at_once'])."', ".$slides_in_viewport.", ".$data_array['slider_settings']['slide_speed'].", ".$data_array['slider_settings']['pause_time'].", ".$data_array['slider_settings']['slide_margin'].", ".$data_array['slider_settings']['min_slide_width'].", ".$slides_in_viewport.", ".$slider_media_count.", videoIconSrc, FileIconSrc);
 						});
 					}
 					else
 					{
-						slider('.slider_".$data_array['record_id']."', '".strtolower($data_array['slider_settings']['should_auto_slide'])."', '".strtolower($data_array['slider_settings']['use_pagination'])."', '".strtolower($data_array['slider_settings']['use_thumbnails'])."', '".strtolower($data_array['slider_settings']['slide_all_at_once'])."', ".$slides_in_viewport.", ".$data_array['slider_settings']['slide_speed'].", ".$data_array['slider_settings']['pause_time'].", ".$data_array['slider_settings']['min_slide_width'].", ".$slides_in_viewport.", ".$slider_media_count.", videoIconSrc, FileIconSrc);
+						slider('.slider_".$data_array['record_id']."', '".strtolower($data_array['slider_settings']['should_auto_slide'])."', '".strtolower($data_array['slider_settings']['use_pagination'])."', '".strtolower($data_array['slider_settings']['use_thumbnails'])."', '".strtolower($data_array['slider_settings']['slide_all_at_once'])."', ".$slides_in_viewport.", ".$data_array['slider_settings']['slide_speed'].", ".$data_array['slider_settings']['pause_time'].", ".$data_array['slider_settings']['slide_margin'].", ".$data_array['slider_settings']['min_slide_width'].", ".$slides_in_viewport.", ".$slider_media_count.", videoIconSrc, FileIconSrc);
 					}
 					</script>";
 					

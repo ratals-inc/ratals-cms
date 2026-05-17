@@ -95,7 +95,7 @@ else
 					
 					if(!empty($assigned_sub_items)) 
 					{
-						$page_data_array = getItemsData($site_id, $domain, $home_page, $url_structure, $sites_end_urls_with, $url, $assigned_sub_items);
+						$page_data_array = getItemsData($site_id, $domain, $home_page, $url_structure, $sites_end_urls_with, $url, $page_group, $assigned_sub_items);
 					}
 					
 					$page_data_arrays = array('group_rows' => $page_data_array);

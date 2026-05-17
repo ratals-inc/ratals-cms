@@ -16,7 +16,6 @@ else
 		$pages_data["pages_url"] = getUrl($pages_data["custom_link"], $pages_data["url_extension"], $sites_end_urls_with, $url_structure, $domain, $pages_data["hierarchy_url"], $pages_data["flat_url"], '', $pages_data['id'], $home_page);
 		
 		$pages_data['author_bio'] = array();
-
 		
 		//Get media for loaded page
 		$pages_data['media_data'] = mediaIdArray($pages_data['media']);

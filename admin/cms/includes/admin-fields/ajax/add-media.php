@@ -3,7 +3,7 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-header('Content-type: text/html; charset=utf-8');
+header('Content-Type: application/json; charset=utf-8');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -15,7 +15,7 @@ if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/includes/admin-fields
 }
 else
 {
-	if($_SESSION['admin_table_name'] == 'media' && $_SESSION['admin_type'] == 'add' && $_SESSION['admin_class'] != 'add-video-embed')
+	if(isset($_POST['admin_table_name']) && $_POST['admin_table_name'] == 'media' && isset($_POST['admin_type']) && $_POST['admin_type'] == 'add' && isset($_POST['admin_class']) && $_POST['admin_class'] != 'add-video-embed')
 	{
 		if(isset($_FILES['files']['name']))
 		{
@@ -45,7 +45,8 @@ else
 				{
 					$byte_size = '0 Bytes';
 				}
-					return $byte_size;
+				
+				return $byte_size;
 			}
 			
 			//Makes sure avif is fully enabled.
@@ -104,18 +105,12 @@ else
 				return $avif_enabled;
 			}
 			
-			ob_implicit_flush(true);
-			ob_end_flush();
-			flush();
-			
 			$countfiles = count($_FILES['files']['name']);
-			$totalImages = $_GET['total_images'];
 			$path = '';
 			$media_type = array();
 			$upload_success = array();
 			$upload_exists = array();
 			$extension_not_valid = array();
-			$uploadedImages = 0;
 			//The smallest allowed variant size for creation is in pixels. By default, images smaller than 50 pixels will not be created.
 			$smallest_variant_size = 50;
 			//Important: Using values higher than the defaults will increase image quality, but also file size. Speed testing tools (like Lighthouse) may then suggest lowering quality to improve load times.
@@ -154,18 +149,17 @@ else
 					
 					//Get MIME type of uploaded file
 					$finfo = finfo_open(FILEINFO_MIME_TYPE);
-					$mine_file_type = finfo_file($finfo, $_FILES['files']['tmp_name'][$index]);
+					$mime_file_type = finfo_file($finfo, $_FILES['files']['tmp_name'][$index]);
 					finfo_close($finfo);
 					
 					$media_size_other = filesize($_FILES['files']['tmp_name'][$index]);
 					if(isset($media_size_other)) { $size_other = convertBytesToSize($media_size_other); } else { $size_other = ''; }
 					
 					//If image uploaded.
-					if($media_data !== false && !empty($media_extension) && !empty($mine_file_type) && array_key_exists($media_extension, $accepted_image_extension_types) && in_array($mine_file_type, $accepted_image_extension_types))
+					if($media_data !== false && !empty($media_extension) && !empty($mime_file_type) && array_key_exists($media_extension, $accepted_image_extension_types) && in_array($mime_file_type, $accepted_image_extension_types))
 					{
 						//Insert Image or PDF
 						$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'Yes', NULL, $cleaned_media_url, $meta_tag, $size_other, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
-						$uploadedImages++; echo "Uploaded images: $uploadedImages / $totalImages\n"; flush();
 						//Get media id just created.
 						$get_media_just_added = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '*', 'media', 'WHERE `original_media` = ? AND `media_url` = ? ORDER BY `id` DESC LIMIT 1', ['Yes', $cleaned_media_url]);
 						//Update media that was just created with its id in the column of original_media_id.					
@@ -191,7 +185,7 @@ else
 						
 						//Variables to create smaller image sizes.
 						$all_image_resizes = array();
-						if(isset($_GET['create_smaller_images']) && $_GET['create_smaller_images'] == 'Yes' && !empty($media_data[0]) && !empty($media_data[1]))
+						if(isset($_POST['create_smaller_images']) && $_POST['create_smaller_images'] == 'Yes' && !empty($media_data[0]) && !empty($media_data[1]))
 						{
 							//Fixed breakpoints that lighthouse likes
 							$fixed_widths = array(2560, 1920, 1400, 1024, 744, 640, 372, 320, 240);
@@ -208,7 +202,7 @@ else
 						}
 						
 						//Make sure avif is fully enabled if admin user asking to create them.
-						if(!isset($flag_run_once) && isset($_GET['create_avif']) && $_GET['create_avif'] == 'Yes')
+						if(!isset($flag_run_once) && isset($_POST['create_avif']) && $_POST['create_avif'] == 'Yes')
 						{
 							$flag_run_once = true;
 							$avif_enabled = avif_enabled($path);
@@ -246,15 +240,12 @@ else
 										
 										imagedestroy($image);
 										imagedestroy($resized_image);
-										$uploadedImages++;
-										echo "Uploaded images: $uploadedImages / $totalImages\n";
-										flush();
 									}
 								}
 							}
 							
 							//Create WebP image.
-							if(function_exists('imagewebp') && isset($_GET['create_webp']) && $_GET['create_webp'] == 'Yes')
+							if(function_exists('imagewebp') && isset($_POST['create_webp']) && $_POST['create_webp'] == 'Yes')
 							{
 								$image = imagecreatefromgif($path);
 								imagepalettetotruecolor($image);
@@ -279,9 +270,6 @@ else
 								}
 							
 								imagedestroy($image);
-								$uploadedImages++;
-								echo "Uploaded images: $uploadedImages / $totalImages\n";
-								flush();
 							
 								//Resizes
 								if(!empty($all_image_resizes))
@@ -321,17 +309,13 @@ else
 							
 											imagedestroy($image);
 											imagedestroy($resized_image);
-							
-											$uploadedImages++;
-											echo "Uploaded images: $uploadedImages / $totalImages\n";
-											flush();
 										}
 									}
 								}
 							}
 							
 							//Create AVIF image.
-							if($avif_enabled && function_exists('imageavif') && isset($_GET['create_avif']) && $_GET['create_avif'] == 'Yes')
+							if($avif_enabled && function_exists('imageavif') && isset($_POST['create_avif']) && $_POST['create_avif'] == 'Yes')
 							{
 								$image = imagecreatefromgif($path);
 								imagepalettetotruecolor($image);
@@ -356,9 +340,6 @@ else
 								}
 							
 								imagedestroy($image);
-								$uploadedImages++;
-								echo "Uploaded images: $uploadedImages / $totalImages\n";
-								flush();
 							
 								//Resizes
 								if(!empty($all_image_resizes))
@@ -398,10 +379,6 @@ else
 							
 											imagedestroy($image);
 											imagedestroy($resized_image);
-							
-											$uploadedImages++;
-											echo "Uploaded images: $uploadedImages / $totalImages\n";
-											flush();
 										}
 									}
 								}
@@ -431,15 +408,12 @@ else
 										
 										imagedestroy($image);
 										imagedestroy($resized_image);
-										$uploadedImages++;
-										echo "Uploaded images: $uploadedImages / $totalImages\n";
-										flush();
 									}
 								}
 							}
 							
 							//Create WebP image.
-							if(function_exists('imagewebp') && isset($_GET['create_webp']) && $_GET['create_webp'] == 'Yes')
+							if(function_exists('imagewebp') && isset($_POST['create_webp']) && $_POST['create_webp'] == 'Yes')
 							{
 								$image = imagecreatefromjpeg($path);
 								imagepalettetotruecolor($image);
@@ -464,9 +438,6 @@ else
 								}
 							
 								imagedestroy($image);
-								$uploadedImages++;
-								echo "Uploaded images: $uploadedImages / $totalImages\n";
-								flush();
 							
 								//Resizes
 								if(!empty($all_image_resizes))
@@ -502,17 +473,13 @@ else
 							
 											imagedestroy($image);
 											imagedestroy($resized_image);
-							
-											$uploadedImages++;
-											echo "Uploaded images: $uploadedImages / $totalImages\n";
-											flush();
 										}
 									}
 								}
 							}
 							
 							//Create AVIF image.
-							if($avif_enabled && function_exists('imageavif') && isset($_GET['create_avif']) && $_GET['create_avif'] == 'Yes')
+							if($avif_enabled && function_exists('imageavif') && isset($_POST['create_avif']) && $_POST['create_avif'] == 'Yes')
 							{
 								$image = imagecreatefromjpeg($path);
 								imagepalettetotruecolor($image);
@@ -537,9 +504,6 @@ else
 								}
 							
 								imagedestroy($image);
-								$uploadedImages++;
-								echo "Uploaded images: $uploadedImages / $totalImages\n";
-								flush();
 							
 								//Resizes
 								if(!empty($all_image_resizes))
@@ -575,10 +539,6 @@ else
 							
 											imagedestroy($image);
 											imagedestroy($resized_image);
-							
-											$uploadedImages++;
-											echo "Uploaded images: $uploadedImages / $totalImages\n";
-											flush();
 										}
 									}
 								}
@@ -613,15 +573,12 @@ else
 										
 										imagedestroy($image);
 										imagedestroy($resized_image);
-										$uploadedImages++;
-										echo "Uploaded images: $uploadedImages / $totalImages\n";
-										flush();
 									}
 								}
 							}
 							
 							//Create WebP image.
-							if(function_exists('imagewebp') && isset($_GET['create_webp']) && $_GET['create_webp'] == 'Yes')
+							if(function_exists('imagewebp') && isset($_POST['create_webp']) && $_POST['create_webp'] == 'Yes')
 							{
 								$image = imagecreatefrompng($path);
 								imagepalettetotruecolor($image);
@@ -643,9 +600,6 @@ else
 								}
 								
 								imagedestroy($image);
-								$uploadedImages++;
-								echo "Uploaded images: $uploadedImages / $totalImages\n";
-								flush();
 								
 								//Loop through each resize from PNG to WEBP images
 								if(!empty($all_image_resizes))
@@ -681,16 +635,13 @@ else
 											
 											imagedestroy($image);
 											imagedestroy($resized_image);
-											$uploadedImages++;
-											echo "Uploaded images: $uploadedImages / $totalImages\n";
-											flush();
 										}
 									}
 								}
 							}
 							
 							//Create AVIF image.
-							if($avif_enabled && function_exists('imageavif') && isset($_GET['create_avif']) && $_GET['create_avif'] == 'Yes')
+							if($avif_enabled && function_exists('imageavif') && isset($_POST['create_avif']) && $_POST['create_avif'] == 'Yes')
 							{
 								$image = imagecreatefrompng($path);
 								imagepalettetotruecolor($image);
@@ -712,9 +663,6 @@ else
 								}
 								
 								imagedestroy($image);
-								$uploadedImages++;
-								echo "Uploaded images: $uploadedImages / $totalImages\n";
-								flush();
 								
 								//Loop through each resize from PNG to AVIF images
 								if(!empty($all_image_resizes))
@@ -750,9 +698,6 @@ else
 											
 											imagedestroy($image);
 											imagedestroy($resized_image);
-											$uploadedImages++;
-											echo "Uploaded images: $uploadedImages / $totalImages\n";
-											flush();
 										}
 									}
 								}
@@ -760,7 +705,7 @@ else
 						}
 					}
 					//If video uploaded.
-					elseif(!empty($media_extension) && !empty($mine_file_type) && array_key_exists($media_extension, $accepted_video_extension_types) && in_array($mine_file_type, $accepted_video_extension_types))
+					elseif(!empty($media_extension) && !empty($mime_file_type) && array_key_exists($media_extension, $accepted_video_extension_types) && in_array($mime_file_type, $accepted_video_extension_types))
 					{
 						$path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/videos/'.$cleaned_media_url;
 						
@@ -776,7 +721,6 @@ else
 							
 							//Insert Video
 							$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Video', 'Yes', NULL, $cleaned_media_url, $meta_tag, $size_video, '', '', '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
-							$uploadedImages++; echo "Uploaded images: $uploadedImages / $totalImages\n"; flush();
 						}
 						else
 						{
@@ -784,7 +728,7 @@ else
 						}
 					}
 					//If file uploaded.
-					elseif(!empty($media_extension) && !empty($mine_file_type) && array_key_exists($media_extension, $accepted_file_extension_types) && in_array($mine_file_type, $accepted_file_extension_types))
+					elseif(!empty($media_extension) && !empty($mime_file_type) && array_key_exists($media_extension, $accepted_file_extension_types) && in_array($mime_file_type, $accepted_file_extension_types))
 					{
 						
 						$path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/files/'.$cleaned_media_url;
@@ -801,7 +745,6 @@ else
 							
 							//Insert Video
 							$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'File', 'Yes', NULL, $cleaned_media_url, $meta_tag, $size_file, '', '', '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
-							$uploadedImages++; echo "Uploaded images: $uploadedImages / $totalImages\n"; flush();
 						}
 						else
 						{
@@ -818,39 +761,29 @@ else
 				}
 			}
 			
-			if(!empty($extension_not_valid))
-			{
-				$extension_not_valid = implode(', ', $extension_not_valid);
-				$extension_not_valid = trim($extension_not_valid, ', ');
-				
-				echo '<div class="changes-error">File(s) were not uploaded because extension(s) ('.$extension_not_valid.') are not listed as approved for uploading. To upload, add extension types to <a href="'.$domain.'/'.$_SESSION['admin_directory'].'/admin/list-options/?rid=50" target="_blank">Accepted Image Extension Types</a>, <a href="'.$domain.'/'.$_SESSION['admin_directory'].'/admin/list-options/?rid=51" target="_blank">Accepted Video Extension Types</a>  or <a href="'.$domain.'/'.$_SESSION['admin_directory'].'/admin/list-options/?rid=52" target="_blank">Accepted File Extension Types</a>. Make sure to set the "value" to the media type extension you\'re trying to upload.</div>';
-			}
+			$extension_not_valid = array_values(array_unique($extension_not_valid));
 			
-			if(!empty($upload_exists) && !empty($upload_success))
+			if(!empty($upload_success) && empty($upload_exists) && empty($extension_not_valid))
 			{
-				echo '<div class="changes-error">'.count($upload_exists).' media file name(s) were not uploaded becuase they already exists. The other '.count($upload_success).' media file name(s) were uploaded successfully.</div>';
+				$status = 'completed';
 			}
 			elseif(!empty($upload_success))
 			{
-				echo '<div class="changes-saved">'.count($upload_success).' media file name(s) were uploaded successfully.</div>';
+				$status = 'partial';
 			}
-			elseif(!empty($upload_exists))
+			else
 			{
-				echo '<div class="changes-error">'.count($upload_exists).' media file name(s) were not uploaded becuase they already exists.</div>';
+				$status = 'failed';
 			}
 			
-			if(!empty($upload_exists))
-			{
-				echo '<div class="changes-details">List of media file name(s) that were not uploaded because media URL(s) already exists. Please rename these and try again.<ol>';
-				
-				foreach($upload_exists as $upload_exist)
-				{
-					echo '<li>'.$upload_exist[1].'</li>';
-				}
-				echo '</ol></div>';
-			}
+			$response = ['status' => $status, 'success' => $upload_success, 'duplicates' => $upload_exists, 'invalid_extensions' => $extension_not_valid];
 			
-			flush();
+			echo json_encode($response);
+			exit();
+		}
+		else
+		{
+			echo json_encode(array('error' => 'Invalid upload request.'));
 			exit();
 		}
 	}

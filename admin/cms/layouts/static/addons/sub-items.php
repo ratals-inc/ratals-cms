@@ -581,7 +581,7 @@ else
                                             <label>
                                                 <div class="name">Slides Visible at Once</div>
                                                 <select name="groups[<?php echo $group_counter; ?>][group_slides_in_view]">
-                                                  <option value="1"<?php if($all_groups["group_slides_in_view"] == '1') { echo ' selected'; }?>>1 (List View)</option>
+                                                  <option value="1"<?php if($all_groups["group_slides_in_view"] == '1') { echo ' selected'; }?>>1</option>
                                                   <option value="2"<?php if($all_groups["group_slides_in_view"] == '2') { echo ' selected'; }?>>2</option>
                                                   <option value="3"<?php if($all_groups["group_slides_in_view"] == '3') { echo ' selected'; }?>>3</option>
                                                   <option value="4"<?php if($all_groups["group_slides_in_view"] == '4') { echo ' selected'; }?>>4</option>
@@ -659,9 +659,15 @@ else
                                             <label>
                                                 <div class="name">Slide Transition Speed</div>
                                                 <select name="groups[<?php echo $group_counter; ?>][group_slide_speed]">
+                                                  <option value="100"<?php if($all_groups["group_slide_speed"] == '100') { echo ' selected'; }?>>0.1 seconds</option>
                                                   <option value="200"<?php if($all_groups["group_slide_speed"] == '200') { echo ' selected'; }?>>0.2 seconds</option>
+                                                  <option value="300"<?php if($all_groups["group_slide_speed"] == '300') { echo ' selected'; }?>>0.3 seconds</option>
+                                                  <option value="400"<?php if($all_groups["group_slide_speed"] == '400') { echo ' selected'; }?>>0.4 seconds</option>
                                                   <option value="500"<?php if($all_groups["group_slide_speed"] == '500') { echo ' selected'; }?>>0.5 seconds</option>
+                                                  <option value="600"<?php if($all_groups["group_slide_speed"] == '600') { echo ' selected'; }?>>0.6 seconds</option>
+                                                  <option value="700"<?php if($all_groups["group_slide_speed"] == '700') { echo ' selected'; }?>>0.7 seconds</option>
                                                   <option value="800"<?php if($all_groups["group_slide_speed"] == '800') { echo ' selected'; }?>>0.8 seconds</option>
+                                                  <option value="900"<?php if($all_groups["group_slide_speed"] == '900') { echo ' selected'; }?>>0.9 seconds</option>
                                                   <option value="1000"<?php if($all_groups["group_slide_speed"] == '1000') { echo ' selected'; }?>>1 second</option>
                                                   <option value="2000"<?php if($all_groups["group_slide_speed"] == '2000') { echo ' selected'; }?>>2 seconds</option>
                                                   <option value="3000"<?php if($all_groups["group_slide_speed"] == '3000') { echo ' selected'; }?>>3 seconds</option>
@@ -671,12 +677,13 @@ else
                                             </label>
                                             
                                             <label>
-                                                <div class="name">Margin Between Slide Items</div>
+                                                <div class="name">Gap Between Items</div>
                                                 <select name="groups[<?php echo $group_counter; ?>][group_slide_margin]">
                                                   <option value="0"<?php if($all_groups["group_slide_margin"] == '0') { echo ' selected'; }?>>0px</option>
                                                   <option value="1"<?php if($all_groups["group_slide_margin"] == '1') { echo ' selected'; }?>>1px</option>
                                                   <option value="2"<?php if($all_groups["group_slide_margin"] == '2') { echo ' selected'; }?>>2px</option>
                                                   <option value="3"<?php if($all_groups["group_slide_margin"] == '3') { echo ' selected'; }?>>3px</option>
+                                                  <option value="4"<?php if($all_groups["group_slide_margin"] == '4') { echo ' selected'; }?>>4px</option>
                                                   <option value="5"<?php if($all_groups["group_slide_margin"] == '5') { echo ' selected'; }?>>5px</option>
                                                   <option value="6"<?php if($all_groups["group_slide_margin"] == '6') { echo ' selected'; }?>>6px</option>
                                                   <option value="7"<?php if($all_groups["group_slide_margin"] == '7') { echo ' selected'; }?>>7px</option>
@@ -727,11 +734,14 @@ else
                                                 <select name="groups[<?php echo $group_counter; ?>][group_pagination_thumbnail_width]">
                                                   <option value="10"<?php if($all_groups["group_pagination_thumbnail_width"] == '10') { echo ' selected'; }?>>10px</option>
                                                   <option value="20"<?php if($all_groups["group_pagination_thumbnail_width"] == '20') { echo ' selected'; }?>>20px</option>
-                                                  <option value="25"<?php if($all_groups["group_pagination_thumbnail_width"] == '25') { echo ' selected'; }?>>25px</option>
                                                   <option value="30"<?php if($all_groups["group_pagination_thumbnail_width"] == '30') { echo ' selected'; }?>>30px</option>
                                                   <option value="40"<?php if($all_groups["group_pagination_thumbnail_width"] == '40') { echo ' selected'; }?>>40px</option>
-                                                  <option value="55"<?php if($all_groups["group_pagination_thumbnail_width"] == '55') { echo ' selected'; }?>>55px</option>
+                                                  <option value="50"<?php if($all_groups["group_pagination_thumbnail_width"] == '50') { echo ' selected'; }?>>50px</option>
                                                   <option value="60"<?php if($all_groups["group_pagination_thumbnail_width"] == '60') { echo ' selected'; }?>>60px</option>
+                                                  <option value="70"<?php if($all_groups["group_pagination_thumbnail_width"] == '70') { echo ' selected'; }?>>70px</option>
+                                                  <option value="80"<?php if($all_groups["group_pagination_thumbnail_width"] == '80') { echo ' selected'; }?>>80px</option>
+                                                  <option value="90"<?php if($all_groups["group_pagination_thumbnail_width"] == '90') { echo ' selected'; }?>>90px</option>
+                                                  <option value="100"<?php if($all_groups["group_pagination_thumbnail_width"] == '100') { echo ' selected'; }?>>100px</option>
                                                 </select>
                                             </label>
                                             

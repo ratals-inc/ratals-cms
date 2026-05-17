@@ -11,15 +11,17 @@ else
 {
 ?>
 <script nonce="<?php echo NONCE; ?>">
-function slider(slidersId, shouldAutoSlide, usePagination, useThumbnails, slideAllAtOnce, slidesInView, slideSpeed, pauseTime, minSlideWidth, totalSlidesInit, totalNumOfSlides, videoIconSrc, FileIconSrc) {
-
+function slider(slidersId, shouldAutoSlide, usePagination, useThumbnails, slideAllAtOnce, slidesInView, slideSpeed, pauseTime, slideItemGap, minSlideWidth, totalSlidesInit, totalNumOfSlides, videoIconSrc, FileIconSrc) {
+	
 	if (parseInt(slideSpeed) >= parseInt(pauseTime)) {
 		pauseTime = parseInt(slideSpeed)+parseInt(pauseTime);
 	}
 	
 	const $sliderId = document.querySelector(slidersId);
 	let currentIndex = slidesInView;
+	let calculatedSlideWidth = 0;
 	let sliderInterval;
+	let isAnimating = false;
 
 	function cloneSlides() {
 		const $sliderHolder = $sliderId.querySelector('.slider-holder');
@@ -43,7 +45,8 @@ function slider(slidersId, shouldAutoSlide, usePagination, useThumbnails, slideA
 			$lastSlides.reverse().forEach(slide => $sliderHolder.insertBefore(slide, $sliderHolder.firstChild));
 		}
 		
-		$sliderHolder.style.transform = `translateX(-${currentIndex * (100 / slidesInView)}%)`;
+		const slideWidth = calculatedSlideWidth + slideItemGap;
+		$sliderHolder.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
 	}
 
 	function removeClonedSlides() {
@@ -84,10 +87,9 @@ function slider(slidersId, shouldAutoSlide, usePagination, useThumbnails, slideA
 			adjustSlideWidth();
 			const $sliderHolder = $sliderId.querySelector('.slider-holder');
 			const clonedDivs = $sliderHolder.querySelectorAll('.cloned').length;
-			// var clonedDivs = document.querySelectorAll('.slider-holder .cloned').length;
 			currentIndex = clonedDivs / 2;
 
-			updateSlider();
+			updateSlider('', true);
 			updateActivePagerOnResize();
 		}
 	}
@@ -141,16 +143,23 @@ function slider(slidersId, shouldAutoSlide, usePagination, useThumbnails, slideA
 	}
 
 	function adjustSlideWidth() {
-		//Make sure to get the width of the slider container incase margin or padding is added to outter wrapping divs.
+	
 		const $slidesContainer = document.querySelector(slidersId + ' .slider-holder');
-		const sliderWidth = $slidesContainer.offsetWidth;
-		const slideWidthInPixels = (sliderWidth / slidesInView);
-		const $containers = $sliderId.querySelectorAll('.container');
-		$containers.forEach(container => {
-			//container.style.setProperty('width', `${slideWidthInPixels}px`);
-			container.style.width = `${slideWidthInPixels}px`
-		});
+	
+		const sliderWidth = $slidesContainer.parentElement.offsetWidth;
+	
+		//Remove total gap space from usable width
+		const totalGapWidth = (slidesInView - 1) * slideItemGap;
 		
+		calculatedSlideWidth = (sliderWidth - totalGapWidth) / slidesInView;
+	
+		const $containers = $sliderId.querySelectorAll('.container');
+	
+		$containers.forEach(container => {
+			container.style.width = `${calculatedSlideWidth}px`;
+			container.style.flexShrink = '0';
+		});
+	
 		if (slideAllAtOnce === "yes") {
 			updateSlider('', true);
 		}
@@ -158,23 +167,25 @@ function slider(slidersId, shouldAutoSlide, usePagination, useThumbnails, slideA
 
 	function updateSlider(pager = '', instant = false) {
 		if (slideAllAtOnce === 'yes') {
-			const slideWidth = 100 / slidesInView;
+			
+			const slideWidth = calculatedSlideWidth + slideItemGap;
+
 			const sliderHolder = $sliderId.querySelector('.slider-holder');
 
 			sliderHolder.style.transition = instant ? 'none' : `transform ${slideSpeed}ms ease`;
 			currentIndex = instant ? 0 : currentIndex;
-			sliderHolder.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+			sliderHolder.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
 
 			if (currentIndex === 0) {
 				setTimeout(() => {
 					sliderHolder.style.transition = 'none';
-					sliderHolder.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+					sliderHolder.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
 				}, slideSpeed);
 			} else if (currentIndex === (parseInt(totalNumOfSlides) + parseInt(slidesInView))) {
 				setTimeout(() => {
 					sliderHolder.style.transition = 'none';
 					currentIndex = slidesInView;
-					sliderHolder.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+					sliderHolder.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
 				}, slideSpeed);
 			}
 			
@@ -197,25 +208,26 @@ function slider(slidersId, shouldAutoSlide, usePagination, useThumbnails, slideA
 			if (pager !== '') {
 				currentIndex = parseInt(currentIndex) + parseInt(slidesInView);
 			}
-			const slideWidth = 100 / slidesInView;
+			
+			const slideWidth = calculatedSlideWidth + slideItemGap;
 			const $sliderHolder = $sliderId.querySelector('.slider-holder');
 			const countDivs = $sliderHolder.querySelectorAll('.container').length;
 			const clones = countDivs - totalNumOfSlides;
 
 			$sliderHolder.style.transition = instant ? 'none' : `transform ${slideSpeed}ms ease`;
-			$sliderHolder.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+			$sliderHolder.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
 
 			if (currentIndex === 0) {
 				setTimeout(() => {
 					$sliderHolder.style.transition = 'none';
-					currentIndex = totalNumOfSlides; // Jump to the last real slide
-					$sliderHolder.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+					currentIndex = totalNumOfSlides; //Jump to the last real slide
+					$sliderHolder.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
 				}, slideSpeed);
 			} else if (currentIndex === (parseInt(totalNumOfSlides) + parseInt(slidesInView))) {
 				setTimeout(() => {
 					$sliderHolder.style.transition = 'none';
-					currentIndex = slidesInView; // Jump to the first real slide
-					$sliderHolder.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+					currentIndex = slidesInView; //Jump to the first real slide
+					$sliderHolder.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
 				}, slideSpeed);
 			}
 
@@ -272,6 +284,13 @@ function slider(slidersId, shouldAutoSlide, usePagination, useThumbnails, slideA
 	}
 
 	function nextSlide() {
+	
+		if (isAnimating) {
+			return;
+		}
+	
+		isAnimating = true;
+	
 		if (slideAllAtOnce === 'yes') {
 			currentIndex += parseInt(slidesInView, 10);
 			if (currentIndex >= totalNumOfSlides) {
@@ -283,27 +302,48 @@ function slider(slidersId, shouldAutoSlide, usePagination, useThumbnails, slideA
 			nextButton.classList.add('disabled');
 			setTimeout(() => nextButton.classList.remove('disabled'), slideSpeed / 2);
 		}
+	
 		updateSlider();
 		restartAutoSlide();
+	
+		setTimeout(() => {
+			isAnimating = false;
+		}, slideSpeed);
 	}
 
 	function prevSlide() {
+	
+		if (isAnimating) {
+			return;
+		}
+	
+		isAnimating = true;
+	
 		if (slideAllAtOnce === "yes") {
 			currentIndex -= slidesInView;
+		
 			if (currentIndex < 0) {
-				currentIndex = totalNumOfSlides - 1;
+		
+				//Get last valid grouped index
+				currentIndex = Math.floor((totalNumOfSlides - 1) / slidesInView) * slidesInView;
 			}
 		} else {
 			currentIndex--;
 			if (currentIndex < 0) {
 				currentIndex = totalNumOfSlides - 1;
 			}
+	
 			const prevButton = $sliderId.querySelector('.prev');
 			prevButton.classList.add('disabled');
 			setTimeout(() => prevButton.classList.remove('disabled'), slideSpeed / 2);
 		}
+	
 		updateSlider();
 		restartAutoSlide();
+	
+		setTimeout(() => {
+			isAnimating = false;
+		}, slideSpeed);
 	}
 
 	function restartAutoSlide() {
@@ -425,7 +465,7 @@ function slider(slidersId, shouldAutoSlide, usePagination, useThumbnails, slideA
 		if (slideAllAtOnce === 'yes') {
 			const $sliderPager = $sliderId.querySelector(".slider-pager");
 			$sliderPager.addEventListener('click', (e) => {
-				const thumbnail = e.target.closest('.thumbnail'); // Find the closest `.thumbnail` element
+				const thumbnail = e.target.closest('.thumbnail'); //Find the closest `.thumbnail` element
 				if (thumbnail) {
 					currentIndex = parseInt(thumbnail.dataset.index, 10);
 					updateSlider();

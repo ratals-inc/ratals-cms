@@ -37,9 +37,27 @@ else
 					$media_array[] = array($media, '');
 				}
 				
+				$all_media_ids = array();
+				$all_media_placeholders = array();
 				foreach($media_array as $media_array_item)
 				{
-					$media_result = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '*', 'media', 'WHERE `id` = ?', [$media_array_item[0]]);
+					if(!in_array($media_array_item[0], $all_media_ids))
+					{
+						$all_media_ids[] = $media_array_item[0];
+						$all_media_placeholders[] = '?';
+					}
+				}
+				
+				if(!empty($all_media_ids) && !empty($all_media_placeholders))
+				{
+					$all_media_placeholders = implode(',', $all_media_placeholders);
+					
+					$media_results = $_SESSION['results']->getSelectMultipleRecordsKeyName(__LINE__, __FILE__, '*', 'media', 'WHERE `id` IN ('.$all_media_placeholders.')', $all_media_ids, 'id');
+				}
+				
+				foreach($media_array as $media_array_item)
+				{
+					$media_result = $media_results[$media_array_item[0]];
 					
 					if(!empty($media_result))
 					{
@@ -117,6 +135,7 @@ else
 							$sql_media_rows = array();
 							if(is_numeric($requested_media_id))
 							{
+								//Limit to 30 media files. The original image format (GIF, PNG, etc.), along with AVIF and WebP conversions across all generated sizes, should never exceed 30 media files.
 								$sql_media_rows = $_SESSION['results']->getSelectMultipleRecordsKeyName(__LINE__, __FILE__, '*', 'media', 'WHERE `id` = ? OR `original_media_id` = ? LIMIT 30', [$requested_media_id, $requested_media_id], 'id');
 								rsort($sql_media_rows); //list the 'max-width' queries from smallest to largest
 							}

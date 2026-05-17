@@ -81,7 +81,7 @@ else
 				$set_thumbnail_width = '';
 				if($sql_sliders['pagination_thumbnail_width'] !== NULL)
 				{
-					$set_thumbnail_width = ' .slider_'.$slider_id.' .thumbnail img { width: '.$sql_sliders['pagination_thumbnail_width'].'px; }';
+					$set_thumbnail_width = ' .slider_'.$slider_id.' .thumbnail { width: '.$sql_sliders['pagination_thumbnail_width'].'px; }';
 				}
 				///////////////End slider settings///////////////
 				
@@ -91,7 +91,7 @@ else
 				{
 					//Set slider css.
 					echo "<style nonce=\"".NONCE."\">
-					.slider_".$slider_id." .container { width: calc(100% / ".$slides_in_viewport."); padding: 0px ".($sql_sliders['slide_margin'] ?? 0)."px; }".$set_pagination_over_image.$set_pagination_center.$set_thumbnail_width.$set_pagination_gap."
+					.slider_".$slider_id." .slider-holder { gap: ".($sql_sliders['slide_margin'] ?? 0)."px; } .slider_".$slider_id." .container { width: calc(100% / ".$slides_in_viewport."); }".$set_pagination_over_image.$set_pagination_center.$set_thumbnail_width.$set_pagination_gap."
 					</style>";
 					
 					//Call slider function.
@@ -99,7 +99,7 @@ else
 					var videoIconSrc = `".$_SESSION['media_video_icon_no_picture_tag']."`;
 					var FileIconSrc = `".$_SESSION['media_file_icon_no_picture_tag']."`;
 					document.addEventListener('DOMContentLoaded', function () {
-						slider('.slider_".$sql_sliders['id']."', '".strtolower($sql_sliders['auto_slide_media'])."', '".strtolower($sql_sliders['display_pagination'])."', '".strtolower($sql_sliders['display_thumbnails'])."', '".strtolower($sql_sliders['slide_all_at_once'])."', ".$slides_in_viewport.", ".$sql_sliders['slide_speed'].", ".$sql_sliders['pause_time'].", ".$sql_sliders['slide_minimum_width'].", ".$slides_in_viewport.", ".count($slider_items).", videoIconSrc, FileIconSrc);
+						slider('.slider_".$sql_sliders['id']."', '".strtolower($sql_sliders['auto_slide_media'])."', '".strtolower($sql_sliders['display_pagination'])."', '".strtolower($sql_sliders['display_thumbnails'])."', '".strtolower($sql_sliders['slide_all_at_once'])."', ".$slides_in_viewport.", ".$sql_sliders['slide_speed'].", ".$sql_sliders['pause_time'].", ".$sql_sliders['slide_margin'].", ".$sql_sliders['slide_minimum_width'].", ".$slides_in_viewport.", ".count($slider_items).", videoIconSrc, FileIconSrc);
 					});
 					</script>";
 					

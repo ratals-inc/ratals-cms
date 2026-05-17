@@ -11,6 +11,20 @@ if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/core/database/DbCredentials.php
 }
 else
 {
+	// IMPORTANT
+	// If you change the database connection to use a different document_root folder / site,
+	// make sure to also update the "auto_prepend_file" path in the following files:
+	//
+	// /.htaccess
+	// /admin/.htaccess
+	//
+	// If you are using Nginx, update the path in these files instead:
+	//
+	// /.user.ini
+	// /admin/.user.ini
+	//
+	// Failure to update these paths will prevent the site from loading properly.
+	
 	if(session_status() === PHP_SESSION_ACTIVE)
 	{
 		$_SESSION['site_db_name'] = '[DATABASE_NAME]';

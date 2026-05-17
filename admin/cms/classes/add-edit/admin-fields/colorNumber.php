@@ -43,6 +43,7 @@ else
 					}
 				}
 				
+				//Only swatches and boxes display select a color for a swatch display.
 				if((isset($custom_field_type) && $custom_field_type['display_as'] == 'swatch') || (isset($form_field_type) && $form_field_type['form_field_type'] == 'Swatch'))
 				{
 					echo '

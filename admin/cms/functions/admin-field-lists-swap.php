@@ -28,17 +28,45 @@ else
 				//Controlling options (ex: countries)
 				$main_fields_lists = $_SESSION['results']->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'admin_fields_values', 'WHERE `admin_fields_lists_parent_code` = ? ORDER BY `sort` ASC', [$main_field_data['system_code']]);
 				
+				//Get all form fields and values in one query for speed.
+				$all_form_field_ids = array();
+				$all_form_field_placeholders = array();
+				foreach($main_fields_lists as $main_fields_list)
+				{
+					if(!empty($main_fields_list['swap_admin_field_to']) && !in_array($main_fields_list['swap_admin_field_to'], $all_form_field_ids))
+					{
+						$all_form_field_ids[] = $main_fields_list['swap_admin_field_to'];
+						$all_form_field_placeholders[] = '?';
+					}
+				}
+				$swap_field_meta = array();
+				$all_swap_fields_lists = array();
+				if(!empty($all_form_field_ids) && !empty($all_form_field_placeholders))
+				{
+					$all_form_field_placeholders = implode(',', $all_form_field_placeholders);
+					
+					$swap_field_meta = $_SESSION['results']->getSelectMultipleRecordsKeyName(__LINE__, __FILE__, '*', 'admin_fields_lists', 'WHERE `system_code` IN ('.$all_form_field_placeholders.')', $all_form_field_ids, 'system_code');
+					
+					$all_swap_fields_lists = $_SESSION['results']->getSelectMultipleRecordsKeyNameArray(__LINE__, __FILE__, '*', 'admin_fields_values', 'WHERE `admin_fields_lists_parent_code` IN ('.$all_form_field_placeholders.') ORDER BY `sort` ASC', $all_form_field_ids, 'admin_fields_lists_parent_code');
+				}
+				
 				if(!empty($main_fields_lists))
 				{
 					foreach($main_fields_lists as $main_fields_list)
 					{
 						//Label metadata for .edit-label
-						$swap_list_meta = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '*', 'admin_fields_lists', 'WHERE `system_code` = ?', [$main_fields_list['swap_admin_field_to']]);
-						
-						$swap_label = !empty($swap_list_meta['name']) ? $swap_list_meta['name'] : '';
+						$swap_label = '';
+						if(isset($swap_field_meta[$main_fields_list['swap_admin_field_to']]['name']) && !empty($swap_field_meta[$main_fields_list['swap_admin_field_to']]['name']))
+						{
+							$swap_label = $swap_field_meta[$main_fields_list['swap_admin_field_to']]['name'];
+						}
 						
 						//Fetch swap values
-						$swap_fields_lists = $_SESSION['results']->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'admin_fields_values', 'WHERE `admin_fields_lists_parent_code` = ? ORDER BY `sort` ASC', [$main_fields_list['swap_admin_field_to']]);
+						$swap_fields_lists = array();
+						if(isset($all_swap_fields_lists[$main_fields_list['swap_admin_field_to']]) && !empty($all_swap_fields_lists[$main_fields_list['swap_admin_field_to']]))
+						{
+							$swap_fields_lists = $all_swap_fields_lists[$main_fields_list['swap_admin_field_to']];
+						}
 						
 						//SELECT MODE
 						if(!empty($swap_fields_lists))
@@ -187,13 +215,45 @@ else
 			{
 				$main_fields_lists = $_SESSION['results']->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'form_values', 'WHERE `form_fields_id` = ? AND `status` = ? ORDER BY `sort` ASC', [$main_field_data['id'], 1]);
 				
+				//Get all form fields and values in one query for speed.
+				$all_form_field_ids = array();
+				$all_form_field_placeholders = array();
+				foreach($main_fields_lists as $main_fields_list)
+				{
+					if(!empty($main_fields_list['swap_form_field_to']) && !in_array($main_fields_list['swap_form_field_to'], $all_form_field_ids))
+					{
+						$all_form_field_ids[] = $main_fields_list['swap_form_field_to'];
+						$all_form_field_placeholders[] = '?';
+					}
+				}
+				$swap_field_meta = array();
+				$all_swap_fields_lists = array();
+				if(!empty($all_form_field_ids) && !empty($all_form_field_placeholders))
+				{
+					$all_form_field_placeholders = implode(',', $all_form_field_placeholders);
+					
+					$swap_field_meta = $_SESSION['results']->getSelectMultipleRecordsKeyName(__LINE__, __FILE__, '*', 'form_fields', 'WHERE `id` IN ('.$all_form_field_placeholders.')', $all_form_field_ids, 'id');
+					
+					$all_form_field_ids[] = 1; //Add form value status 1 as active.
+					
+					$all_swap_fields_lists = $_SESSION['results']->getSelectMultipleRecordsKeyNameArray(__LINE__, __FILE__, '*', 'form_values', 'WHERE `form_fields_id` IN ('.$all_form_field_placeholders.') AND `status` = ? ORDER BY `sort` ASC', $all_form_field_ids, 'form_fields_id');
+				}
+				
 				foreach((array)$main_fields_lists as $main_fields_list)
 				{
-					$swap_field_meta = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '*', 'form_fields', 'WHERE `id` = ?', [$main_fields_list['swap_form_field_to']]);
+					//Lookup swap field meta to fetch frontend_name
+					$frontend_label = '';
+					if(isset($swap_field_meta[$main_fields_list['swap_form_field_to']]['frontend_name']) && !empty($swap_field_meta[$main_fields_list['swap_form_field_to']]['frontend_name']))
+					{
+						$frontend_label = $swap_field_meta[$main_fields_list['swap_form_field_to']]['frontend_name'];
+					}
 					
-					$frontend_label = $swap_field_meta['frontend_name'] ?? '';
-					
-					$swap_fields_lists = $_SESSION['results']->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'form_values', 'WHERE `form_fields_id` = ? AND `status` = ? ORDER BY `sort` ASC', [$main_fields_list['swap_form_field_to'], 1]);
+					//Lookup swap values
+					$swap_fields_lists = array();
+					if(isset($all_swap_fields_lists[$main_fields_list['swap_form_field_to']]) && !empty($all_swap_fields_lists[$main_fields_list['swap_form_field_to']]))
+					{
+						$swap_fields_lists = $all_swap_fields_lists[$main_fields_list['swap_form_field_to']];
+					}
 					
 					if(!empty($swap_fields_lists))
 					{
@@ -369,11 +429,36 @@ else
 			if(!empty($main_field_data))
 			{
 				$main_fields_lists = $_SESSION['results']->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'form_values', 'WHERE `form_fields_id` = ? AND `status` = ? ORDER BY `sort` ASC', [$main_field_data['id'], 1]);
-		
+				
+				//Get all form fields and values in one query for speed.
+				$all_form_field_ids = array();
+				$all_form_field_placeholders = array();
+				foreach($main_fields_lists as $main_fields_list)
+				{
+					if(!empty($main_fields_list['swap_form_field_to']) && !in_array($main_fields_list['swap_form_field_to'], $all_form_field_ids))
+					{
+						$all_form_field_ids[] = $main_fields_list['swap_form_field_to'];
+						$all_form_field_placeholders[] = '?';
+					}
+				}
+				$swap_field_meta = array();
+				$all_swap_fields_lists = array();
+				if(!empty($all_form_field_ids) && !empty($all_form_field_placeholders))
+				{
+					$all_form_field_placeholders = implode(',', $all_form_field_placeholders);
+					
+					$swap_field_meta = $_SESSION['results']->getSelectMultipleRecordsKeyName(__LINE__, __FILE__, '*', 'form_fields', 'WHERE `id` IN ('.$all_form_field_placeholders.')', $all_form_field_ids, 'id');
+					
+					$all_form_field_ids[] = 1; //Add form value status 1 as active.
+					
+					$all_swap_fields_lists = $_SESSION['results']->getSelectMultipleRecordsKeyNameArray(__LINE__, __FILE__, '*', 'form_values', 'WHERE `form_fields_id` IN ('.$all_form_field_placeholders.') AND `status` = ? ORDER BY `sort` ASC', $all_form_field_ids, 'form_fields_id');
+				}
+				
 				if(!empty($main_fields_lists))
 				{
 					foreach($main_fields_lists as $main_fields_list)
 					{
+						
 						if($checkout == 'checkout_countries' && !in_array($main_fields_list['value'], $_SESSION['eligible_countries'], true))
 						{
 							continue;
@@ -390,17 +475,18 @@ else
 						}
 						
 						//Lookup swap field meta to fetch frontend_name
-						$swap_field_meta = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '*', 'form_fields', 'WHERE `id` = ?', [$main_fields_list['swap_form_field_to']]);
-						
 						$frontend_label = '';
-						
-						if(!empty($swap_field_meta['frontend_name']))
+						if(isset($swap_field_meta[$main_fields_list['swap_form_field_to']]['frontend_name']) && !empty($swap_field_meta[$main_fields_list['swap_form_field_to']]['frontend_name']))
 						{
-							$frontend_label = $swap_field_meta['frontend_name'];
+							$frontend_label = $swap_field_meta[$main_fields_list['swap_form_field_to']]['frontend_name'];
 						}
 						
 						//Lookup swap values
-						$swap_fields_lists = $_SESSION['results']->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'form_values', 'WHERE `form_fields_id` = ? AND `status` = ? ORDER BY `sort` ASC', [$main_fields_list['swap_form_field_to'], 1]);
+						$swap_fields_lists = array();
+						if(isset($all_swap_fields_lists[$main_fields_list['swap_form_field_to']]) && !empty($all_swap_fields_lists[$main_fields_list['swap_form_field_to']]))
+						{
+							$swap_fields_lists = $all_swap_fields_lists[$main_fields_list['swap_form_field_to']];
+						}
 						
 						//Build main select options
 						$selected = (!empty($posted_main_list_value) && $posted_main_list_value == $main_fields_list['value']) ? ' selected' : '';

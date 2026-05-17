@@ -53,6 +53,7 @@ include_once('sites/functions.php');
 	"image": ["<?php if(isset($data_array['media_data'][0]['path_url']) && !empty($data_array['media_data'][0]['path_url'])) { echo $domain.'/'.$data_array['media_data'][0]['path_url']; } ?>"],  
 	<?php if(isset($data_array['author_bio']['author_name'])) { ?>"author": {
 		"@type": "Person",
+		"@id": "<?php echo $data_array['author_bio']['author_personal_website_url']; ?>",
 		"name": "<?php echo $data_array['author_bio']['author_name']; ?>"<?php if(isset($data_array['author_bio']['author_page_url']) && !empty($data_array['author_bio']['author_page_url'])) { ?>,
 		"url": "<?php echo $data_array['author_bio']['author_page_url']; ?>"<?php } ?><?php if(isset($data_array['author_bio']['author_photo_url']) && !empty($data_array['author_bio']['author_photo_url'])) { ?>,
 		"image": {
@@ -60,23 +61,24 @@ include_once('sites/functions.php');
 			"url": "<?php echo $data_array['author_bio']['author_photo_url']; ?>"
 		}<?php } ?><?php if(isset($data_array['author_bio']['author_same_as_urls']) && !empty($data_array['author_bio']['author_same_as_urls'])) { ?>,
 		<?php
-			$same_as_urls = explode(',', $data_array['author_bio']['author_same_as_urls']);
-			$same_as_urls = array_map('trim', $same_as_urls);
-			$same_as_urls = array_filter($same_as_urls);
-			if(!empty($same_as_urls))
-			{
-				echo '"sameAs": ' . json_encode(array_values($same_as_urls), JSON_UNESCAPED_SLASHES) . '
-			';
-			}
-		?>},
-	<?php } ?>
-	<?php } ?>"publisher": {
+		$same_as_urls = explode(',', $data_array['author_bio']['author_same_as_urls']);
+		$same_as_urls = array_map('trim', $same_as_urls);
+		$same_as_urls = array_filter($same_as_urls);
+		if(!empty($same_as_urls))
+		{
+			echo '"sameAs": '.json_encode(array_values($same_as_urls), JSON_UNESCAPED_SLASHES).'
+	';
+	}
+	?>},
+	<?php } ?><?php } ?>"publisher": {
 		"@type": "Organization",
 		"name": "<?php echo $site_name ?? ''; ?>",
+		"url": "<?php echo $domain ?? ''; ?>"<?php if(isset($logo_media_url) && strpos($logo_media_url, 'http') !== false) {?>,
 		"logo": {
 			"@type": "ImageObject",
 			"url": "<?php echo $logo_media_url ?? ''; ?>"
-		}
+		}<?php } ?>
+
 	},
 	"datePublished": "<?php echo str_replace(' ', 'T', $data_array['created_date']).''.$time_zone_offset ?? ''; ?>",
 	"dateModified": "<?php echo str_replace(' ', 'T', $data_array['updated_date']).''.$time_zone_offset ?? ''; ?>"
