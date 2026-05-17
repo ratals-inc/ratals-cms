@@ -113,15 +113,6 @@ Full documentation: https://www.ratals.com/tutorials/
 
 ---
 
-## Screenshots
-
-_Add screenshots here:_
-- Dashboard
-- CMS editor
-- ERP / accounting interface
-
----
-
 ## Philosophy
 
 Ratals is built on a few core principles:
