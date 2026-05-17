@@ -118,9 +118,9 @@ Full documentation: https://www.ratals.com/tutorials/
 Ratals is built on a few core principles:
 
 - **Data & Platform Sovereignty** - You own your server and your data. Unlike SaaS, your website stays online even if you choose not to renew a business license. Our internal update system ensures your platform stays modern and secure without ever losing control of your infrastructure.
-- **Developer Freedom** – No restrictions on customization or deployment.
-- **All-in-One System** – CMS, commerce, and operations in one platform.
-- **Performance Matters** – Fast load times and efficient backend processing.
+- **Developer Freedom** - No restrictions on customization or deployment.
+- **All-in-One System** - CMS, commerce, and operations in one platform.
+- **Performance Matters** - Fast load times and efficient backend processing.
 
 ---
 
