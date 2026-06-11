@@ -26,6 +26,7 @@ else
 	$inventory_variant_builder_max = $site_settings["inventory_variant_builder_max"] ?? 3000;
 	$_SESSION['cart_line_item_max_qty'] = $site_settings["cart_line_item_max_qty"] ?? 9999;
 	$display_discount_code_on_cart = $site_settings["display_discount_code_on_cart"] ?? 'Yes';
+	$add_to_cart_redirect = $site_settings["add_to_cart_redirect"] ?? 'No';
 	$allow_checkout_as_guest = $site_settings["allow_checkout_as_guest"] ?? 'Yes';
 	$allow_customers_save_cards = $site_settings["customers_save_cards"] ?? 'No';
 	$customer_account_url = $site_settings["customer_account_url"] ?? 0;

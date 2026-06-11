@@ -199,7 +199,12 @@ else
 						}
 						
 						//Set Desktop Slider Media
+						$sql_sliders_rows["desktop_media_type"] = '';
+						$sql_sliders_rows["desktop_original_media_id"] = 0;
 						$sql_sliders_rows["desktop_media_url"] = '';
+						$sql_sliders_rows["desktop_media_width"] = 0;
+						$sql_sliders_rows["desktop_media_height"] = 0;
+						$sql_sliders_rows["desktop_media_tag"] = '';
 						if(!empty($sql_sliders_rows["desktop_media"]))
 						{
 							$media_array = explode('~||~', $sql_sliders_rows["desktop_media"]);
@@ -226,7 +231,12 @@ else
 						}
 						
 						//Set Tablet Slider Media
+						$sql_sliders_rows["tablet_media_type"] = '';
+						$sql_sliders_rows["tablet_original_media_id"] = 0;
 						$sql_sliders_rows["tablet_media_url"] = '';
+						$sql_sliders_rows["tablet_media_width"] = 0;
+						$sql_sliders_rows["tablet_media_height"] = 0;
+						$sql_sliders_rows["tablet_media_tag"] = '';
 						if(!empty($sql_sliders_rows["tablet_media"]))
 						{
 							$media_array = explode('~||~', $sql_sliders_rows["tablet_media"]);
@@ -253,7 +263,12 @@ else
 						}
 						
 						//Set Mobile Slider Media
+						$sql_sliders_rows["mobile_media_type"] = '';
+						$sql_sliders_rows["mobile_original_media_id"] = 0;
 						$sql_sliders_rows["mobile_media_url"] = '';
+						$sql_sliders_rows["mobile_media_width"] = 0;
+						$sql_sliders_rows["mobile_media_height"] = 0;
+						$sql_sliders_rows["mobile_media_tag"] = '';
 						if(!empty($sql_sliders_rows["mobile_media"]))
 						{
 							$media_array = explode('~||~', $sql_sliders_rows["mobile_media"]);

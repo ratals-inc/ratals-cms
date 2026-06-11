@@ -123,18 +123,18 @@ else
 									
 									if(!empty($referer_url)) 
 									{
-										echo '</ol><div class="referer-bottom-margin"><strong>'.$is_returning.'Referer URL:</strong> '.$referer_url.'</div><ol>';
+										echo '</ol><div class="referer-bottom-margin"><strong>'.$is_returning.'Referrer URL:</strong> '.$referer_url.'</div><ol>';
 										echo '<li>'.$pageview_timestamp.' - '.$unique_visitor['pageview_url'].'</li>';
 									}
 									else 
 									{
-										echo '</ol><div class="referer-bottom-margin"><strong>'.$is_returning.'Referer URL:</strong> Direct</div><ol>'; 
+										echo '</ol><div class="referer-bottom-margin"><strong>'.$is_returning.'Referrer URL:</strong> Direct</div><ol>'; 
 										echo '<li>'.$pageview_timestamp.' - '.$unique_visitor['pageview_url'].'</li>';
 									}
                                 }
 								elseif(!empty($last_timestamp) && $time_difference > 1800)
 								{
-									echo '</ol><div class="referer-bottom-margin"><strong>'.$is_returning.'Referer URL:</strong> Direct</div><ol>';
+									echo '</ol><div class="referer-bottom-margin"><strong>'.$is_returning.'Referrer URL:</strong> Direct</div><ol>';
 									echo '<li>'.$pageview_timestamp.' - '.$unique_visitor['pageview_url'].'</li>';
 								}
 								else
@@ -200,7 +200,7 @@ else
                     <li class="table-cell-header analytics table-edit">#</li>
                     <li class="table-cell-header analytics no-sorting">Uniques</li>
                     <li class="table-cell-header analytics no-sorting">URL</li>
-                    <li class="table-cell-header analytics no-sorting">Referer Source</li>
+                    <li class="table-cell-header analytics no-sorting">Referrer Source</li>
                     <li class="table-cell-header analytics no-sorting">Bounces</li>
                     <li class="table-cell-header analytics no-sorting">Bounce Rate</li>
                 </ul>

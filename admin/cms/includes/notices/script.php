@@ -49,6 +49,10 @@ if(isset($sql_get_messages) && !empty($sql_get_messages))
 				updateButton.prop("disabled", true);
 				updateButton.text("Starting Update...");
 				
+				$(".pending-ajax-inner-container span").html("Starting Update... Hang tight.")
+				$("body").addClass("body-pending-ajax");
+				$(".pending-ajax").show();
+				
 				var dataValues = $(this).attr("data-click");
 				var dataArray = dataValues.split(",");
 				

@@ -49,7 +49,9 @@ $parameters['admin_pages_parent_code'] = ['Admin Page Parent URL', 'admin_pages_
 
 $parameters['admin_permissions_id'] = ['Admin Permissions', 'admin_permissions_id', 'admin-permissions-id', 'dropdownValue', 'dropdownValue', 'Yes', 'Yes', '', 'admin_users_permissions', 'int', '', 'Yes', 'No', 'No', '0', '0', 'No', 'No', 'If no Admin Permissions are set, the user will have access to all admin pages as super admin.', '', '{}', $first_last_name, $first_last_name];
 
-$parameters['affiliate_account_id'] = ['Affiliate Account ID', 'affiliate_account_id', 'affiliate-account-id', 'textfield', 'text', 'Yes', 'Yes', '', '0', 'int', '', 'Yes', 'No', 'No', '0', '0', 'No', 'No', 'If an affiliate ID is set here, it means an affiliate referred this customer or traffic to us.', '', '{}', $first_last_name, $first_last_name];
+$parameters['affiliate_account_id'] = ['Affiliate Account ID', 'affiliate_account_id', 'affiliate-account-id', 'textfield', 'text', 'Yes', 'Yes', '', '0', 'int', '', 'Yes', 'No', 'No', '0', '0', 'No', 'No', 'If an affiliate ID is set, it means an affiliate referred this customer or traffic to you.', '', '{}', $first_last_name, $first_last_name];
+
+$parameters['affiliate_lead_commission_amount'] = ['Affiliate Lead Commission Amount', 'affiliate_lead_commission_amount', 'affiliate-lead-commission-amount', 'textfield', 'text', 'Yes', 'No', '', '0', 'int', '', 'Yes', 'No', 'No', '0', '0', 'No', 'No', 'If an affiliate sent the traffic that generated this lead, this is the amount they will be paid if you mark the lead as valid.', '', '{}', $first_last_name, $first_last_name];
 
 $parameters['allow_comments'] = ['Allow Comments', 'allow_comments', 'allow-comments', 'dropdownValue', 'dropdownValue', 'Yes', 'Yes', '', 'yes_no', 'varchar(3)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`', 'No', 'No', 'No', '3', '0', 'No', 'Yes', 'If you set this to Yes, visitors will see the comment form to be able to leave comments. If you select as No, visitors will not be able to leave comments on this post. The comment form will be hidden.', '', '{}', $first_last_name, $first_last_name];
 
@@ -67,7 +69,7 @@ $parameters['area_served'] = ['Area Served', 'area_served', 'area-served', 'text
 
 $parameters['assigned_to'] = ['Assigned To', 'assigned_to', 'assigned-to', 'dropdownId', 'assignedTo', 'Yes', 'Yes', '', 'database_table_names', 'varchar(255)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`', 'No', 'No', 'No', '255', '0', 'No', 'Yes', '', '', '{}', $first_last_name, $first_last_name];
 
-$parameters['assigned_type'] = ['Assigned Type', 'assigned_type', 'assigned-type', 'dropdownValue', 'dropdownValue', 'Yes', 'Yes', '', 'template_files_assigned_type', 'varchar(100)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`', 'No', 'No', 'No', '100', '0', 'No', 'No', 'Assigned Type is a flag used to identify when custom code should run with a template file. If you plan to add custom logic to this template file, you can use this field to define a variable name that your code will reference. To learn how to make a custom template file load and execute that code, see this tutorial: <a href="https://www.ratals.com/tutorials/installation/setup-custom-template-file-code/" target="_blank">here</a>.', '', '{}', $first_last_name, $first_last_name];
+$parameters['assigned_type'] = ['Assigned Type', 'assigned_type', 'assigned-type', 'dropdownValue', 'dropdownValue', 'Yes', 'Yes', '', 'template_files_assigned_type', 'varchar(100)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`', 'No', 'No', 'No', '100', '0', 'No', 'No', 'Assigned Type is a flag used to identify when custom code should run with a template file. If you plan to add custom logic to this template file, you can use this field to define a variable name that your code will reference. To learn how to make a custom template file load and execute that code, see this tutorial: <a href="https://www.ratals.com/tutorials/customization/setting-up-custom-template-file-code/" target="_blank">here</a>.', '', '{}', $first_last_name, $first_last_name];
 
 $parameters['author_bio_id'] = ['Author Bio', 'author_bio_id', 'author-bio-id', 'dropdownId', 'dropdownId', 'Yes', 'Yes', '', 'authors_bios', 'int', '', 'Yes', 'No', 'No', '0', '0', 'No', 'No', '', '', '{}', $first_last_name, $first_last_name];
 
@@ -693,9 +695,9 @@ $parameters['redirect_to_opposite_url'] = ['Redirect To Opposite URL', 'redirect
 
 $parameters['redirect_type'] = ['Redirect Type', 'redirect_type', 'redirect-type', 'dropdownValue', 'dropdownValue', 'Yes', 'Yes', '', 'urls_redirect_types', 'varchar(255)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`', 'No', 'No', 'No', '255', '0', 'No', 'Yes', '', '', '{}', $first_last_name, $first_last_name];
 
-$parameters['referer_source'] = ['Referer Source', 'referer_source', 'referer-source', 'textfield', 'text', 'Yes', 'No', '', '0', 'varchar(100)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`', 'No', 'No', 'No', '100', '0', 'No', 'No', '', '', '{}', $first_last_name, $first_last_name];
+$parameters['referer_source'] = ['Referrer Source', 'referer_source', 'referer-source', 'textfield', 'text', 'Yes', 'No', '', '0', 'varchar(100)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`', 'No', 'No', 'No', '100', '0', 'No', 'No', '', '', '{}', $first_last_name, $first_last_name];
 
-$parameters['referer_url'] = ['Referer URL', 'referer_url', 'referer-url', 'textfield', 'text', 'Yes', 'No', '', '0', 'varchar(512)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`', 'No', 'No', 'No', '512', '0', 'No', 'No', '', '', '{}', $first_last_name, $first_last_name];
+$parameters['referer_url'] = ['Referrer URL', 'referer_url', 'referer-url', 'textfield', 'text', 'Yes', 'No', '', '0', 'varchar(512)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`', 'No', 'No', 'No', '512', '0', 'No', 'No', '', '', '{}', $first_last_name, $first_last_name];
 
 $parameters['required'] = ['Required', 'required', 'required', 'dropdownValue', 'dropdownValue', 'Yes', 'Yes', '', 'yes_no', 'varchar(3)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`', 'No', 'No', 'No', '3', '0', 'No', 'Yes', '', '', '{}', $first_last_name, $first_last_name];
 

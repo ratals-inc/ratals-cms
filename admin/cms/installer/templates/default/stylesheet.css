@@ -9,7 +9,7 @@ body { margin: 0; padding: 0; font-family: sans-serif; font-size: 16px;
 --blue-1: #0f344c; --blue-2: #0d5a87; --blue-3: #0f6395; --blue-4: #1373af; --blue-5: #1589cd; --blue-6: #3d96c2; --blue-7: #2ba8f1; --blue-8: #a4daf9;
 --red-1: #ff0000; --red-2: #f3d0d0; --red-3: #fff1f1; 
 --yellow-1: #fbff00; --yellow-2: #fff1bf; 
---green-1: #0a5c0a; --green-2: #2ad116; 
+--green-1: #0a5c0a; --green-2: #e6f9ed;
 /* Edit in Admin Colors */
 --edit-in-admin-bg-color: #000000;
 --edit-in-admin-text-color: #ffffff;
@@ -160,10 +160,11 @@ ul.grid-two-column, ul.grid-three-column, ul.grid-four-column { margin: 0; paddi
 .container { box-sizing: border-box; flex: 0 0 auto; gap: 0; padding: 0; align-content: center; width: 100%; }
 .container img { width: 100%; height: auto; display: block; object-fit: cover; }
 .container video { max-width: 100%; height: auto; }
-.prev, .next { position: absolute; top: 50%; transform: translateY(-50%); cursor: pointer; z-index: 10; border: 1px solid var(--gray-5); font-size: 50px; padding: 40px 15px 48px 15px; line-height: 0; border-radius: var(--border-radius-1); opacity: 0.5; transition: all 0.5s ease; background-color: var(--white-1); color: var(--black-1); -webkit-user-select: none; -ms-user-select: none; user-select: none; }
+.prev, .next { display: none; position: absolute; top: 50%; transform: translateY(-50%); cursor: pointer; z-index: 10; border: 1px solid var(--gray-5); font-size: 50px; padding: 40px 15px 48px 15px; line-height: 0; border-radius: var(--border-radius-1); opacity: 0.5; transition: all 0.5s ease; background-color: var(--white-1); color: var(--black-1); -webkit-user-select: none; -ms-user-select: none; user-select: none; }
+.slider:hover .prev, .slider:hover .next { display: block; }
+.prev { left: 10px; }
+.next{ right: 10px; }
 .prev:hover, .next:hover { opacity: 1; }
-.prev { left: 10px;}
-.next { right: 10px; }
 .slider-pager { position: relative; z-index: 20; line-height: 0; display: flex; flex-wrap: wrap; gap: 5px; padding: 10px; }
 .pager { display: inline-block; width: 8px; height: 8px; margin: 0 1px; border-radius: 50%; background-color: var(--gray-3); cursor: pointer; }
 .pager.active { background-color: var(--blue-2); opacity: 0.7; }
@@ -557,6 +558,8 @@ ul.grid-2 > li, ul.grid-3 > li, ul.grid-4 > li, ul.grid-5 > li, ul.grid-6 > li, 
 .product-options-swatch-item-color-number-inner { height: 100%; }
 .product-options-textarea textarea { margin-top: 12px; width: 100%; height: 100px; padding: 10px; border: 1px solid var(--gray-4); }
 .product-options-textfield input { margin-top: 12px; width: 100%; padding: 10px 10px; border: 1px solid var(--gray-4); font-size: 18px; }
+.item-added-to-cart { padding: 10px; margin-bottom: 5px; background-color: var(--green-2); color: var(--green-1); font-size: 16px; font-weight: 500; text-align: center; }
+.item-added-to-cart::before { content: "\2713"; font-weight: 700; margin-right: 8px; color: var(--green-1); }
 .product-totals { background-color: var(--gray-6); padding: 20px; width: 100%; }
 .product-totals-wrapper { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
 .product-totals-left {}
@@ -1082,8 +1085,8 @@ li.customer-area-data-cell button.link:hover { text-decoration: underline; }
 .form-1 .note {font-size: 13px; margin-top: 15px; color: var(--black-2); }
 .form-1 .call-text-for-quote { margin-top: 15px; font-weight: 600; }
 .form-1 .call-text-for-quote a { color: var(--blue-3); text-decoration: none; cursor: text; }
-.form-1 .in-form-thank-you { text-align: center; background-color: var(--green-2); color: var(--white-1); font-weight: 700; font-size: 18px; margin-bottom: 20px; padding: 10px; }
-.form-1 .in-form-thank-you-failed { text-align: center; background-color: var(--red-1); color: var(--white-1); font-weight: 700; font-size: 18px; margin-bottom: 20px; padding: 10px; }
+.form-1 .in-form-thank-you { text-align: center; background-color: var(--green-2); color: var(--green-1); font-size: 16px; margin-bottom: 20px; padding: 10px; }
+.form-1 .in-form-thank-you-failed { text-align: center; background-color: var(--red-1); color: var(--white-1); font-size: 16px; margin-bottom: 20px; padding: 10px; }
 
 /* Form on Contact Us Page */
 .form-2 { line-height: normal; }
@@ -1112,8 +1115,8 @@ li.customer-area-data-cell button.link:hover { text-decoration: underline; }
 .form-2 .note {font-size: 13px; margin-top: 15px; color: var(--black-2); }
 .form-2 .call-text-for-quote { margin-top: 15px; font-weight: 600; }
 .form-2 .call-text-for-quote a { color: var(--blue-4); text-decoration: none; cursor: text; }
-.form-2 .in-form-thank-you { text-align: center; background-color: var(--green-2); color: var(--white-1); font-weight: 700; font-size: 18px; margin-bottom: 20px; padding: 10px; }
-.form-2 .in-form-thank-you-failed { text-align: center; background-color: var(--red-1); color: var(--white-1); font-weight: 700; font-size: 18px; margin-bottom: 20px; padding: 10px; }
+.form-2 .in-form-thank-you { text-align: center; background-color: var(--green-2); color: var(--green-1); font-size: 16px; margin-bottom: 20px; padding: 10px; }
+.form-2 .in-form-thank-you-failed { text-align: center; background-color: var(--red-1); color: var(--white-1); font-size: 16px; margin-bottom: 20px; padding: 10px; }
 
 /* Start Video Embed */
 .video-embed { position: relative; aspect-ratio: 16 / 9;}
@@ -1212,7 +1215,7 @@ li.customer-area-data-cell button.link:hover { text-decoration: underline; }
 .color-margin-background-padding-shadow-border-line-height { color: var(--white-1); margin: 0 0 20px 0; background-color: var(--blue-5); padding: 10px; box-shadow: 0 0 6px 0 rgb(0 0 0 / 30%); border-radius: var(--border-radius-1); border: 1px solid var(--gray-5); line-height: 22px; }
 .color-text-align-margin-bottom { color: var(--red-1); text-align: center; margin-bottom: 10px; }
 .color-text-cursor-border-background-margin { color: var(--blue-4); text-decoration: none; cursor: pointer; border: none; background-color: transparent; margin: 0; padding: 0; }
-.color-text-margin { color: var(--green-2); text-align: center; margin-bottom: 10px; }
+.color-text-margin { color: var(--green-1); text-align: center; margin-bottom: 10px; }
 .display-block { display: block; }
 .display-block-font-size { display: block; font-size: 14px; }
 .display-color-font-size { display: block; color: var(--black-1); font-size: 12px; }

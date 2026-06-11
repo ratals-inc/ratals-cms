@@ -21,9 +21,14 @@ array(
 	'ratals_index_1' => 
 	array(
 		array('index_name' => 'ratals_index_1', 'non_unique' => '1', 'seq_in_index' => '1', 'column_name' => 'site_id', 'index_type' => 'btree'),
-		array('index_name' => 'ratals_index_1', 'non_unique' => '1', 'seq_in_index' => '2', 'column_name' => 'created_date', 'index_type' => 'btree'),
-		array('index_name' => 'ratals_index_1', 'non_unique' => '1', 'seq_in_index' => '3', 'column_name' => 'ip_address', 'index_type' => 'btree')
-	)
+		array('index_name' => 'ratals_index_1', 'non_unique' => '1', 'seq_in_index' => '2', 'column_name' => 'ip_address', 'index_type' => 'btree')
+   
+	),
+	'ratals_index_2' => 
+	array(
+        array('index_name' => 'ratals_index_2', 'non_unique' => '1', 'seq_in_index' => '1', 'column_name' => 'site_id', 'index_type' => 'btree'),
+        array('index_name' => 'ratals_index_2', 'non_unique' => '1', 'seq_in_index' => '2', 'column_name' => 'created_date', 'index_type' => 'btree')
+    )
 );
 
 if(!in_array($database_table_name, $existing_database_tables))

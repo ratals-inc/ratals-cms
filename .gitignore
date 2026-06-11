@@ -1,6 +1,7 @@
 /admin/commerce/*
 /admin/erp/*
 /admin/ai/*
+/core/database/DbCredentials.php
 /sites/webhooks/paypal.php
 /logout.php
 /LICENSE-BUSINESS.txt

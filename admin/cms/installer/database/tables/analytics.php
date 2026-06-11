@@ -45,37 +45,17 @@ array(
 	'ratals_index_1' => 
 	array(
 		array('index_name' => 'ratals_index_1', 'non_unique' => '1', 'seq_in_index' => '1', 'column_name' => 'site_id', 'index_type' => 'btree'),
-		array('index_name' => 'ratals_index_1', 'non_unique' => '1', 'seq_in_index' => '2', 'column_name' => 'created_date', 'index_type' => 'btree'),
-		array('index_name' => 'ratals_index_1', 'non_unique' => '1', 'seq_in_index' => '3', 'column_name' => 'pageview_hash', 'index_type' => 'btree')
+		array('index_name' => 'ratals_index_1', 'non_unique' => '1', 'seq_in_index' => '2', 'column_name' => 'analytics_cookie_id', 'index_type' => 'btree')
 	),
 	'ratals_index_2' => 
 	array(
 		array('index_name' => 'ratals_index_2', 'non_unique' => '1', 'seq_in_index' => '1', 'column_name' => 'site_id', 'index_type' => 'btree'),
-		array('index_name' => 'ratals_index_2', 'non_unique' => '1', 'seq_in_index' => '2', 'column_name' => 'created_date', 'index_type' => 'btree'),
-		array('index_name' => 'ratals_index_2', 'non_unique' => '1', 'seq_in_index' => '3', 'column_name' => 'visit_date', 'index_type' => 'btree'),
-		array('index_name' => 'ratals_index_2', 'non_unique' => '1', 'seq_in_index' => '4', 'column_name' => 'referer_source', 'index_type' => 'btree')
+		array('index_name' => 'ratals_index_2', 'non_unique' => '1', 'seq_in_index' => '2', 'column_name' => 'masked_ip_hash', 'index_type' => 'btree')
 	),
-	'ratals_index_3' => array(
-	array('index_name' => 'ratals_index_3', 'non_unique' => '1', 'seq_in_index' => '1', 'column_name' => 'site_id', 'index_type' => 'btree'),
-	array('index_name' => 'ratals_index_3', 'non_unique' => '1', 'seq_in_index' => '2', 'column_name' => 'analytics_cookie_id', 'index_type' => 'btree')
-	),
-	'ratals_index_4' => 
+	'ratals_index_3' => 
 	array(
-		array('index_name' => 'ratals_index_4', 'non_unique' => '1', 'seq_in_index' => '1', 'column_name' => 'site_id', 'index_type' => 'btree'),
-		array('index_name' => 'ratals_index_4', 'non_unique' => '1', 'seq_in_index' => '2', 'column_name' => 'analytics_cookie_id', 'index_type' => 'btree'),
-		array('index_name' => 'ratals_index_4', 'non_unique' => '1', 'seq_in_index' => '3', 'column_name' => 'id', 'index_type' => 'btree')
-	),
-	'ratals_index_5' => 
-	array(
-		array('index_name' => 'ratals_index_5', 'non_unique' => '1', 'seq_in_index' => '1', 'column_name' => 'site_id', 'index_type' => 'btree'),
-		array('index_name' => 'ratals_index_5', 'non_unique' => '1', 'seq_in_index' => '2', 'column_name' => 'masked_ip_hash', 'index_type' => 'btree'),
-		array('index_name' => 'ratals_index_5', 'non_unique' => '1', 'seq_in_index' => '3', 'column_name' => 'id', 'index_type' => 'btree')
-	),
-	'ratals_index_6' => 
-	array(
-		array('index_name' => 'ratals_index_6', 'non_unique' => '1', 'seq_in_index' => '1', 'column_name' => 'site_id', 'index_type' => 'btree'),
-		array('index_name' => 'ratals_index_6', 'non_unique' => '1', 'seq_in_index' => '2', 'column_name' => 'created_date', 'index_type' => 'btree'),
-		array('index_name' => 'ratals_index_6', 'non_unique' => '1', 'seq_in_index' => '3', 'column_name' => 'affiliate_account_id', 'index_type' => 'btree')
+		array('index_name' => 'ratals_index_3', 'non_unique' => '1', 'seq_in_index' => '1', 'column_name' => 'site_id', 'index_type' => 'btree'),
+		array('index_name' => 'ratals_index_3', 'non_unique' => '1', 'seq_in_index' => '2', 'column_name' => 'created_date', 'index_type' => 'btree')
 	)
 );
 

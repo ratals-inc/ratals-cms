@@ -24,8 +24,8 @@ $api_data = [
 	"authentication" => [
 		"domain" => $domain,
 		"user_ip" => $_SERVER['REMOTE_ADDR'],
-		"country" => $_SESSION['contact_info_country'],
-		"state_region_province" => $_SESSION['contact_info_state']
+		"country" => $_SESSION['contact_info_country'] ?? '',
+		"state_region_province" => $_SESSION['contact_info_state'] ?? ''
 	],
 	"system_data" => [
 		"php_version" => $php_version,
@@ -33,7 +33,7 @@ $api_data = [
 		"current_version" => $current_software_version
 	],
 	"last_logged_in" => [
-		"date" => $_SESSION['last_logged_in_user']
+		"date" => $_SESSION['last_logged_in_user'] ?? NULL
 	],
 	"system_codes_already_sent" => $get_all_message_system_codes_received
 ];
