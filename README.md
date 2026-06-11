@@ -143,11 +143,11 @@ Under the Ratals Business License:
 - Safe Harbor: You may deploy these modules to a single contracted client, provided that a valid Ratals Business License has been purchased by the client for their instance.
 
 ### What This Means Practically
-- You fully own and control your installation and data
+- You fully control your installation and own your data
 - You can modify the open-source core freely
 - Business modules are licensed for use within your organization or deployed for a specific client project.
 
-**In short:** You own your system and data. You are licensed to use the advanced Ratals Business features.
+**In short:** You own your data. You are licensed to use the advanced Ratals Business features.
 
 View full license details:
 - Apache 2.0 License: https://www.ratals.com/license/
@@ -168,7 +168,7 @@ View full license details:
 
 ## Contributing
 
-We welcome contributions to the Ratals Core. Please see our Contributing Guide for more details. For security vulnerabilities, please email support@ratals.com instead of opening a public issue.
+We welcome contributions to the Ratals CMS Core. Please see our Contributing Guide for more details. For security vulnerabilities, please email support@ratals.com instead of opening a public issue.
 
 ---
 
