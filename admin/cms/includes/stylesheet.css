@@ -308,7 +308,7 @@ ui-sortable-handle { margin: 0px!important; padding: 0px!important; }
 .edit-wrapper .edit-field .content-group label { display: block; padding: 5px 0px 0px 0px; margin: 0px 0px 10px 0px; }
 .edit-wrapper .edit-field .content-group .name { font-size: 15px; margin-bottom: 4px; }
 .edit-wrapper .edit-field .content-group .small-text { font-size: 12px; margin: 4px 0px 0px 0px; }
-.edit-wrapper .edit.top-content textarea { height: 300px; display: block; }
+.edit-wrapper .edit.top-content textarea { display: block; }
 .edit-wrapper .edit.bottom-content textarea { display: block; }
 
 .search-records { display: grid; gap: 10px; flex-wrap: wrap; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); align-items: end; background-color: #f1f1f1; border-top-left-radius: 5px; border-top-right-radius: 5px; padding: 10px; }

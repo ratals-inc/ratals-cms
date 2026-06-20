@@ -26,7 +26,7 @@ $(window).scroll(function(){
     
     for (var i = 0; i < anchors.length; i++)
 	{
-        if (scrollTop > $(anchors[i]).offset().top - 60 && scrollTop)
+        if (scrollTop > $(anchors[i]).offset().top - 61 && scrollTop)
 		{
             $('.table-of-contents ul li a').removeClass('active');
 			$('.table-of-contents ul li a[href="#' + $(anchors[i]).attr('id') + '"]').addClass('active');
