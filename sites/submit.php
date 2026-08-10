@@ -79,9 +79,9 @@ else
 			{
 				if(empty($has_blocked_keyword) && strpos(trim(strtolower($all_review_content)), 'http') === false && strpos(trim(strtolower($all_review_content)), 'href') === false)
 				{
-					$column_names = '`site_id`, `product_url_id`, `status`, `score`, `review`, `customer_account_id`, `name`, `state`, `created_date`, `approved_by`, `approved_date`';
-					$placeholders = '?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,NULL';
-					$parameters = array($_SESSION['site_id'], $page_id, '2', $review_score, $review, $customer_id, $name, $state, '');
+					$column_names = '`site_id`, `product_url_id`, `status`, `score`, `review`, `customer_account_id`, `reviews_order_id`, `name`, `state`, `created_date`, `approved_by`, `approved_date`';
+					$placeholders = '?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,NULL';
+					$parameters = array($_SESSION['site_id'], $page_id, '2', $review_score, $review, $customer_id, NULL, $name, $state, '');
 					
 					$results->getInsertRecord(__LINE__, __FILE__, 'reviews', $column_names, $placeholders, $parameters);
 				}
@@ -90,9 +90,9 @@ else
 			{
 				if(empty($has_blocked_keyword))
 				{
-					$column_names = '`site_id`, `product_url_id`, `status`, `score`, `review`, `customer_account_id`, `name`, `state`, `created_date`, `approved_by`, `approved_date`';
-					$placeholders = '?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,NULL';
-					$parameters = array($_SESSION['site_id'], $page_id, '2', $review_score, $review, $customer_id, $name, $state, '');
+					$column_names = '`site_id`, `product_url_id`, `status`, `score`, `review`, `customer_account_id`, `reviews_order_id`, `name`, `state`, `created_date`, `approved_by`, `approved_date`';
+					$placeholders = '?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,NULL';
+					$parameters = array($_SESSION['site_id'], $page_id, '2', $review_score, $review, $customer_id, NULL, $name, $state, '');
 					
 					$results->getInsertRecord(__LINE__, __FILE__, 'reviews', $column_names, $placeholders, $parameters);
 				}
@@ -557,9 +557,22 @@ else
 				
 				if(!empty($sql_get_cart_id_row))
 				{
-					$column_names = '`site_id`, `cart_id`, `first_name`, `last_name`, `company_name`, `email`, `street_address_1`, `street_address_2`, `city`, `country`, `state`, `postal_code`, `phone_number`, `phone_number_ext`, `address_type`, `loading_dock`, `default_billing_country`, `tax_exempt`, `cookie_id`, `referer_source`, `referer_url`, `updated_date`, `created_date`';
-					$placeholders = '?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),UTC_TIMESTAMP()';
-					$parameters = array($_SESSION['site_id'], $sql_get_cart_id_row['id'], $first_name, $last_name, $company_name, $email_address, $address_one, $address_two, $city, $country, $state, $postal_code, $phone_number, $phone_ext, $address_type, $loading_dock, $default_billing_country, $tax_exempt, $_SESSION['cart_cookie_id'], $_SESSION['referer_domain'], $_SESSION['referer_url']);
+					try
+					{
+						//Preferred: php cryptographically secure.
+						$recovery_email_token = bin2hex(random_bytes(32)); //64 chars
+					}
+					catch(Exception $e)
+					{
+						//Fallback if php cryptographically secure fails.
+						$recovery_email_token = '0123456789abcdefghijklmnopqrstuvwxyz';
+						$recovery_email_token = substr(str_shuffle($recovery_email_token), 0, 64);
+					}
+					
+					$column_names = '`site_id`, `cart_id`, `first_name`, `last_name`, `company_name`, `email`, `street_address_1`, `street_address_2`, `city`, `country`, `state`, `postal_code`, `phone_number`, `phone_number_ext`, `address_type`, `loading_dock`, `default_billing_country`, `tax_exempt`, `cookie_id`, `referer_source`, `referer_url`, `recovery_emails_sent`, `recovery_email_token`, `updated_date`, `created_date`';
+					$placeholders = '?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),UTC_TIMESTAMP()';
+					
+					$parameters = array($_SESSION['site_id'], $sql_get_cart_id_row['id'], $first_name, $last_name, $company_name, $email_address, $address_one, $address_two, $city, $country, $state, $postal_code, $phone_number, $phone_ext, $address_type, $loading_dock, $default_billing_country, $tax_exempt, $_SESSION['cart_cookie_id'], $_SESSION['referer_domain'], $_SESSION['referer_url'], '0', $recovery_email_token);
 					
 					$results->getInsertRecord(__LINE__, __FILE__, 'abandonment_cart_leads', $column_names, $placeholders, $parameters);
 					
@@ -760,6 +773,7 @@ else
 		unset($_SESSION['cart_cookie_id']);
 		unset($_SESSION['customer_first_name']);
 		unset($_SESSION['customer_last_name']);
+		unset($_SESSION['gateway_profile_id']);
 		unset($_SESSION['packages_to_submit']);
 		unset($_SESSION['last_packages_to_submit']);
 		unset($_SESSION['ship_to_address_flag']);

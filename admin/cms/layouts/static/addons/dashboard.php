@@ -76,7 +76,7 @@ else
     <?php } ?>
     <?php if(!empty($add_mysql_timezones)) echo $add_mysql_timezones; ?>
 	<ul class="bashboard-boxes">
-		<?php if($_SESSION['accounting_enabled'] == 'Yes') { ?>
+		<?php if(isset($_SESSION['erp_mode']) && $_SESSION['erp_mode'] == 'Enabled') { ?>
 		<li class="full-width overviews">Financial Overview</li>
         <li class="boxes">
 			<div class="bashboard-box">

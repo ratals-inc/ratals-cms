@@ -121,7 +121,7 @@ else
 			//echo '<br><br>'.$column_names;
 			//echo '<br><br>'.$column_placeholders;
 			//echo '<pre>'; print_r($column_value); echo '</pre>';
-			
+			//die;
 			
 			//Insert new url record and get the id for the record url record inserted.
 			if($table_name == 'urls')

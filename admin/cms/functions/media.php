@@ -9,7 +9,7 @@ if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/functions/media.php')
 }
 else
 {	
-	if(!function_exists('media_id_array'))
+	if(!function_exists('mediaIdArray'))
 	{
 		function mediaIdArray($media)
 		{
@@ -100,7 +100,7 @@ else
 		}
 	}
 	
-	if(!function_exists('media_id'))
+	if(!function_exists('mediaId'))
 	{
 		function mediaId($media_id, $lazy_load, $fetch_priority, $custom_media_tag) 
 		{

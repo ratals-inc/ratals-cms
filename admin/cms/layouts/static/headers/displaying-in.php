@@ -16,12 +16,14 @@ else
 		
 		$sql_record_data_rows['urls_record_data'] = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'urls', 'WHERE `id` = ?', [$sql_record_data_rows['urls_id']]);
 		
+		$displaying_in_record_id = $sql_record_data_rows['urls_record_data']['id'];
+		$contextual_link_search = '%urlId('.$displaying_in_record_id.');%';
 		$assignments_rows = array();
 		$sql_get_assignments_products = array();
 		
 		if($commerce_installed)
 		{
-			$sql_get_assignments_products = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'assignments_products', 'WHERE `child_id` = ? AND `child_id_table_name` = ? AND `site_id` = ?', [trim($_GET["rid"] ?? ''), $_SESSION['admin_table_name'], $_SESSION["site_set_for_editing"]]);
+			$sql_get_assignments_products = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'assignments_products', 'WHERE `child_id` = ? AND `child_id_table_name` = ? AND `site_id` = ?', [$displaying_in_record_id, $_SESSION['admin_table_name'], $_SESSION["site_set_for_editing"]]);
 		}
 		
 		$assignments_products_rows = array();
@@ -34,7 +36,7 @@ else
 			}
 		}
 		
-		$sql_get_assignments_sub_items = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'assignments_sub_items', 'WHERE `child_id` = ? AND `child_id_table_name` = ? AND `site_id` = ?', [trim($_GET["rid"] ?? ''), $_SESSION['admin_table_name'], $_SESSION["site_set_for_editing"]]);
+		$sql_get_assignments_sub_items = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'assignments_sub_items', 'WHERE `child_id` = ? AND `child_id_table_name` = ? AND `site_id` = ?', [$displaying_in_record_id, $_SESSION['admin_table_name'], $_SESSION["site_set_for_editing"]]);
 		$assignments_sub_items_rows = array();
 		if(!empty($sql_get_assignments_sub_items))
 		{
@@ -45,8 +47,21 @@ else
 			}
 		}
 		
-		//Chose to not add assignments_posts becuase you can see all places the post is displaying in on the admin post page.
+		$sql_get_contextual_link_rows = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'urls', 'WHERE `url_status` = ? AND (`top_content` LIKE ? OR `bottom_content` LIKE ?)', [1, $contextual_link_search, $contextual_link_search]);
+		$contextual_link_rows = array();
+		if(!empty($sql_get_contextual_link_rows))
+		{
+			foreach($sql_get_contextual_link_rows as $sql_get_contextual_link_row)
+			{
+				$contextual_link_row['status'] = 'N/A';
+				$contextual_link_row['parent_id'] = $sql_get_contextual_link_row['id'];
+				$contextual_link_row['assignment_table_name'] = 'Contextual Link';
+				$contextual_link_row['type'] = 'Contextual Link';
+				
+				$contextual_link_rows[] = $contextual_link_row;
+			}
+		}
 		
-		$assignments_rows = array_merge($assignments_products_rows, $assignments_sub_items_rows);
+		$assignments_rows = array_merge($contextual_link_rows, $assignments_products_rows, $assignments_sub_items_rows);
 	}
 }

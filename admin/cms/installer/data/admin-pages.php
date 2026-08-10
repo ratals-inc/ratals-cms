@@ -57,8 +57,6 @@ $parameters[] = ['Add Admin Menu', 'admin/menus/add', '', '', '', '', '', 'admin
 
 $parameters[] = ['Edit Admin Menu', 'admin/menus/edit', '', '', '', '', 'admin/menu-items', 'admin/menus', 'admin/menus', '', 'edit', 'admin_menus', '', '', '', 'admin_menu_items', 'admin_menus_id', 'admin/menus', 'admin/menus/edit', '1', 'No', 'sort', 'Yes', 'No', 'No', '', '', 'admin-edit-menu', 'Save', 'submit', '{}', $first_last_name, $first_last_name];
 
-$parameters[] = ['Modules', 'admin/modules', '', '', '', '', '', 'admin/modules', '', '', 'edit', 'modules', '', '', '', '', '', '', 'admin/modules', '1', 'No', 'sort', 'Yes', 'Yes', 'No', '', '', 'admin-modules', 'Save', 'submit', '{}', $first_last_name, $first_last_name];
-
 $parameters[] = ['All Notices', 'admin/notices', '', 'admin/notices/edit', '', '', '', '', '', '', 'table', 'notices', '', '', '', '', '', '', 'admin/notices', '1', 'No', 'sort', 'Yes', 'No', 'No', '', 'hide-delete-option', 'notices', 'Save', 'submit', '{}', $first_last_name, $first_last_name];
 
 $parameters[] = ['Edit Notice', 'admin/notices/edit', '', '', '', '', '', '', 'admin/notices', '', 'edit', 'notices', '', '', '', '', '', 'admin/notices', 'admin/notices/edit', '1', 'No', 'sort', 'Yes', 'No', 'No', '', '', 'edit-notices', 'Save', 'submit', '{}', $first_last_name, $first_last_name];

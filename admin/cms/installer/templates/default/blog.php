@@ -33,6 +33,25 @@ include_once('sites/functions.php');
 <?php } ?>
 <?php if(!empty($pages_data['hreflang'])) { echo $pages_data['hreflang'].'
 '; } ?>
+<meta property="og:type" content="website">
+<?php if(!empty($full_meta_title)) { ?>
+<meta property="og:title" content="<?php echo $full_meta_title; ?>">
+<?php } ?>
+<?php if(!empty($meta_description)) { ?>
+<meta property="og:description" content="<?php echo $meta_description; ?>">
+<?php } ?>
+<?php if(!empty($data_array['pages_url'])) { ?>
+<meta property="og:url" content="<?php echo $data_array['pages_url']; ?>">
+<?php } ?>
+<?php if(!empty($site_name)) { ?>
+<meta property="og:site_name" content="<?php echo $site_name; ?>">
+<?php } ?>
+<?php if(!empty($data_array['media_data'][0]['full_url'])) { ?>
+<meta property="og:image" content="<?php echo $data_array['media_data'][0]['full_url']; ?>">
+<?php } ?>
+<?php if(!empty($data_array['media_data'][0]['media_tag'])) { ?>
+<meta property="og:image:alt" content="<?php echo $data_array['media_data'][0]['media_tag']; ?>">
+<?php } ?>
 <?php include('head-files.php'); ?>
 </head>
 
@@ -81,7 +100,7 @@ if(isset($_SESSION['user_id']))
                 <div class="categories-store-sub-items-style">
                     <div class="sub-items sub-items-bottom-padding">
                         <div class="sub-items-wrap container-width">
-                            <ul class="grid-2">
+                            <ul class="grid-<?php echo empty($data_array['grid_columns']) ? '2' : $data_array['grid_columns']; ?>">
                                 <?php 
                                 foreach($data_array['posts'] as $posts)
                                 {

@@ -19,19 +19,19 @@ else
 		<div class="edit-wrapper">
 		<!-- Start Edit View -->
 		<div class="edit margin-top-25px">
-		<div class="edit-label">These are the locations that "<?php echo $sql_record_data_rows['urls_record_data']["meta_title"]; ?>" is displaying in.</div>
+		<div class="edit-label">These are the locations where "<strong><?php echo $sql_record_data_rows['urls_record_data']["meta_title"]; ?></strong>" is linked throughout your website. This report includes product-category assignments, sub-item relationships, and contextual links embedded in page content using the <code>urlId();</code> function. Site-wide navigation elements such as menus, headers, footers, and sliders are intentionally excluded. Use this report to evaluate how well this URL is connected to other content across your website.</div>
 		<div class="edit-field">
 		<!-- Start Displaying In Table -->
 		<div class="table-overfollow fixed-scrollbar">
 		<div class="displaying-in-table">
-		<ul class="displaying-in-table-row header">
-			<li class="displaying-in-table-cell header center">Status</li>
-			<li class="displaying-in-table-cell header center">ID</li>
-			<li class="displaying-in-table-cell header center">Page Type</li>
-			<li class="displaying-in-table-cell header center">Displaying As</li>
-			<li class="displaying-in-table-cell header">Displaying In</li>
-			<li class="displaying-in-table-cell header center">Remove</li>
-		</ul>
+        <ul class="displaying-in-table-row header">
+            <li class="displaying-in-table-cell header center">Status</li>
+            <li class="displaying-in-table-cell header center">Source ID</li>
+            <li class="displaying-in-table-cell header center">Source Type</li>
+            <li class="displaying-in-table-cell header center">Link Type</li>
+            <li class="displaying-in-table-cell header">Linked From</li>
+            <li class="displaying-in-table-cell header center">Action</li>
+        </ul>
 		<?php   
 		if(!empty($assignments_rows))
 		{
@@ -88,15 +88,33 @@ else
 				if($home_page == $get_url_data["id"] && empty($get_url_data["custom_link"]))
 				{
 					$final_url = $domain."/";
-				} 
+				}
+				
+				$displaying_as_type = $assignments_row['type'];
+				if($assignments_row['assignment_table_name'] == 'products')
+				{
+					$displaying_as_type = 'Product List';
+				}
+				elseif($assignments_row['assignment_table_name'] == 'sub_items')
+				{
+					$displaying_as_type = 'Sub Item';
+				}
+				elseif($assignments_row['assignment_table_name'] == 'Contextual Link')
+				{
+					$displaying_as_type = 'Contextual Link';
+				}
 				?>
 				<ul class="displaying-in-table-row remove_<?php echo $counter; ?>">
 				<li class="displaying-in-table-cell center status status_<?php echo $counter; ?>"><?php echo $status; ?></li>
 				<li class="displaying-in-table-cell center status"><?php echo $admin_edit_page; ?></li>
 				<li class="displaying-in-table-cell center status"><?php echo ucwords(str_replace('_', ' ', $get_url_data["table_name"] ?? '')); ?></li>
-				<li class="displaying-in-table-cell center displaying-as"><?php echo ucwords(str_replace('_', ' ', $assignments_row["type"] ?? '')); echo $edit_inventory; ?></li>
+				<li class="displaying-in-table-cell center displaying-as"><?php echo $displaying_as_type; echo $edit_inventory; ?></li>
 				<li class="displaying-in-table-cell"><a href="<?php echo $final_url; ?>" target="_blank"><?php echo $final_url; ?></a></li>
+                <?php if($assignments_row["type"] == 'Contextual Link') { ?>
+                <li class="displaying-in-table-cell center status">N/A</li>
+                <?php } else { ?>
 				<li class="displaying-in-table-cell center status"><span class="displayingInRemove" data-click="<?php echo $assignments_row["id"] ?>,<?php echo $assignments_row["parent_id"]; ?>,<?php echo $assignment_table; ?>">Remove</span></li>
+                <?php } ?>
 				</ul>
 				<?php
 				$counter = $counter + 1;

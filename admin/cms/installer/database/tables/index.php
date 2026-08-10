@@ -40,7 +40,6 @@ include('license.php');
 include('media.php');
 include('menu_items.php');
 include('menus.php');
-include('modules.php');
 include('notices.php');
 include('page_groups.php');
 include('pages.php');

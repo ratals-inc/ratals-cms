@@ -629,7 +629,6 @@ if(isset($_POST['submit']))
 			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/form-values.php');
 			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/forms.php');
 			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/license.php');
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/modules.php');
 			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/notices.php');
 			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/users.php');
 			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/assigned-fields.php'); //Must run after admin_fields/columns, admin_pages, and users as we assign fields from these tables.
@@ -688,9 +687,9 @@ a { color: #589fc3; }
 .box-wrapper .box ul li { list-style: none; margin: 0px; }
 .box-wrapper .box ul li.full-row { grid-column: 1 / -1; }
 .box-wrapper .headline { font-size: 20px; text-align: center; padding: 10px; background: #f1f1f1; margin-top: 15px; }
-.box-wrapper .http-s { width: 80px; vertical-align: top; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-right: 0px; }
-.box-wrapper .www { width: 80px; vertical-align: top; border-radius: 0px; border-right: 1px dashed #dedede; border-left: 1px dashed #dedede; }
-.box-wrapper .tld { width: calc(100% - 161px); vertical-align: top; border-left: 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; }
+.box-wrapper .http-s { width: 82px; vertical-align: top; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-right: 0px; }
+.box-wrapper .www { width: 82px; vertical-align: top; border-radius: 0px; border-right: 1px dashed #dedede; border-left: 1px dashed #dedede; }
+.box-wrapper .tld { width: calc(100% - 165px); vertical-align: top; border-left: 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; }
 .box-wrapper button { font-size: 18px; padding: 10px; display: inline-block; width: 100%; border: 0px; background-color: #195c95; color: #fff; cursor: pointer; border-radius: 5px; }
 .box-wrapper .small-font { font-size: 14px; line-height: 20px; }
 .box-wrapper .note-small-font { font-size: 11px; margin-top: 3px; color: #7c7c7c; }

@@ -9,7 +9,7 @@ $placeholders = 'NULL,0,1,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?';
 
 $parameters = array();
 
-$parameters[] = ['Admin - Main Menu', 95, 'Main Menu', [], 'admin_main_menu', '{}', $first_last_name, $first_last_name];
+$parameters[] = ['Admin - Main Menu', 93, 'Main Menu', [], 'admin_main_menu', '{}', $first_last_name, $first_last_name];
 
 $parameters[] = ['Categories - Sub Menu', 3, 'Sub Menu', ['website/categories/edit', 'website/categories/products-and-inventory-assigned', 'website/categories/assign-products-to-category', 'website/categories/assign-products-to-category/inventory', 'website/categories/search-filters', 'website/categories/sub-items', 'website/categories/displaying-in'], 'categories_sub_menu', '{}', $first_last_name, $first_last_name];
 

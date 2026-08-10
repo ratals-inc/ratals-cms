@@ -629,6 +629,17 @@ ui-sortable-handle { margin: 0px!important; padding: 0px!important; }
 .idea-media-sizes .media-sizes-text ul {}
 .idea-media-sizes .media-sizes-text li { padding-bottom: 6px; }
 
+/*Inventory Vendors*/
+.inventory-vendors-table table { margin: 0; padding: 0; width: 100%; }
+.inventory-vendors-table table td { padding: 10px; border-bottom: 1px solid var(--primary-bg-color); }
+.inventory-vendors-table table td.vendor-left { border-left: 1px solid var(--primary-bg-color); }
+.inventory-vendors-table table td.vendor-right { border-right: 1px solid var(--primary-bg-color); }
+.inventory-vendors-table table .inventory-vendors-header td { background-color: var(--primary-bg-color); color: #fff; }
+.inventory-vendors-table .removeRow { color: var(--primary-link-color); cursor: pointer; }
+.inventory-vendors-table .removeRow:hover { text-decoration: underline; }
+.inventory-vendors-table .add-vendor { color: var(--primary-link-color); cursor: pointer; display: inline-block; margin-top: 10px; }
+.inventory-vendors-table .add-vendor:hover { text-decoration: underline; }
+
 /*Inventory Shipping Centers*/
 .edit-wrapper .edit-field .inventory-shipping-centers { border: 1px solid #ccc; height: 225px; min-height: 225px ;min-width: 100%; max-width: 100%; overflow: auto; resize: both; background-color: #e0e0e0; }
 .edit-wrapper .edit-field .inventory-shipping-centers table { border-spacing: 0px; width: 100%; }
@@ -822,9 +833,9 @@ ul.orders-boxes li.three-column { grid-column: span 3; }
 .billing-line-items td { padding: 10px; border-top: 1px solid #e5e5e5; vertical-align: top; }
 
 /* Add a Site */
-.edit-wrapper .edit-field select.http-s { width: 80px; vertical-align: top; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-right: 0px; }
-.edit-wrapper .edit-field select.www { width: 80px; vertical-align: top; border-radius: 0px; border-right: 1px dashed #dedede; border-left: 1px dashed #dedede; }
-.edit-wrapper .edit-field input[type=text].tld { width: calc(100% - 161px); vertical-align: top; border-left: 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; }
+.edit-wrapper .edit-field select.http-s { width: 82px; vertical-align: top; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-right: 0px; }
+.edit-wrapper .edit-field select.www { width: 82px; vertical-align: top; border-radius: 0px; border-right: 1px dashed #dedede; border-left: 1px dashed #dedede; }
+.edit-wrapper .edit-field input[type=text].tld { width: calc(100% - 165px); vertical-align: top; border-left: 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; }
 .edit-wrapper .edit-field .email_connector { margin: 5px 0px; }
 .edit-wrapper .edit-field .email_connector label { cursor: pointer; }
 .edit-wrapper .edit-field .email_connector input { height: 18px; width: 18px; vertical-align: sub; margin: 0px 2px 0px 0px; cursor: pointer; }

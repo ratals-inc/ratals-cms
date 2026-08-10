@@ -206,7 +206,6 @@ else
 	//Load site if found in db
 	if(!empty($sites))
 	{
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/frontend/modules.php'; //This gets modules that are enabled or not.
 		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/frontend/currency.php'; //This makes the site load with the set currency type.
 		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/date-time-format.php'; //This formats dates.
 		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/admin-field-lists-swap.php'; //This gets Admin Field Lists. It swaps the values in a sub field. Example: Change states in states field when country is changed.

@@ -12,11 +12,11 @@ try
 		
 		if(!empty($accounting_settings_to_update))
 		{
-			if(isset($accounting_settings_to_update['id']) && !empty($accounting_settings_to_update['id']) && isset($accounting_settings_to_update['cost_of_goods_sold_method']) && empty($accounting_settings_to_update['cost_of_goods_sold_method']) && isset($accounting_settings_to_update['landed_cost_method']) && empty($accounting_settings_to_update['landed_cost_method']))
+			if(isset($accounting_settings_to_update['id']) && !empty($accounting_settings_to_update['id']) && isset($accounting_settings_to_update['erp_mode']) && empty($accounting_settings_to_update['erp_mode']) && isset($accounting_settings_to_update['cost_of_goods_sold_method']) && empty($accounting_settings_to_update['cost_of_goods_sold_method']) && isset($accounting_settings_to_update['landed_cost_method']) && empty($accounting_settings_to_update['landed_cost_method']))
 			{
-				$update_columns = '`cost_of_goods_sold_method` = ?, `landed_cost_method` = ?';
+				$update_columns = '`erp_mode` = ?, `cost_of_goods_sold_method` = ?, `landed_cost_method` = ?';
 				$update_where_clause = 'WHERE `id` = ?';
-				$fields_to_update = array('FIFO', 'Cost', $accounting_settings_to_update['id']);
+				$fields_to_update = array('Disabled', 'FIFO', 'Cost', $accounting_settings_to_update['id']);
 				
 				$results->getUpdateRecord(__LINE__, __FILE__, 'accounting_settings', $update_columns, $update_where_clause, $fields_to_update);
 			}

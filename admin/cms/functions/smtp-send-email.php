@@ -93,13 +93,20 @@ else
 				
 				//This creates the email and displays what email addresses go in the TO and CC. The BCC variable is not included here as we don't want BCC's to display as being sent to in the email. However some email clients, like Gmail, require the Bcc to be present in the header as empty to be delivered.
 				fwrite($mail_socket, "From: ".$email_from."\r\n"."To: ".$email_to_name." <".$email_to.">\r\n"."Cc: ".$email_cc."\r\n"."Bcc: \r\n"."Reply-To: ".$email_reply_to."\r\n"."Return-Path: ".$email_reply_to."\r\n"."Content-Type: text/html; charset=UTF-8\r\n"."MIME-Version: 1.0\r\n"."Subject: ".$email_subject."\r\n\r\n".$email_message."\r\n.\r\n");
-				fread($mail_socket, 8192);
+				$email_send_response = fread($mail_socket, 8192);
 				
 				fwrite($mail_socket, "QUIT \r\n");
 				fread($mail_socket, 8192);
 				
 				fclose($mail_socket);
+				
+				if(substr($email_send_response, 0, 3) == '250')
+				{
+					return true;
+				}
 			}
+			
+			return false;
 		}
 	}
 }

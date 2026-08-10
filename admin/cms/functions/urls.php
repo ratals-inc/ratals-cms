@@ -52,8 +52,8 @@ else
 		}
 	}
 	
-	//Get url by url_id
-	if(!function_exists('url_id'))
+	//Get url by urlId
+	if(!function_exists('urlId'))
 	{
 		function urlId($get_url_from_id, $db_results = NULL) 
 		{
@@ -222,8 +222,8 @@ else
 		}
 	}
 	
-	//Get url by admin_url_id
-	if(!function_exists('admin_url_id'))
+	//Get url by adminUrlId
+	if(!function_exists('adminUrlId'))
 	{
 		function adminUrlId($get_admin_url_from_id) 
 		{

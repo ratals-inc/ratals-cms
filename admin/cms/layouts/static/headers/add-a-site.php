@@ -408,6 +408,8 @@ else
 					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/installer/data/menus-items.php');
 					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/installer/data/urls.php'); //urls.php must run before pages.php as the pages need the URL IDs.
 					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/installer/data/pages.php');
+					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/installer/data/cart-recovery-emails.php');
+					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/installer/data/review-request-emails.php');
 					//Use updater files to make sure we set default values at the commerce level for the new site added.
 					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/notices/updates/blocking-spam.php');
 					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/notices/updates/site-security.php');

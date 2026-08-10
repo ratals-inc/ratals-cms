@@ -153,7 +153,7 @@ $parameter['security_blocking_spam'] = ['1', 'Blocking Spam', '0', 'admin_main_m
 $parameter['security_failed_logins'] = ['1', 'Failed Logins', '0', 'admin_main_menu', '0', 'security/failed-logins', '0', 'security', 'security_failed_logins', '', '', '4', '{}', $first_last_name, $first_last_name];
 
 //Admin
-$parameter['admin'] = ['1', 'Admin', '36', 'admin_main_menu', '0', '', '0', '', 'admin', '', '', '10', '{}', $first_last_name, $first_last_name];
+$parameter['admin'] = ['1', 'Admin', '29', 'admin_main_menu', '0', '', '0', '', 'admin', '', '', '10', '{}', $first_last_name, $first_last_name];
 
 //Admin > Admin Field Lists
 $parameter['admin_admin_field_lists'] = ['1', 'Admin Field Lists', '2', 'admin_main_menu', '0', '', '', 'admin', 'admin_admin_field_lists', '', '', '1', '{}', $first_last_name, $first_last_name];
@@ -222,11 +222,6 @@ $parameter['admin_admin_users'] = ['1', 'Admin Users', '2', 'admin_main_menu', '
 $parameter['admin_all_admin_users'] = ['1', 'Admin Users', '0', 'admin_main_menu', '0', 'admin/users', '0', 'admin_admin_users', 'admin_all_admin_users', '', '', '1', '{}', $first_last_name, $first_last_name];
 
 $parameter['admin_add_admin_user'] = ['1', 'Add Admin User', '0', 'admin_main_menu', '0', 'admin/users/add', '0', 'admin_admin_users', 'admin_add_admin_user', '', '', '2', '{}', $first_last_name, $first_last_name];
-
-//Admin > Modules
-$parameter['admin_modules'] = ['1', 'Modules', '1', 'admin_main_menu', '0', '', '0', 'admin', 'admin_modules', '', '', '12', '{}', $first_last_name, $first_last_name];
-
-$parameter['admin_edit_modules'] = ['1', 'Modules', '0', 'admin_main_menu', '0', 'admin/modules', '0', 'admin_modules', 'admin_edit_modules', '', '', '1', '{}', $first_last_name, $first_last_name];
 
 //Add Site
 $parameter['add_site'] = ['1', 'Add Site', '0', 'admin_main_menu', '0', 'add-a-site', '0', '', 'add_site', '', '', '11', '{}', $first_last_name, $first_last_name];

@@ -15,7 +15,7 @@ else
 	include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/admin-fields/validation.php';
 	include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/custom-fields/validation.php';
 	//echo '<pre>'; print_r($post_values); echo '</pre>';
-	//echo '<pre>'; print_r($errors); echo '</pre>';
+	//echo 'here<pre>'; print_r($errors); echo '</pre>';
 	//die;
 	include_once 'includes/update-data.php';
 	

@@ -42,9 +42,9 @@ if(isset($admin_field_section_ids['display_cookie_notice']['id']))
 	$parameters[] = [$admin_field_section_ids['display_cookie_notice']['id'], 'Cookie Notice Settings', 'cookie_notice_settings', '', '{}', $first_last_name, $first_last_name];
 }
 
-if(isset($admin_field_section_ids['email_server_url']['id']))
+if(isset($admin_field_section_ids['email_signiture']['id']))
 {
-	$parameters[] = [$admin_field_section_ids['email_server_url']['id'], 'Admin User SMTP Email Server Information', 'admin_user_smpt_email_server_information', 'When this is setup, this admin user will able to email from the admin area. These emails will be sent from this admin users email address if you enter in their SMTP server email details. If the customer reply\'s to the email it will email back to this admin user email address.', '{}', $first_last_name, $first_last_name];
+	$parameters[] = [$admin_field_section_ids['email_signiture']['id'], 'Admin User SMTP Email Server Information', 'admin_user_smpt_email_server_information', 'When this is setup, this admin user will able to email from the admin area. These emails will be sent from this admin users email address if you enter in their SMTP server email details. If the customer reply\'s to the email it will email back to this admin user email address.', '{}', $first_last_name, $first_last_name];
 }
 
 if(isset($admin_field_section_ids['form_name_class']['id']))

@@ -16,7 +16,7 @@ if(in_array('head-files.php', $data_array['active_template_includes'])) { ?>
 <?php if(!empty($favicon_180px_180px)) { ?><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="<?php echo $favicon_180px_180px; ?>"><?php } ?>
 <?php if(isset($cart_cookie) && !empty($cart_cookie)) { ?>
 <script nonce="<?php echo NONCE; ?>">
-//Get cookie string and convert to js array.
+//Get cookie string and convert to JS array.
 var cookies = document.cookie
 .split(';')
 .map(cookie => cookie.split('='))
@@ -24,25 +24,25 @@ var cookies = document.cookie
 ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }),
 {});
 
+var now = new Date();
+var time = now.getTime();
+var expireTime = time + 31500000000;
+now.setTime(expireTime);
+
 if(typeof cookies.cart != 'undefined')
 {
-	//update expired time if cookie exist for one year.
-	var now = new Date();
-	var time = now.getTime();
-	var expireTime = time + 31500000000;
-	now.setTime(expireTime);
+	//Update expiration time for one year if the cookie already exists.
 	document.cookie = 'cart='+cookies.cart+';expires='+now.toUTCString()+';path=/;SameSite=Lax';
 }
 else
 {
-	//Set cookie if does not exist for one year.
-	var now = new Date();
-	var time = now.getTime();
-	var expireTime = time + 31500000000;
-	now.setTime(expireTime);<?php 
+	//Set cookie for one year if it does not exist.
+	<?php 
 	//  START CAUTION!
-	//  IF YOU MODIFY THE "CART COOKIE" CODE BELOW, MAKE SURE TO UPDATE THE CODE IN /INDEX.PHP FILE TO PREVENT IT FROM BEING CACHED. ?>
-	document.cookie = 'cart=<?php echo $cart_cookie; ?>;expires='+now.toUTCString()+';path=/;SameSite=Lax';<?php //END CAUTION! ?>
+	//  IF YOU MODIFY THE "CART COOKIE" CODE BELOW, MAKE SURE TO UPDATE THE CODE IN /INDEX.PHP FILE TO PREVENT IT FROM BEING CACHED.
+	?>
+	document.cookie = 'cart=<?php echo $cart_cookie; ?>;expires='+now.toUTCString()+';path=/;SameSite=Lax';
+	<?php //  END CAUTION! ?>
 }
 </script>
 <?php } ?>
