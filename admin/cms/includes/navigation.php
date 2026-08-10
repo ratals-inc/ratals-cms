@@ -47,14 +47,7 @@ else
           {
               if(empty($_SESSION['user_site_permissions_id']) || (!empty($_SESSION['user_site_permissions_id']) && strpos($_SESSION['user_site_permissions_id'], ','.$all_sites_in_account_row["id"].',') !== false))
               {
-                  if($all_sites_in_account_row["load_on"] == 'Domain')
-                  {
-                      echo '<option value="'.$all_sites_in_account_row["id"].'"'.(($_SESSION["site_set_for_editing"] == $all_sites_in_account_row["id"]) ? ' selected' : '').'>'.$all_sites_in_account_row["domain"].'</option>';
-                  }
-                  else if($all_sites_in_account_row["load_on"] == 'Subdomain')
-                  {
-                      echo '<option value="'.$all_sites_in_account_row["id"].'"'.(($_SESSION["site_set_for_editing"] == $all_sites_in_account_row["id"]) ? ' selected' : '').'>'.$all_sites_in_account_row["subdomain"].'</option>';
-                  }
+                  echo '<option value="'.$all_sites_in_account_row["id"].'"'.(($_SESSION["site_set_for_editing"] == $all_sites_in_account_row["id"]) ? ' selected' : '').'>'.$all_sites_in_account_row["domain"].'</option>';
               }
           }
           echo '</select>

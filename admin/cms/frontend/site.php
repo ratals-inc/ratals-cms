@@ -10,7 +10,7 @@ if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/frontend/site.php'))
 else
 {	
 	//SITES - Check if domain exist in Data Base that is being requested.
-	$sites = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'sites', 'WHERE (`domain` = ? || `subdomain` = ?) LIMIT 1', [$homepage_url, $homepage_url]);
+	$sites = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'sites', 'WHERE `domain` = ? LIMIT 1', [$homepage_url]);
 	
 	$_SESSION['site_id'] = '';
 	
@@ -20,9 +20,7 @@ else
 		$_SESSION['site_id'] = $sites["id"];
 		$_SESSION['site_language'] = $sites['site_language'];
 		$home_page = $sites["homepage"];
-		$load_site_on = $sites["load_on"];
 		$tld_domain = $sites["domain"];
-		$subdomain = $sites["subdomain"];
 		$https_in_url = $sites["https_in_url"];
 		$www_in_url = $sites["www_in_url"];
 		$url_structure = $sites["url_structure"];
@@ -37,22 +35,11 @@ else
 		//$www_in_url - from SITES table
 		if($www_in_url == 'Yes') { $www = "www."; } else { $www = ""; }
 		
-		$domain = '';
-		$domain_only = '';
-		if($load_site_on == 'Domain' && !empty($tld_domain))
-		{
-			$domain = $http.$www.$tld_domain;
-			$_SESSION['domain'] = $http.$www.$tld_domain;
-			$domain_only = $tld_domain;
-			$_SESSION['domain_only'] = $tld_domain;
-		}
-		elseif($load_site_on == 'Subdomain' && !empty($subdomain))
-		{
-			$domain = $http.$www.$subdomain;
-			$_SESSION['domain'] = $http.$www.$subdomain;
-			$domain_only = $subdomain;
-			$_SESSION['domain_only'] = $subdomain;
-		}
+		//Build live domain URL.
+		$domain = $http.$www.$tld_domain;
+		$_SESSION['domain'] = $http.$www.$tld_domain;
+		$domain_only = $tld_domain;
+		$_SESSION['domain_only'] = $tld_domain;
 	}
 	else//if($path_url != 'create-account')
 	{

@@ -30,12 +30,11 @@ $tld = $_SERVER['SERVER_NAME'] ?? '';
 $tld = preg_replace('#^www\.#i', '', $tld);
 
 $site_name = '';
-$subdomain = $tld;
+//Set site_name if tld has 1 period in it for something like .com, .net, .org, etc.
 $site_name_array = explode('.', $tld);
 if(count($site_name_array) == 2)
 {
 	$site_name = ucfirst($site_name_array[0]);
-	$subdomain = $site_name_array[0].'.'.$tld;
 }
 
 //Get all timezones from php library and put in array.
@@ -250,7 +249,7 @@ if(isset($_POST['submit']))
 		{
 			$errors['tld'] = '<span class="error">Remove http/https and use dropdown</span>';
 		}
-		elseif(preg_match('#^www\.#i', $tld))
+		elseif(stripos($tld, 'www.') === 0)
 		{
 			$errors['tld'] = '<span class="error">Remove www. and use dropdown</span>';
 		}
@@ -529,7 +528,6 @@ if(isset($_POST['submit']))
 		}
 		
 		$email = $server_email;
-		$subdomain = $subdomain;
 		$redirect_to_opposite_url = 'Yes';
 		$auto_generate_canonical_url = 'Yes';
 		$url_extension = '/';

@@ -31,15 +31,7 @@ else
 			//$www_in_url - from SITES table
 			if($site_results[$url_result['site_id']]['www_in_url'] == 'Yes') { $hl_www = "www."; } else { $hl_www = ""; }
 			
-			$hl_domain = '';
-			if($site_results[$url_result['site_id']]['load_on'] == 'Domain' && !empty($site_results[$url_result['site_id']]['domain']))
-			{
-				$hl_domain = $hl_http.$hl_www.$site_results[$url_result['site_id']]['domain'];
-			}
-			elseif($site_results[$url_result['site_id']]['load_on'] == 'Subdomain' && !empty($site_results[$url_result['site_id']]['subdomain']))
-			{
-				$hl_domain = $hl_http.$hl_www.$site_results[$url_result['site_id']]['subdomain'];
-			}
+			$hl_domain = $hl_http.$hl_www.$site_results[$url_result['site_id']]['domain'];
 			
 			if($url_result['id'] != $site_results[$url_result['site_id']]['homepage'])
 			{

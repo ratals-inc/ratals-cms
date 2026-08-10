@@ -835,14 +835,7 @@ else
 			{
 				foreach($domains as $set_domain)
 				{
-					if(strtolower($set_domain['load_on']) == 'domain')
-					{
-						$all_domains[] = $set_domain['domain'];
-					}
-					elseif(strtolower($set_domain['load_on']) == 'subdomain')
-					{
-						$all_domains[] = $set_domain['subdomain'];
-					}
+					$all_domains[] = $set_domain['domain'];
 				}
 			}
 			

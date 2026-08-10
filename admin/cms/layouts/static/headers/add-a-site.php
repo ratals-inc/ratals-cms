@@ -330,12 +330,6 @@ else
 				$first_last_name = $_SESSION['user_first_last_name'];
 				$email = $server_email;
 				$tld = trim($tld, '/');
-				$subdomain = $tld;
-				$tld_array = explode('.', $tld);
-				if(count($tld_array) == 2)
-				{
-					$subdomain = $tld_array[0].'.'.$tld;
-				}
 				$redirect_to_opposite_url = 'Yes';
 				$auto_generate_canonical_url = 'Yes';
 				$url_extension = '/';

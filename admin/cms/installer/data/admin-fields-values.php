@@ -352,10 +352,6 @@ $parameter[] = [0, 'Only email me - do not block the IP Address', 'Email Me', ''
 $parameter[] = [0, 'Email me and automatically block the IP Address', 'Email Me and Block IP', '', 'site_security_email_block_ip', 'email_me_and_block', $values_counter++];
 
 $values_counter = 1;
-$parameter[] = [0, 'Domain - TLD', 'Domain', '', 'site_settings_load_site_on', 'domain_tld', $values_counter++];
-$parameter[] = [0, 'Subdomain', 'Subdomain', '', 'site_settings_load_site_on', 'subdomain', $values_counter++];
-
-$values_counter = 1;
 $parameter[] = [0, 'Hierarchy', 'Hierarchy', '', 'site_settings_url_structure', 'hierarchy', $values_counter++];
 $parameter[] = [0, 'Flat', 'Flat', '', 'site_settings_url_structure', 'flat', $values_counter++];
 

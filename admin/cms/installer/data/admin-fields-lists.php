@@ -116,8 +116,6 @@ $parameters[] = ['Province', 14, 'No', '', '', '', '', 'ca_province', '{}', $fir
 
 $parameters[] = ['Site Security - Email / Block IP', 2, 'No', '', '', '', '', 'site_security_email_block_ip', '{}', $first_last_name, $first_last_name];
 
-$parameters[] = ['Site Settings - Load Site On', 2, 'No', '', '', '', '', 'site_settings_load_site_on', '{}', $first_last_name, $first_last_name];
-
 $parameters[] = ['Site Settings - URL Structure', 2, 'No', '', '', '', '', 'site_settings_url_structure', '{}', $first_last_name, $first_last_name];
 
 $parameters[] = ['Sliders - Pager Alignments', 3, 'No', '', '', '', '', 'sliders_pager_alignments', '{}', $first_last_name, $first_last_name];

@@ -49,27 +49,13 @@ else
 					$url_as_www = 'www.';
 				}
 				
-				if($sql_sites_in_account_rows["load_on"] == 'Domain')
+				$view_frontend_of_site_array[$sql_sites_in_account_rows["id"]] = $url_as_https.$url_as_www.$sql_sites_in_account_rows["domain"];
+				
+				if($_SESSION["site_set_for_editing"] == $sql_sites_in_account_rows["id"])
 				{
-					$view_frontend_of_site_array[$sql_sites_in_account_rows["id"]] = $url_as_https.$url_as_www.$sql_sites_in_account_rows["domain"];
+					$view_frontend_of_site = $url_as_https.$url_as_www.$sql_sites_in_account_rows["domain"];
 					
-					if($_SESSION["site_set_for_editing"] == $sql_sites_in_account_rows["id"])
-					{
-						$view_frontend_of_site = $url_as_https.$url_as_www.$sql_sites_in_account_rows["domain"];
-						
-						$_SESSION['view_frontend_of_site'] = $url_as_https.$url_as_www.$sql_sites_in_account_rows["domain"];
-					}
-				}
-				else if($sql_sites_in_account_rows["load_on"] == 'Subdomain')
-				{
-					$view_frontend_of_site_array[$sql_sites_in_account_rows["id"]] = $url_as_https.$url_as_www.$sql_sites_in_account_rows["subdomain"];
-					
-					if($_SESSION["site_set_for_editing"] == $sql_sites_in_account_rows["id"])
-					{
-						$view_frontend_of_site = $url_as_https.$url_as_www.$sql_sites_in_account_rows["subdomain"];
-						
-						$_SESSION['view_frontend_of_site'] = $url_as_https.$url_as_www.$sql_sites_in_account_rows["subdomain"];
-					}
+					$_SESSION['view_frontend_of_site'] = $url_as_https.$url_as_www.$sql_sites_in_account_rows["domain"];
 				}
 			}
 		}
