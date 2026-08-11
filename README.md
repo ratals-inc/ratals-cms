@@ -65,7 +65,7 @@ Ratals includes a native, smart update system built directly into the core.
 
 ### Requirements
 - PHP 8.1+
-- MySQL 8.0+ or MariaDB 10.6+
+- MySQL 8.0+ or MariaDB 10.11+
 - Web server (Nginx, Apache, or LiteSpeed)
 
 
