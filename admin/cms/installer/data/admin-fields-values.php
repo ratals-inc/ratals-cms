@@ -655,7 +655,7 @@ $parameter[] = [0, 'varchar(255)', 'varchar(255)', '', 'admin_fields_data_type',
 $parameter[] = [0, 'varchar(512)', 'varchar(512)', '', 'admin_fields_data_type', 'admin_fields_data_type_varchar_512', $values_counter++];
 
 $values_counter = 1;
-$parameter[] = [0, 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_0900_ai_ci`', '', 'database_character_set_and_collate', 'character_set_utf8mb4_collate_utf8mb4_0900_ai_ci', $values_counter++];
+$parameter[] = [0, 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`', '', 'database_character_set_and_collate', 'character_set_utf8mb4_collate_utf8mb4_unicode_ci', $values_counter++];
 
 $values_counter = 1;
 $parameter[] = [0, 'AUD', 'AUD', '', 'currency_types', 'aud', $values_counter++];

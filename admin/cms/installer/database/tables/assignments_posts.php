@@ -23,7 +23,7 @@ if(!in_array($database_table_name, $existing_database_tables))
 	//Install table when not installed.
 	$table_columns = buildDatabaseTableCreateQuery($database_table_name, $table_schema, $keys_schema);
 	
-	$table_setup = 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;';
+	$table_setup = 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;';
 	$results->getCreateDatabaseTable(__LINE__, __FILE__, $database_table_name, $table_columns, $table_setup);
 }
 else
