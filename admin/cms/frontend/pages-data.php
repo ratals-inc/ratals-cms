@@ -273,7 +273,7 @@ else
 	
 	if(isset($pages_data['grid_columns']))
 	{
-		$grid_columns = $pages_data['grid_columns'];
+		$grid_columns = $pages_data['grid_columns'] ?? 5;
 	}
 	
 	if(isset($pages_data['inventory_assigned']))

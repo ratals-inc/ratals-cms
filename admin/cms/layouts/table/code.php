@@ -458,7 +458,7 @@ else
 							//If custom_fields column exits on main table search custom_fields column.
 							elseif(array_key_exists('custom_fields', $table_uses_urls))
 							{
-								$sql_query_for_search .= " AND custom_fields->>'$.".$sql_account_columns_active["column_name"]."' LIKE ?";
+								$sql_query_for_search .= " AND JSON_UNQUOTE(JSON_EXTRACT(custom_fields, '$.".$sql_account_columns_active["column_name"]."')) LIKE ?";
 								$sql_query_for_search_values[] = '%'.$build_mysql_query_data[1].'%';
 							}
 						}
@@ -487,7 +487,7 @@ else
 							//If custom_fields column exits on main table search custom_fields column.
 							elseif(array_key_exists('custom_fields', $table_uses_urls))
 							{
-								$sql_query_for_search .= " AND custom_fields->>'$.".$sql_account_columns_active["column_name"]."' LIKE ?";
+								$sql_query_for_search .= " AND JSON_UNQUOTE(JSON_EXTRACT(custom_fields, '$.".$sql_account_columns_active["column_name"]."')) LIKE ?";
 								$sql_query_for_search_values[] = ''.$build_mysql_query_data[1].'';
 							}
 						}
@@ -526,7 +526,7 @@ else
 							//If custom_fields column exits on main table use custom_fields column name for sorting.
 							elseif(array_key_exists('custom_fields', $table_uses_urls))
 							{
-								$sort_column = " ORDER BY custom_fields->>'$.".$sql_account_columns_active["column_name"]."' ".$sql_sorting_type;
+								$sort_column = " ORDER BY JSON_UNQUOTE(JSON_EXTRACT(custom_fields, '$.".$sql_account_columns_active["column_name"]."')) ".$sql_sorting_type;
 							}
 						}
 					}

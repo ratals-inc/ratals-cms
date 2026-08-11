@@ -21,7 +21,7 @@ $parameters[] = [$_SESSION['install_ids'][$site_id]['about_us_page_id'] ?? NULL,
 $parameters[] = [$_SESSION['install_ids'][$site_id]['contact_us_page_id'] ?? NULL, $site_id, $_SESSION['install_ids'][$site_id]['contact_us_page_url_id'] ?? 0, NULL, NULL, '', '{}', $first_last_name, $first_last_name];
 
 //Search
-$parameters[] = [$_SESSION['install_ids'][$site_id]['site_search_page_id'] ?? NULL, $site_id, $_SESSION['install_ids'][$site_id]['site_search_page_url_id'] ?? 0, NULL, NULL, '', '{}', $first_last_name, $first_last_name];
+$parameters[] = [$_SESSION['install_ids'][$site_id]['site_search_page_id'] ?? NULL, $site_id, $_SESSION['install_ids'][$site_id]['site_search_page_url_id'] ?? 0, NULL, NULL, '5', '{}', $first_last_name, $first_last_name];
 
 //Cookie Policy
 $parameters[] = [$_SESSION['install_ids'][$site_id]['cookie_policy_page_id'] ?? NULL, $site_id, $_SESSION['install_ids'][$site_id]['cookie_policy_page_url_id'] ?? 0, NULL, NULL, '', '{}', $first_last_name, $first_last_name];

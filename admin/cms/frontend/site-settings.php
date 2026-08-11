@@ -38,7 +38,6 @@ else
 	$_SESSION['unit_of_weight'] = $site_settings["unit_of_weight"] ?? 'lb';
 	$site_search_results_per_page = $site_settings["site_search_results_per_page"] ?? 30;
 	$site_search_max_results = $site_settings["site_search_max_results"] ?? 300;
-	$grid_columns = $site_settings["grid_columns"] ?? 5; //used on site search page.
 	$lazy_load_media_row = $site_settings["lazy_load_media_row"] ?? 5; //used on sub-products page
 	$default_video_icon = $site_settings["default_video_icon"] ?? 25;
 	$default_file_icon = $site_settings["default_file_icon"] ?? 28;

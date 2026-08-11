@@ -510,7 +510,7 @@ else
 				if(count($search_results) < $max_search_results)
 				{
 					//Get lists from custom_fields_options in db with key as ID for inventory attributes.
-					$search_custom_field_option_rows = $results->getSelectLeftJoinMultipleRecordsKeyNameTwo(__LINE__, __FILE__, '`custom_fields_options`.`id`, `custom_fields_options`.`option_data`->>"$.'.$_SESSION['site_language'].'.value" AS option_data, `custom_fields`.`column_name`', 'custom_fields_options', 'custom_fields ON `custom_fields_options`.`custom_fields_id` = `custom_fields`.`id`', 'WHERE `field_type` = ? AND `status` = ? AND `option_data`->>"$.'.$_SESSION['site_language'].'.value" = ?', ['Inventory Attribute', 1, strtolower($search_term)], 'id', 'column_name');
+					$search_custom_field_option_rows = $results->getSelectLeftJoinMultipleRecordsKeyNameTwo(__LINE__, __FILE__, '`custom_fields_options`.`id`, JSON_UNQUOTE(JSON_EXTRACT(`custom_fields_options`.`option_data`, "$.'.$_SESSION['site_language'].'.value")) AS option_data, `custom_fields`.`column_name`', 'custom_fields_options', 'custom_fields ON `custom_fields_options`.`custom_fields_id` = `custom_fields`.`id`', 'WHERE `field_type` = ? AND `status` = ? AND JSON_UNQUOTE(JSON_EXTRACT(`custom_fields_options`.`option_data`, "$.'.$_SESSION['site_language'].'.value")) = ?', ['Inventory Attribute', 1, strtolower($search_term)], 'id', 'column_name');
 					
 					$custom_field_column = '';
 					$custom_field_values = array('1', $search_term, $search_term, $search_term, $search_term);
@@ -580,7 +580,7 @@ else
 				if(count($search_results) < $max_search_results)
 				{
 					//Get lists from custom_fields_options in db with key as ID for inventory attributes.
-					$search_custom_field_option_rows = $results->getSelectLeftJoinMultipleRecordsKeyNameTwo(__LINE__, __FILE__, '`custom_fields_options`.`id`, `custom_fields_options`.`option_data`->>"$.'.$_SESSION['site_language'].'.value" AS option_data, `custom_fields`.`column_name`', 'custom_fields_options', 'custom_fields ON `custom_fields_options`.`custom_fields_id` = `custom_fields`.`id`', 'WHERE `field_type` = ? AND `status` = ? AND `option_data`->>"$.'.$_SESSION['site_language'].'.value" = ?', ['Inventory Attribute', 1, strtolower($search_term)], 'id', 'column_name');
+					$search_custom_field_option_rows = $results->getSelectLeftJoinMultipleRecordsKeyNameTwo(__LINE__, __FILE__, '`custom_fields_options`.`id`, JSON_UNQUOTE(JSON_EXTRACT(`custom_fields_options`.`option_data`, "$.'.$_SESSION['site_language'].'.value")) AS option_data, `custom_fields`.`column_name`', 'custom_fields_options', 'custom_fields ON `custom_fields_options`.`custom_fields_id` = `custom_fields`.`id`', 'WHERE `field_type` = ? AND `status` = ? AND JSON_UNQUOTE(JSON_EXTRACT(`option_data`, "$.'.$_SESSION['site_language'].'.value")) = ?', ['Inventory Attribute', 1, strtolower($search_term)], 'id', 'column_name');
 					
 					$custom_field_column = '';
 					$custom_field_values = array('1', '%'.$search_term.'%', '%'.$search_term.'%', '%'.$search_term.'%', '%'.$search_term.'%');
@@ -677,7 +677,7 @@ else
 					$custom_field_column = trim($custom_field_column, ' OR ');
 					
 					//Get lists from custom_fields_options in db for inventory attributes. IDs are set on inventory for inventory attributes so we have to get the ids to look for colors, sizes, etc on inventory items.
-					$search_custom_field_option_rows = $results->getSelectLeftJoinMultipleRecordsKeyNameTwo(__LINE__, __FILE__, '`custom_fields_options`.`id`, `custom_fields_options`.`option_data`->>"$.'.$_SESSION['site_language'].'.value" AS option_data, `custom_fields`.`column_name`', 'custom_fields_options', 'custom_fields ON `custom_fields_options`.`custom_fields_id` = `custom_fields`.`id`', 'WHERE `field_type` = ? AND `status` = ?  AND ('.$custom_field_column.')', $custom_field_values, 'id', 'column_name');
+					$search_custom_field_option_rows = $results->getSelectLeftJoinMultipleRecordsKeyNameTwo(__LINE__, __FILE__, '`custom_fields_options`.`id`, JSON_UNQUOTE(JSON_EXTRACT(`custom_fields_options`.`option_data`, "$.'.$_SESSION['site_language'].'.value")) AS option_data, `custom_fields`.`column_name`', 'custom_fields_options', 'custom_fields ON `custom_fields_options`.`custom_fields_id` = `custom_fields`.`id`', 'WHERE `field_type` = ? AND `status` = ? AND ('.$custom_field_column.')', $custom_field_values, 'id', 'column_name');
 					
 					if(isset($search_custom_field_option_rows) && !empty($search_custom_field_option_rows))
 					{

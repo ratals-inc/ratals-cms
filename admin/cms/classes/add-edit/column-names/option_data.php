@@ -41,11 +41,11 @@ else
 						
 						if($_SESSION['admin_type'] == 'edit')
 						{
-							$duplicate_value = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '`option_data`->>"$.'.$option_languages.'.value" AS option_data', 'custom_fields_options', 'WHERE `id` != ? AND `custom_fields_id` = ? AND `option_data`->>"$.'.$option_languages.'.value" = ?', [trim($_GET["rid"] ?? ''), trim($_GET['sub-page-rid'] ?? ''), $option_value]);
+							$duplicate_value = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, 'JSON_UNQUOTE(JSON_EXTRACT(`option_data`, "$.'.$option_languages.'.value")) AS option_data', 'custom_fields_options', 'WHERE `id` != ? AND `custom_fields_id` = ? AND JSON_UNQUOTE(JSON_EXTRACT(`option_data`, "$.'.$option_languages.'.value")) = ?', [trim($_GET["rid"] ?? ''), trim($_GET['sub-page-rid'] ?? ''), $option_value]);
 						}
 						else
 						{
-							$duplicate_value = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '`option_data`->>"$.'.$option_languages.'.value" AS option_data', 'custom_fields_options', 'WHERE `custom_fields_id` = ? AND `option_data`->>"$.'.$option_languages.'.value" = ?', [trim($_GET["rid"] ?? ''), $option_value]);
+							$duplicate_value = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, 'JSON_UNQUOTE(JSON_EXTRACT(`option_data`, "$.'.$option_languages.'.value")) AS option_data', 'custom_fields_options', 'WHERE `custom_fields_id` = ? AND JSON_UNQUOTE(JSON_EXTRACT(`option_data`, "$.'.$option_languages.'.value")) = ?', [trim($_GET["rid"] ?? ''), $option_value]);
 						}
 						
 						if(!empty($duplicate_value) && !isset($errors[$table_name]['option_data'][$option_languages]['value']))
