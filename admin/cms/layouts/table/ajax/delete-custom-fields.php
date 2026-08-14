@@ -3,13 +3,18 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
+if(!defined('INSTALLATION_ROOT'))
+{
+	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
+}
+
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
+require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/ajax/delete-custom-fields.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/ajax/delete-custom-fields.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/ajax/delete-custom-fields.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/ajax/delete-custom-fields.php');
 }
 else
 {
@@ -89,6 +94,16 @@ else
 				
 				$results->getDeleteRecord(__LINE__, __FILE__, 'custom_fields', 'WHERE `id` = ? AND `assigned_to` = ?', [$select_custom_field_row["id"], $select_custom_field_row["assigned_to"]]);
 			}
+		}
+		
+		//Clear cache on save.
+		if($_SESSION['admin_site_id_global'] == 'No')
+		{
+			clearSiteCache($_SESSION['site_set_for_editing']);
+		}
+		else
+		{
+			clearAllSiteCache();
 		}
 		
 		echo "1";

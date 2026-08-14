@@ -3,11 +3,16 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
-
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/login.php'))
+if(!defined('INSTALLATION_ROOT'))
 {
-	require($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/login.php');
+	define('INSTALLATION_ROOT', dirname(__DIR__));
+}
+
+require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
+
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/login.php'))
+{
+	require(INSTALLATION_ROOT.'/hooks/admin/login.php');
 }
 else
 {
@@ -160,9 +165,9 @@ else
 				}
 				
 				//Connect to API messages.
-				if(file_exists(rtrim($_SERVER['DOCUMENT_ROOT'], '/').'/admin/cms/api/connect.php'))
+				if(file_exists(rtrim(INSTALLATION_ROOT, '/').'/admin/cms/api/connect.php'))
 				{
-					require_once(rtrim($_SERVER['DOCUMENT_ROOT'], '/').'/admin/cms/api/connect.php');
+					require_once(rtrim(INSTALLATION_ROOT, '/').'/admin/cms/api/connect.php');
 				}
 				
 				//Take admin user back to same url if they got logged out.
@@ -209,12 +214,12 @@ else
 						//Get Email Template.
 						$subject = '';
 						$message = '';
-						include $_SERVER['DOCUMENT_ROOT'].'/sites/'.$_SESSION['site_id'].'/templates/'.$email_template_record['directory_folder_name'].'/email-template-max-failed-login-attempts.php';
+						include INSTALLATION_ROOT.'/sites/'.$_SESSION['site_id'].'/templates/'.$email_template_record['directory_folder_name'].'/email-template-max-failed-login-attempts.php';
 						
 						if(isset($warp_with_email_template) && $warp_with_email_template == 'Yes')
 						{
 							//Get Email Template Frame.
-							include $_SERVER['DOCUMENT_ROOT'].'/sites/'.$_SESSION['site_id'].'/templates/'.$email_template_record['directory_folder_name'].'/email-template.php';
+							include INSTALLATION_ROOT.'/sites/'.$_SESSION['site_id'].'/templates/'.$email_template_record['directory_folder_name'].'/email-template.php';
 							
 							$message = str_replace('[EMAIL_MESSAGE]', $message, $email_template);
 						}
@@ -235,7 +240,7 @@ else
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Admin Login - <?php echo $site_name; ?></title>
-	<?php include_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/head-files.php');?>
+	<?php include_once(INSTALLATION_ROOT.'/admin/cms/includes/head-files.php');?>
     <script nonce="<?php echo NONCE; ?>">
     $(document).ready(function () {
       $(".username").focus();

@@ -11,7 +11,7 @@ if(!(extension_loaded('gd') && function_exists('imagecreate')))
 }
 
 //Make sure server software allows .htaccess rules to run.
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/server-software.php');
+require_once(INSTALLATION_ROOT.'/core/server-software.php');
 
 //Detect if user is on https.
 $https_status = false;
@@ -176,6 +176,16 @@ if(!empty($new_site_languages))
 $errors = array();
 if(isset($_POST['submit']))
 {
+	$database_hostname = trim($_POST['database_hostname'] ?? '');
+	if(empty($database_hostname))
+	{
+		$errors['database_hostname'] = '<span class="error">Database Hostname</span>';
+	}
+	elseif(strpos($database_hostname, "'") !== false)
+	{
+		$errors['database_hostname_quote'] = '<span class="error">Cannot contain single quotes.</span>';
+	}
+	
 	$database_name = trim($_POST['database_name'] ?? '');
 	if(empty($database_name))
 	{
@@ -206,16 +216,49 @@ if(isset($_POST['submit']))
 		$errors['database_password_quote'] = '<span class="error">Cannot contain single quotes.</span>';
 	}
 	
-	if(!empty($database_name) && !empty($database_username) && !empty($database_password) && !isset($errors['database_name']) && !isset($errors['database_username']) && !isset($errors['database_password']))
+	if(!empty($database_hostname) && !empty($database_name) && !empty($database_username) && !empty($database_password) && !isset($errors['database_hostname']) && !isset($errors['database_name']) && !isset($errors['database_username']) && !isset($errors['database_password']))
 	{
 		try
 		{
-			$dsn = 'mysql:host=localhost; dbname='.$database_name;
+			$dsn = 'mysql:host='.$database_hostname.';dbname='.$database_name;
 			$pdo = new PDO($dsn, $database_username, $database_password);
-		} 
+			
+			//Make sure PDO throws exceptions for database errors.
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+			//Make sure the database is empty before installing.
+			try
+			{
+				$database_tables = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+				
+				if(!empty($database_tables))
+				{
+					$errors['database_empty'] = '<span class="center error">The selected database is not empty. Please use an empty database before installing Ratals.</span>';
+				}
+			}
+			catch(Exception $e)
+			{
+				$errors['database_empty_check'] = '<span class="center error">Ratals connected to the database, but could not verify that it is empty. Please make sure the database user has permission to view and manage tables.</span>';
+			}
+			
+			//Make sure required database collation is available.
+			try
+			{
+				$collation_check = $pdo->query("SHOW COLLATION LIKE 'utf8mb4_unicode_ci'")->fetch(PDO::FETCH_ASSOC);
+				
+				if(empty($collation_check))
+				{
+					$errors['database_collation'] = '<span class="center error">The database server does not support the required utf8mb4_unicode_ci collation. Please contact your hosting provider before installing Ratals.</span>';
+				}
+			}
+			catch(Exception $e)
+			{
+				$errors['database_collation_check'] = '<span class="center error">Ratals connected to the database, but could not verify the required utf8mb4_unicode_ci collation. Please contact your hosting provider.</span>';
+			}
+		}
 		catch(Exception $e)
 		{
-			$errors['database_connection'] = '<span class="center error">Couldn\'t connect to database with provide credentials.</span>';
+			$errors['database_connection'] = '<span class="center error">Couldn\'t connect to the database with the provided credentials.</span>';
 		}
 	}
 	
@@ -330,7 +373,7 @@ if(isset($_POST['submit']))
 	$server_smpt_url = trim($_POST['server_smpt_url'] ?? '');
 	if(empty($server_smpt_url))
 	{
-		$errors['server_smpt_url'] = '<span class="error">Server SMTP Email URL</span>';
+		$errors['server_smpt_url'] = '<span class="error">SMTP Server / Hostname</span>';
 	}
 	
 	$server_email_username = trim($_POST['server_email_username'] ?? '');
@@ -399,29 +442,29 @@ if(isset($_POST['submit']))
 		$errors['display_contact_inforamtion'] = '<span class="error">Display Contact Information on the Website</span>';
 	}
 	
-	//Make sure admin login URL is not easy to find for for brute force login attackes and make sure new admin url directory is avaible to use. 
+	//Make sure Admin Login Path is not easy to find for for brute force login attackes and make sure new admin url directory is avaible to use. 
 	$admin_directory = trim($_POST['admin_directory'] ?? '');
 	if(empty($admin_directory))
 	{
-		$errors['admin_directory'] = '<span class="error">Admin Login URL</span>';
+		$errors['admin_directory'] = '<span class="error">Admin Login Path</span>';
 	}
-	elseif(strtolower($admin_directory) == 'i-love-ratals' || strtolower($admin_directory) == 'admin' || strtolower($admin_directory) == 'administrator' || strtolower($admin_directory) == 'root' || strtolower($admin_directory) == 'login' || strtolower($admin_directory) == 'backend' || strtolower($admin_directory) == strtolower($first_name) || strtolower($admin_directory) == strtolower($last_name) || strtolower($admin_directory) == strtolower($site_name))
+	elseif(strtolower($admin_directory) == 'ratals' || strtolower($admin_directory) == 'admin' || strtolower($admin_directory) == 'administrator' || strtolower($admin_directory) == 'admin-panel' || strtolower($admin_directory) == 'admin-login' || strtolower($admin_directory) == 'backend' || strtolower($admin_directory) == 'cms' || strtolower($admin_directory) == 'control' || strtolower($admin_directory) == 'control-panel' || strtolower($admin_directory) == 'cp' || strtolower($admin_directory) == 'dashboard' || strtolower($admin_directory) == 'login' || strtolower($admin_directory) == 'manage' || strtolower($admin_directory) == 'manager' || strtolower($admin_directory) == 'management' || strtolower($admin_directory) == 'panel' || strtolower($admin_directory) == 'root' || strtolower($admin_directory) == 'webadmin' || strtolower($admin_directory) == strtolower($first_name) || strtolower($admin_directory) == strtolower($last_name) || strtolower($admin_directory) == strtolower($site_name))
 	{
-		$errors['admin_directory'] = '<span class="error">Enter A Stronger Admin Login URL</span>';
+		$errors['admin_directory'] = '<span class="error">Enter A Stronger Admin Login Path</span>';
 	}
 	elseif(!preg_match('/^[a-z0-9-]+$/', $admin_directory))
 	{
-		$errors['admin_directory'] = '<span class="error">Admin Login URL Can Only Contain Lowercase a-z, 0-9, and -</span>';
+		$errors['admin_directory'] = '<span class="error">Admin Login Path Can Only Contain Lowercase a-z, 0-9, and -</span>';
 	}
-	elseif(is_dir($_SERVER['DOCUMENT_ROOT']."/".$admin_directory))
+	elseif(is_dir(INSTALLATION_ROOT."/".$admin_directory))
 	{
-		$errors['admin_directory'] = '<span class="error">Admin Login URL Is Not Available</span>';
+		$errors['admin_directory'] = '<span class="error">Admin Login Path Is Not Available</span>';
 	}
 	
 	$username = trim($_POST['username'] ?? '');
 	if(empty($username))
 	{
-		$errors['username'] = '<span class="error">Username</span>';
+		$errors['username'] = '<span class="error">Admin Username</span>';
 	}
 	elseif(strtolower($username) == 'admin' || strtolower($username) == 'administrator' || strtolower($username) == 'root' || strtolower($username) == strtolower($first_name) || strtolower($username) == strtolower($last_name) || strtolower($username) == strtolower($site_name) || strtolower($username) == strtolower($admin_directory))
 	{
@@ -431,13 +474,13 @@ if(isset($_POST['submit']))
 	$password = trim($_POST['password'] ?? '');
 	if(empty($password))
 	{
-		$errors['password'] = '<span class="error">Password</span>';
+		$errors['password'] = '<span class="error">Admin Password</span>';
 	}
 	
 	$confirm_password = trim($_POST['confirm_password'] ?? '');
 	if(empty($confirm_password))
 	{
-		$errors['confirm_password'] = '<span class="error">Confirm Password</span>';
+		$errors['confirm_password'] = '<span class="error">Confirm Admin Password</span>';
 	}
 	
 	if(!empty($password) && !empty($confirm_password) && $password != $confirm_password)
@@ -448,7 +491,7 @@ if(isset($_POST['submit']))
 	if(!empty($password) && !empty($confirm_password) && $password == $confirm_password)
 	{
 		//Initiated in /config.php. This validates passwords when accounts are created to make sure they have a character, digit and special character in them.
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/password-validation.php');
+		require_once(INSTALLATION_ROOT.'/admin/cms/functions/password-validation.php');
 		$password_validation = passwordValidation($password);
 		
 		if(strlen($password) < 10)
@@ -475,185 +518,482 @@ if(isset($_POST['submit']))
 	
 	if(count($errors) == 0) 
 	{
-		//Get the .htaccess file path - for Apache and Lightspeed servers
-		$htaccess_path = $_SERVER['DOCUMENT_ROOT'].'/.htaccess';
-		if(file_exists($htaccess_path))
-		{
-			//Read the /.htaccess content.
-			$htaccess_contents = file_get_contents($htaccess_path);
-			//Replace YOUR_ADMIN_URL_PATH with virtual admin path
-			$htaccess_contents = str_replace('YOUR_ADMIN_URL_PATH', $admin_directory, $htaccess_contents);
-			//Replace auto_prepend_file for frontend with absolute path
-			$htaccess_contents = preg_replace('~php_value\s+auto_prepend_file\s+.*~i', 'php_value auto_prepend_file "'.rtrim($_SERVER['DOCUMENT_ROOT'], '/').'/core/session-check-frontend.php"', $htaccess_contents);
-			//Write back the updated /.htaccess content with new admin URL.
-			file_put_contents($htaccess_path, $htaccess_contents);
-		}
+		$installation_step = 'Starting installation';
+		$original_htaccess_contents = null;
+		$original_admin_htaccess_contents = null;
+		$original_user_ini_contents = null;
+		$original_admin_user_ini_contents = null;
 		
-		//Get the /admin/.htaccess file path - for Apache and Lightspeed servers
-		$admin_htaccess_path = $_SERVER['DOCUMENT_ROOT'].'/admin/.htaccess';
-		if(file_exists($admin_htaccess_path))
-		{
-			//Read the /admin/.htacces content.
-			$admin_htaccess_contents = file_get_contents($admin_htaccess_path);
-			//Replace YOUR_ADMIN_URL_PATH with virtual admin path
-			$admin_htaccess_contents = str_replace('YOUR_ADMIN_URL_PATH', $admin_directory, $admin_htaccess_contents);
-			//Replace auto_prepend_file for admin with absolute path
-			$admin_htaccess_contents = preg_replace('~php_value\s+auto_prepend_file\s+.*~i', 'php_value auto_prepend_file "'.rtrim($_SERVER['DOCUMENT_ROOT'], '/').'/core/session-check-admin.php"', $admin_htaccess_contents);
-			//Write back the updated /admin/.htacces content with new admin URL.
-			file_put_contents($admin_htaccess_path, $admin_htaccess_contents);
-		}
-		
-		//Update /.user.ini (frontend) - for Nginx / PHP-FPM environments
-		$user_ini_path = $_SERVER['DOCUMENT_ROOT'].'/.user.ini';
-		if(file_exists($user_ini_path))
-		{
-			$doc_root = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
-			$frontend_path = $doc_root.'/core/session-check-frontend.php';
-			$user_ini_contents = file_get_contents($user_ini_path);
-			//Replace ONLY the auto_prepend_file line
-			$user_ini_contents = preg_replace('/;auto_prepend_file\s*=\s*".*?"/', 'auto_prepend_file = "'.$frontend_path.'"', $user_ini_contents);
-			file_put_contents($user_ini_path, $user_ini_contents, LOCK_EX);
-		}
-		
-		//Update /admin/.user.ini (admin) - for Nginx / PHP-FPM environments
-		$admin_user_ini_path = $_SERVER['DOCUMENT_ROOT'].'/admin/.user.ini';
-		if(file_exists($admin_user_ini_path))
-		{
-			$doc_root = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
-			$admin_path = $doc_root.'/core/session-check-admin.php';
-			$admin_user_ini_contents = file_get_contents($admin_user_ini_path);
-			//Replace ONLY the auto_prepend_file line
-			$admin_user_ini_contents = preg_replace('/;auto_prepend_file\s*=\s*".*?"/', 'auto_prepend_file = "'.$admin_path.'"', $admin_user_ini_contents);
-			file_put_contents($admin_user_ini_path, $admin_user_ini_contents, LOCK_EX);
-		}
-		
-		$email = $server_email;
-		$redirect_to_opposite_url = 'Yes';
-		$auto_generate_canonical_url = 'Yes';
-		$url_extension = '/';
-		$add_site_name_to_title_tag = 'Yes';
-		$separate_site_name_in_title_tag_with = '-';
-		$pagination = 30;
-		$first_last_name = $first_name.' '.$last_name;
-		$new_user_id = 1;
-		
-		//Make sure last ids for installs are unset. These session variables are set in template-files.php.
-		unset($_SESSION['last_menu_id']);
-		unset($_SESSION['last_slider_id']);
-		unset($_SESSION['last_custom_field_id']);
-		unset($_SESSION['last_pages_id']);
-		unset($_SESSION['last_url_id']);
-		$_SESSION['install_ids'] = array();
-		
-		//Set database connection credentials
-		$database_connection_file = file_get_contents($_SERVER['DOCUMENT_ROOT']."/admin/cms/installer/data/credentials.php");
-		
-		$old_datbase_name = '[DATABASE_NAME]'; 
-		$new_datbase_name = $database_name;
-		$database_connection_file = str_replace($old_datbase_name, $new_datbase_name, $database_connection_file);
-		
-		$old_datbase_username = '[DATABASE_USERNAME]'; 
-		$new_datbase_username = $database_username;
-		$database_connection_file = str_replace($old_datbase_username, $new_datbase_username, $database_connection_file);
-		
-		$old_datbase_password = '[DATABASE_PASSWORD]'; 
-		$new_datbase_password = $database_password;
-		$database_connection_file = str_replace($old_datbase_password, $new_datbase_password, $database_connection_file);
-		
-		clearstatcache(); //Clear file cache to make sure its writting to the real file and not buffer version/cache.
-		
-		$set_database_connection_file = fopen($_SERVER['DOCUMENT_ROOT']."/core/database/DbCredentials.php", "w");
-		fwrite($set_database_connection_file, $database_connection_file);
-		fclose($set_database_connection_file);
-		
-		//Create unique secret for this install.
 		try
 		{
-			//Preferred: php cryptographically secure.
-			$hash_secret = bin2hex(random_bytes(16)); //32 chars
+			$installation_step = 'Updating server configuration files';
+			
+			//Get the .htaccess file path - for Apache and Lightspeed servers
+			$htaccess_path = INSTALLATION_ROOT.'/.htaccess';
+			if(file_exists($htaccess_path))
+			{
+				//Read the /.htaccess content.
+				$htaccess_contents = file_get_contents($htaccess_path);
+				if($htaccess_contents === false)
+				{
+					throw new Exception('Could not read frontend .htaccess file.');
+				}
+				$original_htaccess_contents = $htaccess_contents;
+				//Replace YOUR_ADMIN_URL_PATH with virtual admin path
+				$htaccess_contents = str_replace('YOUR_ADMIN_URL_PATH', $admin_directory, $htaccess_contents);
+				//Replace auto_prepend_file for frontend with absolute path
+				$htaccess_contents = preg_replace('~php_value\s+auto_prepend_file\s+.*~i', 'php_value auto_prepend_file "'.rtrim(INSTALLATION_ROOT, '/').'/core/session-check-frontend.php"', $htaccess_contents);
+				if($htaccess_contents === null)
+				{
+					throw new Exception('Could not update frontend .htaccess configuration.');
+				}
+				//Write back the updated /.htaccess content with new admin URL.
+				if(file_put_contents($htaccess_path, $htaccess_contents) === false)
+				{
+					throw new Exception('Could not update frontend .htaccess file.');
+				}
+			}
+			
+			//Get the /admin/.htaccess file path - for Apache and Lightspeed servers
+			$admin_htaccess_path = INSTALLATION_ROOT.'/admin/.htaccess';
+			if(file_exists($admin_htaccess_path))
+			{
+				//Read the /admin/.htacces content.
+				$admin_htaccess_contents = file_get_contents($admin_htaccess_path);
+				if($admin_htaccess_contents === false)
+				{
+					throw new Exception('Could not read admin .htaccess file.');
+				}
+				$original_admin_htaccess_contents = $admin_htaccess_contents;
+				//Replace YOUR_ADMIN_URL_PATH with virtual admin path
+				$admin_htaccess_contents = str_replace('YOUR_ADMIN_URL_PATH', $admin_directory, $admin_htaccess_contents);
+				//Replace auto_prepend_file for admin with absolute path
+				$admin_htaccess_contents = preg_replace('~php_value\s+auto_prepend_file\s+.*~i', 'php_value auto_prepend_file "'.rtrim(INSTALLATION_ROOT, '/').'/core/session-check-admin.php"', $admin_htaccess_contents);
+				if($admin_htaccess_contents === null)
+				{
+					throw new Exception('Could not update admin .htaccess configuration.');
+				}
+				//Write back the updated /admin/.htacces content with new admin URL.
+				if(file_put_contents($admin_htaccess_path, $admin_htaccess_contents) === false)
+				{
+					throw new Exception('Could not update admin .htaccess file.');
+				}
+			}
+			
+			//Update /.user.ini (frontend) - for Nginx / PHP-FPM environments
+			$user_ini_path = INSTALLATION_ROOT.'/.user.ini';
+			if(file_exists($user_ini_path))
+			{
+				$doc_root = rtrim(INSTALLATION_ROOT, '/');
+				$frontend_path = $doc_root.'/core/session-check-frontend.php';
+				$user_ini_contents = file_get_contents($user_ini_path);
+				if($user_ini_contents === false)
+				{
+					throw new Exception('Could not read frontend .user.ini file.');
+				}
+				$original_user_ini_contents = $user_ini_contents;
+				//Replace ONLY the auto_prepend_file line
+				$user_ini_contents = preg_replace('/;auto_prepend_file\s*=\s*".*?"/', 'auto_prepend_file = "'.$frontend_path.'"', $user_ini_contents);
+				if($user_ini_contents === null)
+				{
+					throw new Exception('Could not update frontend .user.ini configuration.');
+				}
+				if(file_put_contents($user_ini_path, $user_ini_contents, LOCK_EX) === false)
+				{
+					throw new Exception('Could not update frontend .user.ini file.');
+				}
+			}
+			
+			//Update /admin/.user.ini (admin) - for Nginx / PHP-FPM environments
+			$admin_user_ini_path = INSTALLATION_ROOT.'/admin/.user.ini';
+			if(file_exists($admin_user_ini_path))
+			{
+				$doc_root = rtrim(INSTALLATION_ROOT, '/');
+				$admin_path = $doc_root.'/core/session-check-admin.php';
+				$admin_user_ini_contents = file_get_contents($admin_user_ini_path);
+				if($admin_user_ini_contents === false)
+				{
+					throw new Exception('Could not read admin .user.ini file.');
+				}
+				$original_admin_user_ini_contents = $admin_user_ini_contents;
+				//Replace ONLY the auto_prepend_file line
+				$admin_user_ini_contents = preg_replace('/;auto_prepend_file\s*=\s*".*?"/', 'auto_prepend_file = "'.$admin_path.'"', $admin_user_ini_contents);
+				if($admin_user_ini_contents === null)
+				{
+					throw new Exception('Could not update admin .user.ini configuration.');
+				}
+				if(file_put_contents($admin_user_ini_path, $admin_user_ini_contents, LOCK_EX) === false)
+				{
+					throw new Exception('Could not update admin .user.ini file.');
+				}
+			}
+			
+			$email = $server_email;
+			$redirect_to_opposite_url = 'Yes';
+			$auto_generate_canonical_url = 'Yes';
+			$url_extension = '/';
+			$add_site_name_to_title_tag = 'Yes';
+			$separate_site_name_in_title_tag_with = '-';
+			$pagination = 30;
+			$first_last_name = $first_name.' '.$last_name;
+			$new_user_id = 1;
+			
+			//Make sure last ids for installs are unset. These session variables are set in template-files.php.
+			unset($_SESSION['last_menu_id']);
+			unset($_SESSION['last_slider_id']);
+			unset($_SESSION['last_custom_field_id']);
+			unset($_SESSION['last_pages_id']);
+			unset($_SESSION['last_url_id']);
+			$_SESSION['install_ids'] = array();
+			
+			$installation_step = 'Creating database credentials';
+			
+			//Set database connection credentials
+			$database_connection_file = file_get_contents(INSTALLATION_ROOT."/admin/cms/installer/data/credentials.php");
+			if($database_connection_file === false)
+			{
+				throw new Exception('Could not read database credentials template.');
+			}
+			
+			$old_database_hostname = '[DATABASE_HOSTNAME]'; 
+			$new_database_hostname = $database_hostname;
+			$database_connection_file = str_replace($old_database_hostname, $new_database_hostname, $database_connection_file);
+			
+			$old_database_name = '[DATABASE_NAME]'; 
+			$new_database_name = $database_name;
+			$database_connection_file = str_replace($old_database_name, $new_database_name, $database_connection_file);
+			
+			$old_database_username = '[DATABASE_USERNAME]'; 
+			$new_database_username = $database_username;
+			$database_connection_file = str_replace($old_database_username, $new_database_username, $database_connection_file);
+			
+			$old_database_password = '[DATABASE_PASSWORD]'; 
+			$new_database_password = $database_password;
+			$database_connection_file = str_replace($old_database_password, $new_database_password, $database_connection_file);
+			
+			clearstatcache(); //Clear file cache to make sure its writting to the real file and not buffer version/cache.
+			
+			$set_database_connection_file = fopen(INSTALLATION_ROOT."/core/database/DbCredentials.php", "w");
+			if($set_database_connection_file === false)
+			{
+				throw new Exception('Could not create database credentials file.');
+			}
+			$bytes_written = fwrite($set_database_connection_file, $database_connection_file);
+			if($bytes_written === false || $bytes_written < strlen($database_connection_file))
+			{
+				fclose($set_database_connection_file);
+				throw new Exception('Could not completely write database credentials file.');
+			}
+			if(!fclose($set_database_connection_file))
+			{
+				throw new Exception('Could not close database credentials file after writing.');
+			}
+			
+			$installation_step = 'Creating installation security settings';
+			
+			//Create unique secret for this install.
+			try
+			{
+				//Preferred: php cryptographically secure.
+				$hash_secret = bin2hex(random_bytes(16)); //32 chars
+			}
+			catch(Exception $e)
+			{
+				//Fallback if php cryptographically secure fails.
+				$hash_secret = '0123456789abcdefghijklmnopqrstuvwxyz';
+				$hash_secret = substr(str_shuffle($hash_secret), 0, 32);
+			}
+			$config_file_path = INSTALLATION_ROOT."/core/config.php";
+			$config_contents = file_get_contents($config_file_path);
+			if($config_contents === false)
+			{
+				throw new Exception('Could not read config.php.');
+			}
+			$config_contents = str_replace('[SET_HASH_SECRET]', $hash_secret, $config_contents);
+			if(file_put_contents($config_file_path, $config_contents) === false)
+			{
+				throw new Exception('Could not update config.php.');
+			}
+			
+			$installation_step = 'Connecting to the installed database';
+			
+			//Get all classes and connect to database.
+			require_once(INSTALLATION_ROOT.'/core/database/index.php');
+			
+			$installation_step = 'Creating database tables';
+			
+			//Get function that creates queries so databases can be installed.
+			require_once(INSTALLATION_ROOT.'/admin/cms/functions/build-database-table-create-query.php');
+			
+			//Create database tables.
+			$existing_database_tables = array();
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/database/tables/index.php');
+			
+			$installation_step = 'Preparing database records';
+			
+			//Get auto increment id columns to install new site on next id.
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/counters.php');
+			
+			$installation_step = 'Creating website directories';
+			
+			//Create Account Template Folders on Server
+			$directory_path = INSTALLATION_ROOT.'/sites/'.$site_id.'/templates/default';
+			if(!is_dir($directory_path) && !mkdir($directory_path, 0755, true))
+			{
+				throw new Exception('Could not create website template directory.');
+			}
+			$directory_path = INSTALLATION_ROOT.'/sites/media';
+			if(!is_dir($directory_path) && !mkdir($directory_path, 0755, true))
+			{
+				throw new Exception('Could not create website media directory.');
+			}
+			$directory_path = INSTALLATION_ROOT.'/sites/media/images';
+			if(!is_dir($directory_path) && !mkdir($directory_path, 0755, true))
+			{
+				throw new Exception('Could not create website images directory.');
+			}
+			$directory_path = INSTALLATION_ROOT.'/sites/media/videos';
+			if(!is_dir($directory_path) && !mkdir($directory_path, 0755, true))
+			{
+				throw new Exception('Could not create website videos directory.');
+			}
+			$directory_path = INSTALLATION_ROOT.'/sites/media/files';
+			if(!is_dir($directory_path) && !mkdir($directory_path, 0755, true))
+			{
+				throw new Exception('Could not create website files directory.');
+			}
+			
+			$installation_step = 'Installing website template and media';
+			
+			//Install Template Files
+			$install_template = 'Yes';
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/template.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/template-files.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/media.php');
+			
+			$installation_step = 'Creating website record';
+			
+			//Install new site database row.
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/sites.php');
+			
+			if($site_id == 1)
+			{
+				$installation_step = 'Installing core admin data';
+				
+				//These records are only needed once within an account.
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/database/columns/index.php'); //Must stay before admin-fields-lists.php as admin-fields-lists.php needs the state row id.
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/admin-fields-lists.php'); //Must stay before admin-fields-values.php as admin-fields-values.php is updated with admin-fields-lists.php row ids.
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/admin-fields-values.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/admin-field-sections.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/admin-pages.php'); //Must stay before admin-menus-items.php as admin-menus-items.php is updated with admin-pages.php row ids for menu links.
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/admin-menus.php'); //Must run before admin-menus-items.php so we can get the admin_menus ids.
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/admin-menus-items.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/database-column-ids.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/form-fields.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/form-values.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/forms.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/license.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/notices.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/users.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/assigned-fields.php'); //Must run after admin_fields/columns, admin_pages, and users as we assign fields from these tables.
+			}
+			
+			$installation_step = 'Installing site data';
+			
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/assignments-sub-items.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/blocking-spam.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/currency.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/custom-fields-global.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/custom-fields.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/menus-items.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/menus.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/page-groups.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/pages.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/search-engines.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/site-contact-info.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/site-security.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/site-settings.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/sliders-items.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/sliders.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/urls.php');
+			
+			$installation_step = 'Completing installation';
+			
+			//Pause for 10 seconds to ensure the new admin URL is updated in the .htaccess file and the cache is cleared, allowing it to load properly.
+			sleep(10);
+			
+			header("Location: /".$admin_directory."/?signup=success");
+			exit;
 		}
-		catch(Exception $e)
+		//Remove anything installed if the installation failed.
+		catch(Throwable $e)
 		{
-			//Fallback if php cryptographically secure fails.
-			$hash_secret = '0123456789abcdefghijklmnopqrstuvwxyz';
-			$hash_secret = substr(str_shuffle($hash_secret), 0, 32);
+			$cleanup_failed = false;
+			
+			//Log actual technical failure.
+			error_log('Ratals installation failed during '.$installation_step.': '.$e->getMessage().' in '.$e->getFile().' on line '.$e->getLine());
+			
+			//Delete DbCredentials.php if it was created.
+			$database_credentials_file = INSTALLATION_ROOT.'/core/database/DbCredentials.php';
+			
+			if(file_exists($database_credentials_file))
+			{
+				if(!unlink($database_credentials_file))
+				{
+					$cleanup_failed = true;
+					error_log('Ratals installation cleanup could not delete DbCredentials.php.');
+				}
+			}
+			
+			//Remove any database tables created during the failed installation.
+			if(isset($pdo) && $pdo instanceof PDO)
+			{
+				try
+				{
+					$pdo->exec('SET FOREIGN_KEY_CHECKS=0');
+					
+					$database_tables = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+					
+					foreach($database_tables as $database_table)
+					{
+						$database_table = str_replace('`', '``', $database_table);
+						$pdo->exec('DROP TABLE IF EXISTS `'.$database_table.'`');
+					}
+					
+					$pdo->exec('SET FOREIGN_KEY_CHECKS=1');
+				}
+				catch(Throwable $cleanup_error)
+				{
+					$cleanup_failed = true;
+					error_log('Ratals installation cleanup could not remove database tables: '.$cleanup_error->getMessage());
+					
+					//Make sure foreign key checks are turned back on if cleanup failed.
+					try
+					{
+						$pdo->exec('SET FOREIGN_KEY_CHECKS=1');
+					}
+					catch(Throwable $foreign_key_error)
+					{
+						$cleanup_failed = true;
+						error_log('Ratals installation cleanup could not restore foreign key checks: '.$foreign_key_error->getMessage());
+					}
+				}
+			}
+			
+			//Function used to remove directories created during installation.
+			$remove_install_directory = function($directory_path) use (&$remove_install_directory, &$cleanup_failed)
+			{
+				if(!is_dir($directory_path))
+				{
+					return;
+				}
+				
+				$directory_contents = scandir($directory_path);
+				
+				if($directory_contents === false)
+				{
+					$cleanup_failed = true;
+					error_log('Ratals installation cleanup could not read directory: '.$directory_path);
+					return;
+				}
+				
+				foreach($directory_contents as $item)
+				{
+					if($item !== '.' && $item !== '..')
+					{
+						$item_path = $directory_path.'/'.$item;
+						
+						if(is_dir($item_path))
+						{
+							$remove_install_directory($item_path);
+						}
+						else
+						{
+							if(!unlink($item_path))
+							{
+								$cleanup_failed = true;
+								error_log('Ratals installation cleanup could not delete file: '.$item_path);
+							}
+						}
+					}
+				}
+				
+				if(!rmdir($directory_path))
+				{
+					$cleanup_failed = true;
+					error_log('Ratals installation cleanup could not remove directory: '.$directory_path);
+				}
+			};
+			
+			//Remove site 1 files created during the failed installation.
+			$site_directory = INSTALLATION_ROOT.'/sites/1';
+			
+			if(is_dir($site_directory))
+			{
+				$remove_install_directory($site_directory);
+			}
+			
+			//Remove media files created during the failed installation.
+			$media_directory = INSTALLATION_ROOT.'/sites/media';
+			
+			if(is_dir($media_directory))
+			{
+				$remove_install_directory($media_directory);
+			}
+			
+			//Restore original frontend .htaccess file.
+			if(isset($original_htaccess_contents) && isset($htaccess_path))
+			{
+				if(file_put_contents($htaccess_path, $original_htaccess_contents) === false)
+				{
+					$cleanup_failed = true;
+					error_log('Ratals installation cleanup could not restore frontend .htaccess file.');
+				}
+			}
+			
+			//Restore original admin .htaccess file.
+			if(isset($original_admin_htaccess_contents) && isset($admin_htaccess_path))
+			{
+				if(file_put_contents($admin_htaccess_path, $original_admin_htaccess_contents) === false)
+				{
+					$cleanup_failed = true;
+					error_log('Ratals installation cleanup could not restore admin .htaccess file.');
+				}
+			}
+			
+			//Restore original frontend .user.ini file.
+			if(isset($original_user_ini_contents) && isset($user_ini_path))
+			{
+				if(file_put_contents($user_ini_path, $original_user_ini_contents, LOCK_EX) === false)
+				{
+					$cleanup_failed = true;
+					error_log('Ratals installation cleanup could not restore frontend .user.ini file.');
+				}
+			}
+			
+			//Restore original admin .user.ini file.
+			if(isset($original_admin_user_ini_contents) && isset($admin_user_ini_path))
+			{
+				if(file_put_contents($admin_user_ini_path, $original_admin_user_ini_contents, LOCK_EX) === false)
+				{
+					$cleanup_failed = true;
+					error_log('Ratals installation cleanup could not restore admin .user.ini file.');
+				}
+			}
+			
+			//Clear PHP file status cache after cleanup.
+			clearstatcache();
+			
+			//Show installer-friendly error.
+			if($cleanup_failed === true)
+			{
+				$errors['installation'] = '<span class="center error">Installation failed while '.$installation_step.'. Ratals could not fully remove the partial installation. Please check your server error log for the exact cause of the failure and to see what could not be cleaned up before trying again.</span>';
+			}
+			else
+			{
+				$errors['installation'] = '<span class="center error">Installation failed while '.$installation_step.'. The partial installation was removed. Please check your server error log for the exact cause of the failure before trying again.</span>';
+			}
 		}
-		$config_file_path = $_SERVER['DOCUMENT_ROOT']."/core/config.php";
-		$config_contents = file_get_contents($config_file_path);
-		$config_contents = str_replace('[SET_HASH_SECRET]', $hash_secret, $config_contents);
-		file_put_contents($config_file_path, $config_contents);
-		
-		//Get all classes and connect to database.
-		require_once($_SERVER['DOCUMENT_ROOT'].'/core/database/index.php');
-		
-		//Get function that creates queries so databases can be installed.
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/build-database-table-create-query.php');
-		
-		//Create database tables.
-		$existing_database_tables = array();
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/database/tables/index.php');
-		
-		//Get auto increment id columns to install new site on next id.
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/counters.php');
-		
-		//Create Account Template Folders on Server
-		if(!is_dir($_SERVER['DOCUMENT_ROOT']."/sites/".$site_id."/templates/default")) { mkdir($_SERVER['DOCUMENT_ROOT']."/sites/".$site_id."/templates/default", 0755, true); }
-		if(!is_dir($_SERVER['DOCUMENT_ROOT']."/sites/media")) { mkdir($_SERVER['DOCUMENT_ROOT']."/sites/media", 0755, true); }
-		if(!is_dir($_SERVER['DOCUMENT_ROOT']."/sites/media/images")) { mkdir($_SERVER['DOCUMENT_ROOT']."/sites/media/images", 0755, true); }
-		if(!is_dir($_SERVER['DOCUMENT_ROOT']."/sites/media/videos")) { mkdir($_SERVER['DOCUMENT_ROOT']."/sites/media/videos", 0755, true); }
-		if(!is_dir($_SERVER['DOCUMENT_ROOT']."/sites/media/files")) { mkdir($_SERVER['DOCUMENT_ROOT']."/sites/media/files", 0755, true); }
-		
-		//Install Template Files
-		$install_template = 'Yes';
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/template.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/template-files.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/media.php');
-		
-		//Install new site database row.
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/sites.php');
-		
-		if($site_id == 1)
-		{
-			//These records are only needed once within an account.
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/database/columns/index.php'); //Must stay before admin-fields-lists.php as admin-fields-lists.php needs the state row id.
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/admin-fields-lists.php'); //Must stay before admin-fields-values.php as admin-fields-values.php is updated with admin-fields-lists.php row ids.
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/admin-fields-values.php');
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/admin-field-sections.php');
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/admin-pages.php'); //Must stay before admin-menus-items.php as admin-menus-items.php is updated with admin-pages.php row ids for menu links.
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/admin-menus.php'); //Must run before admin-menus-items.php so we can get the admin_menus ids.
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/admin-menus-items.php');
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/database-column-ids.php');
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/form-fields.php');
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/form-values.php');
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/forms.php');
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/license.php');
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/notices.php');
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/users.php');
-			require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/assigned-fields.php'); //Must run after admin_fields/columns, admin_pages, and users as we assign fields from these tables.
-		}
-		
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/assignments-sub-items.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/blocking-spam.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/currency.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/custom-fields-global.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/custom-fields.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/menus-items.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/menus.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/page-groups.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/pages.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/search-engines.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/site-contact-info.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/site-security.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/site-settings.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/sliders-items.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/sliders.php');
-		require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/urls.php');
-		
-		//Pause for 10 seconds to ensure the new admin URL is updated in the .htaccess file and the cache is cleared, allowing it to load properly.
-		sleep(10);
-		
-		header("Location: /".$admin_directory."/?signup=success");
-		exit;
 	}
 }
 ?><!DOCTYPE html>
@@ -675,12 +1015,16 @@ input, select { background-color: #fff; padding: 8px; height: 37px; border: 1px 
 .pending-ajax-inner-container span { background-color: #f1f1f1; padding: 10px 20px; border-radius: 25px; display: inline-block; }
 h1 { font-size: 40px; text-align: center; font-weight: 700; margin: 0px; padding-bottom: 12px; }
 h2 { font-size: 16px; text-align: center; font-weight: 400; margin: 0px 0px 20px 0px; padding: 0px; }
-a { color: #589fc3; }
+a { color: #5a5aa9; }
 .box-wrapper { margin: 10px; }
 .box-wrapper span { display: block; padding-bottom: 4px; }
 .box-wrapper .box { max-width: 1200px; margin: 30px auto 50px auto; box-shadow: 0 20px 50px 0 rgba(0,0,0,0.2); padding: 25px; }
+.box-wrapper .box .ratals-logo { text-align: center; }
+.box-wrapper .box .ratals-logo img { width: auto; max-height: 50px; }
+.box-wrapper .box .need-help { text-align: center; margin: 10px 0 0 0; }
 .box-wrapper .box ul.two-column { margin: 0px; padding: 0px; --n: 2; display: grid; grid-template-columns: repeat(auto-fill, minmax(max(300px,(100% - (var(--n) - 1)*20px)/var(--n)), 1fr)); gap: 20px; width: calc(100% - 3px); }
 .box-wrapper .box ul.three-column { margin: 0px; padding: 0px; --n: 3; display: grid; grid-template-columns: repeat(auto-fill, minmax(max(180px,(100% - (var(--n) - 1)*20px)/var(--n)), 1fr)); gap: 20px; width: calc(100% - 3px); }
+.box-wrapper .box ul.four-column { margin: 0px; padding: 0px; --n: 4; display: grid; grid-template-columns: repeat(auto-fill, minmax(max(180px,(100% - (var(--n) - 1)*20px)/var(--n)), 1fr)); gap: 20px; width: calc(100% - 3px); }
 .box-wrapper .box ul.five-column { margin: 0px; padding: 0px; --n: 5; display: grid; grid-template-columns: repeat(auto-fill, minmax(max(180px,(100% - (var(--n) - 1)*20px)/var(--n)), 1fr)); gap: 20px; width: calc(100% - 3px); }
 .box-wrapper .box ul li { list-style: none; margin: 0px; }
 .box-wrapper .box ul li.full-row { grid-column: 1 / -1; }
@@ -690,7 +1034,8 @@ a { color: #589fc3; }
 .box-wrapper .tld { width: calc(100% - 165px); vertical-align: top; border-left: 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; }
 .box-wrapper button { font-size: 18px; padding: 10px; display: inline-block; width: 100%; border: 0px; background-color: #195c95; color: #fff; cursor: pointer; border-radius: 5px; }
 .box-wrapper .small-font { font-size: 14px; line-height: 20px; }
-.box-wrapper .note-small-font { font-size: 11px; margin-top: 3px; color: #7c7c7c; }
+.box-wrapper .note-small-font { font-size: 11px; margin-top: 3px; color: #7c7c7c; line-height: 15px; }
+.box-wrapper .sub-text { background-color: #f7f7f7; padding: 10px; line-height: 22px; color: #424242; border: 1px solid #f1f1f1; border-radius: 5px; }
 .box-wrapper .currency_format { font-weight: 600; }
 .box-wrapper .currency_format, .box-wrapper .currency_format span { display: inline; }
 .box-wrapper .email_connector { margin: 5px 0px; }
@@ -844,32 +1189,42 @@ $(document).ready(function()
 <!-- End Pending Overlay -->
 <div class="box-wrapper">
 	<div class="box">
-	<h1>Install Ratals</h1>
-    <?php if(!empty($nginx_warning)) { echo $nginx_warning; } ?>
-	<h2>Need Help? Watch our Installation Guide videos <a href="https://www.ratals.com/tutorials/installation/ratals-installation-guide/" target="_blank">here</a>.</h2>
+        <div class="ratals-logo"><img src="/sites/ratals-logo.png" width="548" height="191" alt="Ratals Logo"></div>
+        <?php if(!empty($nginx_warning)) { echo $nginx_warning; } ?>
+        <p class="need-help">Need help? Watch our <a href="https://www.ratals.com/tutorials/installation/ratals-installation-guide/" target="_blank">Installation Guide videos</a> on ratals.com.</p>
 		<?php if(!empty($errors)) { echo '<span class="center error">Oh Snap! Something isn\'t right.</span>'; } ?>
 		<?php if(!empty($errors['database_connection'])) { echo $errors['database_connection']; } ?>
+        <?php if(!empty($errors['database_empty'])) { echo $errors['database_empty']; } ?>
+        <?php if(!empty($errors['database_empty_check'])) { echo $errors['database_empty_check']; } ?>
+        <?php if(!empty($errors['database_collation'])) { echo $errors['database_collation']; } ?>
+        <?php if(!empty($errors['database_collation_check'])) { echo $errors['database_collation_check']; } ?>
+        <?php if(!empty($errors['installation'])) { echo $errors['installation']; } ?>
 		<?php if(isset($errors['password_confirm_password'])) { echo $errors['password_confirm_password']; } ?>
 		
 		<form action="" method="POST">
-		<ul class="three-column">
+		<ul class="four-column">
 			<li class="full-row">
 				<div class="headline">DATABASE CONNECTION</div>
 			</li>
 			<li>
+				<?php if(isset($errors['database_hostname'])) { echo $errors['database_hostname']; } else { echo '<span>Database Hostname</span>'; } ?>
+				<input name="database_hostname" type="text" value="<?php if(isset($_POST['submit'])) { echo $database_hostname; } else { echo 'localhost'; } ?>" />
+				<div class="note-small-font"><?php if(isset($errors['database_hostname_quote'])) { echo $errors['database_hostname_quote']; } ?></div>
+			</li>
+            <li>
 				<?php if(isset($errors['database_name'])) { echo $errors['database_name']; } else { echo '<span>Database Name</span>'; } ?>
 				<input name="database_name" type="text" value="<?php if(isset($_POST['submit'])) { echo $database_name; } ?>" />
-				<div class="note-small-font"><?php if(isset($errors['database_name_quote'])) { echo $errors['database_name_quote']; } else { echo 'Cannot contain single quotes.'; } ?></div>
+				<div class="note-small-font"><?php if(isset($errors['database_name_quote'])) { echo $errors['database_name_quote']; } ?></div>
 			</li>
 			<li>
 				<?php if(isset($errors['database_username'])) { echo $errors['database_username']; } else { echo '<span>Database Username</span>'; } ?>
 				<input name="database_username" type="text" value="<?php if(isset($_POST['submit'])) { echo $database_username; } ?>" />
-				<div class="note-small-font"><?php if(isset($errors['database_username_quote'])) { echo $errors['database_username_quote']; } else { echo 'Cannot contain single quotes.'; } ?></div>
+				<div class="note-small-font"><?php if(isset($errors['database_username_quote'])) { echo $errors['database_username_quote']; } ?></div>
 			</li>
 			<li>
 				<?php if(isset($errors['database_password'])) { echo $errors['database_password']; } else { echo '<span>Database Password</span>'; } ?>
 				<input name="database_password" type="password" value="" />
-				<div class="note-small-font"><?php if(isset($errors['database_password_quote'])) { echo $errors['database_password_quote']; } else { echo 'Cannot contain single quotes.'; } ?></div>
+				<div class="note-small-font"><?php if(isset($errors['database_password_quote'])) { echo $errors['database_password_quote']; } ?></div>
 			</li>
 		</ul>
 		<ul class="two-column">
@@ -895,8 +1250,8 @@ $(document).ready(function()
 				</select><input name="tld" class="tld" type="text" value="<?php echo htmlspecialchars($tld ?? '', ENT_QUOTES); ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['admin_directory'])) { echo $errors['admin_directory']; } else { echo '<span>Admin Login URL</span>'; } ?>
-				<input name="admin_directory" placeholder="i.e: i-love-ratals" type="text" value="<?php if(isset($_POST['submit'])) { echo $admin_directory; } ?>" />
+				<?php if(isset($errors['admin_directory'])) { echo $errors['admin_directory']; } else { echo '<span>Admin Login Path</span>'; } ?>
+				<input name="admin_directory" placeholder="Enter path only - no domain" type="text" value="<?php if(isset($_POST['submit'])) { echo $admin_directory; } ?>" />
 			</li>
 			<li>
 				<?php if(isset($errors['site_language'])) { echo $errors['site_language']; } else { echo '<span>Site Language</span>'; } ?>
@@ -916,6 +1271,7 @@ $(document).ready(function()
 					<option value="Yes"<?php if(isset($_POST['load_with_cache']) && $_POST['load_with_cache'] == 'Yes') { echo ' selected'; } ?>>Yes</option>
 					<option value="No"<?php if(isset($_POST['load_with_cache']) && $_POST['load_with_cache'] == 'No') { echo ' selected'; } ?>>No</option>
 				</select>
+                <div class="note-small-font">Cached pages reduce server resources during higher website traffic and automatically refresh on content updates.</div>
 			</li>
 		</ul>
 		<ul class="three-column">
@@ -998,8 +1354,8 @@ $(document).ready(function()
 			<li class="full-row">
 				<div class="headline">EMAIL SERVER SETUP</div>
 			</li>
-			<li class="full-row small-font">
-				Please enter a default server email address associated with <?php echo $tld; ?>. This email will be used for sending order confirmations, password recovery, security alerts, and more.
+			<li class="full-row small-font sub-text">
+				Please enter your email account settings associated with cartrio.com. These settings should match the email account you set up in your hosting account to help improve email delivery with proper SPF and DKIM authentication. The default values shown below are common examples and may need to be changed. This email will be used to send you failed login alerts, SQL injection alerts, DDoS attack alerts, and other security notifications so you are aware if suspicious activity is detected.
 			</li>
 			<li class="full-row small-font">
 				<div class="email_connector"><label><input name="email_connector" type="checkbox"<?php if(isset($email_connector)) { echo $email_connector; } ?>> Email server is configured with a relay or connector and does not require a username and password.</label></div>
@@ -1013,7 +1369,7 @@ $(document).ready(function()
 				<input name="server_email" placeholder="i.e. support@<?php echo $tld; ?>" type="text" value="<?php if(isset($_POST['submit'])) { echo $server_email; } else { echo 'support@'.$tld; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['server_smpt_url'])) { echo $errors['server_smpt_url']; } else { echo '<span>Server SMTP Email URL</span>'; } ?>
+				<?php if(isset($errors['server_smpt_url'])) { echo $errors['server_smpt_url']; } else { echo '<span>SMTP Server / Hostname</span>'; } ?>
 				<input name="server_smpt_url" placeholder="i.e. mail.<?php echo $tld; ?>" type="text" value="<?php if(isset($_POST['submit'])) { echo $server_smpt_url; } else { echo 'mail.'.$tld; } ?>" />
 			</li>
 			<li>
@@ -1027,7 +1383,10 @@ $(document).ready(function()
 		</ul>
 		<ul class="three-column">
 			<li class="full-row">
-				<div class="headline">CREATE USER</div>
+				<div class="headline">USER & COMPANY INFORMATION</div>
+			</li>
+            <li class="full-row small-font sub-text">
+				This information is used to create your administrator profile and company contact information that can be displayed on your website. To prevent your company contact information from being displayed, select No for Display This Contact Information on the Website.
 			</li>
 			<li>
 				<?php if(isset($errors['first_name'])) { echo $errors['first_name']; } else { echo '<span>First Name</span>'; } ?>
@@ -1273,23 +1632,23 @@ $(document).ready(function()
 		</ul>
 		<ul class="three-column">
 			<li class="full-row">
-				<div class="headline">CREATE LOGIN CREDENTIALS</div>
+				<div class="headline">ADMIN LOGIN CREDENTIALS</div>
 			</li>
 			<li>
-				<?php if(isset($errors['username'])) { echo $errors['username']; } else { echo '<span>Username</span>'; } ?>
+				<?php if(isset($errors['username'])) { echo $errors['username']; } else { echo '<span>Admin Username</span>'; } ?>
 				<input name="username" type="text" value="<?php if(isset($_POST['submit'])) { echo $username; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['password'])) { echo $errors['password']; } else { echo '<span>Password</span>'; } ?>
+				<?php if(isset($errors['password'])) { echo $errors['password']; } else { echo '<span>Admin Password</span>'; } ?>
 				<input name="password" type="password" value="" />
 			</li>
 			<li>
-				<?php if(isset($errors['confirm_password'])) { echo $errors['confirm_password']; } else { echo '<span>Confirm Password</span>'; } ?>
+				<?php if(isset($errors['confirm_password'])) { echo $errors['confirm_password']; } else { echo '<span>Confirm Admin Password</span>'; } ?>
 				<input name="confirm_password" type="password" value="" />
 			</li>
 			<li class="full-row">
 				<div class="password-requirements-wrap">
-					<span>Password Requirements</span>
+					<span>Admin Password Requirements</span>
 					<ul class="password-requirements">
 						<li>At least 10 characters long</li>
 						<li>At least one special character (e.g., `~!@#$%^&amp;*()-_+=[{]}\|;:'",.?/)</li>

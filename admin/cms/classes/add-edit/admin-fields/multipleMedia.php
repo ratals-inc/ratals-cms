@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/admin-fields/multipleMedia.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/admin-fields/multipleMedia.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/admin-fields/multipleMedia.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/admin-fields/multipleMedia.php');
 }
 else
 {
@@ -39,7 +39,7 @@ else
 				}
 				else
 				{
-					include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/admin-fields/modify-js/sort-multiple-media.php';
+					include INSTALLATION_ROOT.'/admin/cms/includes/admin-fields/modify-js/sort-multiple-media.php';
 					
 					$media = array();
 					if(!empty($field_value))

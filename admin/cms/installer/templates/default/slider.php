@@ -5,7 +5,7 @@
 
 if(in_array('slider.php', $data_array['active_template_includes'])) { ?>
 	<?php 
-	include_once($_SERVER['DOCUMENT_ROOT'].'/sites/slider-js.php');
+	include_once(INSTALLATION_ROOT.'/sites/slider-js.php');
 	$slider_id = [SLIDER_ID];
     $slider = sliderId($slider_id);
 	$slider_pagers = '';
@@ -52,12 +52,12 @@ if(in_array('slider.php', $data_array['active_template_includes'])) { ?>
 								{
 									$original_media_id = $slider_items["mobile_original_media_id"];
 									
-									if(file_exists($_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$mobile_media_data[0].'.avif'))
+									if(file_exists(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$mobile_media_data[0].'.avif'))
 									{
 										$mobile_media_urls .= '<source type="image/avif" media="(max-width: '.$slider_items["mobile_media_width"].'px)" srcset="'.$domain.'/sites/media/images/'.$original_media_id.'/'.$mobile_media_data[0].'.avif">';
 									}
 									
-									if(file_exists($_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$mobile_media_data[0].'.webp'))
+									if(file_exists(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$mobile_media_data[0].'.webp'))
 									{
 										$mobile_media_urls .= '<source type="image/webp" media="(max-width: '.$slider_items["mobile_media_width"].'px)" srcset="'.$domain.'/sites/media/images/'.$original_media_id.'/'.$mobile_media_data[0].'.webp">';
 									}
@@ -89,12 +89,12 @@ if(in_array('slider.php', $data_array['active_template_includes'])) { ?>
 								{
 									$original_media_id = $slider_items["tablet_original_media_id"];
 									
-									if(file_exists($_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$tablet_media_data[0].'.avif'))
+									if(file_exists(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$tablet_media_data[0].'.avif'))
 									{
 										$tablet_media_urls .= '<source type="image/avif" media="(max-width: '.$slider_items["tablet_media_width"].'px)" srcset="'.$domain.'/sites/media/images/'.$original_media_id.'/'.$tablet_media_data[0].'.avif">';
 									}
 									
-									if(file_exists($_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$tablet_media_data[0].'.webp'))
+									if(file_exists(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$tablet_media_data[0].'.webp'))
 									{
 										$tablet_media_urls .= '<source type="image/webp" media="(max-width: '.$slider_items["tablet_media_width"].'px)" srcset="'.$domain.'/sites/media/images/'.$original_media_id.'/'.$tablet_media_data[0].'.webp">';
 									}
@@ -126,12 +126,12 @@ if(in_array('slider.php', $data_array['active_template_includes'])) { ?>
 								{
 									$original_media_id = $slider_items["desktop_original_media_id"];
 									
-									if(file_exists($_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$desktop_media_data[0].'.avif'))
+									if(file_exists(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$desktop_media_data[0].'.avif'))
 									{
 										$desktop_media_urls .= '<source type="image/avif" srcset="'.$domain.'/sites/media/images/'.$original_media_id.'/'.$desktop_media_data[0].'.avif">';
 									}
 									
-									if(file_exists($_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$desktop_media_data[0].'.webp'))
+									if(file_exists(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$desktop_media_data[0].'.webp'))
 									{
 										$desktop_media_urls .= '<source type="image/webp" srcset="'.$domain.'/sites/media/images/'.$original_media_id.'/'.$desktop_media_data[0].'.webp">';
 									}
@@ -186,7 +186,7 @@ if(in_array('slider.php', $data_array['active_template_includes'])) { ?>
 									$original_media_id = $slider_items["original_media_id"];
 									
 									$video_poster = '';
-									if(!empty($slider_items["video_poster"]) && file_exists($_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$slider_items["video_poster"]))
+									if(!empty($slider_items["video_poster"]) && file_exists(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$slider_items["video_poster"]))
 									{
 										$video_poster = ' poster="'.$domain.'/sites/media/images/'.$original_media_id.'/'.$slider_items["video_poster"].'"';
 									}

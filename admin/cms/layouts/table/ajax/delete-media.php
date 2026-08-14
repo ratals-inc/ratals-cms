@@ -3,13 +3,18 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
+if(!defined('INSTALLATION_ROOT'))
+{
+	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
+}
+
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
+require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/ajax/delete-media.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/ajax/delete-media.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/ajax/delete-media.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/ajax/delete-media.php');
 }
 else
 {
@@ -25,26 +30,26 @@ else
 				$original_media_id = $sql_get_media_name_to_delete_data['original_media_id'];
 				
 				$path = '';
-				if(file_exists($_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$sql_get_media_name_to_delete_data['media_url']) && $sql_get_media_name_to_delete_data['media_type'] == 'Image')
+				if(file_exists(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$sql_get_media_name_to_delete_data['media_url']) && $sql_get_media_name_to_delete_data['media_type'] == 'Image')
 				{
-					$path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$sql_get_media_name_to_delete_data['media_url'];
+					$path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$sql_get_media_name_to_delete_data['media_url'];
 					unlink($path);
 					
 					//If directory becomes empty, remove it.
-					$dir_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id;
+					$dir_path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id;
 					if(is_readable($dir_path) && is_dir($dir_path) && count(scandir($dir_path)) === 2)
 					{
 						rmdir($dir_path);
 					}
 				}
-				elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/sites/media/videos/'.$sql_get_media_name_to_delete_data['media_url']) && $sql_get_media_name_to_delete_data['media_type'] == 'Video')
+				elseif(file_exists(INSTALLATION_ROOT.'/sites/media/videos/'.$sql_get_media_name_to_delete_data['media_url']) && $sql_get_media_name_to_delete_data['media_type'] == 'Video')
 				{
-					$path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/videos/'.$sql_get_media_name_to_delete_data['media_url'];
+					$path = INSTALLATION_ROOT.'/sites/media/videos/'.$sql_get_media_name_to_delete_data['media_url'];
 					unlink($path);
 				}
-				elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/sites/media/files/'.$sql_get_media_name_to_delete_data['media_url']) && $sql_get_media_name_to_delete_data['media_type'] == 'File')
+				elseif(file_exists(INSTALLATION_ROOT.'/sites/media/files/'.$sql_get_media_name_to_delete_data['media_url']) && $sql_get_media_name_to_delete_data['media_type'] == 'File')
 				{
-					$path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/files/'.$sql_get_media_name_to_delete_data['media_url'];
+					$path = INSTALLATION_ROOT.'/sites/media/files/'.$sql_get_media_name_to_delete_data['media_url'];
 					unlink($path);
 				}
 		

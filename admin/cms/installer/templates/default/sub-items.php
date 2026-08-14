@@ -14,9 +14,9 @@ foreach($data_array['sub_items'] as $group)
 	}
 	elseif($group['sub_items_type'] == 'Include File')
 	{
-		if(!empty($group['sub_items_load_template_include_file']) && file_exists($_SERVER['DOCUMENT_ROOT'].'/sites/'.$site_id.'/templates/'.$active_template_path.'/'.$group['sub_items_load_template_include_file']))
+		if(!empty($group['sub_items_load_template_include_file']) && file_exists(INSTALLATION_ROOT.'/sites/'.$site_id.'/templates/'.$active_template_path.'/'.$group['sub_items_load_template_include_file']))
 		{
-			include($_SERVER['DOCUMENT_ROOT'].'/sites/'.$site_id.'/templates/'.$active_template_path.'/'.$group['sub_items_load_template_include_file']);
+			include(INSTALLATION_ROOT.'/sites/'.$site_id.'/templates/'.$active_template_path.'/'.$group['sub_items_load_template_include_file']);
 		}
 		else
 		{
@@ -29,7 +29,7 @@ foreach($data_array['sub_items'] as $group)
 		//Open - display as slider
 		if($group['display_as_slider'] == 'Yes')
 		{
-			include_once($_SERVER['DOCUMENT_ROOT'].'/sites/slider-js.php');
+			include_once(INSTALLATION_ROOT.'/sites/slider-js.php');
 			
 			//Get correct count of slides to show based on device type. This is important for Cumulative Layout Shifts.
 			$slides_in_viewport = getDeviceType($group['slide_minimum_width'], $group['slides_in_view']);

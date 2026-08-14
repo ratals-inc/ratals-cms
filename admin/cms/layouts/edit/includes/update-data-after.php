@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/edit/includes/update-data-after.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/edit/includes/update-data-after.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/edit/includes/update-data-after.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/edit/includes/update-data-after.php');
 }
 else
 {
@@ -258,24 +258,24 @@ else
 		{
 			$active_template = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'templates', 'WHERE `id` = ? AND site_id = ?', [trim($_GET['sub-page-rid'] ?? ''), $_SESSION["site_set_for_editing"]]);
 			
-			if(!empty($active_template['directory_folder_name']) && !file_exists($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']))
+			if(!empty($active_template['directory_folder_name']) && !file_exists(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']))
 			{
-				mkdir($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name'], 0777, true);
+				mkdir(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name'], 0777, true);
 			}
 			
 			if(isset($active_template['directory_folder_name']) && !empty($active_template['directory_folder_name']))
 			{
-				rename($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$current_template_file_name, 
-					   $_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$posted_template_file_name);
+				rename(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$current_template_file_name, 
+					   INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$posted_template_file_name);
 			}
 		}
 		
 		if($_SESSION['admin_table_name'] == 'templates' && isset($post_values['templates']['directory_folder_name']) && !empty($post_values['templates']['directory_folder_name']) && isset($current_values['templates']['directory_folder_name']) && $post_values['templates']['directory_folder_name'] != $current_values['templates']['directory_folder_name'])
 		{
-			if(file_exists($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$current_values['templates']['directory_folder_name']))
+			if(file_exists(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$current_values['templates']['directory_folder_name']))
 			{
-				rename($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$current_values['templates']['directory_folder_name'], 
-					   $_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$post_values['templates']['directory_folder_name']);
+				rename(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$current_values['templates']['directory_folder_name'], 
+					   INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$post_values['templates']['directory_folder_name']);
 			}
 		}
 		
@@ -283,9 +283,9 @@ else
 		{
 			$active_template = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'templates', 'WHERE `id` = ? AND site_id = ?', [trim($_GET['sub-page-rid'] ?? ''), $_SESSION["site_set_for_editing"]]);
 			
-			if(isset($active_template['directory_folder_name']) && !empty($active_template['directory_folder_name']) && isset($post_values['template_files']['filename']) && !empty($post_values['template_files']['filename']) && file_exists($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$post_values['template_files']['filename']))
+			if(isset($active_template['directory_folder_name']) && !empty($active_template['directory_folder_name']) && isset($post_values['template_files']['filename']) && !empty($post_values['template_files']['filename']) && file_exists(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$post_values['template_files']['filename']))
 			{
-				$myfile = fopen($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$post_values['template_files']['filename'], "w");
+				$myfile = fopen(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$post_values['template_files']['filename'], "w");
 				fwrite($myfile, $posted_template_file_code);
 				fclose($myfile);
 			}
@@ -295,10 +295,10 @@ else
 		{
 			$media_type = strtolower($current_values['media']['media_type'].'s');
 			
-			if(file_exists($_SERVER['DOCUMENT_ROOT']."/sites/media/".$media_type."/".$current_values['media']['original_media_id']."/".$current_values['media']['media_url']))
+			if(file_exists(INSTALLATION_ROOT."/sites/media/".$media_type."/".$current_values['media']['original_media_id']."/".$current_values['media']['media_url']))
 			{
-				rename($_SERVER['DOCUMENT_ROOT']."/sites/media/".$media_type."/".$current_values['media']['original_media_id']."/".$current_values['media']['media_url'], 
-					   $_SERVER['DOCUMENT_ROOT']."/sites/media/".$media_type."/".$current_values['media']['original_media_id']."/".$post_values['media']['media_url']);
+				rename(INSTALLATION_ROOT."/sites/media/".$media_type."/".$current_values['media']['original_media_id']."/".$current_values['media']['media_url'], 
+					   INSTALLATION_ROOT."/sites/media/".$media_type."/".$current_values['media']['original_media_id']."/".$post_values['media']['media_url']);
 			}
 		}
 		
@@ -320,7 +320,7 @@ else
 		if($_SESSION['admin_table_name'] == 'sites' && isset($post_values['sites']['admin_directory']) && isset($current_values['sites']['admin_directory']) && $post_values['sites']['admin_directory'] != $current_values['sites']['admin_directory'])
 		{
 			//Get the /.htaccess file path.
-			$htaccess_path = $_SERVER['DOCUMENT_ROOT'].'/.htaccess';
+			$htaccess_path = INSTALLATION_ROOT.'/.htaccess';
 			if(file_exists($htaccess_path))
 			{
 				//Read the .htaccess content.
@@ -332,7 +332,7 @@ else
 			}
 			
 			//Get the /admin/.htaccess file path.
-			$admin_htaccess_path = $_SERVER['DOCUMENT_ROOT'].'/admin/.htaccess';
+			$admin_htaccess_path = INSTALLATION_ROOT.'/admin/.htaccess';
 			if(file_exists($admin_htaccess_path))
 			{
 				//Read the .htaccess content.

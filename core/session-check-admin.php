@@ -3,13 +3,18 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/core/session-check-admin.php'))
+if(!defined('INSTALLATION_ROOT'))
 {
-	include($_SERVER['DOCUMENT_ROOT'].'/hooks/core/session-check-admin.php');
+	define('INSTALLATION_ROOT', dirname(__DIR__));
+}
+
+if(file_exists(INSTALLATION_ROOT.'/hooks/core/session-check-admin.php'))
+{
+	include(INSTALLATION_ROOT.'/hooks/core/session-check-admin.php');
 }
 else
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/frontend/requested-url.php');
+	require_once(INSTALLATION_ROOT.'/admin/cms/frontend/requested-url.php');
 	require_once('session-setting.php');
 	
 	if(session_status() === PHP_SESSION_NONE)

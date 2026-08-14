@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/scripts/delete-records.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/scripts/delete-records.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/scripts/delete-records.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/scripts/delete-records.php');
 }
 elseif(!empty($_SESSION['admin_js_name']))
 {
@@ -30,19 +30,19 @@ elseif(!empty($_SESSION['admin_js_name']))
             {
                 <?php
 				$ajax_url_request = ''; 
-				if(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/cms/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php')) 
+				if(file_exists(INSTALLATION_ROOT.'/admin/cms/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php')) 
 				{
 					$ajax_url_request = '/'.$_SESSION['admin_directory'].'/cms/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php';
 				}
-				elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php')) 
+				elseif(file_exists(INSTALLATION_ROOT.'/admin/commerce/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php')) 
 				{
 					$ajax_url_request = '/'.$_SESSION['admin_directory'].'/commerce/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php';
 				}
-				elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/erp/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php')) 
+				elseif(file_exists(INSTALLATION_ROOT.'/admin/erp/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php')) 
 				{
 					$ajax_url_request = '/'.$_SESSION['admin_directory'].'/erp/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php';
 				}
-				elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/ai/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php')) 
+				elseif(file_exists(INSTALLATION_ROOT.'/admin/ai/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php')) 
 				{
 					$ajax_url_request = '/'.$_SESSION['admin_directory'].'/ai/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php';
 				}

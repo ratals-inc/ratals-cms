@@ -3,13 +3,18 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
+if(!defined('INSTALLATION_ROOT'))
+{
+	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
+}
+
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
+require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/ajax/delete-menus.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/ajax/delete-menus.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/ajax/delete-menus.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/ajax/delete-menus.php');
 }
 else
 {
@@ -78,6 +83,16 @@ else
 					$results->getUpdateRecord(__LINE__, __FILE__, 'menu_items', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(), `updated_by` = ?', 'WHERE `menus_id` = ? AND `site_id` = ? AND `id` = ?', [$sql_menu_items_check, $_SESSION['user_first_last_name'], $get_rid, $_SESSION["site_set_for_editing"], trim($get_sub_rid ?? '')]);
 				}
 			}
+		}
+		
+		//Clear cache on save.
+		if($_SESSION['admin_site_id_global'] == 'No')
+		{
+			clearSiteCache($_SESSION['site_set_for_editing']);
+		}
+		else
+		{
+			clearAllSiteCache();
 		}
 		
 		echo "1";

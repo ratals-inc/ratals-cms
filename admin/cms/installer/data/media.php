@@ -70,7 +70,7 @@ function avif_enabled($path)
 			if($image !== false)
 			{
 				imagepalettetotruecolor($image);
-				$avif_path = $_SERVER['DOCUMENT_ROOT'].'/test-avif-image-creation.avif';
+				$avif_path = INSTALLATION_ROOT.'/test-avif-image-creation.avif';
 				$avif_result = @imageavif($image, $avif_path, 75);
 				if($avif_result && is_file($avif_path) && filesize($avif_path) > 0)
 				{
@@ -127,20 +127,20 @@ foreach($media_to_install as $media_file_array)
 		$_SESSION[$file_name_and_extenstion] = $inserted_media_id_row;
 		
 		//Create media folder using original media id.
-		if(!is_dir($_SERVER['DOCUMENT_ROOT']."/sites/media/images/".$inserted_media_id_row)) { mkdir($_SERVER['DOCUMENT_ROOT']."/sites/media/images/".$inserted_media_id_row, 0755, true); }
+		if(!is_dir(INSTALLATION_ROOT."/sites/media/images/".$inserted_media_id_row)) { mkdir(INSTALLATION_ROOT."/sites/media/images/".$inserted_media_id_row, 0755, true); }
 		
-		if(!file_exists($_SERVER['DOCUMENT_ROOT']."/sites/media/images/".$inserted_media_id_row."/".$file_name_and_extenstion))
+		if(!file_exists(INSTALLATION_ROOT."/sites/media/images/".$inserted_media_id_row."/".$file_name_and_extenstion))
 		{
 			//Make sure avif is fully enabled if admin user asking to create them.
 			if(!isset($flag_run_once))
 			{
 				$flag_run_once = true;
-				$avif_enabled = avif_enabled($_SERVER['DOCUMENT_ROOT']."/admin/cms/installer/templates/".$template_to_install."/images/".$file_name_and_extenstion);
+				$avif_enabled = avif_enabled(INSTALLATION_ROOT."/admin/cms/installer/templates/".$template_to_install."/images/".$file_name_and_extenstion);
 			}
 			
 			//Update media recordwith original media id.
-			copy($_SERVER['DOCUMENT_ROOT']."/admin/cms/installer/templates/".$template_to_install."/images/".$file_name_and_extenstion, $_SERVER['DOCUMENT_ROOT']."/sites/media/images/".$inserted_media_id_row."/".$file_name_and_extenstion);
-			$media_size = filesize($_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$inserted_media_id_row.'/'.$file_name_and_extenstion);
+			copy(INSTALLATION_ROOT."/admin/cms/installer/templates/".$template_to_install."/images/".$file_name_and_extenstion, INSTALLATION_ROOT."/sites/media/images/".$inserted_media_id_row."/".$file_name_and_extenstion);
+			$media_size = filesize(INSTALLATION_ROOT.'/sites/media/images/'.$inserted_media_id_row.'/'.$file_name_and_extenstion);
 			if(isset($media_size)) { $media_size = convertBytesToSize($media_size); } else { $media_size = ''; }
 			
 			//Update media record just inserted with original media id and media size.
@@ -149,15 +149,15 @@ foreach($media_to_install as $media_file_array)
 			//Prepare creation of .webp and .avif images.
 			if($file_extenstion_only == 'gif')
 			{
-				$image = imagecreatefromgif($_SERVER['DOCUMENT_ROOT']."/admin/cms/installer/templates/".$template_to_install."/images/".$file_name_and_extenstion);
+				$image = imagecreatefromgif(INSTALLATION_ROOT."/admin/cms/installer/templates/".$template_to_install."/images/".$file_name_and_extenstion);
 			}
 			elseif($file_extenstion_only == 'jpg' || $file_extenstion_only == 'jpeg')
 			{
-				$image = imagecreatefromjpeg($_SERVER['DOCUMENT_ROOT']."/admin/cms/installer/templates/".$template_to_install."/images/".$file_name_and_extenstion);
+				$image = imagecreatefromjpeg(INSTALLATION_ROOT."/admin/cms/installer/templates/".$template_to_install."/images/".$file_name_and_extenstion);
 			}
 			elseif($file_extenstion_only == 'png')
 			{
-				$image = imagecreatefrompng($_SERVER['DOCUMENT_ROOT']."/admin/cms/installer/templates/".$template_to_install."/images/".$file_name_and_extenstion);
+				$image = imagecreatefrompng(INSTALLATION_ROOT."/admin/cms/installer/templates/".$template_to_install."/images/".$file_name_and_extenstion);
 			}
 			else
 			{
@@ -169,7 +169,7 @@ foreach($media_to_install as $media_file_array)
 			//Make sure imagewebp is enabled before allowing create.
 			if(function_exists('imagewebp'))
 			{
-				$webp_image_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$inserted_media_id_row.'/'.$file_name_only.'.webp';
+				$webp_image_path = INSTALLATION_ROOT.'/sites/media/images/'.$inserted_media_id_row.'/'.$file_name_only.'.webp';
 				$webp_result = imagewebp($image, $webp_image_path);
 				if($webp_result == true && file_exists($webp_image_path) && filesize($webp_image_path) > 0)
 				{
@@ -191,7 +191,7 @@ foreach($media_to_install as $media_file_array)
 			//In those cases the function exists but will produce failed/empty outputs.
 			if($avif_enabled && function_exists('imageavif'))
 			{
-				$avif_image_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$inserted_media_id_row.'/'.$file_name_only.'.avif';
+				$avif_image_path = INSTALLATION_ROOT.'/sites/media/images/'.$inserted_media_id_row.'/'.$file_name_only.'.avif';
 				$avif_result = imageavif($image, $avif_image_path);
 				if($avif_result == true && file_exists($avif_image_path) && filesize($avif_image_path) > 0)
 				{

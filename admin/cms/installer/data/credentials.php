@@ -5,15 +5,15 @@
 
 namespace core\database;
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/core/database/DbCredentials.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/core/database/DbCredentials.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/core/database/DbCredentials.php');
+	require_once(INSTALLATION_ROOT.'/hooks/core/database/DbCredentials.php');
 }
 else
 {
 	// IMPORTANT
-	// If you change the database connection to use a different document_root folder / site,
-	// make sure to also update the "auto_prepend_file" path in the following files:
+	// If the application installation path changes, make sure the auto_prepend_file
+	// paths in the server configuration files point to the correct installation.
 	//
 	// /.htaccess
 	// /admin/.htaccess
@@ -33,7 +33,7 @@ else
 	//Database credentials
 	class DbCredentials extends DbConnect
 	{
-		protected $host = 'localhost';
+		protected $host = '[DATABASE_HOSTNAME]';
 		protected $username = '[DATABASE_USERNAME]';
 		protected $password = '[DATABASE_PASSWORD]';
 		protected $db_name = '[DATABASE_NAME]';
@@ -43,7 +43,7 @@ else
 	//Database credentials
 	class DbCredentialsSchema extends DbConnectSchema
 	{
-		protected $host = 'localhost';
+		protected $host = '[DATABASE_HOSTNAME]';
 		protected $username = '[DATABASE_USERNAME]';
 		protected $password = '[DATABASE_PASSWORD]';
 		protected $db_name = 'information_schema';

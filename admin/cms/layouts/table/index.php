@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/index.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/index.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/index.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/index.php');
 }
 else
 {
@@ -15,27 +15,27 @@ else
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title><?php if(!empty($head_title_name)) { echo $head_title_name.' '; } echo $_SESSION['admin_title']; ?></title>
-	<?php include_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/head-files.php'); ?>
+	<?php include_once(INSTALLATION_ROOT.'/admin/cms/includes/head-files.php'); ?>
 	<?php
 	//Auto loader - scripts
 	$types_to_load = array();
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/cms/layouts/table/scripts')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/cms/layouts/table/scripts')) 
 	{
 		$types_to_load[] = 'cms'; 
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/layouts/table/scripts')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/commerce/layouts/table/scripts')) 
 	{
 		$types_to_load[] = 'commerce';
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/erp/layouts/table/scripts'))
+	if(is_dir(INSTALLATION_ROOT.'/admin/erp/layouts/table/scripts'))
 	{
 		$types_to_load[] = 'erp';
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/ai/layouts/table/scripts')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/ai/layouts/table/scripts')) 
 	{
 		$types_to_load[] = 'ai';
 	}
@@ -44,7 +44,7 @@ else
 	{
 		$existing_files = array();
 		$directory_path = '/admin/'.$type_to_load.'/layouts/table/scripts';
-		$auto_loader_path = $_SERVER['DOCUMENT_ROOT'].$directory_path;
+		$auto_loader_path = INSTALLATION_ROOT.$directory_path;
 		$auto_loader_files = array_diff(scandir($auto_loader_path), array('.', '..'));
 		if(!empty($auto_loader_files))
 		{
@@ -52,13 +52,13 @@ else
 			{
 				$existing_files[] = $auto_loader_file;
 				
-				if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks'.$directory_path.'/'.$auto_loader_file))
+				if(file_exists(INSTALLATION_ROOT.'/hooks'.$directory_path.'/'.$auto_loader_file))
 				{
-					include_once($_SERVER['DOCUMENT_ROOT'].'/hooks'.$directory_path.'/'.$auto_loader_file);
+					include_once(INSTALLATION_ROOT.'/hooks'.$directory_path.'/'.$auto_loader_file);
 				}
 				else
 				{
-					include_once($_SERVER['DOCUMENT_ROOT'].$directory_path.'/'.$auto_loader_file);
+					include_once(INSTALLATION_ROOT.$directory_path.'/'.$auto_loader_file);
 				}
 			}
 		}
@@ -79,7 +79,7 @@ else
 	<!-- End Pending Ajax Overlay -->
 	<!-- Start Left Column -->
 	<?php
-    include_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/navigation.php'); 
+    include_once(INSTALLATION_ROOT.'/admin/cms/includes/navigation.php'); 
 	?>
 	<!-- End Left Column -->
 	
@@ -87,7 +87,7 @@ else
 	<div class="right">
     <!-- Start Notices -->
     <?php 
-	include($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/notices/index.php');
+	include(INSTALLATION_ROOT.'/admin/cms/includes/notices/index.php');
 	echo $display_message; 
 	?>
     <!-- End Notices -->
@@ -118,22 +118,22 @@ else
     //Auto loader - addons
 	$types_to_load = array();
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/cms/layouts/table/addons')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/cms/layouts/table/addons')) 
 	{
 		$types_to_load[] = 'cms';
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/layouts/table/addons')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/commerce/layouts/table/addons')) 
 	{
 		$types_to_load[] = 'commerce';
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/erp/layouts/table/addons'))
+	if(is_dir(INSTALLATION_ROOT.'/admin/erp/layouts/table/addons'))
 	{
 		$types_to_load[] = 'erp';
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/ai/layouts/table/addons')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/ai/layouts/table/addons')) 
 	{
 		$types_to_load[] = 'ai';
 	}
@@ -142,7 +142,7 @@ else
 	{
 		$existing_files = array();
 		$directory_path = '/admin/'.$type_to_load.'/layouts/table/addons';
-		$auto_loader_path = $_SERVER['DOCUMENT_ROOT'].$directory_path;
+		$auto_loader_path = INSTALLATION_ROOT.$directory_path;
 		$auto_loader_files = array_diff(scandir($auto_loader_path), array('.', '..'));
 		if(!empty($auto_loader_files))
 		{
@@ -150,13 +150,13 @@ else
 			{
 				$existing_files[] = $auto_loader_file;
 				
-				if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks'.$directory_path.'/'.$auto_loader_file))
+				if(file_exists(INSTALLATION_ROOT.'/hooks'.$directory_path.'/'.$auto_loader_file))
 				{
-					include_once($_SERVER['DOCUMENT_ROOT'].'/hooks'.$directory_path.'/'.$auto_loader_file);
+					include_once(INSTALLATION_ROOT.'/hooks'.$directory_path.'/'.$auto_loader_file);
 				}
 				else
 				{
-					include_once($_SERVER['DOCUMENT_ROOT'].$directory_path.'/'.$auto_loader_file);
+					include_once(INSTALLATION_ROOT.$directory_path.'/'.$auto_loader_file);
 				}
 			}
 		}
@@ -190,7 +190,7 @@ else
        && $path_url != $_SESSION['admin_directory'].'/website/products/assigned-sub-products'
        && $path_url != $_SESSION['admin_directory'].'/accounting/accounts_payable/bills/inventory')
     {
-        include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/sub-navigation.php';
+        include_once INSTALLATION_ROOT.'/admin/cms/includes/sub-navigation.php';
         if(!empty($sub_menu)) { echo $sub_menu; }
     }
     ?>
@@ -592,140 +592,140 @@ else
                         
                         //column_names run first as they are a higher level rule. If you create a file for a column name, it will process any data you pass through that admin field column.
                         //If you want to customize an existing /classes/table/column-names/ file, copy the file to the folder of /hooks/classes/table/column-names/. This allows you to edit existing files that software updates will not override.
-                        if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/table/column-names/'.$db_column_name.'.php'))
+                        if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/table/column-names/'.$db_column_name.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/table/column-names/'.$db_column_name.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/cms/classes/table/column-names/'.$db_column_name.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/table/column-names/'.$db_column_name.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/table/column-names/'.$db_column_name.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/table/column-names/'.$db_column_name.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/table/column-names/'.$db_column_name.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/table/column-names/'.$db_column_name.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/erp/classes/table/column-names/'.$db_column_name.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/table/column-names/'.$db_column_name.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/erp/classes/table/column-names/'.$db_column_name.'.php');
                         }
-						elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/ai/classes/table/column-names/'.$db_column_name.'.php'))
+						elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/ai/classes/table/column-names/'.$db_column_name.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/ai/classes/table/column-names/'.$db_column_name.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/ai/classes/table/column-names/'.$db_column_name.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/table/column-names/'.$db_column_name.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/cms/classes/table/column-names/'.$db_column_name.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/table/column-names/'.$db_column_name.'.php');
+                            include(INSTALLATION_ROOT.'/admin/cms/classes/table/column-names/'.$db_column_name.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/table/column-names/'.$db_column_name.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/commerce/classes/table/column-names/'.$db_column_name.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/table/column-names/'.$db_column_name.'.php');
+                            include(INSTALLATION_ROOT.'/admin/commerce/classes/table/column-names/'.$db_column_name.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/table/column-names/'.$db_column_name.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/erp/classes/table/column-names/'.$db_column_name.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/table/column-names/'.$db_column_name.'.php');
+                            include(INSTALLATION_ROOT.'/admin/erp/classes/table/column-names/'.$db_column_name.'.php');
                         }
-						elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/ai/classes/table/column-names/'.$db_column_name.'.php'))
+						elseif(file_exists(INSTALLATION_ROOT.'/admin/ai/classes/table/column-names/'.$db_column_name.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/ai/classes/table/column-names/'.$db_column_name.'.php');
+                            include(INSTALLATION_ROOT.'/admin/ai/classes/table/column-names/'.$db_column_name.'.php');
                         }
                         //display_as runs second as its a lower level rule. If you set an admin_field / column to display_as singleMedia, all column_names will run through the singleMedia display_as. This allows you to have multiple column_names that can run through the same display_as name.
                         //If you want to customize an existing /classes/table/display-as/ file, copy the file to the folder of /hooks/classes/table/display-as/. This allows you to edit existing files that software updates will not override.
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/table/display-as/'.$db_display_as.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/table/display-as/'.$db_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/table/display-as/'.$db_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/cms/classes/table/display-as/'.$db_display_as.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/table/display-as/'.$db_display_as.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/table/display-as/'.$db_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/table/display-as/'.$db_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/table/display-as/'.$db_display_as.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/table/display-as/'.$db_display_as.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/erp/classes/table/display-as/'.$db_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/table/display-as/'.$db_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/erp/classes/table/display-as/'.$db_display_as.'.php');
                         }
-						elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/ai/classes/table/display-as/'.$db_display_as.'.php'))
+						elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/ai/classes/table/display-as/'.$db_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/ai/classes/table/display-as/'.$db_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/ai/classes/table/display-as/'.$db_display_as.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/table/display-as/'.$db_display_as.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/cms/classes/table/display-as/'.$db_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/table/display-as/'.$db_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/admin/cms/classes/table/display-as/'.$db_display_as.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/table/display-as/'.$db_display_as.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/commerce/classes/table/display-as/'.$db_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/table/display-as/'.$db_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/admin/commerce/classes/table/display-as/'.$db_display_as.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/table/display-as/'.$db_display_as.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/erp/classes/table/display-as/'.$db_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/table/display-as/'.$db_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/admin/erp/classes/table/display-as/'.$db_display_as.'.php');
                         }
-						elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/ai/classes/table/display-as/'.$db_display_as.'.php'))
+						elseif(file_exists(INSTALLATION_ROOT.'/admin/ai/classes/table/display-as/'.$db_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/ai/classes/table/display-as/'.$db_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/admin/ai/classes/table/display-as/'.$db_display_as.'.php');
                         }
                         //assigned_type runs third as its a lower level rule. If you set an admin_page to an assigned_type, you can create condition in this file to do specific things for that assigned type.
                         //If you want to customize an existing /classes/table/assigned-type/ file, copy the file to the folder of /hooks/classes/table/assigned-type/. This allows you to edit existing files that software updates will not override.
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/table/assigned-type/'.$db_assigned_type.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/table/assigned-type/'.$db_assigned_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/table/assigned-type/'.$db_assigned_type.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/cms/classes/table/assigned-type/'.$db_assigned_type.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/table/assigned-type/'.$db_assigned_type.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/table/assigned-type/'.$db_assigned_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/table/assigned-type/'.$db_assigned_type.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/table/assigned-type/'.$db_assigned_type.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/table/assigned-type/'.$db_assigned_type.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/erp/classes/table/assigned-type/'.$db_assigned_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/table/assigned-type/'.$db_assigned_type.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/erp/classes/table/assigned-type/'.$db_assigned_type.'.php');
                         }
-						elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/ai/classes/table/assigned-type/'.$db_assigned_type.'.php'))
+						elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/ai/classes/table/assigned-type/'.$db_assigned_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/ai/classes/table/assigned-type/'.$db_assigned_type.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/ai/classes/table/assigned-type/'.$db_assigned_type.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/table/assigned-type/'.$db_assigned_type.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/cms/classes/table/assigned-type/'.$db_assigned_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/table/assigned-type/'.$db_assigned_type.'.php');
+                            include(INSTALLATION_ROOT.'/admin/cms/classes/table/assigned-type/'.$db_assigned_type.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/table/assigned-type/'.$db_assigned_type.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/commerce/classes/table/assigned-type/'.$db_assigned_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/table/assigned-type/'.$db_assigned_type.'.php');
+                            include(INSTALLATION_ROOT.'/admin/commerce/classes/table/assigned-type/'.$db_assigned_type.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/table/assigned-type/'.$db_assigned_type.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/erp/classes/table/assigned-type/'.$db_assigned_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/table/assigned-type/'.$db_assigned_type.'.php');
+                            include(INSTALLATION_ROOT.'/admin/erp/classes/table/assigned-type/'.$db_assigned_type.'.php');
                         }
-						elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/ai/classes/table/assigned-type/'.$db_assigned_type.'.php'))
+						elseif(file_exists(INSTALLATION_ROOT.'/admin/ai/classes/table/assigned-type/'.$db_assigned_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/ai/classes/table/assigned-type/'.$db_assigned_type.'.php');
+                            include(INSTALLATION_ROOT.'/admin/ai/classes/table/assigned-type/'.$db_assigned_type.'.php');
                         }
                         //assigned_type runs third as its a lower level rule. If you set an admin_page to an assigned_type, you can create condition in this file to do specific things for that assigned type.
                         //If you want to customize an existing /classes/table/data-type/ file, copy the file to the folder of /hooks/classes/table/data-type/. This allows you to edit existing files that software updates will not override.
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/table/data-type/'.$db_data_type.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/table/data-type/'.$db_data_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/table/data-type/'.$db_data_type.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/cms/classes/table/data-type/'.$db_data_type.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/table/data-type/'.$db_data_type.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/table/data-type/'.$db_data_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/table/data-type/'.$db_data_type.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/table/data-type/'.$db_data_type.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/table/data-type/'.$db_data_type.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/erp/classes/table/data-type/'.$db_data_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/table/data-type/'.$db_data_type.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/erp/classes/table/data-type/'.$db_data_type.'.php');
                         }
-						elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/ai/classes/table/data-type/'.$db_data_type.'.php'))
+						elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/ai/classes/table/data-type/'.$db_data_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/ai/classes/table/data-type/'.$db_data_type.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/ai/classes/table/data-type/'.$db_data_type.'.php');
                         }
 						
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/table/data-type/'.$db_data_type.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/cms/classes/table/data-type/'.$db_data_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/table/data-type/'.$db_data_type.'.php');
+                            include(INSTALLATION_ROOT.'/admin/cms/classes/table/data-type/'.$db_data_type.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/table/data-type/'.$db_data_type.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/commerce/classes/table/data-type/'.$db_data_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/table/data-type/'.$db_data_type.'.php');
+                            include(INSTALLATION_ROOT.'/admin/commerce/classes/table/data-type/'.$db_data_type.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/table/data-type/'.$db_data_type.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/erp/classes/table/data-type/'.$db_data_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/table/data-type/'.$db_data_type.'.php');
+                            include(INSTALLATION_ROOT.'/admin/erp/classes/table/data-type/'.$db_data_type.'.php');
                         }
-						elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/ai/classes/table/data-type/'.$db_data_type.'.php'))
+						elseif(file_exists(INSTALLATION_ROOT.'/admin/ai/classes/table/data-type/'.$db_data_type.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/ai/classes/table/data-type/'.$db_data_type.'.php');
+                            include(INSTALLATION_ROOT.'/admin/ai/classes/table/data-type/'.$db_data_type.'.php');
                         }
                         //else, if none of above true, display data from database as its saved.
                         else 
@@ -742,37 +742,37 @@ else
                         
                         //cf-display-as runs first as they are a higher level rule as a custom field. If you create a file for a cf-display-as, it will process any data you pass through that admin cf-display-as.
                         //If you want to customize an existing /classes/table/cf-display-as/ file, copy the file to the folder of /hooks/classes/table/cf-display-as/. This allows you to edit existing files that software updates will not override.
-                        if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
+                        if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/cms/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/erp/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/erp/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
                         }
-						elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/ai/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
+						elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/ai/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/ai/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/hooks/admin/ai/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/cms/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/admin/cms/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/commerce/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/admin/commerce/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
                         }
-                        elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
+                        elseif(file_exists(INSTALLATION_ROOT.'/admin/erp/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/admin/erp/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
                         }
-						elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/ai/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
+						elseif(file_exists(INSTALLATION_ROOT.'/admin/ai/classes/table/cf-display-as/'.$db_cf_display_as.'.php'))
                         {
-                            include($_SERVER['DOCUMENT_ROOT'].'/admin/ai/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
+                            include(INSTALLATION_ROOT.'/admin/ai/classes/table/cf-display-as/'.$db_cf_display_as.'.php');
                         }
                         elseif(!empty($sql_custom_fields_rows['custom_fields']))
                         {

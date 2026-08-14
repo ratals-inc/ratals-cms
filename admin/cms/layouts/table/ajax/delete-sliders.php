@@ -3,13 +3,18 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
+if(!defined('INSTALLATION_ROOT'))
+{
+	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
+}
+
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
+require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/ajax/delete-sliders.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/ajax/delete-sliders.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/ajax/delete-sliders.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/ajax/delete-sliders.php');
 }
 else
 {
@@ -40,6 +45,16 @@ else
 			
 			//Update slider items count
 			$results->getUpdateRecord(__LINE__, __FILE__, 'sliders', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(),`updated_by` = ?', 'WHERE `id` = ? AND `site_id` = ?', [$sql_slider_items_count, $_SESSION['user_first_last_name'], $get_rid, $_SESSION["site_set_for_editing"]]);
+		}
+		
+		//Clear cache on save.
+		if($_SESSION['admin_site_id_global'] == 'No')
+		{
+			clearSiteCache($_SESSION['site_set_for_editing']);
+		}
+		else
+		{
+			clearAllSiteCache();
 		}
 		
 		echo "1";

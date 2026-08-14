@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/static/headers/add-a-site.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/headers/add-a-site.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/static/headers/add-a-site.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/headers/add-a-site.php');
 }
 else
 {
@@ -366,53 +366,53 @@ else
 				$_SESSION['favicon-180x180.png'] = $default_media_id['favicon-180x180.png']['id'] ?? 0;
 				
 				//Get auto increment id columns to install new site on next id.
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/counters.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/counters.php');
 				
 				//Create Account Template Folders on Server
-				if(!is_dir($_SERVER['DOCUMENT_ROOT']."/sites/".$site_id."/templates/default")) { mkdir($_SERVER['DOCUMENT_ROOT']."/sites/".$site_id."/templates/default", 0755, true); }
-				if(!is_dir($_SERVER['DOCUMENT_ROOT']."/sites/media")) { mkdir($_SERVER['DOCUMENT_ROOT']."/sites/media", 0755, true); }
-				if(!is_dir($_SERVER['DOCUMENT_ROOT']."/sites/media/images")) { mkdir($_SERVER['DOCUMENT_ROOT']."/sites/media/images", 0755, true); }
-				if(!is_dir($_SERVER['DOCUMENT_ROOT']."/sites/media/videos")) { mkdir($_SERVER['DOCUMENT_ROOT']."/sites/media/videos", 0755, true); }
-				if(!is_dir($_SERVER['DOCUMENT_ROOT']."/sites/media/files")) { mkdir($_SERVER['DOCUMENT_ROOT']."/sites/media/files", 0755, true); }
+				if(!is_dir(INSTALLATION_ROOT."/sites/".$site_id."/templates/default")) { mkdir(INSTALLATION_ROOT."/sites/".$site_id."/templates/default", 0755, true); }
+				if(!is_dir(INSTALLATION_ROOT."/sites/media")) { mkdir(INSTALLATION_ROOT."/sites/media", 0755, true); }
+				if(!is_dir(INSTALLATION_ROOT."/sites/media/images")) { mkdir(INSTALLATION_ROOT."/sites/media/images", 0755, true); }
+				if(!is_dir(INSTALLATION_ROOT."/sites/media/videos")) { mkdir(INSTALLATION_ROOT."/sites/media/videos", 0755, true); }
+				if(!is_dir(INSTALLATION_ROOT."/sites/media/files")) { mkdir(INSTALLATION_ROOT."/sites/media/files", 0755, true); }
 				
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/template.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/template-files.php'); //template-files.php must run first as template-files.php sets URL IDs.
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/sites.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/assignments-sub-items.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/blocking-spam.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/currency.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/custom-fields-global.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/custom-fields.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/menus.php'); //menus.php must run before menus-items.php
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/menus-items.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/page-groups.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/urls.php'); //urls.php must run before pages.php as the pages need the URL IDs.
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/pages.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/search-engines.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/site-contact-info.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/site-security.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/site-settings.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/sliders-items.php');
-				require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/data/sliders.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/template.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/template-files.php'); //template-files.php must run first as template-files.php sets URL IDs.
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/sites.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/assignments-sub-items.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/blocking-spam.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/currency.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/custom-fields-global.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/custom-fields.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/menus.php'); //menus.php must run before menus-items.php
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/menus-items.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/page-groups.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/urls.php'); //urls.php must run before pages.php as the pages need the URL IDs.
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/pages.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/search-engines.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/site-contact-info.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/site-security.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/site-settings.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/sliders-items.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/sliders.php');
 				
 				if($commerce_installed)
 				{
-					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/installer/data/template-files.php'); //template-files.php must run first as template-files.php sets URL IDs.
-					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/installer/data/menus.php'); //menus.php must run before menus-items.php
-					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/installer/data/menus-items.php');
-					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/installer/data/urls.php'); //urls.php must run before pages.php as the pages need the URL IDs.
-					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/installer/data/pages.php');
-					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/installer/data/cart-recovery-emails.php');
-					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/installer/data/review-request-emails.php');
+					require_once(INSTALLATION_ROOT.'/admin/commerce/installer/data/template-files.php'); //template-files.php must run first as template-files.php sets URL IDs.
+					require_once(INSTALLATION_ROOT.'/admin/commerce/installer/data/menus.php'); //menus.php must run before menus-items.php
+					require_once(INSTALLATION_ROOT.'/admin/commerce/installer/data/menus-items.php');
+					require_once(INSTALLATION_ROOT.'/admin/commerce/installer/data/urls.php'); //urls.php must run before pages.php as the pages need the URL IDs.
+					require_once(INSTALLATION_ROOT.'/admin/commerce/installer/data/pages.php');
+					require_once(INSTALLATION_ROOT.'/admin/commerce/installer/data/cart-recovery-emails.php');
+					require_once(INSTALLATION_ROOT.'/admin/commerce/installer/data/review-request-emails.php');
 					//Use updater files to make sure we set default values at the commerce level for the new site added.
-					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/notices/updates/blocking-spam.php');
-					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/notices/updates/site-security.php');
-					require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/notices/updates/site-settings.php');
+					require_once(INSTALLATION_ROOT.'/admin/cms/includes/notices/updates/blocking-spam.php');
+					require_once(INSTALLATION_ROOT.'/admin/cms/includes/notices/updates/site-security.php');
+					require_once(INSTALLATION_ROOT.'/admin/cms/includes/notices/updates/site-settings.php');
 				}
 				
-				if(file_exists(rtrim($_SERVER['DOCUMENT_ROOT'], '/').'/admin/cms/api/connect.php'))
+				if(file_exists(rtrim(INSTALLATION_ROOT, '/').'/admin/cms/api/connect.php'))
 				{
-					require_once(rtrim($_SERVER['DOCUMENT_ROOT'], '/').'/admin/cms/api/connect.php');
+					require_once(rtrim(INSTALLATION_ROOT, '/').'/admin/cms/api/connect.php');
 				}
 				
 				header("Location: /".$_SESSION['admin_directory']."/add-a-site/?created=success");

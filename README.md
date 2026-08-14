@@ -54,10 +54,9 @@ Ratals includes a native, smart update system built directly into the core.
 
 ## Who Ratals Is For
 
-- Developers who want full control over their stack
-- Businesses that prefer self-hosting over SaaS platforms
-- Teams looking to unify CMS, eCommerce, and ERP systems
-- Users moving away from platforms like WordPress, Magento, or Shopify
+- Developers who want full control over their stack.
+- Businesses that prefer self-hosting over SaaS platforms.
+- Teams looking to unify CMS, eCommerce, and ERP systems.
 
 ---
 
@@ -65,8 +64,9 @@ Ratals includes a native, smart update system built directly into the core.
 
 ### Requirements
 - PHP 8.1+
+- PHP GD
 - MySQL 8.0+ or MariaDB 10.11+
-- Web server (Nginx, Apache, or LiteSpeed)
+- Web server (Apache 2.4+, LiteSpeed, or Nginx)
 
 
 ### Installation
@@ -75,15 +75,15 @@ Ratals can be installed in two ways depending on your experience level.
 
 ### Option 1: Recommended (Most Users - ZIP Install)
 
-1. Download the latest release ZIP from GitHub
+1. Download the latest release ZIP from GitHub.
 
-2. Extract the files on your computer
+2. Extract the files on your computer.
 
-3. Upload the files to your web server (public_html or equivalent)
+3. Upload the contents of the extracted Ratals folder to your website's document root (`public_html` or equivalent). Do not upload the containing Ratals folder (`ratals-cms-main`) unless your domain is configured to use that folder as its document root.
 
-4. Configure your domain to point to the project directory
+4. Make sure your domain's document root points to the directory containing the Ratals files.
 
-5. Open your browser and visit your domain
+5. Open your browser and visit your domain.
 
 6. Server Configuration (Nginx Users Only):
    - **Nginx Users:** You must manually configure your server block for routing to work. [Get the Nginx Configuration Guide here](https://www.ratals.com/tutorials/installation/setting-up-ratals-on-nginx/).
@@ -91,11 +91,12 @@ Ratals can be installed in two ways depending on your experience level.
 7. The installer will automatically load and guide you through:
    - Database connection setup
    - Initial system configuration
+   - Email account configuration - Have an email account set up for your domain with login credentials. Ratals uses SMTP email delivery to send security alerts and other system notifications.
    - Admin account creation
 
-8. Once completed, you will be redirected to your dashboard
+8. Once completed, you will be redirected to your admin dashboard.
 
-> If the installer does not appear, verify your server configuration and file upload.
+> If the installer does not appear, verify that your domain's document root points to the directory containing the Ratals files and that all files were uploaded correctly.
 
 ---
 
@@ -105,7 +106,7 @@ Ratals can be installed in two ways depending on your experience level.
 
 2. Navigate into the project directory to see the downloaded files: `cd Ratals`
 
-3. Follow the same installation steps as above
+3. Follow the same installation steps as above.
 
 ---
 
@@ -129,22 +130,22 @@ Ratals is built on a few core principles:
 Ratals uses a dual-license model:
 
 ### Open Source Core (Apache 2.0 License)
-- Ratals core CMS framework is released under the Apache 2.0 License
-- You are free to use, modify, distribute, and deploy it based on Apache 2.0 License
+- Ratals core CMS framework is released under the Apache 2.0 License.
+- You are free to use, modify, distribute, and deploy it based on Apache 2.0 License.
 
 ### Business Modules (Commercial License)
 Advanced features such as Commerce, ERP, and AI modules are provided under the Ratals Business commercial license.
 
 Under the Ratals Business License:
-- You are granted a usage license for the software
-- You do not obtain ownership of the proprietary business modules
+- You are granted a usage license for the software.
+- You do not obtain ownership of the proprietary business modules.
 - The source code remains the intellectual property of Ratals Inc.
 - Redistribution, resale, or re-licensing is not permitted.
 - Safe Harbor: You may deploy these modules to a single contracted client, provided that a valid Ratals Business License has been purchased by the client for their instance.
 
 ### What This Means Practically
-- You fully control your installation and own your data
-- You can modify the open-source core freely
+- You fully control your installation and own your data.
+- You can modify the open-source core freely.
 - Business modules are licensed for use within your organization or deployed for a specific client project.
 
 **In short:** You own your data. You are licensed to use the advanced Ratals Business features.

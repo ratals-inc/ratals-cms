@@ -49,7 +49,7 @@ if(isset($admin_field_section_ids['email_signiture']['id']))
 
 if(isset($admin_field_section_ids['form_name_class']['id']))
 {
-	$parameters[] = [$admin_field_section_ids['form_name_class']['id'], 'CSS Class Names to Above Fields', 'form_css_class_names_to_above_fields', '', '{}', $first_last_name, $first_last_name];
+	$parameters[] = [$admin_field_section_ids['form_name_class']['id'], 'CSS Class Names to Above Fields', 'form_css_class_names_to_above_fields', 'CSS classes should be defined in your website template stylesheet to customize the look and feel of this form.', '{}', $first_last_name, $first_last_name];
 }
 
 if(isset($admin_field_section_ids['forms_blocked_keywords']['id']))
@@ -74,7 +74,7 @@ if(isset($admin_field_section_ids['max_pageviews_block']['id']))
 
 if(isset($admin_field_section_ids['name_class']['id']))
 {
-	$parameters[] = [$admin_field_section_ids['name_class']['id'], 'CSS Class Names to Above Fields', 'css_class_names_to_above_fields', '', '{}', $first_last_name, $first_last_name];
+	$parameters[] = [$admin_field_section_ids['name_class']['id'], 'CSS Class Names to Above Fields', 'css_class_names_to_above_fields', 'CSS classes should be defined in your website template stylesheet to customize the look and feel of this form field.', '{}', $first_last_name, $first_last_name];
 }
 
 if(isset($admin_field_section_ids['site_email']['id']))

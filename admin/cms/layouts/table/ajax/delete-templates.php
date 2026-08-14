@@ -3,13 +3,18 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
+if(!defined('INSTALLATION_ROOT'))
+{
+	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
+}
+
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
+require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/ajax/delete-templates.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/ajax/delete-templates.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/ajax/delete-templates.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/ajax/delete-templates.php');
 }
 else
 {
@@ -57,9 +62,9 @@ else
 				$results->getDeleteRecord(__LINE__, __FILE__, 'templates', 'WHERE `site_id` = ? AND `id` = ?', [$_SESSION["site_set_for_editing"], $row_id]);
 				
 				//Start remove all template files and directories & call function
-				if(!empty($template_directy_name) && file_exists($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$template_directy_name))
+				if(!empty($template_directy_name) && file_exists(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$template_directy_name))
 				{
-					$files = GLOB($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$template_directy_name."/*");
+					$files = GLOB(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$template_directy_name."/*");
 	
 					if(!empty($files)) 
 					{
@@ -77,7 +82,7 @@ else
 						}
 					}
 					
-					rmdir($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$template_directy_name);
+					rmdir(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$template_directy_name);
 				}
 				//End remove all template files and directories & call function
 				
@@ -93,9 +98,9 @@ else
 				
 				$results->getDeleteRecord(__LINE__, __FILE__, 'template_files', 'WHERE `site_id` = ? AND `id` = ?', [$_SESSION["site_set_for_editing"], $row_id]);
 				
-				if(!empty($template_directory_name_to_delete) && !empty($template_file_name) && file_exists($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$template_directory_name_to_delete."/".$template_file_name))
+				if(!empty($template_directory_name_to_delete) && !empty($template_file_name) && file_exists(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$template_directory_name_to_delete."/".$template_file_name))
 				{
-					unlink($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$template_directory_name_to_delete."/".$template_file_name);
+					unlink(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$template_directory_name_to_delete."/".$template_file_name);
 				}
 			}
 		}
@@ -107,6 +112,16 @@ else
 			
 			//Update template files count
 			$results->getUpdateRecord(__LINE__, __FILE__, 'templates', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(),`updated_by` = ?', 'WHERE `id` = ? AND `site_id` = ?', [$sql_template_files_check, $_SESSION['user_first_last_name'], $get_rid, $_SESSION["site_set_for_editing"]]);
+		}
+		
+		//Clear cache on save.
+		if($_SESSION['admin_site_id_global'] == 'No')
+		{
+			clearSiteCache($_SESSION['site_set_for_editing']);
+		}
+		else
+		{
+			clearAllSiteCache();
 		}
 		
 		echo "1";

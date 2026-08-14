@@ -5,13 +5,18 @@
 
 header('Content-Type: application/json; charset=utf-8');
 
+if(!defined('INSTALLATION_ROOT'))
+{
+	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
+}
+
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
+require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/includes/admin-fields/ajax/add-media.php')) 
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/includes/admin-fields/ajax/add-media.php')) 
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/includes/admin-fields/ajax/add-media.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/includes/admin-fields/ajax/add-media.php');
 }
 else
 {
@@ -87,7 +92,7 @@ else
 						if($image !== false)
 						{
 							imagepalettetotruecolor($image);
-							$avif_path = $_SERVER['DOCUMENT_ROOT'].'/test-avif-image-creation.avif';
+							$avif_path = INSTALLATION_ROOT.'/test-avif-image-creation.avif';
 							$avif_result = @imageavif($image, $avif_path, 75);
 							if($avif_result && is_file($avif_path) && filesize($avif_path) > 0)
 							{
@@ -166,7 +171,7 @@ else
 						$original_media_id = $get_media_just_added['id'];
 						$_SESSION['results']->getUpdateRecord(__LINE__, __FILE__, 'media', '`original_media_id` = ?', 'WHERE `id` = ?', [$original_media_id, $original_media_id]);
 						
-						$path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$cleaned_media_url;
+						$path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$cleaned_media_url;
 						$display = '/sites/media/images/'.$original_media_id.'/'.$cleaned_media_url;
 						
 						//If the media file name exist, remove the image that was just added and continue the loop to the next media image to upload.
@@ -178,7 +183,7 @@ else
 						}
 						
 						//If media directory name does NOT exist, create it to put the images in.
-						if(!is_dir($_SERVER['DOCUMENT_ROOT']."/sites/media/images/".$original_media_id)) { mkdir($_SERVER['DOCUMENT_ROOT']."/sites/media/images/".$original_media_id, 0755, true); }
+						if(!is_dir(INSTALLATION_ROOT."/sites/media/images/".$original_media_id)) { mkdir(INSTALLATION_ROOT."/sites/media/images/".$original_media_id, 0755, true); }
 						
 						move_uploaded_file($_FILES['files']['tmp_name'][$index], $path);
 						$upload_success[] = array('image', $display);
@@ -231,8 +236,8 @@ else
 											imagecolortransparent($resized_image, $transIndexNew);
 										}
 										imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $media_width, $media_height, $media_data[0], $media_data[1]);
-										imagegif($resized_image, $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.gif');
-										$media_size_gif = filesize($_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.gif');
+										imagegif($resized_image, INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.gif');
+										$media_size_gif = filesize(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.gif');
 										if($media_size_gif !== false) { $size_gif = convertBytesToSize($media_size_gif); } else { $size_gif = ''; }
 										
 										//Insert Image
@@ -250,7 +255,7 @@ else
 								$image = imagecreatefromgif($path);
 								imagepalettetotruecolor($image);
 							
-								$webp_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'.webp';
+								$webp_path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'.webp';
 								$webp_result = imagewebp($image, $webp_path, $webp_quality);
 							
 								if($webp_result == true && file_exists($webp_path) && filesize($webp_path) > 0)
@@ -289,7 +294,7 @@ else
 											imagefill($resized_image, 0, 0, $transparent);
 											imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $media_width, $media_height, $media_data[0], $media_data[1]);
 							
-											$webp_resize_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.webp';
+											$webp_resize_path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.webp';
 											$webp_result = imagewebp($resized_image, $webp_resize_path, $webp_quality);
 							
 											if($webp_result == true && file_exists($webp_resize_path) && filesize($webp_resize_path) > 0)
@@ -320,7 +325,7 @@ else
 								$image = imagecreatefromgif($path);
 								imagepalettetotruecolor($image);
 							
-								$avif_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'.avif';
+								$avif_path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'.avif';
 								$avif_result = imageavif($image, $avif_path, $avif_quality);
 							
 								if($avif_result == true && file_exists($avif_path) && filesize($avif_path) > 0)
@@ -359,7 +364,7 @@ else
 											imagefill($resized_image, 0, 0, $transparent);
 											imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $media_width, $media_height, $media_data[0], $media_data[1]);
 							
-											$avif_resize_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.avif';
+											$avif_resize_path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.avif';
 											$avif_result = imageavif($resized_image, $avif_resize_path, $avif_quality);
 							
 											if($avif_result == true && file_exists($avif_resize_path) && filesize($avif_resize_path) > 0)
@@ -399,8 +404,8 @@ else
 										$image = imagecreatefromjpeg($path);
 										$resized_image = imagecreatetruecolor($media_width, $media_height);
 										imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $media_width, $media_height, $media_data[0], $media_data[1]);
-										imagejpeg($resized_image, $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.'.$media_extension, $jpg_quality);
-										$media_size_jpeg = filesize($_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.'.$media_extension);
+										imagejpeg($resized_image, INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.'.$media_extension, $jpg_quality);
+										$media_size_jpeg = filesize(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.'.$media_extension);
 										if(isset($media_size_jpeg)) { $size_jpeg = convertBytesToSize($media_size_jpeg); } else { $size_jpeg = ''; }
 										
 										//Insert Image
@@ -418,7 +423,7 @@ else
 								$image = imagecreatefromjpeg($path);
 								imagepalettetotruecolor($image);
 							
-								$webp_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'.webp';
+								$webp_path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'.webp';
 								$webp_result = imagewebp($image, $webp_path, $webp_quality);
 							
 								if($webp_result == true && file_exists($webp_path) && filesize($webp_path) > 0)
@@ -453,7 +458,7 @@ else
 											$resized_image = imagecreatetruecolor($media_width, $media_height);
 											imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $media_width, $media_height, $media_data[0], $media_data[1]);
 							
-											$webp_resize_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.webp';
+											$webp_resize_path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.webp';
 											$webp_result = imagewebp($resized_image, $webp_resize_path, $webp_quality);
 							
 											if($webp_result == true && file_exists($webp_resize_path) && filesize($webp_resize_path) > 0)
@@ -484,7 +489,7 @@ else
 								$image = imagecreatefromjpeg($path);
 								imagepalettetotruecolor($image);
 							
-								$avif_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'.avif';
+								$avif_path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'.avif';
 								$avif_result = imageavif($image, $avif_path, $avif_quality);
 							
 								if($avif_result == true && file_exists($avif_path) && filesize($avif_path) > 0)
@@ -519,7 +524,7 @@ else
 											$resized_image = imagecreatetruecolor($media_width, $media_height);
 											imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $media_width, $media_height, $media_data[0], $media_data[1]);
 							
-											$avif_resize_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.avif';
+											$avif_resize_path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.avif';
 											$avif_result = imageavif($resized_image, $avif_resize_path, $avif_quality);
 							
 											if($avif_result == true && file_exists($avif_resize_path) && filesize($avif_resize_path) > 0)
@@ -564,8 +569,8 @@ else
 										imagefill($resized_image, 0, 0, $transparent);
 										$transIndex = imagecolortransparent($image);
 										imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $media_width, $media_height, $media_data[0], $media_data[1]);
-										imagepng($resized_image, $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.png', 6);
-										$media_size_png = filesize($_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.png');
+										imagepng($resized_image, INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.png', 6);
+										$media_size_png = filesize(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.png');
 										if(isset($media_size_png)) { $size_png = convertBytesToSize($media_size_png); } else { $size_png = ''; }
 										
 										//Insert Image
@@ -583,7 +588,7 @@ else
 								$image = imagecreatefrompng($path);
 								imagepalettetotruecolor($image);
 								
-								$webp_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'.webp';
+								$webp_path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'.webp';
 								$webp_result = imagewebp($image, $webp_path, $webp_quality);
 								
 								if($webp_result == true && file_exists($webp_path) && filesize($webp_path) > 0)
@@ -618,7 +623,7 @@ else
 											$transparent = imagecolorallocatealpha($resized_image, 0, 0, 0, 127);
 											imagefill($resized_image, 0, 0, $transparent);
 											imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $media_width, $media_height, $media_data[0], $media_data[1]);
-											$webp_resize_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.webp';
+											$webp_resize_path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.webp';
 											$webp_result = imagewebp($resized_image, $webp_resize_path, $webp_quality);
 											
 											if($webp_result == true && file_exists($webp_resize_path) && filesize($webp_resize_path) > 0)
@@ -646,7 +651,7 @@ else
 								$image = imagecreatefrompng($path);
 								imagepalettetotruecolor($image);
 								
-								$avif_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'.avif';
+								$avif_path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'.avif';
 								$avif_result = imageavif($image, $avif_path, $avif_quality);
 								
 								if($avif_result == true && file_exists($avif_path) && filesize($avif_path) > 0)
@@ -681,7 +686,7 @@ else
 											$transparent = imagecolorallocatealpha($resized_image, 0, 0, 0, 127);
 											imagefill($resized_image, 0, 0, $transparent);
 											imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $media_width, $media_height, $media_data[0], $media_data[1]);
-											$avif_resize_path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.avif';
+											$avif_resize_path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_type[0].'-'.$media_width.'w-'.$media_height.'h.avif';
 											$avif_result = imageavif($resized_image, $avif_resize_path, $avif_quality);
 											
 											if($avif_result == true && file_exists($avif_resize_path) && filesize($avif_resize_path) > 0)
@@ -707,7 +712,7 @@ else
 					//If video uploaded.
 					elseif(!empty($media_extension) && !empty($mime_file_type) && array_key_exists($media_extension, $accepted_video_extension_types) && in_array($mime_file_type, $accepted_video_extension_types))
 					{
-						$path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/videos/'.$cleaned_media_url;
+						$path = INSTALLATION_ROOT.'/sites/media/videos/'.$cleaned_media_url;
 						
 						$display = '';
 						$display = '/sites/media/videos/'.$cleaned_media_url;
@@ -731,7 +736,7 @@ else
 					elseif(!empty($media_extension) && !empty($mime_file_type) && array_key_exists($media_extension, $accepted_file_extension_types) && in_array($mime_file_type, $accepted_file_extension_types))
 					{
 						
-						$path = $_SERVER['DOCUMENT_ROOT'].'/sites/media/files/'.$cleaned_media_url;
+						$path = INSTALLATION_ROOT.'/sites/media/files/'.$cleaned_media_url;
 						
 						$display = '';
 						$display = '/sites/media/files/'.$cleaned_media_url;

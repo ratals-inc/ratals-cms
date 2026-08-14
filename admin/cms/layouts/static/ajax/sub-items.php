@@ -3,13 +3,18 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
+if(!defined('INSTALLATION_ROOT'))
+{
+	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
+}
+
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
+require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/static/ajax/sub-items.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/ajax/sub-items.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/static/ajax/sub-items.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/ajax/sub-items.php');
 }
 else
 {
@@ -33,6 +38,17 @@ else
 		{
 			echo '<span class="groupStatus" data-click="'.$editing.','.$group_id_count.','.$group_id.','.$value.'"><i><svg viewBox="0 0 512 512"><path d="M424 358C478 310 507 256 507 256s-94-173-251-173a220 220 0 0 0-88 18l24 24A189 189 0 0 1 256 115c67 0 122 37 162 77A409 409 0 0 1 471 256q-3 4-6 9c-11 15-26 35-46 55q-8 8-16 15zM360 293a110 110 0 0 0-141-141l26 26a79 79 0 0 1 89 89zm-92 41 26 26a110 110 0 0 1-141-141l26 26a79 79 0 0 0 89 89M110 176q-8 8-16 15A409 409 0 0 0 41 256l6 9c11 15 26 35 46 55C134 361 189 397 256 397c22 0 44-4 63-11l24 24A220 220 0 0 1 256 429C99 429 5 256 5 256s30-54 83-102l22 22zm324 279-377-377 22-22 377 377z"></path></svg></i></span>';
 		}
+		
+		//Clear cache on save.
+		if($_SESSION['admin_site_id_global'] == 'No')
+		{
+			clearSiteCache($_SESSION['site_set_for_editing']);
+		}
+		else
+		{
+			clearAllSiteCache();
+		}
+		
 		exit;
 	}
 	
@@ -56,6 +72,17 @@ else
 		{
 			echo '<span class="changeActive" data-click="'.$id.','.$editing.','.$field.','.$value.'">Disabled</span>';
 		}
+		
+		//Clear cache on save.
+		if($_SESSION['admin_site_id_global'] == 'No')
+		{
+			clearSiteCache($_SESSION['site_set_for_editing']);
+		}
+		else
+		{
+			clearAllSiteCache();
+		}
+		
 		exit;
 	}
 }

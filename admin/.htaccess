@@ -11,7 +11,9 @@
 ############################################################
 #Set to "none" during install/update so server-side update scripts can run without errors.
 #This value is replaced with the correct absolute path durning install/updates.
-php_value auto_prepend_file none
+<IfModule php_module>
+	php_value auto_prepend_file none
+</IfModule>
 
 RewriteEngine on
 
@@ -26,10 +28,10 @@ RewriteEngine on
 #REQUIRED SESSION CHECKS
 ############################################################
 #Backend (required for all admin-access files):
-#require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
+#require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 #
 #Frontend (use when connecting to frontend logic):
-#require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-frontend.php');
+#require_once(INSTALLATION_ROOT.'/core/session-check-frontend.php');
 
 ############################################################
 # AJAX ACCESS (WHITELIST)

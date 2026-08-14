@@ -3,11 +3,16 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
-
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/recover-login.php'))
+if(!defined('INSTALLATION_ROOT'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/recover-login.php');
+	define('INSTALLATION_ROOT', dirname(__DIR__));
+}
+
+require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
+
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/recover-login.php'))
+{
+	require_once(INSTALLATION_ROOT.'/hooks/admin/recover-login.php');
 }
 else
 {
@@ -74,12 +79,12 @@ else
 					//Get Email Template.
 					$subject = '';
 					$message = '';
-					include $_SERVER['DOCUMENT_ROOT'].'/sites/'.$_SESSION['site_id'].'/templates/'.$email_template_record['directory_folder_name'].'/email-template-password-reset-admin.php';
+					include INSTALLATION_ROOT.'/sites/'.$_SESSION['site_id'].'/templates/'.$email_template_record['directory_folder_name'].'/email-template-password-reset-admin.php';
 					
 					if(isset($warp_with_email_template) && $warp_with_email_template == 'Yes')
 					{
 						//Get Email Template Frame.
-						include $_SERVER['DOCUMENT_ROOT'].'/sites/'.$_SESSION['site_id'].'/templates/'.$email_template_record['directory_folder_name'].'/email-template.php';
+						include INSTALLATION_ROOT.'/sites/'.$_SESSION['site_id'].'/templates/'.$email_template_record['directory_folder_name'].'/email-template.php';
 						
 						$message = str_replace('[EMAIL_MESSAGE]', $message, $email_template);
 					}
@@ -103,7 +108,7 @@ else
 	<title>Reciver Login - <?php echo $site_name; ?></title>
 	<meta name="description" content="">
 	<meta name="keywords" content="">
-	<?php include_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/head-files.php');?>
+	<?php include_once(INSTALLATION_ROOT.'/admin/cms/includes/head-files.php');?>
 	</head>
 	<body>
 	<div class="box-wrapper">

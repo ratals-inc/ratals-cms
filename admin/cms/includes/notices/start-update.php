@@ -3,9 +3,14 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
+if(!defined('INSTALLATION_ROOT'))
+{
+	define('INSTALLATION_ROOT', dirname(__DIR__, 4));
+}
+
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
+require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
 if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['versionNumber']) && !empty($_POST['versionNumber']) && isset($_POST['upgradeTo']) && isset($_POST['type']) && $_POST['type'] == 'updateSoftwareNow')
 {
@@ -55,7 +60,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 	
 	//Set save path
 	$file_name = 'ratals-core';
-	$save_path = rtrim($_SERVER['DOCUMENT_ROOT'], '/').'/'.$file_name.'.zip';
+	$save_path = rtrim(INSTALLATION_ROOT, '/').'/'.$file_name.'.zip';
 	
 	//Create zip file on server to download to.
 	$save_file = fopen($save_path, 'w');
@@ -133,7 +138,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 	}
 	
 	//Extract to temp_extract folder
-	$temp_extract_dir = $_SERVER['DOCUMENT_ROOT'].'/admin/temp_extract';
+	$temp_extract_dir = INSTALLATION_ROOT.'/admin/temp_extract';
 	
 	//Delete files that might be in an old temp_extract directory.
 	if(is_dir($temp_extract_dir))
@@ -202,7 +207,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 	
 	//Create file if it doesn't exist
 	$timestamp = time();
-	$progress_log_file = $_SERVER['DOCUMENT_ROOT'].'/progress-software-update-log-'.$timestamp.'.txt';
+	$progress_log_file = INSTALLATION_ROOT.'/progress-software-update-log-'.$timestamp.'.txt';
 	file_put_contents($progress_log_file, '');
 	
 	//Pass this filename to update.php
@@ -213,7 +218,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 	
 	//Token file
 	$update_token = bin2hex(random_bytes(32));
-	$token_file = $_SERVER['DOCUMENT_ROOT'].'/admin/temp_extract/update-token-'.$timestamp.'.txt';
+	$token_file = INSTALLATION_ROOT.'/admin/temp_extract/update-token-'.$timestamp.'.txt';
 	file_put_contents($token_file, $update_token);
 	
 	//Pass same POST data to update.php
@@ -230,7 +235,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 	session_write_close();
 	
 	//Remove started-file.txt to avoid stale file starts.
-	$started_file = $_SERVER['DOCUMENT_ROOT'].'/update-started.txt';
+	$started_file = INSTALLATION_ROOT.'/update-started.txt';
 	if(file_exists($started_file))
 	{
 		unlink($started_file);

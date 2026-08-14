@@ -3,9 +3,16 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
+if(!defined('INSTALLATION_ROOT'))
+{
+	//Need to use 6 as this path includes temp_extract like so for updates:
+	//admin/temp_extract/admin/cms/includes/notices/update.php
+	define('INSTALLATION_ROOT', dirname(__DIR__, 6));
+}
+
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
+require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
 if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['versionNumber']) && !empty($_POST['versionNumber']) && isset($_POST['upgradeTo']) && isset($_POST['current_update_log']) && !empty($_POST['current_update_log']) && isset($_POST['type']) && $_POST['type'] == 'updateSoftwareNow') 
 {
@@ -23,7 +30,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 	}
 	
 	//Mark as started immediately so cron can stop trying to start.
-	$started_file = $_SERVER['DOCUMENT_ROOT'].'/update-started.txt';
+	$started_file = INSTALLATION_ROOT.'/update-started.txt';
 	file_put_contents($started_file, '');
 	
 	//Delete the token immediately after verification so it can't be reused.
@@ -51,7 +58,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 	session_write_close(); //release session lock so user browser connection can freely run
 	
 	$progress_log_file = $_POST['current_update_log'];
-	$allowed_dir = $_SERVER['DOCUMENT_ROOT'];
+	$allowed_dir = INSTALLATION_ROOT;
 	if(strpos(realpath($progress_log_file), $allowed_dir) !== 0)
 	{
 		throw new \Exception('Invalid or missing progress log file.');
@@ -59,9 +66,9 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 	file_put_contents($progress_log_file, '');
 	
 	//Make sure log file directory exist.
-	if(!is_dir($_SERVER['DOCUMENT_ROOT'].'/storage/logs'))
+	if(!is_dir(INSTALLATION_ROOT.'/storage/logs'))
 	{
-		mkdir($_SERVER['DOCUMENT_ROOT'].'/storage/logs', 0755, true);
+		mkdir(INSTALLATION_ROOT.'/storage/logs', 0755, true);
 	}
 	
 	//Function to create install log changes and log any errors on update.
@@ -70,7 +77,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 		global $progress_log_file;
 		
 		//Create file if it doesn't exist
-		$log_file = $_SERVER['DOCUMENT_ROOT'].'/storage/logs/software-update.txt';
+		$log_file = INSTALLATION_ROOT.'/storage/logs/software-update.txt';
 		if(!file_exists($log_file))
 		{
 			file_put_contents($log_file, '');
@@ -170,7 +177,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 	try
 	{
 		//Location of extracted file that start-update.php created.
-		$temp_extract_dir = $_SERVER['DOCUMENT_ROOT'].'/admin/temp_extract';
+		$temp_extract_dir = INSTALLATION_ROOT.'/admin/temp_extract';
 		
 		if(!is_dir($temp_extract_dir))
 		{
@@ -183,7 +190,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 			throw new \Exception("Warning: Could not write to temp extract directory (".$temp_extract_dir."). Check server permissions.");
 		}
 		
-		if(!is_writable($_SERVER['DOCUMENT_ROOT']))
+		if(!is_writable(INSTALLATION_ROOT))
 		{
 			throw new \Exception("Live directory is not writable. Update cannot continue.");
 		}
@@ -297,7 +304,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 			//Replace YOUR_ADMIN_URL_PATH with virtual admin path
 			$htaccess_contents = str_replace('YOUR_ADMIN_URL_PATH', $_SESSION['admin_directory'], $htaccess_contents);
 			
-			$htaccess_contents = preg_replace('~php_value\s+auto_prepend_file\s+.*~i', 'php_value auto_prepend_file "'.rtrim($_SERVER['DOCUMENT_ROOT'], '/').'/core/session-check-frontend.php"', $htaccess_contents);
+			$htaccess_contents = preg_replace('~php_value\s+auto_prepend_file\s+.*~i', 'php_value auto_prepend_file "'.rtrim(INSTALLATION_ROOT, '/').'/core/session-check-frontend.php"', $htaccess_contents);
 			
 			if(file_put_contents($temp_htaccess_path, $htaccess_contents, LOCK_EX) === false)
 			{
@@ -315,7 +322,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 			//Replace YOUR_ADMIN_URL_PATH with virtual admin path
 			$admin_htaccess_contents = str_replace('YOUR_ADMIN_URL_PATH', $_SESSION['admin_directory'], $admin_htaccess_contents);
 			
-			$admin_htaccess_contents = preg_replace('~php_value\s+auto_prepend_file\s+.*~i', 'php_value auto_prepend_file "'.rtrim($_SERVER['DOCUMENT_ROOT'], '/').'/core/session-check-admin.php"', $admin_htaccess_contents);
+			$admin_htaccess_contents = preg_replace('~php_value\s+auto_prepend_file\s+.*~i', 'php_value auto_prepend_file "'.rtrim(INSTALLATION_ROOT, '/').'/core/session-check-admin.php"', $admin_htaccess_contents);
 			
 			if(file_put_contents($temp_admin_htaccess_path, $admin_htaccess_contents, LOCK_EX) === false)
 			{
@@ -329,7 +336,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 		{
 			writeToInstallLog('Updating /.user.ini auto_prepend_file path in staging update folder...');
 			
-			$doc_root = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
+			$doc_root = rtrim(INSTALLATION_ROOT, '/');
 			$frontend_path = $doc_root.'/core/session-check-frontend.php';
 			
 			$user_ini_contents = file_get_contents($temp_user_ini_path);
@@ -349,7 +356,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 		{
 			writeToInstallLog('Updating /admin/.user.ini auto_prepend_file path in staging update folder...');
 			
-			$doc_root = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
+			$doc_root = rtrim(INSTALLATION_ROOT, '/');
 			$admin_path = $doc_root.'/core/session-check-admin.php';
 			
 			$admin_user_ini_contents = file_get_contents($temp_admin_user_ini_path);
@@ -365,7 +372,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 		
 		//Update config.php
 		$temp_config_path = $temp_extract_dir.'/core/config.php';
-		$current_config_path = $_SERVER['DOCUMENT_ROOT'].'/core/config.php';
+		$current_config_path = INSTALLATION_ROOT.'/core/config.php';
 		if(file_exists($temp_config_path))
 		{
 			writeToInstallLog('Updating config.php in staging update folder...');
@@ -669,7 +676,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 		{
 			writeToInstallLog('Copying update files from staging folder to live directory...');
 			sleep(2); //Allow user to read progress bar step
-			recursiveCopy($temp_extract_dir, $_SERVER['DOCUMENT_ROOT']);
+			recursiveCopy($temp_extract_dir, INSTALLATION_ROOT);
 			writeToInstallLog('All staging update files copied to live directory successfully.');
 		}
 		catch(\Throwable $e)

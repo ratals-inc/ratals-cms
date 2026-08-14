@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/add/includes/insert-data-after.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/add/includes/insert-data-after.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/add/includes/insert-data-after.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/add/includes/insert-data-after.php');
 }
 else
 {
@@ -43,9 +43,9 @@ else
 		
 		if($_SESSION['admin_table_name'] == 'templates' && isset($post_values['templates']['directory_folder_name']) && !empty($post_values['templates']['directory_folder_name'])  )
 		{
-			if(!file_exists($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$post_values['templates']['directory_folder_name']))
+			if(!file_exists(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$post_values['templates']['directory_folder_name']))
 			{
-				mkdir($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$post_values['templates']['directory_folder_name'], 0777, true);
+				mkdir(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$post_values['templates']['directory_folder_name'], 0777, true);
 			}
 		}
 		
@@ -55,12 +55,12 @@ else
 			
 			if(isset($active_template) && !empty($active_template['directory_folder_name']))
 			{
-				if(!file_exists($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']))
+				if(!file_exists(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']))
 				{
-					mkdir($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name'], 0777, true);
+					mkdir(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name'], 0777, true);
 				}
 		
-				$myfile = fopen($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$posted_template_file_name, "w");
+				$myfile = fopen(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$posted_template_file_name, "w");
 				fwrite($myfile, $posted_template_file_code);
 				fclose($myfile);
 			}

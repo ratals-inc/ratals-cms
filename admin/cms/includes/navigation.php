@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/includes/navigation.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/includes/navigation.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/includes/navigation.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/includes/navigation.php');
 }
 else
 {
@@ -58,15 +58,36 @@ else
       </div>
       <div class="navigation">
       <script nonce="<?php echo NONCE; ?>">
-        $(document).ready(function()
-        {
-            $(".toggleMenu").click(function()
-            {
-                id = $(this).attr('data-click');
-                $(".menuItem"+id).slideToggle();
-                $(".menuArrow"+id).toggleClass("toggle-arrow");
-            });
-        });
+		$(document).ready(function()
+		{
+			//Set arrows for menus that are already open when the page loads.
+			$(".toggleMenu").each(function()
+			{
+				var id = $(this).attr("data-click");
+				var arrow = $(".menuArrow"+id);
+				
+				if($(".menuItem"+id).hasClass("display-block"))
+				{
+					//Rotate instantly without animation.
+					arrow.addClass("toggle-arrow-instant");
+					
+					//Force the browser to apply the instant position.
+					arrow[0].offsetHeight;
+					
+					//Switch to the normal open class without changing position.
+					arrow.addClass("toggle-arrow").removeClass("toggle-arrow-instant");
+				}
+			});
+			
+			//Open and close menus.
+			$(".toggleMenu").click(function()
+			{
+				var id = $(this).attr("data-click");
+				
+				$(".menuItem"+id).slideToggle();
+				$(".menuArrow"+id).toggleClass("toggle-arrow");
+			});
+		});
       </script>
       <ul>
       <?php

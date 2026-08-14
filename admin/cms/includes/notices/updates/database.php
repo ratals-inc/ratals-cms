@@ -28,7 +28,7 @@ if(!function_exists('writeToInstallLog'))
 	//Function to create install log changes and log any errors on update.
 	function writeToInstallLog($log_content)
 	{
-		$log_file = $_SERVER['DOCUMENT_ROOT'].'/software-update-log.txt';
+		$log_file = INSTALLATION_ROOT.'/software-update-log.txt';
 		
 		//Create file if it doesn't exist
 		if(!file_exists($log_file))

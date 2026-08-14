@@ -3,17 +3,17 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/edit/index.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/edit/index.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/edit/index.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/edit/index.php');
 }
 else
 {
-	include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/admin-fields/get-fields.php';
-	include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/admin-fields/get-values.php';
-	include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/admin-fields/modify.php';
-	include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/admin-fields/validation.php';
-	include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/custom-fields/validation.php';
+	include_once INSTALLATION_ROOT.'/admin/cms/includes/admin-fields/get-fields.php';
+	include_once INSTALLATION_ROOT.'/admin/cms/includes/admin-fields/get-values.php';
+	include_once INSTALLATION_ROOT.'/admin/cms/includes/admin-fields/modify.php';
+	include_once INSTALLATION_ROOT.'/admin/cms/includes/admin-fields/validation.php';
+	include_once INSTALLATION_ROOT.'/admin/cms/includes/custom-fields/validation.php';
 	//echo '<pre>'; print_r($post_values); echo '</pre>';
 	//echo '<pre>'; print_r($errors); echo '</pre>';
 	//die;
@@ -25,8 +25,8 @@ else
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><?php if(!empty($head_title_name)) { echo $head_title_name.' '; } echo $_SESSION['admin_title']; ?></title>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/head-files.php'); ?>
-    <?php include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/admin-fields/modify-js.php'; ?>
+    <?php include_once(INSTALLATION_ROOT.'/admin/cms/includes/head-files.php'); ?>
+    <?php include_once INSTALLATION_ROOT.'/admin/cms/includes/admin-fields/modify-js.php'; ?>
     </head>
     <body>
     <!-- Start Pending Ajax Overlay -->
@@ -39,11 +39,11 @@ else
 	  </div>
 	</div>
 	<!-- End Pending Ajax Overlay -->
-    <?php include_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/navigation.php');?>
+    <?php include_once(INSTALLATION_ROOT.'/admin/cms/includes/navigation.php');?>
     <div class="right">
       <!-- Start Notices -->
       <?php 
-	  include($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/notices/index.php');
+	  include(INSTALLATION_ROOT.'/admin/cms/includes/notices/index.php');
 	  echo $display_message; 
 	  ?>
       <!-- End Notices -->
@@ -63,7 +63,7 @@ else
       </div>
       <!-- End Header -->
       <?php 
-    include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/sub-navigation.php';
+    include_once INSTALLATION_ROOT.'/admin/cms/includes/sub-navigation.php';
     if(!empty($sub_menu)) { echo $sub_menu; }
     ?>
       <?php if($admin_fields_has_url == 'Yes') { include_once 'includes/urls-header.php'; } ?>
@@ -82,7 +82,7 @@ else
         <form method="post" enctype="multipart/form-data">
         <?php } ?>
           <!-- Start Admin Fields -->
-          <?php include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/admin-fields/fields.php'; ?>
+          <?php include_once INSTALLATION_ROOT.'/admin/cms/includes/admin-fields/fields.php'; ?>
           <!-- End Admin Fields -->
           <?php if($status_lock_insert_update_delete == 'No') { ?>
           <div class="button-right">
@@ -108,7 +108,7 @@ else
       }
       ?>
     </div>
-    <?php include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/media-popup.php'; ?>
+    <?php include_once INSTALLATION_ROOT.'/admin/cms/includes/media-popup.php'; ?>
     </body>
     </html>
 <?php } ?>

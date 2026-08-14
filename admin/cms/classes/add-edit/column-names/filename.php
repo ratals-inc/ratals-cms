@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/column-names/filename.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/column-names/filename.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/column-names/filename.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/column-names/filename.php');
 }
 else
 {
@@ -36,17 +36,17 @@ else
 					{
 						$errors[$table_name][$admin_field["column_name"]] = $admin_field["name"].' is being used on another template file.';
 					}
-					elseif($_SESSION['admin_type'] == 'add' && isset($active_template['directory_folder_name']) && !empty($active_template['directory_folder_name']) && file_exists($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$_POST[$table_name][$admin_field["column_name"]]))
+					elseif($_SESSION['admin_type'] == 'add' && isset($active_template['directory_folder_name']) && !empty($active_template['directory_folder_name']) && file_exists(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$_POST[$table_name][$admin_field["column_name"]]))
 					{
-						$errors[$table_name][$admin_field["column_name"]] = $admin_field["name"].' is being used on another template file here: '.$_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$_POST[$table_name][$admin_field["column_name"]];
+						$errors[$table_name][$admin_field["column_name"]] = $admin_field["name"].' is being used on another template file here: '.INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$_POST[$table_name][$admin_field["column_name"]];
 					}
-					elseif($_SESSION['admin_type'] == 'edit' && isset($active_template['directory_folder_name']) && !empty($active_template['directory_folder_name']) && $_POST[$table_name][$admin_field["column_name"]] != $current_values[$table_name][$admin_field["column_name"]] && file_exists($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$_POST[$table_name][$admin_field["column_name"]]))
+					elseif($_SESSION['admin_type'] == 'edit' && isset($active_template['directory_folder_name']) && !empty($active_template['directory_folder_name']) && $_POST[$table_name][$admin_field["column_name"]] != $current_values[$table_name][$admin_field["column_name"]] && file_exists(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$_POST[$table_name][$admin_field["column_name"]]))
 					{
-						$errors[$table_name][$admin_field["column_name"]] = $admin_field["name"].' is being used on another template file here: '.$_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$_POST[$table_name][$admin_field["column_name"]];
+						$errors[$table_name][$admin_field["column_name"]] = $admin_field["name"].' is being used on another template file here: '.INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$_POST[$table_name][$admin_field["column_name"]];
 					}
-					elseif($_SESSION['admin_type'] == 'edit' && isset($active_template['directory_folder_name']) && !empty($active_template['directory_folder_name']) && !file_exists($_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$current_values[$table_name][$admin_field["column_name"]]))
+					elseif($_SESSION['admin_type'] == 'edit' && isset($active_template['directory_folder_name']) && !empty($active_template['directory_folder_name']) && !file_exists(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$current_values[$table_name][$admin_field["column_name"]]))
 					{
-						$errors[$table_name][$admin_field["column_name"]] = 'Original '.$admin_field["name"].' cannot be found on the server to change it here: '.$_SERVER['DOCUMENT_ROOT']."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$current_values[$table_name][$admin_field["column_name"]];
+						$errors[$table_name][$admin_field["column_name"]] = 'Original '.$admin_field["name"].' cannot be found on the server to change it here: '.INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$current_values[$table_name][$admin_field["column_name"]];
 					}
 				}
 			}

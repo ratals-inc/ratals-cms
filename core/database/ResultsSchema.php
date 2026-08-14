@@ -5,9 +5,9 @@
 
 namespace core\database;
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/core/database/ResultsSchema.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/core/database/ResultsSchema.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/core/database/ResultsSchema.php');
+	require_once(INSTALLATION_ROOT.'/hooks/core/database/ResultsSchema.php');
 }
 else
 {

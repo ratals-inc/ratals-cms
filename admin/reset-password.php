@@ -3,11 +3,16 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
-
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/reset-password.php'))
+if(!defined('INSTALLATION_ROOT'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/reset-password.php');
+	define('INSTALLATION_ROOT', dirname(__DIR__));
+}
+
+require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
+
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/reset-password.php'))
+{
+	require_once(INSTALLATION_ROOT.'/hooks/admin/reset-password.php');
 }
 else
 {
@@ -124,7 +129,7 @@ else
 	<title>Reset Password - <?php echo $site_name; ?></title>
 	<meta name="description" content="">
 	<meta name="keywords" content="">
-	<?php include_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/head-files.php');?>
+	<?php include_once(INSTALLATION_ROOT.'/admin/cms/includes/head-files.php');?>
 	</head>
 	<body>
 	<div class="box-wrapper">

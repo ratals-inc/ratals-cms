@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/functions/media.php')) 
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/functions/media.php')) 
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/functions/media.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/functions/media.php');
 }
 else
 {	
@@ -276,11 +276,11 @@ else
 						
 						if(!empty($media_output_data))
 						{
-							if($media_output_data[1] == 'avif' && file_exists($_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_output_data[0].'.avif'))
+							if($media_output_data[1] == 'avif' && file_exists(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_output_data[0].'.avif'))
 							{
 								$media_output_srcset_avif .= $domain.'/sites/media/images/'.$original_media_id.'/'.$media_output_data[0].'.avif '.$width.'w, ';
 							}
-							elseif($media_output_data[1] == 'webp' && file_exists($_SERVER['DOCUMENT_ROOT'].'/sites/media/images/'.$original_media_id.'/'.$media_output_data[0].'.webp'))
+							elseif($media_output_data[1] == 'webp' && file_exists(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_output_data[0].'.webp'))
 							{
 								$media_output_srcset_webp .= $domain.'/sites/media/images/'.$original_media_id.'/'.$media_output_data[0].'.webp '.$width.'w, ';
 							}
@@ -360,7 +360,7 @@ else
 					}
 					
 					$video_poster = '';
-					if(!empty($media_poster_url) && file_exists($_SERVER['DOCUMENT_ROOT'].$media_poster_url))
+					if(!empty($media_poster_url) && file_exists(INSTALLATION_ROOT.$media_poster_url))
 					{
 						$video_poster = ' poster="'.$domain.$media_poster_url.'"';
 					}

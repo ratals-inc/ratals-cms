@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/includes/editor/editor.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/includes/editor/editor.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/includes/editor/editor.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/includes/editor/editor.php');
 }
 else
 {
@@ -36,7 +36,7 @@ else
     .align-right { text-align: right; }
     </style>
     
-    <?php require_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/editor/links.php'); ?>
+    <?php require_once(INSTALLATION_ROOT.'/admin/cms/includes/editor/links.php'); ?>
     
     <div class="editor" data-target="<?php echo $editor_name; ?>">
         <div class="editor-toolbar">

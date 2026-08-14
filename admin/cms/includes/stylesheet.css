@@ -80,6 +80,8 @@ svg { width: 13px; }
 .left li li span.label:hover i.arrow { color: var(--nav-link-colors-hover); }
 .left li li span.label:hover path { fill: var(--nav-link-colors-hover); }
 .toggle-arrow { transform: rotate( 180deg ); transition: transform 500ms ease; }
+.toggle-arrow-instant { transform: rotate( 180deg ); transition: none !important; }
+.toggle-arrow svg path, .toggle-arrow-instant svg path { stroke: currentColor; stroke-width: 40px; }
 .left .selected-page { background-color: var(--nav-bg-color-selected) !important; color: var(--nav-color-selected) !important; }
 .right { float: right; width: calc(100% - 260px); padding: 20px; }
 .right .account-message a { color: var(--primary-link-color); text-decoration: none; }
@@ -750,6 +752,13 @@ ul.orders-boxes li.three-column { grid-column: span 3; }
 .email-customer-shipment .editor-container { height: 285px; }
 .email-customer-shipment .tracking-number-note { font-size: 13px; padding: 10px 0px; color: #444444; }
 
+/*Edit Lead Page*/
+.lead-submitted-field { display: grid; grid-template-columns: 150px 1fr; gap: 15px; padding: 10px 0; border-bottom: 1px solid #ddd; }
+.lead-submitted-field:first-child { padding-top: 0; }
+.lead-submitted-field:last-child { padding-bottom: 0; border-bottom: 0; }
+.lead-submitted-label { font-weight: bold; }
+.lead-submitted-value { min-width: 0; overflow-wrap: break-word; }
+
 /*Receive Purchase Order Inventory*/
 .receive-inventory-table { display: table; width: 100%; font-size: 14px; background-color: #fff; border-left: 1px solid #d6d6d6; border-bottom: 1px solid #d6d6d6; }
 .receive-inventory-table-row { display: table-row; }
@@ -1119,6 +1128,8 @@ td.selected { background-color: #f0f8ff; }
 {
   .popup .columns li { width: 100%; }
   .popup .media li { width: 100%; }
+  /*Edit Lead Page*/
+  .lead-submitted-field { grid-template-columns: 1fr; gap: 3px; }
 }
 
 @media only screen and (max-width : 550px)

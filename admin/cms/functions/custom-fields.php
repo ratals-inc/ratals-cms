@@ -3,17 +3,14 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/functions/custom-fields.php')) 
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/functions/custom-fields.php')) 
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/functions/custom-fields.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/functions/custom-fields.php');
 }
 else
 {
-	//$record_id is coming from get-page-data.php
 	if(!function_exists('custom_field'))
 	{
-		$rid = $record_id ?? 0;
-		
 		function customField($custom_field_id, $record_id)
 		{
 			global $site_id, $final_url_home_page;

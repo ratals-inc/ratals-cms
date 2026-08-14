@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/includes/custom-fields/fields.php')) 
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/includes/custom-fields/fields.php')) 
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/includes/custom-fields/fields.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/includes/custom-fields/fields.php');
 }
 else
 {
@@ -72,37 +72,37 @@ else
 				//Get dropdown $adminFields class methods to load add and edit attribute custom fields. All attributes load as a dropdown on inventory so we only need to call the dropdown method.
 				//Get the field class so it can load in the admin page.
 				$field_display_as = $admin_field['display_as'];
-				if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+				if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 				{
-					include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+					include(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 				}
-				elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+				elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 				{
-					include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+					include(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 				}
-				elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+				elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 				{
-					include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+					include(INSTALLATION_ROOT.'/hooks/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 				}
-				elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+				elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 				{
-					include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+					include(INSTALLATION_ROOT.'/hooks/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 				}
-				elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+				elseif(file_exists(INSTALLATION_ROOT.'/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 				{
-					include($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+					include(INSTALLATION_ROOT.'/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 				}
-				elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+				elseif(file_exists(INSTALLATION_ROOT.'/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 				{
-					include($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+					include(INSTALLATION_ROOT.'/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 				}
-				elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+				elseif(file_exists(INSTALLATION_ROOT.'/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 				{
-					include($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+					include(INSTALLATION_ROOT.'/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 				}
-				elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+				elseif(file_exists(INSTALLATION_ROOT.'/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 				{
-					include($_SERVER['DOCUMENT_ROOT'].'/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+					include(INSTALLATION_ROOT.'/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 				}
 				
 				//Set $table_name back to original parnet loop name that this is running here: admin/includes/custom-fields/fields.php. Setting it back in case there are more fields after custom_fields.
@@ -116,7 +116,7 @@ else
 	
 	//Display Custom Fields
 	//Dont display custom fields on add media admin page.
-	if(!empty($content_custom_fields) && $_SESSION['admin_table_name'] != 'media' && $_SESSION['admin_type'] != 'add')
+	if(!empty($content_custom_fields) && !($_SESSION['admin_table_name'] == 'media' && $_SESSION['admin_type'] == 'add'))
 	{
 		$multiple_media_counter = 0;
 		
@@ -172,37 +172,37 @@ else
 			//Get $adminFields class methods to load add and edit content custom fields. All content fields load as these fields so we only need to call the methods.
 			//Get the field class so it can load in the admin page.
 			$field_display_as = $admin_field['display_as'];
-			if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+			if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 			{
-				include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+				include(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 			}
-			elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+			elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 			{
-				include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+				include(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 			}
-			elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+			elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 			{
-				include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+				include(INSTALLATION_ROOT.'/hooks/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 			}
-			elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+			elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 			{
-				include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+				include(INSTALLATION_ROOT.'/hooks/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 			}
-			elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+			elseif(file_exists(INSTALLATION_ROOT.'/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 			{
-				include($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+				include(INSTALLATION_ROOT.'/admin/cms/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 			}
-			elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+			elseif(file_exists(INSTALLATION_ROOT.'/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 			{
-				include($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+				include(INSTALLATION_ROOT.'/admin/commerce/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 			}
-			elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+			elseif(file_exists(INSTALLATION_ROOT.'/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 			{
-				include($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+				include(INSTALLATION_ROOT.'/admin/erp/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 			}
-			elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
+			elseif(file_exists(INSTALLATION_ROOT.'/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php'))
 			{
-				include($_SERVER['DOCUMENT_ROOT'].'/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php');
+				include(INSTALLATION_ROOT.'/admin/ai/classes/add-edit/admin-fields/'.$field_display_as.'.php');
 			}
 			
 			//Set $table_name back to original parnet loop name that this is running here: admin/includes/custom-fields/fields.php. Setting it back in case there are more fields after custom_fields.

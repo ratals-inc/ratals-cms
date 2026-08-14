@@ -3,11 +3,16 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
-
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/index.php'))
+if(!defined('INSTALLATION_ROOT'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/index.php');
+	define('INSTALLATION_ROOT', dirname(__DIR__));
+}
+
+require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
+
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/index.php'))
+{
+	require_once(INSTALLATION_ROOT.'/hooks/admin/index.php');
 }
 else
 {
@@ -16,7 +21,7 @@ else
 	header("Expires: 0");
 	
 	//Make sure server software allows .htaccess rules to run.
-	require_once($_SERVER['DOCUMENT_ROOT'].'/core/server-software.php');
+	require_once(INSTALLATION_ROOT.'/core/server-software.php');
 	
 	//If user not logged in display login page.
 	if(!isset($_SESSION['user_id']))
@@ -472,7 +477,7 @@ else
 			$account_message = '<div class="account-message"><p>Your Ratals subscription could not be renewed. Please update your payment information in your <a href="https://www.ratals.com/account/" target="_blank">Ratals account</a> to restore access.</p></div>';
 			
 			//Make sure session-check-admin.php is being included within all admin page url requests. If not, warn admin user to fix.
-			$doc_root = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
+			$doc_root = rtrim(INSTALLATION_ROOT, '/');
 			$server_software = strtolower($_SERVER['SERVER_SOFTWARE'] ?? '');
 			if(stripos($server_software, 'apache') !== false || stripos($server_software, 'litespeed') !== false)
 			{
@@ -522,23 +527,23 @@ else
 			//Load admin page type with router index.php file.
 			if($_SESSION['admin_type'] == 'table')
 			{
-				include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/layouts/table/index.php';
+				include_once INSTALLATION_ROOT.'/admin/cms/layouts/table/index.php';
 			}
 			elseif($_SESSION['admin_type'] == 'add')
 			{
-				include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/layouts/add/index.php';
+				include_once INSTALLATION_ROOT.'/admin/cms/layouts/add/index.php';
 			}
 			elseif($_SESSION['admin_type'] == 'edit')
 			{
-				include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/layouts/edit/index.php';
+				include_once INSTALLATION_ROOT.'/admin/cms/layouts/edit/index.php';
 			}
 			elseif($_SESSION['admin_type'] == 'static')
 			{
-				include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/layouts/static/index.php';
+				include_once INSTALLATION_ROOT.'/admin/cms/layouts/static/index.php';
 			}
 			elseif($_SESSION['admin_type'] == 'blank')
 			{
-				include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/layouts/blank/index.php';
+				include_once INSTALLATION_ROOT.'/admin/cms/layouts/blank/index.php';
 			}
 		}
 	}

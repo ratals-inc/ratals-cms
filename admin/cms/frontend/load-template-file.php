@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/frontend/load-template-file.php')) 
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/frontend/load-template-file.php')) 
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/frontend/load-template-file.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/frontend/load-template-file.php');
 }
 else
 {
@@ -13,7 +13,7 @@ else
 	
 	if(isset($templates_files['filename']) && file_exists("sites/".$site_id."/templates/".$active_template_path.'/'.$templates_files['filename'])) 
 	{
-		include_once($_SERVER['DOCUMENT_ROOT']."/sites/".$site_id."/templates/".$active_template_path.'/'.$templates_files['filename']);
+		include_once(INSTALLATION_ROOT."/sites/".$site_id."/templates/".$active_template_path.'/'.$templates_files['filename']);
 	} 
 	else 
 	{

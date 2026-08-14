@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/static/addons/form-media-swatches.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/addons/form-media-swatches.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/static/addons/form-media-swatches.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/addons/form-media-swatches.php');
 }
 else
 {
@@ -242,6 +242,6 @@ else
 	  </form>
 	  </div>
 	  <!-- End Edit View -->
-	  <?php include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/media-popup.php'; ?>
+	  <?php include_once INSTALLATION_ROOT.'/admin/cms/includes/media-popup.php'; ?>
 	<?php } ?>
 <?php } ?>

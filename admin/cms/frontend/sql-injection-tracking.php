@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/frontend/sql-injection-tracking.php')) 
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/frontend/sql-injection-tracking.php')) 
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/frontend/sql-injection-tracking.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/frontend/sql-injection-tracking.php');
 }
 else
 {
@@ -86,12 +86,12 @@ else
 				//Get Email Template.
 				$subject = '';
 				$message = '';
-				include $_SERVER['DOCUMENT_ROOT'].'/sites/'.$_SESSION['site_id'].'/templates/'.$email_template_record['directory_folder_name'].'/email-template-possible-sql-injection-attempt.php';
+				include INSTALLATION_ROOT.'/sites/'.$_SESSION['site_id'].'/templates/'.$email_template_record['directory_folder_name'].'/email-template-possible-sql-injection-attempt.php';
 				
 				if(isset($warp_with_email_template) && $warp_with_email_template == 'Yes')
 				{
 					//Get Email Template Frame.
-					include $_SERVER['DOCUMENT_ROOT'].'/sites/'.$_SESSION['site_id'].'/templates/'.$email_template_record['directory_folder_name'].'/email-template.php';
+					include INSTALLATION_ROOT.'/sites/'.$_SESSION['site_id'].'/templates/'.$email_template_record['directory_folder_name'].'/email-template.php';
 					
 					$message = str_replace('[EMAIL_MESSAGE]', $message, $email_template);
 				}

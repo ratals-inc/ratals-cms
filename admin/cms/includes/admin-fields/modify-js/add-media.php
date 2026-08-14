@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/includes/admin-fields/modify-js/add-media.php')) 
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/includes/admin-fields/modify-js/add-media.php')) 
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/includes/admin-fields/modify-js/add-media.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/includes/admin-fields/modify-js/add-media.php');
 }
 else
 {
@@ -136,12 +136,24 @@ else
 				{
 					if(event.lengthComputable)
 					{
-						let percent = (event.loaded / event.total);
+						//Use 80% of each file's progress for the actual upload.
+						//Reserve the final 20% for server-side image processing.
+						let percent = (event.loaded / event.total) * 0.80;
 						let overall = ((index - 1) / totalFiles) + (percent / totalFiles);
 						
 						_("progressBar").value = Math.round(overall * 100);
 						_("statuss").innerHTML = "Uploading file " + index + " / " + totalFiles;
 					}
+				};
+				
+				xhr.upload.onload = function()
+				{
+					//The file has finished uploading, but PHP may still be resizing,
+					//creating image variants, and saving the media record.
+					let overall = ((index - 1) / totalFiles) + (0.80 / totalFiles);
+					
+					_("progressBar").value = Math.round(overall * 100);
+					_("statuss").innerHTML = "Processing file " + index + " / " + totalFiles;
 				};
 				
 				xhr.onload = function()

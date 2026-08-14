@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/static/headers/posts-comments.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/headers/posts-comments.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/static/headers/posts-comments.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/headers/posts-comments.php');
 }
 else
 {
@@ -20,6 +20,16 @@ else
 			
 			$results->getUpdateRecord(__LINE__, __FILE__, 'posts', '`updated_by` = ?, `updated_date` = UTC_TIMESTAMP()', 'WHERE `urls_id` = ? AND `site_id` = ?', [$_SESSION['user_first_last_name'], trim($_GET["rid"] ?? ''), $_SESSION["site_set_for_editing"]]);
 			
+			//Clear cache on save.
+			if($_SESSION['admin_site_id_global'] == 'No')
+			{
+				clearSiteCache($_SESSION['site_set_for_editing']);
+			}
+			else
+			{
+				clearAllSiteCache();
+			}
+			
 			header("Location: /".$_SESSION['admin_url_with_rid']."");
 			exit();
 		}
@@ -29,6 +39,16 @@ else
 			$results->getDeleteRecord(__LINE__, __FILE__, 'comments', 'WHERE `site_id` = ? AND `id` = ? AND `post_url_id` = ?', [$_SESSION["site_set_for_editing"], $_POST['id'], trim($_GET["rid"] ?? '')]);
 			
 			$results->getUpdateRecord(__LINE__, __FILE__, 'posts', '`updated_by` = ?, `updated_date` = UTC_TIMESTAMP()', 'WHERE `urls_id` = ? AND `site_id` = ?', [$_SESSION['user_first_last_name'], trim($_GET["rid"] ?? ''), $_SESSION["site_set_for_editing"]]);
+			
+			//Clear cache on save.
+			if($_SESSION['admin_site_id_global'] == 'No')
+			{
+				clearSiteCache($_SESSION['site_set_for_editing']);
+			}
+			else
+			{
+				clearAllSiteCache();
+			}
 			
 			header("Location: /".$_SESSION['admin_url_with_rid']."");
 			exit();

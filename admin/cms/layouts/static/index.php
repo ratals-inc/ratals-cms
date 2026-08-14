@@ -3,31 +3,31 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/static/index.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/index.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/static/index.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/index.php');
 }
 else
 {
 	//Auto loader - headers
 	$types_to_load = array();
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/cms/layouts/static/headers')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/cms/layouts/static/headers')) 
 	{
 		$types_to_load[] = 'cms'; 
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/layouts/static/headers')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/commerce/layouts/static/headers')) 
 	{
 		$types_to_load[] = 'commerce';
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/erp/layouts/static/headers'))
+	if(is_dir(INSTALLATION_ROOT.'/admin/erp/layouts/static/headers'))
 	{
 		$types_to_load[] = 'erp';
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/ai/layouts/static/headers')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/ai/layouts/static/headers')) 
 	{
 		$types_to_load[] = 'ai';
 	}
@@ -36,7 +36,7 @@ else
 	{
 		$existing_files = array();
 		$directory_path = '/admin/'.$type_to_load.'/layouts/static/headers';
-		$auto_loader_path = $_SERVER['DOCUMENT_ROOT'].$directory_path;
+		$auto_loader_path = INSTALLATION_ROOT.$directory_path;
 		$auto_loader_files = array_diff(scandir($auto_loader_path), array('.', '..'));
 		if(!empty($auto_loader_files))
 		{
@@ -44,13 +44,13 @@ else
 			{
 				$existing_files[] = $auto_loader_file;
 				
-				if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks'.$directory_path.'/'.$auto_loader_file))
+				if(file_exists(INSTALLATION_ROOT.'/hooks'.$directory_path.'/'.$auto_loader_file))
 				{
-					include_once($_SERVER['DOCUMENT_ROOT'].'/hooks'.$directory_path.'/'.$auto_loader_file);
+					include_once(INSTALLATION_ROOT.'/hooks'.$directory_path.'/'.$auto_loader_file);
 				}
 				else
 				{
-					include_once($_SERVER['DOCUMENT_ROOT'].$directory_path.'/'.$auto_loader_file);
+					include_once(INSTALLATION_ROOT.$directory_path.'/'.$auto_loader_file);
 				}
 			}
 		}
@@ -60,27 +60,27 @@ else
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title><?php if(!empty($head_title_name)) { echo $head_title_name.' '; } echo $_SESSION['admin_title']; ?></title>
-	<?php include_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/head-files.php'); ?>
+	<?php include_once(INSTALLATION_ROOT.'/admin/cms/includes/head-files.php'); ?>
 	<?php
 	//Auto loader - scripts
 	$types_to_load = array();
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/cms/layouts/static/scripts')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/cms/layouts/static/scripts')) 
 	{
 		$types_to_load[] = 'cms'; 
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/layouts/static/scripts')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/commerce/layouts/static/scripts')) 
 	{
 		$types_to_load[] = 'commerce';
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/erp/layouts/static/scripts'))
+	if(is_dir(INSTALLATION_ROOT.'/admin/erp/layouts/static/scripts'))
 	{
 		$types_to_load[] = 'erp';
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/ai/layouts/static/scripts')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/ai/layouts/static/scripts')) 
 	{
 		$types_to_load[] = 'ai';
 	}
@@ -89,7 +89,7 @@ else
 	{
 		$existing_files = array();
 		$directory_path = '/admin/'.$type_to_load.'/layouts/static/scripts';
-		$auto_loader_path = $_SERVER['DOCUMENT_ROOT'].$directory_path;
+		$auto_loader_path = INSTALLATION_ROOT.$directory_path;
 		$auto_loader_files = array_diff(scandir($auto_loader_path), array('.', '..'));
 		if(!empty($auto_loader_files))
 		{
@@ -97,13 +97,13 @@ else
 			{
 				$existing_files[] = $auto_loader_file;
 				
-				if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks'.$directory_path.'/'.$auto_loader_file))
+				if(file_exists(INSTALLATION_ROOT.'/hooks'.$directory_path.'/'.$auto_loader_file))
 				{
-					include_once($_SERVER['DOCUMENT_ROOT'].'/hooks'.$directory_path.'/'.$auto_loader_file);
+					include_once(INSTALLATION_ROOT.'/hooks'.$directory_path.'/'.$auto_loader_file);
 				}
 				else
 				{
-					include_once($_SERVER['DOCUMENT_ROOT'].$directory_path.'/'.$auto_loader_file);
+					include_once(INSTALLATION_ROOT.$directory_path.'/'.$auto_loader_file);
 				}
 			}
 		}
@@ -123,14 +123,14 @@ else
 	</div>
 	<!-- End Pending Ajax Overlay -->
 	<!-- Start Left Column -->
-	<?php include_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/navigation.php');?>
+	<?php include_once(INSTALLATION_ROOT.'/admin/cms/includes/navigation.php');?>
 	<!-- End Left Column -->
 	
 	<!-- Start Right Column -->
 	<div class="right">
     <!-- Start Notices -->
     <?php 
-	include($_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/notices/index.php');
+	include(INSTALLATION_ROOT.'/admin/cms/includes/notices/index.php');
 	echo $display_message; 
 	?>
     <!-- End Notices -->
@@ -162,29 +162,29 @@ else
 	</div>
 	<!-- End Header -->
 	<?php 
-	include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/sub-navigation.php';
+	include_once INSTALLATION_ROOT.'/admin/cms/includes/sub-navigation.php';
 	if(!empty($sub_menu)) { echo $sub_menu; }
 	?>
 	<?php 
 	//Auto loader - addons
 	$types_to_load = array();
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/cms/layouts/static/addons')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/cms/layouts/static/addons')) 
 	{
 		$types_to_load[] = 'cms';
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/layouts/static/addons')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/commerce/layouts/static/addons')) 
 	{
 		$types_to_load[] = 'commerce';
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/erp/layouts/static/addons'))
+	if(is_dir(INSTALLATION_ROOT.'/admin/erp/layouts/static/addons'))
 	{
 		$types_to_load[] = 'erp';
 	}
 	
-	if(is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/ai/layouts/static/addons')) 
+	if(is_dir(INSTALLATION_ROOT.'/admin/ai/layouts/static/addons')) 
 	{
 		$types_to_load[] = 'ai';
 	}
@@ -193,7 +193,7 @@ else
 	{
 		$existing_files = array();
 		$directory_path = '/admin/'.$type_to_load.'/layouts/static/addons';
-		$auto_loader_path = $_SERVER['DOCUMENT_ROOT'].$directory_path;
+		$auto_loader_path = INSTALLATION_ROOT.$directory_path;
 		$auto_loader_files = array_diff(scandir($auto_loader_path), array('.', '..'));
 		if(!empty($auto_loader_files))
 		{
@@ -201,13 +201,13 @@ else
 			{
 				$existing_files[] = $auto_loader_file;
 				
-				if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks'.$directory_path.'/'.$auto_loader_file))
+				if(file_exists(INSTALLATION_ROOT.'/hooks'.$directory_path.'/'.$auto_loader_file))
 				{
-					include_once($_SERVER['DOCUMENT_ROOT'].'/hooks'.$directory_path.'/'.$auto_loader_file);
+					include_once(INSTALLATION_ROOT.'/hooks'.$directory_path.'/'.$auto_loader_file);
 				}
 				else
 				{
-					include_once($_SERVER['DOCUMENT_ROOT'].$directory_path.'/'.$auto_loader_file);
+					include_once(INSTALLATION_ROOT.$directory_path.'/'.$auto_loader_file);
 				}
 			}
 		}

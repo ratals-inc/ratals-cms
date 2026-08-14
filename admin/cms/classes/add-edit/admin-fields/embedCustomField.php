@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/admin-fields/embedCustomField.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/admin-fields/embedCustomField.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/admin-fields/embedCustomField.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/admin-fields/embedCustomField.php');
 }
 else
 {
@@ -25,14 +25,14 @@ else
 							if($current_values['custom_fields']['cf_display_as'] == "singleMedia")
 							{ 
 							?>
+                                If this embed media is a large image and will load high up in the page, you should use this with High Fetch Priority:<br>
+                                <strong>Embed Code:</strong> &lt;?php $image_data = customField('<?php echo trim($_GET["rid"] ?? ''); ?>', $rid); if(!empty($image_data)) { $media_output = mediaId($image_data[0], 'lazyLoadNo', 'fetchPriorityHigh', $image_data[1]); echo $media_output; } ?&gt;
+                                <br><br>
 								If this embed media will load high up in the page, you should use this with No Lazy Loading:<br>
                                 <strong>Embed Code:</strong> &lt;?php $image_data = customField('<?php echo trim($_GET["rid"] ?? ''); ?>', $rid); if(!empty($image_data)) { $media_output = mediaId($image_data[0], 'lazyLoadNo', 'fetchPriorityAuto', $image_data[1]); echo $media_output; } ?&gt;
                                 <br><br>
                                 If this embed media will load after you scroll some, you should use this with Lazy Loading:<br>
                                 <strong>Embed Code:</strong> &lt;?php $image_data = customField('<?php echo trim($_GET["rid"] ?? ''); ?>', $rid); if(!empty($image_data)) { $media_output = mediaId($image_data[0], 'lazyLoadYes', 'fetchPriorityAuto', $image_data[1]); echo $media_output; } ?&gt;
-                                
-                                If this embed media is a large image and will load high up in the page, you should use this with High Fetch Priority:<br>
-                                <strong>Embed Code:</strong> &lt;?php $image_data = customField('<?php echo trim($_GET["rid"] ?? ''); ?>', $rid); if(!empty($image_data)) { $media_output = mediaId($image_data[0], 'lazyLoadNo', 'fetchPriorityHigh', $image_data[1]); echo $media_output; } ?&gt;
 							<?php 
 							}
 							else

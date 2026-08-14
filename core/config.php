@@ -9,9 +9,9 @@
 //ini_set('display_errors', TRUE);
 //ini_set('log_errors', TRUE);
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/core/config.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/core/config.php'))
 {
-	include($_SERVER['DOCUMENT_ROOT'].'/hooks/core/config.php');
+	include(INSTALLATION_ROOT.'/hooks/core/config.php');
 }
 else
 {
@@ -30,15 +30,15 @@ else
 	$current_software_version = '1.02';
 	
 	//Check to make sure /core/database/DbCredentials.php file exist from setting up an account.
-	if(file_exists($_SERVER['DOCUMENT_ROOT'].'/core/database/DbCredentials.php'))
+	if(file_exists(INSTALLATION_ROOT.'/core/database/DbCredentials.php'))
 	{
 		//Check to make sure an account was setup by looking at the database name in /core/database/DbCredentials.php. If name is [DATABASE_NAME], this means an account has not been setup yet and load create account page.
-		$database_connection_file = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/core/database/DbCredentials.php');
+		$database_connection_file = file_get_contents(INSTALLATION_ROOT.'/core/database/DbCredentials.php');
 		if(strpos($database_connection_file, '[DATABASE_NAME]') !== false)
 		{
 			//Database has not been installed yet so display create account form.
 			header("HTTP/1.1 404"); 
-			include_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/index.php');
+			include_once(INSTALLATION_ROOT.'/admin/cms/installer/index.php');
 			die();
 		}
 	}
@@ -46,7 +46,7 @@ else
 	{
 		//Database has not been installed yet so display create account form.
 		header("HTTP/1.1 404"); 
-		include_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/index.php');
+		include_once(INSTALLATION_ROOT.'/admin/cms/installer/index.php');
 		die();
 	}
 	
@@ -75,7 +75,7 @@ else
 	{
 		//Database has not been installed yet so display create account form.
 		header("HTTP/1.1 404"); 
-		include_once($_SERVER['DOCUMENT_ROOT'].'/admin/cms/installer/index.php');
+		include_once(INSTALLATION_ROOT.'/admin/cms/installer/index.php');
 		die();
 	}
 	
@@ -150,14 +150,14 @@ else
 	}
 	
 	//Get all sites.
-	include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/site.php";
+	include INSTALLATION_ROOT."/admin/cms/frontend/site.php";
 	
 	if(empty($license['last_seen']) || strtotime($license['last_seen']) < strtotime('-7 days')) 
 	{
 		//Connect to API messages.
-		if(file_exists(rtrim($_SERVER['DOCUMENT_ROOT'], '/').'/admin/cms/api/connect.php'))
+		if(file_exists(rtrim(INSTALLATION_ROOT, '/').'/admin/cms/api/connect.php'))
 		{
-			require(rtrim($_SERVER['DOCUMENT_ROOT'], '/').'/admin/cms/api/connect.php');
+			require(rtrim(INSTALLATION_ROOT, '/').'/admin/cms/api/connect.php');
 		}
 	}
 	
@@ -200,93 +200,94 @@ else
 	}
 	
 	//For customer login area to make sure its a real request and not an external / cross-site requests
-	include $_SERVER['DOCUMENT_ROOT']."/admin/cms/functions/csrf-form-submit-token.php"; //This sets Cross-Site Request Forgery form submit tokens.
+	include INSTALLATION_ROOT."/admin/cms/functions/csrf-form-submit-token.php"; //This sets Cross-Site Request Forgery form submit tokens.
 	csrfFormSubmitToken();
 	
 	//Load site if found in db
 	if(!empty($sites))
 	{
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/frontend/currency.php'; //This makes the site load with the set currency type.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/date-time-format.php'; //This formats dates.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/admin-field-lists-swap.php'; //This gets Admin Field Lists. It swaps the values in a sub field. Example: Change states in states field when country is changed.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/assignments-insert-record.php';
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/change-active.php';
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/custom-fields.php'; //This gets all custom fields and values and adds them to the pages array.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/device-viewport.php'; //This gets the device type viewport window size.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/media.php'; //This gets Media - multiple functions in this file.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/menus.php'; //This loads menus.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/nonce.php'; //This updates nonce="nonce" with the correct nonce number.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/page-by-url-id.php'; //This gets the page data by the url id.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/password-validation.php'; //This validates passwords when accounts are created or passwords are updated.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/sliders.php'; //This loads sliders.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/smtp-send-email.php'; //This function send out the site emails with SMTP.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/sub-items.php'; //This gets sub items or load assignments_sub_items tables.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/update-leads-from-junk-to-active.php';
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/urls.php'; //This gets URLs - multiple functions in this file.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/currency-format.php'; //This formats prices / currencies.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/items-data.php'; //This gets the data for sub_items and products to load for things like prices, image, review score, URL, etc.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/functions/build-database-table-create-query.php';
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/frontend/site-settings.php'; //This gets site settings.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/frontend/contact-info.php'; //This get the site contact information.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/frontend/site-security.php'; //This gets site security settings.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/frontend/sql-injection-tracking.php'; //This watches every POST[] pushed into the site and will email if any have SQL terms that might be trying to do injection.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/frontend/ddos-tracking.php'; //This gets every pageview and saves for ddos tracking. Also blocks visitors once blocked ip is set.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/frontend/search-engines.php'; //This gets search engine settings.
-		include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/frontend/active-template.php'; //This gets the active template/theme folder name so it loads with correct template/theme.
+		include INSTALLATION_ROOT.'/admin/cms/frontend/currency.php'; //This makes the site load with the set currency type.
+		include INSTALLATION_ROOT.'/admin/cms/functions/date-time-format.php'; //This formats dates.
+		include INSTALLATION_ROOT.'/admin/cms/functions/admin-field-lists-swap.php'; //This gets Admin Field Lists. It swaps the values in a sub field. Example: Change states in states field when country is changed.
+		include INSTALLATION_ROOT.'/admin/cms/functions/assignments-insert-record.php';
+		include INSTALLATION_ROOT.'/admin/cms/functions/change-active.php';
+		include INSTALLATION_ROOT.'/admin/cms/functions/custom-fields.php'; //This gets all custom fields and values and adds them to the pages array.
+		include INSTALLATION_ROOT.'/admin/cms/functions/device-viewport.php'; //This gets the device type viewport window size.
+		include INSTALLATION_ROOT.'/admin/cms/functions/media.php'; //This gets Media - multiple functions in this file.
+		include INSTALLATION_ROOT.'/admin/cms/functions/menus.php'; //This loads menus.
+		include INSTALLATION_ROOT.'/admin/cms/functions/nonce.php'; //This updates nonce="nonce" with the correct nonce number.
+		include INSTALLATION_ROOT.'/admin/cms/functions/page-by-url-id.php'; //This gets the page data by the url id.
+		include INSTALLATION_ROOT.'/admin/cms/functions/password-validation.php'; //This validates passwords when accounts are created or passwords are updated.
+		include INSTALLATION_ROOT.'/admin/cms/functions/sliders.php'; //This loads sliders.
+		include INSTALLATION_ROOT.'/admin/cms/functions/smtp-send-email.php'; //This function send out the site emails with SMTP.
+		include INSTALLATION_ROOT.'/admin/cms/functions/sub-items.php'; //This gets sub items or load assignments_sub_items tables.
+		include INSTALLATION_ROOT.'/admin/cms/functions/update-leads-from-junk-to-active.php';
+		include INSTALLATION_ROOT.'/admin/cms/functions/urls.php'; //This gets URLs - multiple functions in this file.
+		include INSTALLATION_ROOT.'/admin/cms/functions/currency-format.php'; //This formats prices / currencies.
+		include INSTALLATION_ROOT.'/admin/cms/functions/items-data.php'; //This gets the data for sub_items and products to load for things like prices, image, review score, URL, etc.
+		include INSTALLATION_ROOT.'/admin/cms/functions/build-database-table-create-query.php';
+		include INSTALLATION_ROOT.'/admin/cms/functions/clear-cache.php'; //Cache clearing functions for site-specific and global admin saves.
+		include INSTALLATION_ROOT.'/admin/cms/frontend/site-settings.php'; //This gets site settings.
+		include INSTALLATION_ROOT.'/admin/cms/frontend/contact-info.php'; //This get the site contact information.
+		include INSTALLATION_ROOT.'/admin/cms/frontend/site-security.php'; //This gets site security settings.
+		include INSTALLATION_ROOT.'/admin/cms/frontend/sql-injection-tracking.php'; //This watches every POST[] pushed into the site and will email if any have SQL terms that might be trying to do injection.
+		include INSTALLATION_ROOT.'/admin/cms/frontend/ddos-tracking.php'; //This gets every pageview and saves for ddos tracking. Also blocks visitors once blocked ip is set.
+		include INSTALLATION_ROOT.'/admin/cms/frontend/search-engines.php'; //This gets search engine settings.
+		include INSTALLATION_ROOT.'/admin/cms/frontend/active-template.php'; //This gets the active template/theme folder name so it loads with correct template/theme.
 		
-		if($commerce_installed && is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions'))
+		if($commerce_installed && is_dir(INSTALLATION_ROOT.'/admin/commerce/functions'))
 		{
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/assign-all-inventory-to-category.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/assign-inventory-to-product.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/assign-products-to-category.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/assign-sub-products.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/checkout-clear-checkout-data.php'; //Unset cart / checkout data.
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/checkout-create-license-keys.php'; //Check if license key items are in the cart to set up keys for an inventory item
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/checkout-create-subscription.php'; //Check if recurring items are in the cart to set up a recurring charge / subscription
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/checkout-delete-cart-and-cart-items.php'; //Delete cart and cart items from database.
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/checkout-email-order-confirmation.php'; //Send order confirmation email to customer.
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/checkout-email-order-license-keys.php'; //Send license keys confirmation email to customer.
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/checkout-generate-unique-order-string.php'; //Generate unique order number string.
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/checkout-payment-methods.php'; //This gets the payment methods that can be used when checking out.
+			include INSTALLATION_ROOT.'/admin/commerce/functions/assign-all-inventory-to-category.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/assign-inventory-to-product.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/assign-products-to-category.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/assign-sub-products.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/checkout-clear-checkout-data.php'; //Unset cart / checkout data.
+			include INSTALLATION_ROOT.'/admin/commerce/functions/checkout-create-license-keys.php'; //Check if license key items are in the cart to set up keys for an inventory item
+			include INSTALLATION_ROOT.'/admin/commerce/functions/checkout-create-subscription.php'; //Check if recurring items are in the cart to set up a recurring charge / subscription
+			include INSTALLATION_ROOT.'/admin/commerce/functions/checkout-delete-cart-and-cart-items.php'; //Delete cart and cart items from database.
+			include INSTALLATION_ROOT.'/admin/commerce/functions/checkout-email-order-confirmation.php'; //Send order confirmation email to customer.
+			include INSTALLATION_ROOT.'/admin/commerce/functions/checkout-email-order-license-keys.php'; //Send license keys confirmation email to customer.
+			include INSTALLATION_ROOT.'/admin/commerce/functions/checkout-generate-unique-order-string.php'; //Generate unique order number string.
+			include INSTALLATION_ROOT.'/admin/commerce/functions/checkout-payment-methods.php'; //This gets the payment methods that can be used when checking out.
 			if(in_array('customer_accounts', $existing_database_tables) && in_array('gateway_settings', $existing_database_tables))
 			{
 				checkoutPaymentMethods(); //Load this early as any forms that need to load countries setup for payments will need this.
 			}
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/checkout-shipping-carriers.php'; //This gets the shipping carriers that can be used when checking out.
+			include INSTALLATION_ROOT.'/admin/commerce/functions/checkout-shipping-carriers.php'; //This gets the shipping carriers that can be used when checking out.
 			if(in_array('shipping_carriers', $existing_database_tables))
 			{
 				checkoutShippingCarriers(); //Load this early as any forms that need to load countries setup for carriers will need this.
 			}
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/checkout-with-card-helper.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/checkout-with-card.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/checkout-with-check-by-mail.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/checkout-with-paypal.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/checkout-submit-order.php'; //Submit order.
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/enable-disable-product-or-inventory.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/get-sub-product-ids.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/main-product-inventory-status.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/product-inventory-status-cateogry-level.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/save-category-order.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/save-products-inventory-order.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/sub-products-status.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/unassign-inventory-attached-to-product.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/unassign-sub-products.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/functions/update-assignment-tables.php';
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/frontend/accounting-settings.php'; //This gets accounting settings.
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/commerce/frontend/subscriptions-settings.php'; //This gets the subscription setting so recurring charges can get the default settings.
+			include INSTALLATION_ROOT.'/admin/commerce/functions/checkout-with-card-helper.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/checkout-with-card.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/checkout-with-check-by-mail.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/checkout-with-paypal.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/checkout-submit-order.php'; //Submit order.
+			include INSTALLATION_ROOT.'/admin/commerce/functions/enable-disable-product-or-inventory.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/get-sub-product-ids.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/main-product-inventory-status.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/product-inventory-status-cateogry-level.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/save-category-order.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/save-products-inventory-order.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/sub-products-status.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/unassign-inventory-attached-to-product.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/unassign-sub-products.php';
+			include INSTALLATION_ROOT.'/admin/commerce/functions/update-assignment-tables.php';
+			include INSTALLATION_ROOT.'/admin/commerce/frontend/accounting-settings.php'; //This gets accounting settings.
+			include INSTALLATION_ROOT.'/admin/commerce/frontend/subscriptions-settings.php'; //This gets the subscription setting so recurring charges can get the default settings.
 		}
 		
-		if($erp_installed && is_dir($_SERVER['DOCUMENT_ROOT'].'/admin/erp/functions'))
+		if($erp_installed && is_dir(INSTALLATION_ROOT.'/admin/erp/functions'))
 		{
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/erp/functions/chart-of-accounts.php'; //This created the dropdown for Chart of Accounts in admin.
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/erp/functions/checkout-submit-journal-sales-entries.php'; //Submit accounting journal entries for order.
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/erp/functions/get-inventory-quantities.php'; //This get inventory quantities like available_posted, available_unposted, on_hand, on_order, allocated, and allocated_on_order.
-			include $_SERVER['DOCUMENT_ROOT'].'/admin/erp/functions/set-new-landed-cost.php'; //Update landed cost when PO is posted or inventory is purchased or returned.
+			include INSTALLATION_ROOT.'/admin/erp/functions/chart-of-accounts.php'; //This created the dropdown for Chart of Accounts in admin.
+			include INSTALLATION_ROOT.'/admin/erp/functions/checkout-submit-journal-sales-entries.php'; //Submit accounting journal entries for order.
+			include INSTALLATION_ROOT.'/admin/erp/functions/get-inventory-quantities.php'; //This get inventory quantities like available_posted, available_unposted, on_hand, on_order, allocated, and allocated_on_order.
+			include INSTALLATION_ROOT.'/admin/erp/functions/set-new-landed-cost.php'; //Update landed cost when PO is posted or inventory is purchased or returned.
 		}
 	}
 	
-	if(file_exists($_SERVER['DOCUMENT_ROOT'].'/sites/'.$site_id.'/templates/'.$active_template_path.'/content-security-policy.php'))
+	if(file_exists(INSTALLATION_ROOT.'/sites/'.$site_id.'/templates/'.$active_template_path.'/content-security-policy.php'))
 	{
-		include_once $_SERVER['DOCUMENT_ROOT'].'/sites/'.$site_id.'/templates/'.$active_template_path.'/content-security-policy.php';
+		include_once INSTALLATION_ROOT.'/sites/'.$site_id.'/templates/'.$active_template_path.'/content-security-policy.php';
 	}
 }

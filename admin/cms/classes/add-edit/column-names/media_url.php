@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/column-names/media_url.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/column-names/media_url.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/column-names/media_url.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/column-names/media_url.php');
 }
 else
 {
@@ -30,13 +30,13 @@ else
 					{
 						$errors[$table_name][$admin_field["column_name"]] = 'Enter a vaild file name. Example: my-image.gif.';
 					}
-					elseif($_SESSION['admin_type'] == 'edit' && $_POST[$table_name][$admin_field["column_name"]] != $current_values[$table_name][$admin_field["column_name"]] && file_exists($_SERVER['DOCUMENT_ROOT']."/sites/media/".$media_type."/".$_POST[$table_name]['original_media_id']."/".$_POST[$table_name][$admin_field["column_name"]]))
+					elseif($_SESSION['admin_type'] == 'edit' && $_POST[$table_name][$admin_field["column_name"]] != $current_values[$table_name][$admin_field["column_name"]] && file_exists(INSTALLATION_ROOT."/sites/media/".$media_type."/".$_POST[$table_name]['original_media_id']."/".$_POST[$table_name][$admin_field["column_name"]]))
 					{
-						$errors[$table_name][$admin_field["column_name"]] = $admin_field["name"].' is being used on another media file here: '.$_SERVER['DOCUMENT_ROOT']."/sites/media/".$media_type."/".$_POST[$table_name]['original_media_id']."/".$_POST[$table_name][$admin_field["column_name"]];
+						$errors[$table_name][$admin_field["column_name"]] = $admin_field["name"].' is being used on another media file here: '.INSTALLATION_ROOT."/sites/media/".$media_type."/".$_POST[$table_name]['original_media_id']."/".$_POST[$table_name][$admin_field["column_name"]];
 					}
-					elseif($_SESSION['admin_type'] == 'edit' && !file_exists($_SERVER['DOCUMENT_ROOT']."/sites/media/".$media_type."/".$current_values[$table_name]['original_media_id']."/".$current_values[$table_name][$admin_field["column_name"]]) && $_POST[$table_name]['media_type'] != 'Video Embed')
+					elseif($_SESSION['admin_type'] == 'edit' && !file_exists(INSTALLATION_ROOT."/sites/media/".$media_type."/".$current_values[$table_name]['original_media_id']."/".$current_values[$table_name][$admin_field["column_name"]]) && $_POST[$table_name]['media_type'] != 'Video Embed')
 					{
-						$errors[$table_name][$admin_field["column_name"]] = 'Original '.$admin_field["name"].' cannot be found on the server to change it here: '.$_SERVER['DOCUMENT_ROOT']."/sites/media/".$media_type."/".$current_values[$table_name]['original_media_id']."/".$current_values[$table_name][$admin_field["column_name"]];
+						$errors[$table_name][$admin_field["column_name"]] = 'Original '.$admin_field["name"].' cannot be found on the server to change it here: '.INSTALLATION_ROOT."/sites/media/".$media_type."/".$current_values[$table_name]['original_media_id']."/".$current_values[$table_name][$admin_field["column_name"]];
 					}
 				}
 			}

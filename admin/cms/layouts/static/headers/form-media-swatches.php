@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/static/headers/form-media-swatches.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/headers/form-media-swatches.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/static/headers/form-media-swatches.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/headers/form-media-swatches.php');
 }
 else
 {
@@ -199,6 +199,16 @@ else
 				{
 					$results->getDeleteRecord(__LINE__, __FILE__, 'form_media', 'WHERE `form_id` = ? AND `value_ids` = ?', [trim($_GET["rid"] ?? ''), $removed_swatch_id]);
 				}
+			}
+			
+			//Clear cache on save.
+			if($_SESSION['admin_site_id_global'] == 'No')
+			{
+				clearSiteCache($_SESSION['site_set_for_editing']);
+			}
+			else
+			{
+				clearAllSiteCache();
 			}
 			
 			header("Location: /".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&updated=success"); exit();

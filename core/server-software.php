@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/core/server-software.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/core/server-software.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/core/server-software.php');
+	require_once(INSTALLATION_ROOT.'/hooks/core/server-software.php');
 }
 else
 {
@@ -15,13 +15,6 @@ else
 	//Check if server is running Apache or LiteSpeed
 	if(stripos($server_software, 'apache') !== false || stripos($server_software, 'litespeed') !== false)
 	{
-		//Check if .htaccess override is working (only relevant for Apache or LiteSpeed)
-		if(empty($_SERVER['RATALSEERP_ALLOWOVERRIDE_TEST']))
-		{
-			echo '<p style="text-align: center;">Error: "AllowOverride All" is not enabled. Ratals requires .htaccess overrides to be allowed.</p>';
-			exit();
-		}
-		
 		//If running Apache, ensure version is 2.4 or greater
 		if(stripos($server_software, 'apache') !== false && function_exists('apache_get_version'))
 		{

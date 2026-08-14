@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/frontend/site.php')) 
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/frontend/site.php')) 
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/frontend/site.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/frontend/site.php');
 }
 else
 {	
@@ -45,7 +45,7 @@ else
 	{
 		//Site does not exist in DB.
 		header("HTTP/1.1 404"); 
-		include_once($_SERVER['DOCUMENT_ROOT'].'/sites/site-not-found.php');
+		include_once(INSTALLATION_ROOT.'/sites/site-not-found.php');
 		die();
 	}
 }

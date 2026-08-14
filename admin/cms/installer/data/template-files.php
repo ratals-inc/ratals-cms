@@ -96,14 +96,14 @@ if(!function_exists('createTemplateFile'))
 			//For updates.
 			$text = file_get_contents($temp_extract_dir."/admin/cms/installer/templates/".$template_to_install."/".$template_file);
 		}
-		elseif(file_exists($_SERVER['DOCUMENT_ROOT']."/admin/cms/installer/templates/".$template_to_install."/".$template_file))
+		elseif(file_exists(INSTALLATION_ROOT."/admin/cms/installer/templates/".$template_to_install."/".$template_file))
 		{
 			//For new account creation.
-			$text = file_get_contents($_SERVER['DOCUMENT_ROOT']."/admin/cms/installer/templates/".$template_to_install."/".$template_file);
+			$text = file_get_contents(INSTALLATION_ROOT."/admin/cms/installer/templates/".$template_to_install."/".$template_file);
 		}
 		else
 		{
-			$text = "Could not find template file. Checked: ".$_SERVER['DOCUMENT_ROOT']."/admin/cms/installer/templates/".$template_to_install."/".$template_file." and ".$_SERVER['DOCUMENT_ROOT']."/admin/temp_extract/admin/cms/installer/templates/".$template_to_install."/".$template_file;
+			$text = "Could not find template file. Checked: ".INSTALLATION_ROOT."/admin/cms/installer/templates/".$template_to_install."/".$template_file." and ".INSTALLATION_ROOT."/admin/temp_extract/admin/cms/installer/templates/".$template_to_install."/".$template_file;
 		}
 		
 		//Update file path urls for site being created in templates while installing.
@@ -230,7 +230,7 @@ if(!function_exists('createTemplateFile'))
 	
 		clearstatcache(); //Clear file cache to make sure its writting to the real file and not buffer version/cache.
 		
-		$myfile = fopen($_SERVER['DOCUMENT_ROOT']."/sites/".$site_id."/templates/".$template_to_install."/".$site_file, "w");
+		$myfile = fopen(INSTALLATION_ROOT."/sites/".$site_id."/templates/".$template_to_install."/".$site_file, "w");
 		fwrite($myfile, $text);
 		fclose($myfile);
 	}

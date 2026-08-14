@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/column-names/admin_directory.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/column-names/admin_directory.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/column-names/admin_directory.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/column-names/admin_directory.php');
 }
 else
 {
@@ -26,9 +26,9 @@ else
 					{
 						$errors[$table_name][$admin_field["column_name"]] = 'Enter a vaild directory name that contains only a-z, 0-9, or dashes';
 					}
-					elseif($_SESSION['admin_type'] == 'edit' && $_POST[$table_name][$admin_field["column_name"]] != $current_values[$table_name][$admin_field["column_name"]] && file_exists($_SERVER['DOCUMENT_ROOT']."/".$_POST[$table_name][$admin_field["column_name"]]))
+					elseif($_SESSION['admin_type'] == 'edit' && $_POST[$table_name][$admin_field["column_name"]] != $current_values[$table_name][$admin_field["column_name"]] && file_exists(INSTALLATION_ROOT."/".$_POST[$table_name][$admin_field["column_name"]]))
 					{
-						$errors[$table_name][$admin_field["column_name"]] = $admin_field["name"].' is being used on another directory here: '.$_SERVER['DOCUMENT_ROOT']."/".$_POST[$table_name][$admin_field["column_name"]];
+						$errors[$table_name][$admin_field["column_name"]] = $admin_field["name"].' is being used on another directory here: '.INSTALLATION_ROOT."/".$_POST[$table_name][$admin_field["column_name"]];
 					}
 					elseif($_SESSION['admin_type'] == 'edit' && (strtolower($_POST[$table_name][$admin_field["column_name"]]) == 'admin' || strtolower($_POST[$table_name][$admin_field["column_name"]]) == 'administrator' || strtolower($_POST[$table_name][$admin_field["column_name"]]) == 'root' || strtolower($_POST[$table_name][$admin_field["column_name"]]) == 'login' || strtolower($_POST[$table_name][$admin_field["column_name"]]) == 'backend'))
 					{

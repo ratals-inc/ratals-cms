@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/admin-fields/textareaWithEditor.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/admin-fields/textareaWithEditor.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/admin-fields/textareaWithEditor.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/admin-fields/textareaWithEditor.php');
 }
 else
 {
@@ -15,7 +15,7 @@ else
 		{
 			public function textareaWithEditorAeaf($table_name, $admin_field, $field_value, &$errors, &$post_values)
 			{
-				include_once $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/admin-fields/modify-js/editor.php';
+				include_once INSTALLATION_ROOT.'/admin/cms/includes/admin-fields/modify-js/editor.php';
 				
 				if(isset($admin_field['custom_field_name']))
 				{
@@ -36,7 +36,7 @@ else
 				<div class="edit-field html-text-editor">';
 				$editor_name = htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '');
 				$editor_content = $field_value;
-				include $_SERVER['DOCUMENT_ROOT'].'/admin/cms/includes/editor/editor.php';
+				include INSTALLATION_ROOT.'/admin/cms/includes/editor/editor.php';
 				echo '</div>
 				<div class="small-text">'.$admin_field["notes"].'</div>';
 				if(isset($errors[$table_name][$admin_field["column_name"]])) { echo '<div class="validation">'.htmlspecialchars($errors[$table_name][$admin_field["column_name"]] ?? '').'</div>'; }

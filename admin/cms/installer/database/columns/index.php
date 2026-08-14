@@ -107,7 +107,7 @@ $parameters['blog_sidebar_link_display'] = ['Display Category Link in Blog Sideb
 
 $parameters['blog_sidebar_link_order'] = ['Blog Sidebar Link Order', 'blog_sidebar_link_order', 'blog-sidebar-link-order', 'textfield', 'textfield', 'Yes', 'Yes', '', '0', 'int', '', 'Yes', 'No', 'No', '0', '0', 'No', 'No', 'Lower numbers appear first.', '', '{}', $first_last_name, $first_last_name];
 
-$parameters['bottom_content'] = ['Bottom Content', 'bottom_content', 'bottom-content', 'textfield', 'textareaWithEditor', 'Yes', 'Yes', '', '0', 'longtext', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`', 'No', 'No', 'No', '2147483647', '0', 'No', 'No', '', '', '{}', $first_last_name, $first_last_name];
+$parameters['bottom_content'] = ['Bottom Content', 'bottom_content', 'bottom-content', 'textfield', 'textareaWithEditor', 'Yes', 'Yes', '', '0', 'longtext', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`', 'No', 'No', 'No', '2147483647', '0', 'No', 'No', 'For most templates, Bottom Content is displayed near the bottom of the URL\'s content area. Exact placement depends on the template associated with the URL.', '', '{}', $first_last_name, $first_last_name];
 
 $parameters['breadcrumbs_label'] = ['Breadcrumbs Label', 'breadcrumbs_label', 'breadcrumbs-label', 'textfield', 'textfield', 'Yes', 'Yes', '', '0', 'varchar(255)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`', 'No', 'No', 'No', '255', '0', 'No', 'No', 'Meta Title will be used if left empty.', '', '{}', $first_last_name, $first_last_name];
 
@@ -873,7 +873,7 @@ $parameters['thousand_separator'] = ['Thousand Separator', 'thousand_separator',
 
 $parameters['time_period_block'] = ['Time Period (In Minutes) for Max Pageviews', 'time_period_block', 'time-period-block', 'textfield', 'textfield', 'Yes', 'Yes', '', '0', 'varchar(10)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`', 'No', 'No', 'No', '10', '0', 'No', 'Yes', 'If you entered "500" for "Max Pageviews" above, and "60" minutes for "Time Period", the software will automatically block/send you an email/both for any IP that hits these two numbers.', '', '{}', $first_last_name, $first_last_name];
 
-$parameters['timer'] = ['Timer', 'timer', 'timer', 'textfield', 'text', 'Yes', 'Yes', '', '0', 'int', '', 'No', 'No', 'No', '0', '0', 'No', 'Yes', 'The number of seconds this user was on the site before submitting this leads.', '', '{}', $first_last_name, $first_last_name];
+$parameters['timer'] = ['Timer', 'timer', 'timer', 'textfield', 'text', 'Yes', 'Yes', '', '0', 'int', '', 'No', 'No', 'No', '0', '0', 'No', 'Yes', 'The number of seconds this user was on the site before submitting this lead.', '', '{}', $first_last_name, $first_last_name];
 
 $parameters['timezone'] = ['Time Zone', 'timezone', 'timezone', 'textfield', 'timezone', 'Yes', 'Yes', '', '0', 'varchar(100)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`', 'No', 'No', 'No', '100', '0', 'No', 'Yes', 'All timestamps in the database are saved as UTC time. Setting your time zone will offset UTC times in the database so you can see when items have been saved as your local time.', '', '{}', $first_last_name, $first_last_name];
 
@@ -881,7 +881,7 @@ $parameters['title'] = ['Title', 'title', 'title', 'textfield', 'textfield', 'Ye
 
 $parameters['title_separator'] = ['Title Separator', 'title_separator', 'title-separator', 'textfield', 'textfield', 'Yes', 'Yes', '', '0', 'varchar(10)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`', 'No', 'No', 'No', '10', '0', 'No', 'No', 'This is used to separate your page title from your site name. If you enter a "-" your title tags would look like this: My Page Title - Site Name.', '', '{}', $first_last_name, $first_last_name];
 
-$parameters['top_content'] = ['Main Content', 'top_content', 'top-content', 'textfield', 'textareaWithEditor', 'Yes', 'Yes', '', '0', 'longtext', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`', 'No', 'No', 'No', '2147483647', '0', 'No', 'No', 'If you\'re using a Table of Contents, wrap content sections with this: &lt;span id="name-1" class="contents-section"&gt;Your Content Here&lt;/span&gt;', '', '{}', $first_last_name, $first_last_name];
+$parameters['top_content'] = ['Main Content', 'top_content', 'top-content', 'textfield', 'textareaWithEditor', 'Yes', 'Yes', '', '0', 'longtext', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`', 'No', 'No', 'No', '2147483647', '0', 'No', 'No', 'For most templates, Main Content is displayed near the top of the URL\'s content area. Exact placement depends on the template associated with the URL. If using a Table of Contents, wrap each content section with: &lt;span id="name-1" class="contents-section"&gt;Your Content Here&lt;/span&gt;', '', '{}', $first_last_name, $first_last_name];
 
 $parameters['top_ip_address'] = ['Top IP Addresses', 'top_ip_address', 'top-ip-address', 'textfield', 'topIpAddresses', 'Yes', 'Yes', '', '0', 'int', '', 'Yes', 'No', 'No', '0', '0', 'No', 'Yes', 'If any of these IP Addresses are being too aggressive, and you have confirmed they should not be hitting the site, you can block them by adding there IP Address in the field below of "Blocked IP Addresses".', '', '{}', $first_last_name, $first_last_name];
 
@@ -931,7 +931,7 @@ $parameters['user_id'] = ['User ID', 'user_id', 'user-id', 'textfield', 'textfie
 
 $parameters['username'] = ['Username', 'username', 'username', 'textfield', 'textfield', 'Yes', 'Yes', '', '0', 'varchar(255)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`', 'No', 'No', 'No', '255', '0', 'No', 'No', '', '', '{}', $first_last_name, $first_last_name];
 
-$parameters['valid_lead'] = ['Is This a Valid Lead', 'valid_lead', 'valid-lead', 'dropdownValue', 'dropdownValue', 'Yes', 'Yes', '', 'yes_no', 'varchar(3)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`', 'No', 'No', 'No', '3', '0', 'No', 'No', 'If you select "Yes" and an affiliate referred this lead, it will appear in their account, indicating that they will be paid for the lead.', '', '{}', $first_last_name, $first_last_name];
+$parameters['valid_lead'] = ['Is This a Valid Lead', 'valid_lead', 'valid-lead', 'dropdownValue', 'dropdownValue', 'Yes', 'Yes', '', 'yes_no', 'varchar(3)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`', 'No', 'No', 'No', '3', '0', 'No', 'No', 'If an affiliate referred this lead, selecting "Yes" confirms it as a valid affiliate lead and makes it eligible for affiliate payment.', '', '{}', $first_last_name, $first_last_name];
 
 $parameters['value'] = ['Value', 'value', 'value', 'textfield', 'textfieldNoEdit', 'Yes', 'Yes', '', '0', 'varchar(255)', 'CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`', 'No', 'No', 'No', '255', '0', 'No', 'Yes', '', '', '{}', $first_last_name, $first_last_name];
 

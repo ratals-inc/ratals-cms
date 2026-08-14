@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/static/headers/sub-items.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/headers/sub-items.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/static/headers/sub-items.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/headers/sub-items.php');
 }
 else
 {
@@ -48,6 +48,16 @@ else
 			{
 				//Insert new sub items group.
 				$results->getInsertRecord(__LINE__, __FILE__, 'page_groups', '`site_id`, `table_name`, `urls_id`, `status`, `name`, `sub_items_type`, `sub_items_code`, `sub_items_load_template_include_file`, `title`, `content`, `columns`, `display_text_from_sub_items`, `gap_between_items`, `outter_css_box_styles`, `inner_css_box_styles`, `lazy_load_media`, `display_as_slider`, `slides_in_view`, `slide_all_at_once`, `slide_minimum_width`, `auto_slide_media`, `pause_time`, `slide_speed`, `slide_margin`, `display_pagination`, `pagination_alignment`, `pagination_over_image`, `display_thumbnails`, `pagination_thumbnail_width`, `pagination_margin`, `sort`', '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', [$_SESSION["site_set_for_editing"], $_SESSION['admin_table_name'], trim($_GET["rid"] ?? ''), 1, $create_group_name, '', '', 'No', '', '', '5', 'Yes', 0, '', '', 'No', 'No', 5, 'Yes', 200, 'No', 8000, 500, 3, 'Yes', 'center', 'No', 'No', 40, 5, '0']);
+				
+				//Clear cache on save.
+				if($_SESSION['admin_site_id_global'] == 'No')
+				{
+					clearSiteCache($_SESSION['site_set_for_editing']);
+				}
+				else
+				{
+					clearAllSiteCache();
+				}
 				
 				header("Location: /".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&create=group"); exit();
 			}
@@ -96,6 +106,16 @@ else
 				}
 			}
 			
+			//Clear cache on save.
+			if($_SESSION['admin_site_id_global'] == 'No')
+			{
+				clearSiteCache($_SESSION['site_set_for_editing']);
+			}
+			else
+			{
+				clearAllSiteCache();
+			}
+			
 			header("Location: /".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&updated=groups"); exit();
 		}
 		
@@ -107,6 +127,16 @@ else
 			if(isset($_POST['items']))
 			{
 				assignmentsInsertRecord('assignments_sub_items', $post_group_id, trim($_GET["rid"] ?? ''), $_POST['items']);
+				
+				//Clear cache on save.
+				if($_SESSION['admin_site_id_global'] == 'No')
+				{
+					clearSiteCache($_SESSION['site_set_for_editing']);
+				}
+				else
+				{
+					clearAllSiteCache();
+				}
 				
 				header("Location: /".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&group=".$post_group_id."&assigned=items"); exit();
 			}

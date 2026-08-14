@@ -3,16 +3,21 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-frontend.php');
-
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/index.php'))
+if(!defined('INSTALLATION_ROOT'))
 {
-	include($_SERVER['DOCUMENT_ROOT'].'/hooks/index.php');
+	define('INSTALLATION_ROOT', __DIR__);
+}
+
+require_once(INSTALLATION_ROOT.'/core/session-check-frontend.php');
+
+if(file_exists(INSTALLATION_ROOT.'/hooks/index.php'))
+{
+	include(INSTALLATION_ROOT.'/hooks/index.php');
 }
 else
 {
 	//Make sure server software allows .htaccess rules to run.
-	require_once($_SERVER['DOCUMENT_ROOT'].'/core/server-software.php');
+	require_once(INSTALLATION_ROOT.'/core/server-software.php');
 	
 	//Set no cache for when admin user logged in.
 	header('Cache-Control: no-cache');
@@ -36,9 +41,6 @@ else
 	
 	if(!isset($_SESSION['user_id']) && $load_pages_with_cached_results == 'Yes' && empty($_POST) && !in_array($path_url, $path_urls_to_never_cache) && strpos($url, '?') === false && strpos($url, '#') === false)
 	{
-		//Set cache when admin user not logged for a year.
-		header('Cache-Control: max-age=31536000');
-		
 		if(!empty($path_url))
 		{
 			$cache_file_path = trim($path_url, '/');
@@ -49,7 +51,7 @@ else
 		}
 		
 		//Set cache file path to see if it exist to load it.
-		$cached_file_path = $_SERVER['DOCUMENT_ROOT'].'/storage/cache/'.$site_id.'/'.$active_template_path.'/'.$cache_file_path.'.php';
+		$cached_file_path = INSTALLATION_ROOT.'/storage/cache/'.$site_id.'/'.$active_template_path.'/'.$cache_file_path.'.php';
 		
 		if(empty($seconds_between_cache_refreshing))
 		{
@@ -59,17 +61,17 @@ else
 		//Load page from static cache file if it exist and has not expired.
 		if(file_exists($cached_file_path) && time() - $seconds_between_cache_refreshing < filemtime($cached_file_path))
 		{
-			include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/redirects.php"; //This checks for redirects for the current URL being requested.
-			include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/pages-data.php"; //This gets the data for the page being requested.
-			include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/final-url.php"; //This creates the final URL that the page should be loading on.
-			include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/redirect-to-final-url.php"; //This redirects the url to the correct one if the final url is different from what is being requested.
+			include INSTALLATION_ROOT."/admin/cms/frontend/redirects.php"; //This checks for redirects for the current URL being requested.
+			include INSTALLATION_ROOT."/admin/cms/frontend/pages-data.php"; //This gets the data for the page being requested.
+			include INSTALLATION_ROOT."/admin/cms/frontend/final-url.php"; //This creates the final URL that the page should be loading on.
+			include INSTALLATION_ROOT."/admin/cms/frontend/redirect-to-final-url.php"; //This redirects the url to the correct one if the final url is different from what is being requested.
 			if($commerce_installed)
 			{
-				include $_SERVER['DOCUMENT_ROOT']."/admin/commerce/frontend/affiliate.php"; //This sets the cookie for an affiliate id if source=affailite_id is set in the url.
-				include $_SERVER['DOCUMENT_ROOT']."/admin/commerce/frontend/cart-cookie.php"; //This checks to see if visitor has a cart cookie set. if not, set one.
-				include $_SERVER['DOCUMENT_ROOT']."/admin/commerce/frontend/update-sub-products-data.php"; //This updates sub_products/collection products so prices load correct in categories.
+				include INSTALLATION_ROOT."/admin/commerce/frontend/affiliate.php"; //This sets the cookie for an affiliate id if source=affailite_id is set in the url.
+				include INSTALLATION_ROOT."/admin/commerce/frontend/cart-cookie.php"; //This checks to see if visitor has a cart cookie set. if not, set one.
+				include INSTALLATION_ROOT."/admin/commerce/frontend/update-sub-products-data.php"; //This updates sub_products/collection products so prices load correct in categories.
 			}
-			include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/analytics.php"; //This runs analytics data.
+			include INSTALLATION_ROOT."/admin/cms/frontend/analytics.php"; //This runs analytics data.
 			
 			include($cached_file_path);
 			
@@ -100,29 +102,29 @@ else
 	if(!empty($sites))
 	{
 		//If URL was not cached above, then run all queries the template needs and cache the page if cache enabled.
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/redirects.php"; //This checks for redirects for the current URL being requested.
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/pages-data.php"; //This gets the data for the page being requested.
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/final-url.php"; //This creates the final URL that the page should be loading on.
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/redirect-to-final-url.php"; //This redirects the url to the correct one if the final url is different from what is being requested.
+		include INSTALLATION_ROOT."/admin/cms/frontend/redirects.php"; //This checks for redirects for the current URL being requested.
+		include INSTALLATION_ROOT."/admin/cms/frontend/pages-data.php"; //This gets the data for the page being requested.
+		include INSTALLATION_ROOT."/admin/cms/frontend/final-url.php"; //This creates the final URL that the page should be loading on.
+		include INSTALLATION_ROOT."/admin/cms/frontend/redirect-to-final-url.php"; //This redirects the url to the correct one if the final url is different from what is being requested.
 		if($commerce_installed)
 		{
-			include $_SERVER['DOCUMENT_ROOT']."/admin/commerce/frontend/logout-customer.php"; //This will logout a customer out if you inactivated or delete their account while they are logged in.
-			include $_SERVER['DOCUMENT_ROOT']."/admin/commerce/frontend/cart-cookie.php"; //This checks to see if visitor has a cart cookie set. if not, set one.
-			include $_SERVER['DOCUMENT_ROOT']."/admin/commerce/frontend/affiliate.php"; //This sets the cookie for an affiliate id if source=affailite_id is set in the url.
-			include $_SERVER['DOCUMENT_ROOT']."/admin/commerce/frontend/ship-to-address.php"; //This checks to see if visitor is logged in or not. If logged in, get account shipping address, if not, get shipping address based on cookie id set.
-			include $_SERVER['DOCUMENT_ROOT']."/admin/commerce/frontend/update-sub-products-data.php"; //This updates sub_products/collection products so prices load correct in categories.
+			include INSTALLATION_ROOT."/admin/commerce/frontend/logout-customer.php"; //This will logout a customer out if you inactivated or delete their account while they are logged in.
+			include INSTALLATION_ROOT."/admin/commerce/frontend/cart-cookie.php"; //This checks to see if visitor has a cart cookie set. if not, set one.
+			include INSTALLATION_ROOT."/admin/commerce/frontend/affiliate.php"; //This sets the cookie for an affiliate id if source=affailite_id is set in the url.
+			include INSTALLATION_ROOT."/admin/commerce/frontend/ship-to-address.php"; //This checks to see if visitor is logged in or not. If logged in, get account shipping address, if not, get shipping address based on cookie id set.
+			include INSTALLATION_ROOT."/admin/commerce/frontend/update-sub-products-data.php"; //This updates sub_products/collection products so prices load correct in categories.
 		}
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/blocking-spam.php"; //This gets blocking spam settings.
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/meta-data.php"; //This gets the pages meta data like title tag, description, etc.
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/hreflang.php"; //If multiple pages are set with same url id for hreflang_url_id in urls table, get hreflang link markup.
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/template-files.php"; //This gets the template file data that is set on the page. This tells which code to run in load-page.php that is below.
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/load-page.php"; //This creates the page array so a page can load.
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/breadcrumbs.php"; //This creates the breadcrumbs that load within pages
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/site-search.php"; //This creates site search results when a visitor does a search.
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/forms.php"; //This creates forms where a user can enter there information for contact us, request a quote, etc.
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/analytics.php"; //This runs analytics data.
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/no-record-404.php"; //This loads the 404 page or no record found message if load-sites/pages-data.php cannot find a URL record in the database.
-		include $_SERVER['DOCUMENT_ROOT']."/admin/cms/frontend/load-template-file.php"; //This loads the correct template file into the URL so the page loads as desired.
+		include INSTALLATION_ROOT."/admin/cms/frontend/blocking-spam.php"; //This gets blocking spam settings.
+		include INSTALLATION_ROOT."/admin/cms/frontend/meta-data.php"; //This gets the pages meta data like title tag, description, etc.
+		include INSTALLATION_ROOT."/admin/cms/frontend/hreflang.php"; //If multiple pages are set with same url id for hreflang_url_id in urls table, get hreflang link markup.
+		include INSTALLATION_ROOT."/admin/cms/frontend/template-files.php"; //This gets the template file data that is set on the page. This tells which code to run in load-page.php that is below.
+		include INSTALLATION_ROOT."/admin/cms/frontend/load-page.php"; //This creates the page array so a page can load.
+		include INSTALLATION_ROOT."/admin/cms/frontend/breadcrumbs.php"; //This creates the breadcrumbs that load within pages
+		include INSTALLATION_ROOT."/admin/cms/frontend/site-search.php"; //This creates site search results when a visitor does a search.
+		include INSTALLATION_ROOT."/admin/cms/frontend/forms.php"; //This creates forms where a user can enter there information for contact us, request a quote, etc.
+		include INSTALLATION_ROOT."/admin/cms/frontend/analytics.php"; //This runs analytics data.
+		include INSTALLATION_ROOT."/admin/cms/frontend/no-record-404.php"; //This loads the 404 page or no record found message if load-sites/pages-data.php cannot find a URL record in the database.
+		include INSTALLATION_ROOT."/admin/cms/frontend/load-template-file.php"; //This loads the correct template file into the URL so the page loads as desired.
 		
 		//Start - if page is not cached, cache it.
 		if(!isset($_SESSION['user_id']) && $load_pages_with_cached_results == 'Yes' && empty($_POST) && !in_array($path_url, $path_urls_to_never_cache) && $pages_data['page_not_found_404'] != 'Yes' && isset($cache_file_path) && !empty($cache_file_path) &&  strpos($url, '?') === false && strpos($url, '#') === false)
@@ -147,7 +149,7 @@ else
 			foreach($cache_file_path_array as $cache_file_path_directory)
 			{
 				$cache_file_path_directory_levels .= '/'.$cache_file_path_directory;
-				if(!is_dir($_SERVER['DOCUMENT_ROOT'].$cache_file_path_directory_levels)) { mkdir($_SERVER['DOCUMENT_ROOT'].$cache_file_path_directory_levels, 0755, true); }
+				if(!is_dir(INSTALLATION_ROOT.$cache_file_path_directory_levels)) { mkdir(INSTALLATION_ROOT.$cache_file_path_directory_levels, 0755, true); }
 			}
 			
 			//Save the page data to a file for cache.

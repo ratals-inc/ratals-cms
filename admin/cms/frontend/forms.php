@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/frontend/forms.php')) 
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/frontend/forms.php')) 
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/frontend/forms.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/frontend/forms.php');
 }
 else
 {
@@ -111,22 +111,13 @@ else
 		$form_has_keyword = 'No';
 		if(!empty($forms_blocked_keywords) && !empty($full_lead_string))
 		{
-			$forms_blocked_keywords_array = array();
-			
-			if(strpos(trim($forms_blocked_keywords, ','), ',') !== FALSE)
-			{
-				$forms_blocked_keywords_array = explode(',', trim(strtolower($forms_blocked_keywords), ','));
-			}
-			else
-			{
-				$forms_blocked_keywords_array[] = trim(strtolower($forms_blocked_keywords), ',');
-			}
+			$forms_blocked_keywords_array = array_map('trim', explode(',', strtolower(trim($forms_blocked_keywords, ','))));
 			
 			if(!empty($forms_blocked_keywords_array))
 			{
 				foreach($forms_blocked_keywords_array as $forms_blocked_keyword)
 				{
-					if(strpos($full_lead_string, $forms_blocked_keyword) !== FALSE)
+					if(!empty($forms_blocked_keyword) && strpos($full_lead_string, $forms_blocked_keyword) !== FALSE)
 					{
 						$form_has_keyword = 'Yes';
 						break;
@@ -184,7 +175,7 @@ else
 					$set_lead_commission_amount = $_SESSION['affiliate_lead_commission_amount'];
 				}
 				
-				$column_names = '`site_id`, `lead_status`, `affiliate_account_id`, `affiliate_lead_commission_amount`, `valid_lead`, `follow_up_date`, `lead_value_amount`, `lead`, `notes`, `forms_frontend_name`, `forms_id`, `submitted_from_url`, `timer`, `pageviews`, `click_path`, `referer_source`, `referer_url`, `form_conversion_value`, `ip_address`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`';
+				$column_names = '`site_id`, `lead_status`, `affiliate_account_id`, `affiliate_lead_commission_amount`, `valid_lead`, `follow_up_date`, `lead_value_amount`, `notes`, `lead`, `forms_frontend_name`, `forms_id`, `submitted_from_url`, `timer`, `pageviews`, `click_path`, `referer_source`, `referer_url`, `form_conversion_value`, `ip_address`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`';
 				$placeholders = '?, ?, ?, ?, ?, NULL, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, UTC_TIMESTAMP(), ?, UTC_TIMESTAMP(), ?';
 				$parameters = array($site_id, $form_status, $set_lead_affiliate_id, $set_lead_commission_amount, '', '', '', $sql_form_rows['frontend_name'], $sql_form_rows['id'], $final_url_with_question_mark, $form_timer, $form_pageviews, $form_click_path, $_SESSION['referer_domain'], $_SESSION['referer_url'], $sql_form_rows['form_conversion_value'], $_SERVER['REMOTE_ADDR'], '[]', 'Customer', 'Customer');
 				$results->getInsertRecord(__LINE__, __FILE__, 'leads', $column_names, $placeholders, $parameters);
@@ -199,7 +190,7 @@ else
 					{
 						$results->getInsertRecord(__LINE__, __FILE__, 'leads_values', '`site_id`, `leads_id`, `label`, `values`', '?, ?, ?, ?', [$site_id, $last_lead_id_row['id'], $build_form_submit['frontend_name'], $form_values_submitted['form_'.$build_form_submit['admin_name']]]);
 						
-						$email_form_message .= '<br><strong>'.$build_form_submit['frontend_name'].':</strong> '.htmlspecialchars($form_values_submitted['form_'.$build_form_submit['admin_name']] ?? '');
+						$email_form_message .= '<br>'.$build_form_submit['frontend_name'].': '.htmlspecialchars($form_values_submitted['form_'.$build_form_submit['admin_name']] ?? '');
 					}
 					
 					if(isset($_POST['form_media_id']) && !empty($_POST['form_media_id']))
@@ -982,7 +973,7 @@ else
 					}
 				}
 				
-				include_once($_SERVER['DOCUMENT_ROOT'].'/sites/slider-js.php');
+				include_once(INSTALLATION_ROOT.'/sites/slider-js.php');
 				
 				echo "
 				<script nonce=\"".NONCE."\">

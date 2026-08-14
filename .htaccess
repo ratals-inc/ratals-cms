@@ -9,14 +9,11 @@
 RewriteEngine on
 
 ############################################################
-#Test if AllowOverride is working
-############################################################
-SetEnv RATALSEERP_ALLOWOVERRIDE_TEST "enabled"
-
-############################################################
 #Automatically include frontend session check for all PHP files in the main site
 ############################################################
-php_value auto_prepend_file none
+<IfModule php_module>
+	php_value auto_prepend_file none
+</IfModule>
 
 ############################################################
 ##SECURE ADMIN DIRECTORY ACCESS

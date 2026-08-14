@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/admin-fields/displayPostIn.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/admin-fields/displayPostIn.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/admin-fields/displayPostIn.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/admin-fields/displayPostIn.php');
 }
 else
 {
@@ -73,9 +73,13 @@ else
 				}
 				
 				echo '<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-					<div class="edit-label"><div class="header-text margin-bottom-13">
-					<div class="text">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
-					</div></div>
+					<div class="edit-label">
+					<div class="header-text margin-bottom-13">
+					<div class="text">'.htmlspecialchars($admin_field["name"] ?? '').'
+					<div class="section-notes">URLs are determined by the Flat and Hierarchy URLs set above and by the URL structure selected under Website > Site Settings > URL Settings. This ensures each record has one canonical URL to help prevent duplicate content issues. The categories selected here simply control which categories this post will display in.</div>
+					</div>
+					</div>
+					</div>
 					<div class="edit-field">
 					';
 					

@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/includes/admin-fields/validation.php')) 
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/includes/admin-fields/validation.php')) 
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/includes/admin-fields/validation.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/includes/admin-fields/validation.php');
 }
 else
 {
@@ -46,55 +46,55 @@ else
 					
 					//column_names run first as they are a higher level rule. If you create a file for a column name, it will process any data you pass through that admin field column.
 					//If you want to customize an existing /classes/add-edit/column-names/ file, copy the file to the folder of /hooks/classes/add-edit/column-names/. This allows you to edit existing files that software updates will not override.
-					if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/column-names/'.$db_column_name.'.php'))
+					if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/column-names/'.$db_column_name.'.php'))
 					{
-						include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/column-names/'.$db_column_name.'.php');
+						include(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/column-names/'.$db_column_name.'.php');
 					}
-					elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/add-edit/column-names/'.$db_column_name.'.php'))
+					elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/add-edit/column-names/'.$db_column_name.'.php'))
 					{
-						include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/add-edit/column-names/'.$db_column_name.'.php');
+						include(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/add-edit/column-names/'.$db_column_name.'.php');
 					}
-					elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/add-edit/column-names/'.$db_column_name.'.php'))
+					elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/erp/classes/add-edit/column-names/'.$db_column_name.'.php'))
 					{
-						include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/add-edit/column-names/'.$db_column_name.'.php');
+						include(INSTALLATION_ROOT.'/hooks/admin/erp/classes/add-edit/column-names/'.$db_column_name.'.php');
 					}
-					elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/add-edit/column-names/'.$db_column_name.'.php'))
+					elseif(file_exists(INSTALLATION_ROOT.'/admin/cms/classes/add-edit/column-names/'.$db_column_name.'.php'))
 					{
-						include($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/add-edit/column-names/'.$db_column_name.'.php');
+						include(INSTALLATION_ROOT.'/admin/cms/classes/add-edit/column-names/'.$db_column_name.'.php');
 					}
-					elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/add-edit/column-names/'.$db_column_name.'.php'))
+					elseif(file_exists(INSTALLATION_ROOT.'/admin/commerce/classes/add-edit/column-names/'.$db_column_name.'.php'))
 					{
-						include($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/add-edit/column-names/'.$db_column_name.'.php');
+						include(INSTALLATION_ROOT.'/admin/commerce/classes/add-edit/column-names/'.$db_column_name.'.php');
 					}
-					elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/add-edit/column-names/'.$db_column_name.'.php'))
+					elseif(file_exists(INSTALLATION_ROOT.'/admin/erp/classes/add-edit/column-names/'.$db_column_name.'.php'))
 					{
-						include($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/add-edit/column-names/'.$db_column_name.'.php');
+						include(INSTALLATION_ROOT.'/admin/erp/classes/add-edit/column-names/'.$db_column_name.'.php');
 					}
 					//display_as runs second as its a lower level rule. If you set an admin_field / column to display_as singleMedia, all column_names will run through the singleMedia display_as. This allows you to have multiple column_names that can run through the same display_as name.
 					//If you want to customize an existing /classes/add-edit/display-as/ file, copy the file to the folder of /hooks/classes/add-edit/display-as/. This allows you to edit existing files that software updates will not override.
-					elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/display-as/'.$db_display_as.'.php'))
+					elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/display-as/'.$db_display_as.'.php'))
 					{
-						include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/classes/add-edit/display-as/'.$db_display_as.'.php');
+						include(INSTALLATION_ROOT.'/hooks/admin/cms/classes/add-edit/display-as/'.$db_display_as.'.php');
 					}
-					elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/add-edit/display-as/'.$db_display_as.'.php'))
+					elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/add-edit/display-as/'.$db_display_as.'.php'))
 					{
-						include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/commerce/classes/add-edit/display-as/'.$db_display_as.'.php');
+						include(INSTALLATION_ROOT.'/hooks/admin/commerce/classes/add-edit/display-as/'.$db_display_as.'.php');
 					}
-					elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/add-edit/display-as/'.$db_display_as.'.php'))
+					elseif(file_exists(INSTALLATION_ROOT.'/hooks/admin/erp/classes/add-edit/display-as/'.$db_display_as.'.php'))
 					{
-						include($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/erp/classes/add-edit/display-as/'.$db_display_as.'.php');
+						include(INSTALLATION_ROOT.'/hooks/admin/erp/classes/add-edit/display-as/'.$db_display_as.'.php');
 					}
-					elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/add-edit/display-as/'.$db_display_as.'.php'))
+					elseif(file_exists(INSTALLATION_ROOT.'/admin/cms/classes/add-edit/display-as/'.$db_display_as.'.php'))
 					{
-						include($_SERVER['DOCUMENT_ROOT'].'/admin/cms/classes/add-edit/display-as/'.$db_display_as.'.php');
+						include(INSTALLATION_ROOT.'/admin/cms/classes/add-edit/display-as/'.$db_display_as.'.php');
 					}
-					elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/add-edit/display-as/'.$db_display_as.'.php'))
+					elseif(file_exists(INSTALLATION_ROOT.'/admin/commerce/classes/add-edit/display-as/'.$db_display_as.'.php'))
 					{
-						include($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/classes/add-edit/display-as/'.$db_display_as.'.php');
+						include(INSTALLATION_ROOT.'/admin/commerce/classes/add-edit/display-as/'.$db_display_as.'.php');
 					}
-					elseif(file_exists($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/add-edit/display-as/'.$db_display_as.'.php'))
+					elseif(file_exists(INSTALLATION_ROOT.'/admin/erp/classes/add-edit/display-as/'.$db_display_as.'.php'))
 					{
-						include($_SERVER['DOCUMENT_ROOT'].'/admin/erp/classes/add-edit/display-as/'.$db_display_as.'.php');
+						include(INSTALLATION_ROOT.'/admin/erp/classes/add-edit/display-as/'.$db_display_as.'.php');
 					}
 					
 					//Validate / set error to display if value submitted and column_name data type do not match.

@@ -3,9 +3,16 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/sites/submit.php')) 
+if(!defined('INSTALLATION_ROOT'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/sites/submit.php');
+	define('INSTALLATION_ROOT', dirname(__DIR__));
+}
+
+require_once(INSTALLATION_ROOT.'/core/session-check-frontend.php');
+
+if(file_exists(INSTALLATION_ROOT.'/hooks/sites/submit.php')) 
+{
+	require_once(INSTALLATION_ROOT.'/hooks/sites/submit.php');
 }
 else
 {
@@ -29,25 +36,16 @@ else
 			$all_review_content = $name.' '.$state.' '.$review_score.' '.$review;
 			
 			$has_blocked_keyword = '';
-			
 			if(!empty($blocking_spam["reviews_blocked_keywords"]))
 			{
-				$reviews_blocked_keywords_array = array();
-				
-				if(strpos($blocking_spam["reviews_blocked_keywords"], ','))
-				{
-				$reviews_blocked_keywords_array = explode(',', $blocking_spam["reviews_blocked_keywords"]);
-				}
-				else
-				{
-					$reviews_blocked_keywords_array[] = $blocking_spam["reviews_blocked_keywords"];
-				}
+				$reviews_blocked_keywords_array = array_map('trim', explode(',', strtolower($blocking_spam["reviews_blocked_keywords"])));
 				
 				foreach($reviews_blocked_keywords_array as $keyword)
 				{
-					if(strpos(trim(strtolower($all_review_content)), trim(strtolower($keyword))) !== false)
+					if(!empty($keyword) && strpos(strtolower($all_review_content), $keyword) !== false)
 					{
 						$has_blocked_keyword = 'Yes';
+						break;
 					}
 				}
 			}
@@ -129,21 +127,14 @@ else
 			$has_blocked_keyword = '';
 			if(!empty($blocking_spam["q_and_a_blocked_keywords"]))
 			{
-				$q_and_a_blocked_keywords_array = array();
-				if(strpos($blocking_spam["q_and_a_blocked_keywords"], ','))
-				{
-					$q_and_a_blocked_keywords_array = explode(',', $blocking_spam["q_and_a_blocked_keywords"]);
-				}
-				else
-				{
-					$q_and_a_blocked_keywords_array[] = $blocking_spam["q_and_a_blocked_keywords"];
-				}
+				$q_and_a_blocked_keywords_array = array_map('trim', explode(',', strtolower($blocking_spam["q_and_a_blocked_keywords"])));
 				
 				foreach($q_and_a_blocked_keywords_array as $keyword)
 				{
-					if(strpos(trim(strtolower($all_question_content)), trim(strtolower($keyword))) !== false)
+					if(!empty($keyword) && strpos(strtolower($all_question_content), $keyword) !== false)
 					{
 						$has_blocked_keyword = 'Yes';
+						break;
 					}
 				}
 			}
@@ -228,25 +219,18 @@ else
 			
 			$all_comment_content = '';
 			$all_comment_content = $name.' '.$email.' '.$comment;
-			$has_blocked_keyword = '';
 			
+			$has_blocked_keyword = '';
 			if(!empty($blocking_spam["comments_blocked_keywords"]))
 			{
-				$comments_blocked_keywords_array = array();
-				if(strpos($blocking_spam["comments_blocked_keywords"], ','))
-				{
-					$comments_blocked_keywords_array = explode(',', $blocking_spam["comments_blocked_keywords"]);
-				}
-				else
-				{
-					$comments_blocked_keywords_array[] = $blocking_spam["comments_blocked_keywords"];
-				}
+				$comments_blocked_keywords_array = array_map('trim', explode(',', strtolower($blocking_spam["comments_blocked_keywords"])));
 				
 				foreach($comments_blocked_keywords_array as $keyword)
 				{
-					if(strpos(trim(strtolower($all_comment_content)), trim(strtolower($keyword))) !== false)
+					if(!empty($keyword) && strpos(strtolower($all_comment_content), $keyword) !== false)
 					{
 						$has_blocked_keyword = 'Yes';
+						break;
 					}
 				}
 			}
@@ -749,7 +733,7 @@ else
 			$carrier = $_POST['carrier'];
 			
 			$_SESSION['shipping_rate_id'][$carrier] = $_POST['one'];
-			include($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/frontend/shipping/calculate-rates.php');
+			include(INSTALLATION_ROOT.'/admin/commerce/frontend/shipping/calculate-rates.php');
 		}
 		
 		exit;
@@ -759,7 +743,7 @@ else
 	//Start Calculate Shipping Rates
 	if(isset($_POST['type']) && !empty($_POST['type']) && $_POST['type'] == 'get_shipping_rates')
 	{ 
-		include($_SERVER['DOCUMENT_ROOT'].'/admin/commerce/frontend/shipping/calculate-rates.php');
+		include(INSTALLATION_ROOT.'/admin/commerce/frontend/shipping/calculate-rates.php');
 		exit;
 	}
 	//End Calculate Shipping Rates

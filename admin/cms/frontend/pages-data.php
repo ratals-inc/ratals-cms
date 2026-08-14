@@ -3,9 +3,9 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/frontend/pages-data.php')) 
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/frontend/pages-data.php')) 
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/frontend/pages-data.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/frontend/pages-data.php');
 }
 else
 {
@@ -129,6 +129,7 @@ else
 	//urls table variables
 	$id = $pages_data['id'];
 	$page_type = $pages_data['table_name'];
+	$rid = $pages_data['record_id'];
 	$record_id = $pages_data['urls_id'];
 	$is_active = $pages_data['url_status'];
 	$scheduled_date = $pages_data['scheduled_date'];
@@ -271,9 +272,10 @@ else
 		$display_posts = $pages_data['display_posts'];
 	}
 	
-	if(isset($pages_data['grid_columns']))
+	$grid_columns = 5;
+	if(isset($pages_data['grid_columns']) && !empty($pages_data['grid_columns']))
 	{
-		$grid_columns = $pages_data['grid_columns'] ?? 5;
+		$grid_columns = $pages_data['grid_columns'];
 	}
 	
 	if(isset($pages_data['inventory_assigned']))

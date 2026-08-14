@@ -3,13 +3,18 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
+if(!defined('INSTALLATION_ROOT'))
+{
+	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
+}
+
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
-require_once($_SERVER['DOCUMENT_ROOT'].'/core/session-check-admin.php');
+require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/ajax/sort-table-rows.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/ajax/sort-table-rows.php'))
 {
-	require_once($_SERVER['DOCUMENT_ROOT'].'/hooks/admin/cms/layouts/table/ajax/sort-table-rows.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/table/ajax/sort-table-rows.php');
 }
 else
 {
@@ -68,6 +73,16 @@ else
 		
 		updateAssignmentTables($inventory_assigned_order_string, $product_id);
 		
+		//Clear cache on save.
+		if($_SESSION['admin_site_id_global'] == 'No')
+		{
+			clearSiteCache($_SESSION['site_set_for_editing']);
+		}
+		else
+		{
+			clearAllSiteCache();
+		}
+		
 		exit;
 	}
 	
@@ -97,6 +112,16 @@ else
 		
 		$results->getUpdateRecord(__LINE__, __FILE__, 'products', '`products_assigned` = ?', 'WHERE `urls_id` = ? AND `site_id` = ?', [$new_order, $_POST['sub_rid'], $_SESSION["site_set_for_editing"]]);
 		
+		//Clear cache on save.
+		if($_SESSION['admin_site_id_global'] == 'No')
+		{
+			clearSiteCache($_SESSION['site_set_for_editing']);
+		}
+		else
+		{
+			clearAllSiteCache();
+		}
+		
 		exit;
 	}
 	
@@ -112,6 +137,16 @@ else
 				$results->getUpdateRecord(__LINE__, __FILE__, $_SESSION['admin_table_name'], '`sort` = ?', 'WHERE `id` = ? AND `'.$_SESSION['admin_table_link_column'].'` = ?', [$sort_counter, $set_row_id, $_POST['sub_rid']]);
 				$sort_counter ++;
 			}
+		}
+		
+		//Clear cache on save.
+		if($_SESSION['admin_site_id_global'] == 'No')
+		{
+			clearSiteCache($_SESSION['site_set_for_editing']);
+		}
+		else
+		{
+			clearAllSiteCache();
 		}
 		
 		exit;
