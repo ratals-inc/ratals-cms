@@ -27,7 +27,8 @@ else
 	//hash user IP Address for privacy.
 	$masked_ip_hash = hash_hmac('sha256', $_SERVER['REMOTE_ADDR'], $hash_secret);
 	
-	$current_software_version = '1.02';
+	//Ratals version number
+	$current_software_version = '1.03';
 	
 	//Check to make sure /core/database/DbCredentials.php file exist from setting up an account.
 	if(file_exists(INSTALLATION_ROOT.'/core/database/DbCredentials.php'))
