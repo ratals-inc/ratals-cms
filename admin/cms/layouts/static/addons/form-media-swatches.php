@@ -25,7 +25,7 @@ else
 	  <div class="edit" id="image_swatches">
 	  <div class="edit-field">
 	  <!-- Start Image Swatch Table -->
-	  <div class="overflow-x-auto">
+	  <div class="overflow-x-auto fixed-scrollbar">
 	  <div class="edit-table fixed">
 	  <div class="edit-table-row header">
 	  <div class="edit-table-cell header order">#</div>
@@ -174,7 +174,7 @@ else
 				  $swatch_media_data .= '</ul>';
 				  
 				  echo '<ul class="edit-table-row">';
-				  echo '<div class="edit-table-cell border-left-1px-solid-d6d6d6">'.$row_counter.'</div>';
+				  echo '<div class="edit-table-cell">'.$row_counter.'</div>';
 				  foreach($values as $key => $value)
 				  {
 					  if($key != 'swatch_data_array')

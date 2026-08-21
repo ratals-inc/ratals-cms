@@ -28,7 +28,7 @@ $parameters[] = ['Admin Fields - All', NULL, 'Yes', 'admin_fields', 'id', 'colum
 
 $parameters[] = ['Admin Fields - Data Type', 24, 'No', '', '', '', '', 'admin_fields_data_type', '{}', $first_last_name, $first_last_name];
 
-$parameters[] = ['Admin Fields - Display As', 82, 'No', '', '', '', '', 'admin_fields_display_as', '{}', $first_last_name, $first_last_name];
+$parameters[] = ['Admin Fields - Display As', 83, 'No', '', '', '', '', 'admin_fields_display_as', '{}', $first_last_name, $first_last_name];
 
 $parameters[] = ['Admin Fields - Search As', 8, 'No', '', '', '', '', 'admin_fields_search_as', '{}', $first_last_name, $first_last_name];
 
@@ -128,9 +128,11 @@ $parameters[] = ['State / Province / Region', 0, 'No', '', '', '', '', 'state_pr
 
 $parameters[] = ['Status - Main', 2, 'No', '', '', '', '', 'status_main', '{}', $first_last_name, $first_last_name];
 
+$parameters[] = ['Sub Items Labels', 10, 'No', '', '', '', '', 'sub_items_labels', '{}', $first_last_name, $first_last_name];
+
 $parameters[] = ['Template Files - Assigned Type', 19, 'No', '', '', '', '', 'template_files_assigned_type', '{}', $first_last_name, $first_last_name];
 
-$parameters[] = ['Template Files - List of All Files', NULL, 'Yes', 'template_files', 'id', 'filename', '', 'templates_files_list_of_all_files', '{}', $first_last_name, $first_last_name];
+$parameters[] = ['Template Files - List of All Files', NULL, 'Yes', 'template_files', 'id', 'name', '', 'templates_files_list_of_all_files', '{}', $first_last_name, $first_last_name];
 
 $parameters[] = ['Templates - Types', 7, 'No', '', '', '', '', 'templates_types', '{}', $first_last_name, $first_last_name];
 

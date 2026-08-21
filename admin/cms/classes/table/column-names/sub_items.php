@@ -15,6 +15,19 @@ else
 		{
 			public function sub_items_tcn($sql_custom_fields_rows, $sql_account_columns_active)
 			{
+				static $sub_items_labels;
+				
+				if(!isset($sub_items_labels))
+				{
+					$sub_items_labels = $_SESSION['results']->getSelectMultipleRecordsKeyName(__LINE__, __FILE__, '*', 'admin_fields_values', 'WHERE `admin_fields_lists_parent_code` = ?', ['sub_items_labels'], 'value');
+				}
+				
+				$sub_items_label = 'Sub Items';
+				if(isset($sub_items_labels[$_SESSION['admin_table_name']]['label']) && !empty($sub_items_labels[$_SESSION['admin_table_name']]['label']))
+				{
+					$sub_items_label = $sub_items_labels[$_SESSION['admin_table_name']]['label'];
+				}
+				
 				//display sub item data
 				$table_menu_items = '0'; 
 				if(!empty($sql_custom_fields_rows[$sql_account_columns_active["column_name"]]))
@@ -45,7 +58,7 @@ else
 				}
 				else
 				{
-					echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><a href="/'.$_SESSION['admin_sub_items_url'].'/?'.$sub_items.'">'.$table_menu_items.' Sub Item(s)</a></li>';
+					echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><a href="/'.$_SESSION['admin_sub_items_url'].'/?'.$sub_items.'">'.$table_menu_items.' '.htmlspecialchars($sub_items_label ?? '').'</a></li>';
 				}
 			}
 		}

@@ -150,102 +150,357 @@ function initEditor(wrapper)
         sync(wrapper);
     });
 	
-    wrapper.querySelector('.insert-link')
-    .addEventListener('mousedown', function(e)
-    {
-        e.preventDefault();
-        editor.focus();
-        
-        const selection = window.getSelection();
-        if(!selection || !selection.rangeCount) return;
-        const savedRange = selection.getRangeAt(0).cloneRange();
-		
-        let existingLinkNode = selection.anchorNode;
-        if(existingLinkNode && existingLinkNode.nodeType === 3)
+	wrapper.querySelector('.insert-link')
+	.addEventListener('pointerdown', function(e)
+	{
+		e.preventDefault();
+	
+		const selection = window.getSelection();
+	
+		if(!selection || !selection.rangeCount)
 		{
-            existingLinkNode = existingLinkNode.parentNode;
-        }
+			alert('Please select the text you want to link, then click Link again.');
+			return;
+		}
+	
+		//Save the selected text before changing focus or opening the modal.
+		const savedRange = selection.getRangeAt(0).cloneRange();
+	
+		//Determine whether the start or end of the saved selection is inside a link.
+		let existingLinkNode = savedRange.startContainer;
 		
-        while(existingLinkNode && existingLinkNode !== editor)
+		if(existingLinkNode && existingLinkNode.nodeType === 3)
 		{
-            if(existingLinkNode.tagName === 'A')
+			existingLinkNode = existingLinkNode.parentNode;
+		}
+		
+		while(existingLinkNode && existingLinkNode !== editor)
+		{
+			if(existingLinkNode.tagName === 'A')
 			{
-                break;
-            }
-			
-            existingLinkNode = existingLinkNode.parentNode;
-        }
+				break;
+			}
 		
-        const parentForm = wrapper.closest('form');
-        if(!parentForm) return;
+			existingLinkNode = existingLinkNode.parentNode;
+		}
 		
-        const modal = parentForm.querySelector('.form-link-modal');
-        const urlInput = modal.querySelector('.modal-link-url');
-        const idInput = modal.querySelector('.modal-link-id');
-        const cancelBtn = modal.querySelector('.modal-link-cancel');
-        const submitBtn = modal.querySelector('.modal-link-submit');
-		
-        urlInput.value = '';
-        idInput.value = '';
-		
-        if(existingLinkNode && existingLinkNode.tagName === 'A')
+		//If the start of the selection was not inside a link, check the end of the selection.
+		if(!existingLinkNode || existingLinkNode.tagName !== 'A')
 		{
-            const rawHref = existingLinkNode.getAttribute('href') || '';
-            const idMatch = rawHref.match(/^urlId\((.*?)\);?$/);
-            
-            if(idMatch)
+			existingLinkNode = savedRange.endContainer;
+		
+			if(existingLinkNode && existingLinkNode.nodeType === 3)
 			{
-                idInput.value = idMatch[1];
-            }
+				existingLinkNode = existingLinkNode.parentNode;
+			}
+		
+			while(existingLinkNode && existingLinkNode !== editor)
+			{
+				if(existingLinkNode.tagName === 'A')
+				{
+					break;
+				}
+		
+				existingLinkNode = existingLinkNode.parentNode;
+			}
+		}
+		
+		//Require selected text when creating a new link.
+		if((!existingLinkNode || existingLinkNode.tagName !== 'A') && savedRange.collapsed)
+		{
+			alert('Please select the text you want to link, then click Link again.');
+			return;
+		}
+	
+		const parentForm = wrapper.closest('form');
+	
+		if(!parentForm)
+		{
+			return;
+		}
+	
+		const modal = parentForm.querySelector('.form-link-modal');
+		const urlInput = modal.querySelector('.modal-link-url');
+		const idInput = modal.querySelector('.modal-link-id');
+		const targetInput = modal.querySelector('.modal-link-target');
+		const nofollowInput = modal.querySelector('.modal-link-nofollow');
+		const sponsoredInput = modal.querySelector('.modal-link-sponsored');
+		const ugcInput = modal.querySelector('.modal-link-ugc');
+		const cancelBtn = modal.querySelector('.modal-link-cancel');
+		const submitBtn = modal.querySelector('.modal-link-submit');
+	
+		//Reset link fields.
+		urlInput.value = '';
+		idInput.value = '';
+		targetInput.value = '';
+		nofollowInput.checked = false;
+		sponsoredInput.checked = false;
+		ugcInput.checked = false;
+	
+		//Load existing link settings when editing a link.
+		if(existingLinkNode && existingLinkNode.tagName === 'A')
+		{
+			const rawHref = existingLinkNode.getAttribute('href') || '';
+			const idMatch = rawHref.match(/^urlId\((.*?)\);?$/);
+	
+			if(idMatch)
+			{
+				idInput.value = idMatch[1];
+			}
 			else
 			{
-                urlInput.value = rawHref;
-            }
-        }
+				urlInput.value = rawHref;
+			}
+	
+			targetInput.value = existingLinkNode.getAttribute('target') || '';
+	
+			const existingRel = (existingLinkNode.getAttribute('rel') || '').split(/\s+/);
+	
+			nofollowInput.checked = existingRel.includes('nofollow');
+			sponsoredInput.checked = existingRel.includes('sponsored');
+			ugcInput.checked = existingRel.includes('ugc');
+		}
 		
-        modal.style.display = 'flex';
-		
-        const newCancelBtn = cancelBtn.cloneNode(true);
-        const newSubmitBtn = submitBtn.cloneNode(true);
-        cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
-        submitBtn.parentNode.replaceChild(newSubmitBtn, submitBtn);
-		
-        newCancelBtn.addEventListener('click', function()
+		selection.removeAllRanges();
+		modal.style.display = 'flex';
+	
+		const newCancelBtn = cancelBtn.cloneNode(true);
+		const newSubmitBtn = submitBtn.cloneNode(true);
+	
+		cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+		submitBtn.parentNode.replaceChild(newSubmitBtn, submitBtn);
+	
+		newCancelBtn.addEventListener('click', function()
 		{
-            modal.style.display = 'none';
-        });
-		
-        newSubmitBtn.addEventListener('click', function()
+			modal.style.display = 'none';
+		});
+	
+		newSubmitBtn.addEventListener('click', function()
 		{
-            let finalValue = '';
-			
-            if(idInput.value.trim() !== '')
+			let finalValue = '';
+	
+			if(idInput.value.trim() !== '')
 			{
-                finalValue = 'urlId(' + idInput.value.trim() + ');';
-            }
+				finalValue = 'urlId(' + idInput.value.trim() + ');';
+			}
 			else if(urlInput.value.trim() !== '')
 			{
-                finalValue = urlInput.value.trim();
-            }
-			
-            modal.style.display = 'none';
-			
-            selection.removeAllRanges();
-            selection.addRange(savedRange);
-            editor.focus();
-			
-            if(finalValue !== '')
+				finalValue = urlInput.value.trim();
+			}
+	
+			const linkTarget = targetInput.value;
+	
+			const linkTypes = [];
+	
+			if(nofollowInput.checked)
 			{
-                document.execCommand('createLink', false, finalValue);
-            }
-			else if(existingLinkNode && existingLinkNode.tagName === 'A')
+				linkTypes.push('nofollow');
+			}
+	
+			if(sponsoredInput.checked)
 			{
-                document.execCommand('unlink', false, null);
-            }
-            
-            sync(wrapper);
-        });
-    });
+				linkTypes.push('sponsored');
+			}
+	
+			if(ugcInput.checked)
+			{
+				linkTypes.push('ugc');
+			}
+	
+			if(linkTarget === '_blank')
+			{
+				linkTypes.push('noopener');
+			}
+	
+			modal.style.display = 'none';
+	
+			/*
+			If editing an existing link, update the actual anchor directly.
+			This does not depend on the mobile browser keeping the selection alive.
+			*/
+			if(existingLinkNode && existingLinkNode.tagName === 'A')
+			{
+				if(finalValue !== '')
+				{
+					existingLinkNode.setAttribute('href', finalValue);
+	
+					if(linkTarget !== '')
+					{
+						existingLinkNode.setAttribute('target', linkTarget);
+					}
+					else
+					{
+						existingLinkNode.removeAttribute('target');
+					}
+	
+					if(linkTypes.length > 0)
+					{
+						existingLinkNode.setAttribute('rel', linkTypes.join(' '));
+					}
+					else
+					{
+						existingLinkNode.removeAttribute('rel');
+					}
+				}
+				else
+				{
+					//Remove the link while preserving its text/content.
+					const parentNode = existingLinkNode.parentNode;
+	
+					while(existingLinkNode.firstChild)
+					{
+						parentNode.insertBefore(existingLinkNode.firstChild, existingLinkNode);
+					}
+	
+					parentNode.removeChild(existingLinkNode);
+				}
+			}
+			else if(finalValue !== '')
+			{
+				/*
+				Create a new link using a temporary unique href.
+				This lets us find the newly created anchor without depending
+				on selection.anchorNode after createLink runs.
+				*/
+				selection.removeAllRanges();
+				selection.addRange(savedRange);
+				editor.focus();
+	
+				const temporaryHref = 'ratalsTemporaryLink' + Date.now();
+	
+				document.execCommand('createLink', false, temporaryHref);
+	
+				let linkNode = null;
+	
+				editor.querySelectorAll('a').forEach(function(anchor)
+				{
+					if(anchor.getAttribute('href') === temporaryHref)
+					{
+						linkNode = anchor;
+					}
+				});
+	
+				if(linkNode)
+				{
+					linkNode.setAttribute('href', finalValue);
+	
+					if(linkTarget !== '')
+					{
+						linkNode.setAttribute('target', linkTarget);
+					}
+	
+					if(linkTypes.length > 0)
+					{
+						linkNode.setAttribute('rel', linkTypes.join(' '));
+					}
+				}
+			}
+	
+			sync(wrapper);
+		});
+	});
+	
+	wrapper.querySelector('.insert-media')
+	.addEventListener('pointerdown', function(e)
+	{
+		e.preventDefault();
+		
+		const selection = window.getSelection();
+		
+		//Save the current editor/cursor position for inserting the selected media later.
+		window.wysiwygMediaRange = null;
+		
+		if(selection && selection.rangeCount)
+		{
+			const currentRange = selection.getRangeAt(0);
+			
+			if(editor.contains(currentRange.startContainer) && editor.contains(currentRange.endContainer))
+			{
+				window.wysiwygMediaRange = currentRange.cloneRange();
+			}
+		}
+		
+		//Do not open the media popup if the cursor is not currently inside the editor.
+		if(!window.wysiwygMediaRange)
+		{
+			alert('Please place the cursor in the editor where you want the media inserted, then click Media again.');
+			return;
+		}
+		
+		//Set the popup mode so the existing media selection code knows
+		//the media was requested by the WYSIWYG editor.
+		window.mediaPopupMode = 'editor';
+		
+		//Save which editor opened the popup.
+		window.wysiwygMediaWrapper = wrapper;
+		window.wysiwygMediaEditor = editor;
+		
+		//Remove the visible mobile text selection before showing the popup.
+		if(selection)
+		{
+			selection.removeAllRanges();
+		}
+		
+		//Open the existing media popup.
+		$(".popup_media").show();
+		$("body").addClass("popup-overflow-hidden");
+	});
+	
+	document.querySelectorAll('.editor-media-options-cancel').forEach(function(cancelBtn)
+	{
+		cancelBtn.addEventListener('click', function()
+		{
+			$(".editor-media-options-overlay").hide();
+			
+			window.wysiwygSelectedMediaId = null;
+			window.mediaPopupMode = '';
+			window.wysiwygMediaWrapper = null;
+			window.wysiwygMediaEditor = null;
+			window.wysiwygMediaRange = null;
+			
+			$("body").removeClass("popup-overflow-hidden");
+		});
+	});
+	
+	document.querySelectorAll('.editor-media-options-insert').forEach(function(insertBtn)
+	{
+		insertBtn.addEventListener('click', function()
+		{
+			if(!window.wysiwygSelectedMediaId || !window.wysiwygMediaEditor || !window.wysiwygMediaRange)
+			{
+				return;
+			}
+			
+			const optionsWindow = insertBtn.closest('.editor-media-options-window');
+			const lazyLoad = optionsWindow.querySelector('.editor-media-lazy-load').value;
+			const fetchPriority = optionsWindow.querySelector('.editor-media-fetch-priority').value;
+			
+			const mediaEmbed = 'mediaId(' + window.wysiwygSelectedMediaId + ', ' + lazyLoad + ', ' + fetchPriority + ', altTitleTag(""));';
+			
+			const selection = window.getSelection();
+			
+			selection.removeAllRanges();
+			selection.addRange(window.wysiwygMediaRange);
+			
+			window.wysiwygMediaEditor.focus();
+			
+			document.execCommand('insertText', false, mediaEmbed);
+			
+			if(window.wysiwygMediaWrapper)
+			{
+				sync(window.wysiwygMediaWrapper);
+			}
+			
+			$(".editor-media-options-overlay").hide();
+			$("body").removeClass("popup-overflow-hidden");
+			
+			window.wysiwygSelectedMediaId = null;
+			window.mediaPopupMode = '';
+			window.wysiwygMediaWrapper = null;
+			window.wysiwygMediaEditor = null;
+			window.wysiwygMediaRange = null;
+		});
+	});
 	
     wrapper.querySelector('.toggle-source')
     .addEventListener('click', function()
@@ -266,38 +521,34 @@ function initEditor(wrapper)
             editor.style.setProperty('display', 'none', 'important');
             source.classList.remove('hidden-textarea');
             source.style.setProperty('display', 'block', 'important');
-			toggleBtn.textContent = 'View as Text';
+			toggleBtn.innerHTML = '<svg viewBox="0 0 512 512" aria-hidden="true"><path d="M362.7 19.3c25.8-25.8 67.6-25.8 93.4 0l36.6 36.6c25.8 25.8 25.8 67.6 0 93.4L179.6 462.4 64 488l25.6-115.6L362.7 19.3zM112 392l-13.3 60 60-13.3L416 181.3 370.7 136 112 392z"></path></svg> View as Text';
         }
         else
         {
-            editor.style.setProperty('display', 'block', 'important');
-            editor.focus();
+			editor.style.setProperty('display', 'block', 'important');
+			editor.focus();
 			
-            try
+			const cleanValue = source.value.replace(/\n\s*/g, '');
+			
+			editor.innerHTML = cleanValue;
+			
+			const selection = window.getSelection();
+			
+			if(selection)
 			{
-                document.execCommand('selectAll', false, null);
-                document.execCommand('formatBlock', false, 'p');
-            }
-			catch(e)
-			{
+				selection.removeAllRanges();
+				
+				const range = document.createRange();
+				range.selectNodeContents(editor);
+				range.collapse(true);
+			
+				selection.addRange(range);
 			}
 			
-            const cleanValue = source.value.replace(/\n\s*/g, '');
-            
-            document.execCommand('selectAll', false, null);
-            document.execCommand('insertHTML', false, cleanValue);
-            
-            const selection = window.getSelection();
+			source.classList.add('hidden-textarea');
+			source.style.setProperty('display', 'none', 'important');
 			
-            if(selection)
-			{
-                selection.collapseToStart();
-            }
-			
-            source.classList.add('hidden-textarea');
-            source.style.setProperty('display', 'none', 'important');
-			
-			toggleBtn.textContent = 'View as Code';
+			toggleBtn.innerHTML = '<svg viewBox="0 0 512 512" aria-hidden="true"><path d="M160 128L32 256l128 128 34-34-94-94 94-94-34-34zm192 0l-34 34 94 94-94 94 34 34 128-128-128-128zM294 80l-76 352h-49l76-352h49z"></path></svg> View as Code';
         }
         
         sync(wrapper);
@@ -378,6 +629,8 @@ function formatHTML(html)
         .replace(/<\/b>/gi, '</strong>')
         .replace(/<i(\s[^>]*)?>/gi, '<em$1>')
         .replace(/<\/i>/gi, '</em>')
+		.replace(/<strike(\s[^>]*)?>/gi, '<s$1>')
+		.replace(/<\/strike>/gi, '</s>')
 		
         .replace(/\n\s*/g, '')
         .replace(/(<\/(?:p|li|ul|ol|h[1-6]|div|blockquote)>)/gi, '$1\n')

@@ -11570,7 +11570,7 @@ $.extend( Datepicker.prototype, {
 							( printDate.getTime() === today.getTime() ? " ui-datepicker-today" : "" ) ) + "'" + // highlight today (if different)
 							( ( !otherMonth || showOtherMonths ) && daySettings[ 2 ] ? " title='" + daySettings[ 2 ].replace( /'/g, "&#39;" ) + "'" : "" ) + // cell title
 							( unselectable ? "" : " data-handler='selectDay' data-event='click' data-month='" + printDate.getMonth() + "' data-year='" + printDate.getFullYear() + "'" ) + ">" + // actions
-							( otherMonth && !showOtherMonths ? " " : // display for other months
+							( otherMonth && !showOtherMonths ? "&nbsp;" : // display for other months
 							( unselectable ? "<span class='ui-state-default'>" + printDate.getDate() + "</span>" : "<a class='ui-state-default" +
 							( printDate.getTime() === today.getTime() ? " ui-state-highlight" : "" ) +
 							( printDate.getTime() === currentDate.getTime() ? " ui-state-active" : "" ) + // highlight selected day
@@ -11630,7 +11630,7 @@ $.extend( Datepicker.prototype, {
 		}
 
 		if ( !showMonthAfterYear ) {
-			html += monthHtml + ( secondary || !( changeMonth && changeYear ) ? " " : "" );
+			html += monthHtml + ( secondary || !( changeMonth && changeYear ) ? "&nbsp;" : "" );
 		}
 
 		// Year selection
@@ -11668,7 +11668,7 @@ $.extend( Datepicker.prototype, {
 
 		html += this._get( inst, "yearSuffix" );
 		if ( showMonthAfterYear ) {
-			html += ( secondary || !( changeMonth && changeYear ) ? " " : "" ) + monthHtml;
+			html += ( secondary || !( changeMonth && changeYear ) ? "&nbsp;" : "" ) + monthHtml;
 		}
 		html += "</div>"; // Close datepicker_header
 		return html;

@@ -10,4 +10,4 @@ if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/includes/admin-fields/modify-
 else
 {
 	echo '<script type="text/javascript" src="/'.$_SESSION['admin_directory'].'/cms/includes/editor/editor.js" nonce="'.NONCE.'"></script>';
-} ?>
+}

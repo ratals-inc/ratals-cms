@@ -15,7 +15,20 @@ else
 		{
 			public function path_level_tcn($sql_custom_fields_rows, $sql_account_columns_active)
 			{
-				//Display sub categories to a category
+				static $sub_items_labels;
+				
+				if(!isset($sub_items_labels))
+				{
+					$sub_items_labels = $_SESSION['results']->getSelectMultipleRecordsKeyName(__LINE__, __FILE__, '*', 'admin_fields_values', 'WHERE `admin_fields_lists_parent_code` = ?', ['sub_items_labels'], 'value');
+				}
+				
+				$sub_items_label = 'URL Sub Items';
+				if(isset($sub_items_labels['urls']['label']) && !empty($sub_items_labels['urls']['label']))
+				{
+					$sub_items_label = $sub_items_labels['urls']['label'];
+				}
+				
+				//Display sub categories to a category.
 				if(!empty($sql_custom_fields_rows['path_level']))
 				{
 					$new_path_level_link = $sql_custom_fields_rows['path_level'].$sql_custom_fields_rows['id'].'/';
@@ -28,7 +41,8 @@ else
 					
 					$sql_get_sub_categories_count = $_SESSION['results']->getSelectCountRecords(__LINE__, __FILE__, '*', 'urls', 'WHERE `site_id` = ? AND `path_level` = ?', [$_SESSION["site_set_for_editing"], $new_path_level_link]);
 				}
-				echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><a href="/'.$_SESSION['admin_sub_items_url'].'/?layout=hierarchy&path-ids='.$new_path_level_link.'">'.$sql_get_sub_categories_count.' URL Sub Item(s)</a></li>';
+				
+				echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><a href="/'.$_SESSION['admin_sub_items_url'].'/?layout=hierarchy&path-ids='.$new_path_level_link.'">'.$sql_get_sub_categories_count.' '.htmlspecialchars($sub_items_label ?? '').'</a></li>';
 			}
 		}
 		

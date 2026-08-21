@@ -5,10 +5,8 @@
 
 spl_autoload_register(function ($autoloader_class_name)
 {
-	$base_directory_path = realpath(__DIR__.'/../../');
-
-	$class_full_path = $base_directory_path.'/'.str_replace('\\', '/', $autoloader_class_name).'.php';
-
+	$class_full_path = INSTALLATION_ROOT.'/'.str_replace('\\', '/', $autoloader_class_name).'.php';
+	
 	if(file_exists($class_full_path))
 	{
 		require_once $class_full_path;

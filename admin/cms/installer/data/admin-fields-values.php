@@ -562,6 +562,7 @@ $parameter[] = [0, 'Dropdown/ID', 'dropdownId', '', 'admin_fields_display_as', '
 $parameter[] = [0, 'Dropdown/ID with Edit as Text', 'dropdownIdWithEditAsText', '', 'admin_fields_display_as', 'display_as_dropdown_id_with_edit_as_text', $values_counter++];
 $parameter[] = [0, 'Dropdown/Value', 'dropdownValue', '', 'admin_fields_display_as', 'display_as_dropdown_value', $values_counter++];
 $parameter[] = [0, 'Dropdown/Value with Edit as Text', 'dropdownValueWithEditAsText', '', 'admin_fields_display_as', 'display_as_dropdown_value_with_edit_as_text', $values_counter++];
+$parameter[] = [0, 'Duplicate Template File', 'duplicateTemplateFile', '', 'admin_fields_display_as', 'display_as_duplicate_template_file', $values_counter++];
 $parameter[] = [0, 'Embed Custom Field', 'embedCustomField', '', 'admin_fields_display_as', 'display_as_embed_custom_field', $values_counter++];
 $parameter[] = [0, 'Embed Form', 'embedForm', '', 'admin_fields_display_as', 'display_as_embed_form', $values_counter++];
 $parameter[] = [0, 'Embed Media', 'embedMedia', '', 'admin_fields_display_as', 'display_as_embed_media', $values_counter++];
@@ -766,6 +767,18 @@ $parameter[] = [0, 'CMS', '1', '', 'admin_page_level', 'admin_page_level_cms', $
 $parameter[] = [0, 'Commerce', '2', '', 'admin_page_level', 'admin_page_level_ecommerce', $values_counter++];
 $parameter[] = [0, 'ERP', '3', '', 'admin_page_level', 'admin_page_level_erp', $values_counter++];
 $parameter[] = [0, 'AI', '4', '', 'admin_page_level', 'admin_page_level_erp', $values_counter++];
+
+$values_counter = 1;
+$parameter[] = [0, 'List Items', 'admin_fields_lists', '', 'sub_items_labels', 'sub_items_labels_admin_fields_lists', $values_counter++];
+$parameter[] = [0, 'Menu Items', 'admin_menu_items', '', 'sub_items_labels', 'sub_items_labels_admin_menu_items', $values_counter++];
+$parameter[] = [0, 'Menu Items', 'admin_menus', '', 'sub_items_labels', 'sub_items_labels_admin_menus', $values_counter++];
+$parameter[] = [0, 'Menu Items', 'menu_items', '', 'sub_items_labels', 'sub_items_labels_menu_items', $values_counter++];
+$parameter[] = [0, 'Menu Items', 'menus', '', 'sub_items_labels', 'sub_items_labels_menus', $values_counter++];
+$parameter[] = [0, 'Options', 'custom_fields', '', 'sub_items_labels', 'sub_items_labels_custom_fields', $values_counter++];
+$parameter[] = [0, 'Options', 'form_fields', '', 'sub_items_labels', 'sub_items_labels_form_fields', $values_counter++];
+$parameter[] = [0, 'Slider Items', 'sliders', '', 'sub_items_labels', 'sub_items_labels_sliders', $values_counter++];
+$parameter[] = [0, 'Sub Category URLs', 'urls', '', 'sub_items_labels', 'sub_items_labels_urls', $values_counter++];
+$parameter[] = [0, 'Template Files', 'templates', '', 'sub_items_labels', 'sub_items_labels_templates', $values_counter++];
 
 //Get admin_fields_lists to map admin_fields_values and set admin_fields_lists_id.
 $current_admin_fields_lists = $results->getSelectMultipleRecordsKeyName(__LINE__, __FILE__, '*', 'admin_fields_lists', '', [], 'system_code');

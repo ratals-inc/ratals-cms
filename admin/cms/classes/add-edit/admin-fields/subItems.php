@@ -15,6 +15,15 @@ else
 		{
 			public function subItemsAeaf($table_name, $admin_field, $field_value, $current_values, &$errors, &$post_values)
 			{
+				
+				$admin_field_values = $_SESSION['results']->getSelectMultipleRecordsKeyName(__LINE__, __FILE__, '*', 'admin_fields_values', 'WHERE `admin_fields_lists_parent_code` = ?', ['sub_items_labels'], 'value');
+				
+				$sub_items_label = 'Sub Items';
+				if(isset($admin_field_values[$table_name]['label']) && !empty($admin_field_values[$table_name]['label']))
+				{
+					$sub_items_label = $admin_field_values[$table_name]['label'];
+				}
+				
 				if(empty($field_value) || $field_value == NULL)
 				{
 					if($table_name == 'custom_fields' && isset($current_values[$table_name]['display_as']) && ($current_values[$table_name]['display_as'] == 'textfield' || $current_values[$table_name]['display_as'] == 'textareaWithEditor' || $current_values[$table_name]['display_as'] == 'multipleMedia' || $current_values[$table_name]['display_as'] == 'singleMedia' || $current_values[$table_name]['display_as'] == 'textarea'))
@@ -44,9 +53,9 @@ else
 						}
 						
 						echo '<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-						<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+						<div class="edit-label">'.htmlspecialchars($sub_items_label ?? '').'</div>
 						<div class="edit-field text">
-						<a href="/'.$_SESSION['admin_sub_items_edit_url'].'/?'.$items_edit_url.'">Edit Sub Items (0)</a>
+						<a href="/'.$_SESSION['admin_sub_items_edit_url'].'/?'.$items_edit_url.'">Edit '.htmlspecialchars($sub_items_label ?? '').' (0)</a>
 						<div class="small-text">'.$admin_field["notes"].'</div>
 						</div>';
 						if(isset($errors[$table_name][$admin_field["column_name"]])) { echo '<div class="validation">'.htmlspecialchars($errors[$table_name][$admin_field["column_name"]] ?? '').'</div>'; }
@@ -72,9 +81,9 @@ else
 					}
 					
 					echo '<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-					<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+					<div class="edit-label">'.htmlspecialchars($sub_items_label ?? '').'</div>
 					<div class="edit-field text">
-					<a href="/'.$_SESSION['admin_sub_items_edit_url'].'/?'.$items_edit_url.'">Edit Sub Items ('.htmlspecialchars($field_value ?? '').')</a>
+					<a href="/'.$_SESSION['admin_sub_items_edit_url'].'/?'.$items_edit_url.'">Edit '.htmlspecialchars($sub_items_label ?? '').' ('.htmlspecialchars($field_value ?? '').')</a>
 					<div class="small-text">'.$admin_field["notes"].'</div>
 					</div>';
 					if(isset($errors[$table_name][$admin_field["column_name"]])) { echo '<div class="validation">'.htmlspecialchars($errors[$table_name][$admin_field["column_name"]] ?? '').'</div>'; }

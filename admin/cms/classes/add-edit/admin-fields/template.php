@@ -20,14 +20,14 @@ else
 				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
 				<div class="edit-field">
 				<select name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'" id="'.htmlspecialchars($table_name.'_'.$admin_field["column_name"] ?? '').'">
-				<option value="">Select Template File</option>
+				<option value="">Select Template</option>
 				';
 				
 				$template_data = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '*', 'templates', 'WHERE `site_id` = ? AND `status` = ?', [$_SESSION["site_set_for_editing"], 1]);
 				
 				$admin_field_list = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '*', 'admin_fields_lists', 'WHERE `system_code` = ?', [$admin_field["admin_fields_lists_system_code"]]);
 				
-				$admin_field_values = $_SESSION['results']->getSelectMultipleRecords(__LINE__, __FILE__, '*', $admin_field_list['dynamic_table_name'], 'WHERE `templates_id` = ? AND `status` = ? AND (`template_type` = ? OR `template_type` = ?)', [$template_data['id'], 1, 'all', $_SESSION['admin_table_name']]);
+				$admin_field_values = $_SESSION['results']->getSelectMultipleRecords(__LINE__, __FILE__, '*', $admin_field_list['dynamic_table_name'], 'WHERE `templates_id` = ? AND `status` = ? AND (`template_type` = ? OR `template_type` = ?) ORDER BY `name` ASC', [$template_data['id'], 1, 'all', $_SESSION['admin_table_name']]);
 				
 				if(!empty($admin_field_values))
 				{

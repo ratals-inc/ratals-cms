@@ -24,7 +24,7 @@ else
 	  </div>
 	  </div>
 	  
-	  <div class="overflow-x-auto">
+	  <div class="overflow-x-auto fixed-scrollbar">
 	  <div class="edit-table fixed">
 	  
 	  <div class="edit-table-row header">
@@ -46,7 +46,7 @@ else
 	  ?>
 	  <ul class="edit-table-row">
 		<input name="assigned_form_fields[]" type="hidden" value="<?php echo $form_fields_assigned['id']; ?>">
-		<div class="edit-table-cell border-left-1px-solid-d6d6d6"><a href="/<?php echo $_SESSION['admin_directory']; ?>/website/form-fields/edit/?rid=<?php echo $form_fields_assigned['id']; ?>" target="_blank"><?php echo $form_fields_assigned['id']; ?></a></div>
+		<div class="edit-table-cell"><a href="/<?php echo $_SESSION['admin_directory']; ?>/website/form-fields/edit/?rid=<?php echo $form_fields_assigned['id']; ?>" target="_blank"><?php echo $form_fields_assigned['id']; ?></a></div>
 		<div class="edit-table-cell"><?php echo $form_fields_assigned['frontend_name']; ?></div>
 		<div class="edit-table-cell"><?php echo $form_fields_assigned['admin_name']; ?></div>
 		<div class="edit-table-cell"><?php echo $form_fields_assigned['form_field_type']; ?></div>

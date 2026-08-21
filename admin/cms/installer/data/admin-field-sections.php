@@ -62,6 +62,11 @@ if(isset($admin_field_section_ids['lazy_load_media_row']['id']))
 	$parameters[] = [$admin_field_section_ids['lazy_load_media_row']['id'], 'Media Settings', 'media_settings', '', '{}', $first_last_name, $first_last_name];
 }
 
+if(isset($admin_field_section_ids['lead']['id']))
+{
+	$parameters[] = [$admin_field_section_ids['lead']['id'], 'Lead Submission', 'lead_submission', '', '{}', $first_last_name, $first_last_name];
+}
+
 if(isset($admin_field_section_ids['load_pages_with_cached_results']['id']))
 {
 	$parameters[] = [$admin_field_section_ids['load_pages_with_cached_results']['id'], 'Page Caching', 'page_caching', '', '{}', $first_last_name, $first_last_name];
@@ -95,6 +100,11 @@ if(isset($admin_field_section_ids['slides_in_view']['id']))
 if(isset($admin_field_section_ids['sql_injection_email_me']['id']))
 {
 	$parameters[] = [$admin_field_section_ids['sql_injection_email_me']['id'], 'SQL Injection Attacks', 'sql_injection_attacks', '', '{}', $first_last_name, $first_last_name];
+}
+
+if(isset($admin_field_section_ids['timer']['id']))
+{
+	$parameters[] = [$admin_field_section_ids['timer']['id'], 'Visitor Information', 'visitor_information', '', '{}', $first_last_name, $first_last_name];
 }
 
 if(isset($admin_field_section_ids['timezone']['id']))

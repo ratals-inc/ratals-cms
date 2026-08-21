@@ -287,7 +287,7 @@ else
                    
                   if(!empty($menu['children'])) 
                   {
-                      $sub_items_arrow = ' <i class="desktop-sub-menu-arrow"><svg viewBox="0 0 512 512"><path d="M12 127A19 19 0 0 0 12 154L242 385A19 19 0 0 0 270 385L500 154A19 19 0 0 0 473 127L256 344 39 127A19 19 0 0 0 12 127"></path></svg></i>';
+                      $sub_items_arrow = ' <i class="desktop-sub-menu-arrow"><svg viewBox="0 0 512 512"><path d="M500 385A19 19 0 0 0 500 358L270 127A19 19 0 0 0 242 127L12 358A19 19 0 0 0 39 385L256 168 473 385A19 19 0 0 0 500 385"></path></svg></i>';
                   }
                   
                   if(!empty($_SESSION['admin_menu_all_admin_pages'][$_SESSION['admin_pages_parent_code']]['url']))
@@ -310,7 +310,8 @@ else
                   if(!empty($menu['link_target'])) { $link_target = ' target="'.$menu['link_target'].'"'; }
                   
                   $display_as_block = ' display-none';
-                  if(in_array($menu['id'], $active_blocks)) { $display_as_block = ' display-block'; }
+				  $arrow_class = '';
+                  if(in_array($menu['id'], $active_blocks)) { $display_as_block = ' display-block'; $arrow_class = ' toggle-arrow-instant'; }
                   
                   echo "
                   <li".$selected_page.">"; 
@@ -318,7 +319,7 @@ else
                   if(isset($menu['url'])) { echo '<a href="/'.$_SESSION['admin_directory'].'/'.$menu['url'].$add_slash.'"'.$selected_page.$link_target.'>'.$menu['name'].$sub_items_arrow.'</a>'; }
                   
                   else { echo '
-                  <div class="toggleMenu" data-click="'.$menu['id'].'"><span class="label">'.$menu['name'].' <i class="arrow menuArrow'.$menu['id'].'"><svg viewBox="0 0 512 512"><path d="M500 385A19 19 0 0 0 500 358L270 127A19 19 0 0 0 242 127L12 358A19 19 0 0 0 39 385L256 168 473 385A19 19 0 0 0 500 385"></path></svg></i></span></div>'; }
+                  <div class="toggleMenu" data-click="'.$menu['id'].'"><span class="label">'.$menu['name'].' <i class="arrow menuArrow'.$menu['id'].$arrow_class.'"><svg viewBox="0 0 512 512"><path d="M12 127A19 19 0 0 0 12 154L242 385A19 19 0 0 0 270 385L500 154A19 19 0 0 0 473 127L256 344 39 127A19 19 0 0 0 12 127"></path></svg></i></span></div>'; }
                   
                   if(!empty($menu['children'])) 
                   {

@@ -77,6 +77,7 @@ else
         <?php if(empty($errors) && isset($_GET['redirects']) && $_GET['redirects'] == 'updated-created') { echo '<div class="changes-saved">URLs were updated and redirects have been created successfully.</div>'; } ?>
         <?php if(empty($errors) && isset($_GET['q-and-a-admin-user-email']) && $_GET['q-and-a-admin-user-email'] == 'no') { echo '<div class="changes-error">Oops! You need to add an "email address" to your admin user profile as well as fill in your SMTP Email Server information to email this customer. You can do that <a href="/'.$_SESSION['admin_directory'].'/admin/users/edit/?rid='.$_SESSION['user_id'].'" target="_blank">here</a>.</div>'; } ?>
         <?php if(empty($errors) && isset($_GET['paypal-connect']) && $_GET['paypal-connect'] == 'failed') { echo '<div class="changes-error">We saved your settings, but couldn\'t connect to PayPal. Please double-check your PayPal credentials and try again.</div>'; } ?>
+        <?php if(empty($errors) && isset($_GET['copied']) && $_GET['copied'] == 'success') { echo '<div class="changes-saved">Template file copied successfully. You are now editing the new copy.</div>'; } ?>
         <?php if($status_lock_insert_update_delete == 'Yes') { echo '<div class="changes-error">Locked from editing as status is <strong>'.$admin_page_status.'</strong>.</div>'; }?>
         <?php if($status_lock_insert_update_delete == 'No') { ?>
         <form method="post" enctype="multipart/form-data">

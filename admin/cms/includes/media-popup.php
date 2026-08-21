@@ -50,6 +50,8 @@ else
     {
         $(".openMultipleMediaPopup").click(function()
         {
+			window.mediaPopupMode = 'field';
+			
             var dataValues = $(this).attr('data-click');
             var dataArray = dataValues.split(',');
             
@@ -71,6 +73,8 @@ else
     {
         $(".openSingleMediaPopup").click(function()
         {
+			window.mediaPopupMode = 'field';
+			
             var dataValues = $(this).attr('data-click');
             var dataArray = dataValues.split(',');
             
@@ -100,7 +104,21 @@ else
     $(document).on('click', '.selectMedia', function()
     {
         var id = $(this).attr('data-click');
-        
+		
+		if(window.mediaPopupMode === 'editor')
+		{
+			window.wysiwygSelectedMediaId = id;
+			
+			//Reset media embed options to their defaults.
+			$(".editor-media-lazy-load").val("lazyLoadYes");
+			$(".editor-media-fetch-priority").val("fetchPriorityAuto");
+			
+			$(".popup_media").hide();
+			$(".editor-media-options-overlay").css("display", "flex");
+			
+			return;
+		}
+		
         if(typeof document.getElementById("selected_image_"+id).src != "undefined")
         {
             var selected_media = document.getElementById("selected_image_"+id).src;
@@ -120,20 +138,20 @@ else
 		
         if(selected_media.includes("images"))
         {
-            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"><svg viewBox="0 0 512 512"><path d="M506 256A250 250 0 1 1 6 256 250 250 0 0 1 506 256M173 151A16 16 0 1 0 151 173L234 256 151 339A16 16 0 0 0 173 361L256 278 339 361A16 16 0 0 0 361 339L278 256 361 173A16 16 0 0 0 339 151L256 234Z"></path></svg></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><img src="'+selected_media+'"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="<?php echo $domain; ?>/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
+            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"><svg viewBox="0 0 512 512"><path d="M506 256A250 250 0 1 1 6 256 250 250 0 0 1 506 256M173 151A16 16 0 1 0 151 173L234 256 151 339A16 16 0 0 0 173 361L256 278 339 361A16 16 0 0 0 361 339L278 256 361 173A16 16 0 0 0 339 151L256 234Z"></path></svg></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><img src="'+selected_media+'"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
         }
         else if(selected_media.includes("files"))
         {
-            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"><svg viewBox="0 0 512 512"><path d="M506 256A250 250 0 1 1 6 256 250 250 0 0 1 506 256M173 151A16 16 0 1 0 151 173L234 256 151 339A16 16 0 0 0 173 361L256 278 339 361A16 16 0 0 0 361 339L278 256 361 173A16 16 0 0 0 339 151L256 234Z"></path></svg></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><object data="'+selected_media+'" type="application/'+fileExtType+'" class="select-media-popup"></object><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="<?php echo $domain; ?>/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
+            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"><svg viewBox="0 0 512 512"><path d="M506 256A250 250 0 1 1 6 256 250 250 0 0 1 506 256M173 151A16 16 0 1 0 151 173L234 256 151 339A16 16 0 0 0 173 361L256 278 339 361A16 16 0 0 0 361 339L278 256 361 173A16 16 0 0 0 339 151L256 234Z"></path></svg></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><object data="'+selected_media+'" type="application/'+fileExtType+'" class="select-media-popup"></object><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
         }
         else if(selected_media.includes("videos"))
         {
-            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><video controls="" preload="none" class="select-media-popup"><source src="'+selected_media+'" type="video/'+fileExtType+'"></video><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="<?php echo $domain; ?>/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
+            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><video controls="" preload="none" class="select-media-popup"><source src="'+selected_media+'" type="video/'+fileExtType+'"></video><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
         }
         //Video Embed
         else
         {
-            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"><svg viewBox="0 0 512 512"><path d="M506 256A250 250 0 1 1 6 256 250 250 0 0 1 506 256M173 151A16 16 0 1 0 151 173L234 256 151 339A16 16 0 0 0 173 361L256 278 339 361A16 16 0 0 0 361 339L278 256 361 173A16 16 0 0 0 339 151L256 234Z"></path></svg></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><div class="video-embed"><iframe class="select-media-popup" src="'+selected_media+'" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="<?php echo $domain; ?>/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
+            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"><svg viewBox="0 0 512 512"><path d="M506 256A250 250 0 1 1 6 256 250 250 0 0 1 506 256M173 151A16 16 0 1 0 151 173L234 256 151 339A16 16 0 0 0 173 361L256 278 339 361A16 16 0 0 0 361 339L278 256 361 173A16 16 0 0 0 339 151L256 234Z"></path></svg></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><div class="video-embed"><iframe class="select-media-popup" src="'+selected_media+'" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
         }
 		
 		if(addMultipleMedia == 'Yes')
@@ -152,7 +170,6 @@ else
             $("body").removeClass("popup-overflow-hidden");
         }
     });
-    
     
     $(document).ready(function()
     {
@@ -199,6 +216,30 @@ else
                  }
             });
         }
+		
+		window.refreshMediaPopup = function()
+		{
+			start = 0;
+			sortBy = 0;
+			sortBySet = 0;
+			sortByChanged = 'no';
+			mediaType = 0;
+			mediaTypeSet = 0;
+			mediaTypeChanged = 'no';
+			searchMedia = '';
+			searchMediaSet = '';
+			searchMediaChanged = 'no';
+			clearChanged = 'no';
+			action = 'active';
+			
+			$("#sort_by").val("0");
+			$("#media_type").val("0");
+			$("#search_media").val("");
+			$(".clear-media-search").hide();
+			$("#load_data").empty();
+			
+			load_images(30, 0, 0, 0, '');
+		};
         
         if(action == 'inactive')
         {
@@ -333,6 +374,174 @@ else
             load_images(30, 0, 0, 0, '');
         });
     });
+	
+	$(document).on('click', '.upload-media-button', function()
+	{
+		$('#popup_media_files').trigger('click');
+	});
+	
+	$(document).on('change', '#popup_media_files', async function()
+	{
+		var files = this.files;
+		var totalFiles = files.length;
+		
+		if(totalFiles === 0)
+		{
+			return;
+		}
+		
+		var maxFileUploads = parseInt('<?php echo ini_get('max_file_uploads'); ?>', 10);
+		var uploadMaxFilesize = parseInt('<?php echo ini_get('upload_max_filesize'); ?>', 10) * 1024 * 1024;
+		var postMaxSize = parseInt('<?php echo ini_get('post_max_size'); ?>', 10) * 1024 * 1024;
+		
+		if(totalFiles > maxFileUploads)
+		{
+			alert('You cannot select more than ' + maxFileUploads + ' files.');
+			this.value = '';
+			return;
+		}
+		
+		let totalSize = 0;
+		
+		for(let file of files)
+		{
+			totalSize += file.size;
+			
+			if(file.size > uploadMaxFilesize)
+			{
+				alert('File "' + file.name + '" exceeds max size.');
+				this.value = '';
+				return;
+			}
+		}
+		
+		if(totalSize > postMaxSize)
+		{
+			alert('Total upload size exceeds limit.');
+			this.value = '';
+			return;
+		}
+		
+		var createSmallerImages = $("#small_images").is(":checked") ? "Yes" : "No";
+		var createAvif = $("#create_avif").is(":checked") ? "Yes" : "No";
+		var createWebp = $("#create_webp").is(":checked") ? "Yes" : "No";
+		
+		$(".popup-media-upload-status").show();
+		$(".popup-media-upload-progress").val(0);
+		$(".popup-media-upload-message").text("Preparing upload...");
+		
+		let uploadedFiles = 0;
+		let allResponses = [];
+		
+		for(let i = 0; i < files.length; i++)
+		{
+			try
+			{
+				let response = await uploadPopupMediaFile(files[i], i + 1, totalFiles, createSmallerImages, createAvif, createWebp);
+				
+				if(response)
+				{
+					allResponses.push(response);
+				}
+				
+				uploadedFiles++;
+				
+				let percent = (uploadedFiles / totalFiles) * 100;
+				
+				$(".popup-media-upload-progress").val(Math.round(percent));
+				$(".popup-media-upload-message").text("Uploaded " + uploadedFiles + " / " + totalFiles);
+			}
+			catch(error)
+			{
+				$(".popup-media-upload-message").text("Upload Failed. Please try again.");
+				$("#popup_media_files").val("");
+				return;
+			}
+		}
+		
+		$(".popup-media-upload-progress").val(100);
+		
+		if(totalFiles === 1)
+		{
+			$(".popup-media-upload-message").text("1 media file uploaded successfully.");
+		}
+		else
+		{
+			$(".popup-media-upload-message").text(totalFiles + " media files uploaded successfully.");
+		}
+		
+		$("#popup_media_files").val("");
+		
+		window.refreshMediaPopup();
+	});
+	
+	function uploadPopupMediaFile(file, index, totalFiles, createSmallerImages, createAvif, createWebp)
+	{
+		return new Promise(function(resolve, reject)
+		{
+			let formData = new FormData();
+			
+			formData.append("files[]", file);
+			formData.append("media_popup_upload", "Yes");
+			formData.append("admin_table_name", "<?php echo $_SESSION['admin_table_name']; ?>");
+			formData.append("admin_type", "<?php echo $_SESSION['admin_type']; ?>");
+			formData.append("admin_class", "<?php echo $_SESSION['admin_class']; ?>");
+			formData.append("create_smaller_images", createSmallerImages);
+			formData.append("create_avif", createAvif);
+			formData.append("create_webp", createWebp);
+			formData.append("file_index", index);
+			
+			let xhr = new XMLHttpRequest();
+			
+			xhr.open("POST", "/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/add-media.php", true);
+			
+			xhr.upload.onprogress = function(event)
+			{
+				if(event.lengthComputable)
+				{
+					let percent = (event.loaded / event.total) * 0.80;
+					let overall = ((index - 1) / totalFiles) + (percent / totalFiles);
+					
+					$(".popup-media-upload-progress").val(Math.round(overall * 100));
+					$(".popup-media-upload-message").text("Uploading file " + index + " / " + totalFiles);
+				}
+			};
+			
+			xhr.upload.onload = function()
+			{
+				let overall = ((index - 1) / totalFiles) + (0.80 / totalFiles);
+				
+				$(".popup-media-upload-progress").val(Math.round(overall * 100));
+				$(".popup-media-upload-message").text("Processing file " + index + " / " + totalFiles);
+			};
+			
+			xhr.onload = function()
+			{
+				if(xhr.status >= 200 && xhr.status < 300)
+				{
+					try
+					{
+						resolve(JSON.parse(xhr.responseText));
+					}
+					catch(e)
+					{
+						reject("Invalid JSON response: " + xhr.responseText);
+					}
+				}
+				else
+				{
+					reject(xhr.responseText);
+				}
+			};
+			
+			xhr.onerror = function()
+			{
+				reject("network error");
+			};
+			
+			xhr.send(formData);
+		});
+	}
     </script>
     <div class="popup popup_media admin-width">
       <div class="wrapper">
@@ -343,15 +552,59 @@ else
               <div class="close hide-media"><i><svg viewBox="0 0 512 512"><path d="M506 256A250 250 0 1 1 6 256 250 250 0 0 1 506 256M173 151A16 16 0 1 0 151 173L234 256 151 339A16 16 0 0 0 173 361L256 278 339 361A16 16 0 0 0 361 339L278 256 361 173A16 16 0 0 0 339 151L256 234Z"></path></svg></i></div>
             </div>
             <div class="header-options">
-              <div class="search">
-                <span class="media_type"><select name="media_type" id="media_type"><option value="0">All Media</option><option value="1">Only Images</option><option value="2">Only Files</option><option value="3">Only Videos</option><option value="4">Only Video Embeds</option></select></span>
-                <select name="sort_by" id="sort_by">
-                <option value="0">Sort By: Newest</option>
-                <option value="1">Sort By: Oldest</option>
-                </select>
-                <div class="search-field"><label for="search_media"><input type="text" name="search_media" id="search_media" placeholder="Search media"><i class="search-media-icon"><svg viewBox="0 0 512 512"><path d="M375 332a206 206 0 1 0-44 44h0q1 2 3 4l122 122a32 32 0 0 0 45-45l-122-122a32 32 0 0 0-4-3zM383 211a174 174 0 1 1-348 0 174 174 0 0 1 348 0"></path></svg></i></label></div>
-                <button class="clear-media-search" id="clear-media-search">Clear Search</button>
-              </div>
+                <div class="options">
+                    <div class="search">
+                        <span class="media_type">
+                            <select name="media_type" id="media_type">
+                                <option value="0">All Media</option>
+                                <option value="1">Only Images</option>
+                                <option value="2">Only Files</option>
+                                <option value="3">Only Videos</option>
+                                <option value="4">Only Video Embeds</option>
+                            </select>
+                        </span>
+                        <select name="sort_by" id="sort_by">
+                            <option value="0">Sort By: Newest</option>
+                            <option value="1">Sort By: Oldest</option>
+                        </select>
+                        <div class="search-field">
+                            <label for="search_media">
+                                <input type="text" name="search_media" id="search_media" placeholder="Search media">
+                                <i class="search-media-icon">
+                                    <svg viewBox="0 0 512 512" aria-hidden="true">
+                                        <path d="M375 332a206 206 0 1 0-44 44h0q1 2 3 4l122 122a32 32 0 0 0 45-45l-122-122a32 32 0 0 0-4-3zM383 211a174 174 0 1 1-348 0 174 174 0 0 1 348 0"></path>
+                                    </svg>
+                                </i>
+                            </label>
+                        </div>
+                        <button type="button" class="clear-media-search" id="clear-media-search">Clear Search</button>
+                    </div>
+                    <div class="upload-media">
+                        <input type="file" id="popup_media_files" multiple hidden>
+                        <label>
+                            <input type="checkbox" name="small_images" id="small_images" value="1" checked>
+                            Create Smaller Images
+                        </label>
+                        <label>
+                            <input type="checkbox" name="create_avif" id="create_avif" value="1" checked>
+                            Create .avif Images
+                        </label>
+                        <label>
+                            <input type="checkbox" name="create_webp" id="create_webp" value="1" checked>
+                            Create .webp Images
+                        </label>
+                        <button type="button" class="upload-media-button">
+                            <svg viewBox="0 0 512 512" aria-hidden="true">
+                                <path d="M256 32c13.3 0 24 10.7 24 24v176.1l52.7-52.7c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-93.7 93.7c-9.4 9.4-24.6 9.4-33.9 0l-93.7-93.7c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l52.7 52.7V56c0-13.3 10.7-24 24-24zM64 304c13.3 0 24 10.7 24 24v104h336V328c0-13.3 10.7-24 24-24s24 10.7 24 24v128c0 13.3-10.7 24-24 24H64c-13.3 0-24-10.7-24-24V328c0-13.3 10.7-24 24-24z"></path>
+                            </svg>
+                            Upload Media
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-media-upload-status">
+                <progress class="popup-media-upload-progress" value="0" max="100"></progress>
+                <div class="popup-media-upload-message"></div>
             </div>
           </div>
           <ul id="load_data">

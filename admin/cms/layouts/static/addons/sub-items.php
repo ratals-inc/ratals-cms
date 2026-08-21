@@ -511,19 +511,19 @@ else
                                         <label>
                                             <div class="name">Gap Between Items</div>
                                             <input name="groups[<?php echo $group_counter; ?>][group_gap_between_items]" value="<?php echo $all_groups["group_gap_between_items"]; ?>" type="text" placeholder="e.g., 5">
-                                            <div class="small-text"><strong>Default code:</strong> 5</div>
+                                            <div class="small-text"><strong>Default:</strong> 5</div>
                                         </label>
                                         
                                         <label>
                                             <div class="name">Outter CSS Box Styles</div>
                                             <input name="groups[<?php echo $group_counter; ?>][group_outter_css_box_styles]" value="<?php if($all_groups["group_outter_css_box_styles"] != NULL) { echo $all_groups["group_outter_css_box_styles"]; } ?>" type="text">
-                                            <div class="small-text"><strong>Default code:</strong> background: repeating-linear-gradient(45deg, #ffffff, #f3f3f3 2px, #e7e7e7 2px, #ffffff 5px); border-top: 1px solid #e7e7e7; border-bottom: 1px solid #e7e7e7; margin: 50px 0px  0px 0px; padding: 50px 10px 50px 10px;</div>
+                                            <div class="small-text"><strong>Example CSS:</strong> background: repeating-linear-gradient(45deg, #ffffff, #f3f3f3 2px, #e7e7e7 2px, #ffffff 5px); border-top: 1px solid #e7e7e7; border-bottom: 1px solid #e7e7e7; margin: 50px 0px  0px 0px; padding: 50px 10px 50px 10px;</div>
                                         </label>
                                         
                                         <label>
                                             <div class="name">Inner CSS Box Styles</div>
                                             <input name="groups[<?php echo $group_counter; ?>][group_inner_css_box_styles]" value="<?php if($all_groups["group_inner_css_box_styles"] != NULL) { echo $all_groups["group_inner_css_box_styles"]; } ?>" type="text">
-                                            <div class="small-text"><strong>Default code:</strong> background-color: #ffffff; padding: 10px 5px; border-radius: 10px;</div>
+                                            <div class="small-text"><strong>Example CSS:</strong> background-color: #ffffff; padding: 10px 5px; border-radius: 10px;</div>
                                         </label>
                                         
                                         <label>

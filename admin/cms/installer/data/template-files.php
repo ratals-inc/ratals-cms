@@ -238,8 +238,8 @@ if(!function_exists('createTemplateFile'))
 
 $installed_template_files = $results->getSelectMultipleRecordsKeyNameOneColumn(__LINE__, __FILE__, '*', 'template_files', 'WHERE `templates_id` = ?', [$template_id], 'filename', 'id');
 
-$template_files_column_names = '`site_id`, `templates_id`, `status`, `name`, `filename`, `php_array`, `file_code`, `template_type`, `assigned_type`, `default_file`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`';
-$template_files_placeholders = '?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?';
+$template_files_column_names = '`site_id`, `templates_id`, `status`, `name`, `filename`, `php_array`, `file_code`, `template_type`, `assigned_type`, `default_file`, `copy_template_file`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`';
+$template_files_placeholders = '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?';
 
 //Pages -> 404.php
 $_SESSION['a404_template_id'][$site_id] = $installed_template_files['404.php'] ?? 0;
@@ -247,7 +247,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('404.php', '404.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', '404', '404.php', '', '', 'pages', 'Pages > 404 Error', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', '404 Error Page - Displays Sub Items below the page content', '404.php', '', '', 'pages', 'Pages > 404 Error', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['a404_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -262,7 +262,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('authors.php', 'authors.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Authors', 'authors.php', '', '', 'authors', 'Authors > Bio', 'Yes', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Author - Displays the author profile and bio with Sub Items below the page content', 'authors.php', '', '', 'authors', 'Authors > Bio', 'Yes', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['authors_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -277,7 +277,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('blank-canvas.php', 'blank-canvas.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Blank Canvas', 'blank-canvas.php', '', '', 'all', 'All > Blank Canvas', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Blank Canvas - Build the entire page using Sub Items', 'blank-canvas.php', '', '', 'all', 'All > Blank Canvas', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['blank_canvas_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -292,7 +292,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('blog.php', 'blog.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Blog', 'blog.php', '', '', 'pages', 'Pages > Blog', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Blog - Displays blog post archives with Sub Items below the page content', 'blog.php', '', '', 'pages', 'Pages > Blog', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['blog_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -307,7 +307,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('contact-us.php', 'contact-us.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Contact Us', 'contact-us.php', '', '', 'pages', 'Pages > Contact Us', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Contact Us - Displays the contact form with Sub Items below the page content', 'contact-us.php', '', '', 'pages', 'Pages > Contact Us', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['contact_us_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -322,7 +322,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('homepage-blog.php', 'homepage-blog.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Home Page - Blog', 'homepage-blog.php', '', '', 'pages', 'Pages > Homepage - Blog', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Blog Homepage - Homepage designed for blog content with Sub Items below the page content', 'homepage-blog.php', '', '', 'pages', 'Pages > Homepage - Blog', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['homepage_blog_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -337,7 +337,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('message-confirmation.php', 'message-confirmation.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Message Confirmation', 'message-confirmation.php', '', '', 'pages', 'Pages > Message Confirmation', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Message Confirmation - Displays after a form submission with Sub Items below the page content', 'message-confirmation.php', '', '', 'pages', 'Pages > Message Confirmation', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['message_confirmation_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -352,7 +352,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('pages-one-column.php', 'pages-one-column.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Pages - One Column', 'pages-one-column.php', '', '', 'pages', 'Pages > One Column', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'One Column - Single-column page layout with Sub Items below the page content', 'pages-one-column.php', '', '', 'pages', 'Pages > One Column', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['one_column_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -367,7 +367,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('pages-one-column-gallery.php', 'pages-one-column-gallery.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Pages - One Column Gallery', 'pages-one-column-gallery.php', '', '', 'pages', 'Pages > One Column Gallery', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'One Column Gallery - Sub Items control the gallery content and layout', 'pages-one-column-gallery.php', '', '', 'pages', 'Pages > One Column Gallery', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['one_column_gallery_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -382,7 +382,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('pages-two-column.php', 'pages-two-column.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Pages - Two Column', 'pages-two-column.php', '', '', 'pages', 'Pages > Two Column', 'Yes', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Two Column - Two-column page layout with Sub Items below the page content', 'pages-two-column.php', '', '', 'pages', 'Pages > Two Column', 'Yes', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['two_column_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -397,7 +397,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('pages-two-column-gallery.php', 'pages-two-column-gallery.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Pages - Two Column Gallery', 'pages-two-column-gallery.php', '', '', 'pages', 'Pages > Two Column Gallery', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Two Column Gallery - Sub Items control the gallery content and layout', 'pages-two-column-gallery.php', '', '', 'pages', 'Pages > Two Column Gallery', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['two_column_gallery_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -412,7 +412,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('quote-confirmation.php', 'quote-confirmation.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Quote Confirmation', 'quote-confirmation.php', '', '', 'pages', 'Pages > Quote Confirmation', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Quote Confirmation - Displays after a quote submission with Sub Items below the page content', 'quote-confirmation.php', '', '', 'pages', 'Pages > Quote Confirmation', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['quote_confirmation_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -427,7 +427,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('robots.php', 'robots.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Robots Text File', 'robots.php', '', '', 'pages', 'Pages > Robots Text File', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Robots - Robots.txt output', 'robots.php', '', '', 'pages', 'Pages > Robots Text File', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['robots_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -442,7 +442,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('search.php', 'search.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Search', 'search.php', '', '', 'pages', 'Pages > Site Search', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Search - Displays website search results with Sub Items below the page content', 'search.php', '', '', 'pages', 'Pages > Site Search', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['search_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -457,7 +457,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('sitemap-html.php', 'sitemap-html.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'SiteMap HTML File', 'sitemap-html.php', '', '', 'pages', 'Pages > Sitemap - HTML', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'HTML Sitemap - Displays the website sitemap with Sub Items below the page content', 'sitemap-html.php', '', '', 'pages', 'Pages > Sitemap - HTML', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['sitemap_html_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -472,7 +472,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('sitemap-html-section.php', 'sitemap-html-section.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'SiteMap HTML Section File', 'sitemap-html-section.php', '', '', 'pages', 'Pages > Sitemap - HTML Section', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'HTML Sitemap Section - Displays a section of the website sitemap with Sub Items below the page content', 'sitemap-html-section.php', '', '', 'pages', 'Pages > Sitemap - HTML Section', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['sitemap_html_section_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -487,7 +487,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('sitemap-xml.php', 'sitemap-xml.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'SiteMap XML File', 'sitemap-xml.php', '', '', 'pages', 'Pages > Sitemap - XML', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'XML Sitemap - XML sitemap for search engines', 'sitemap-xml.php', '', '', 'pages', 'Pages > Sitemap - XML', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['sitemap_xml_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -502,7 +502,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('categories-blog.php', 'categories-blog.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Categories - Blog Layout', 'categories-blog.php', '', '', 'categories', 'Category > Blog', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Blog Category - Displays posts assigned to the category with Sub Items below the page content', 'categories-blog.php', '', '', 'categories', 'Category > Blog', 'No', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['categories_blog_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -517,7 +517,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('posts.php', 'posts.php');
 	$template_file_id = $results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Posts', 'posts.php', '', '', 'posts', 'Posts > Posts', 'Yes', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Post - Standard post layout with Sub Items below the page content', 'posts.php', '', '', 'posts', 'Posts > Posts', 'Yes', '', '{}', $first_last_name, $first_last_name]);
 	$_SESSION['posts_template_id'][$site_id] = $template_file_id;
 	
 	if(function_exists('writeToInstallLog'))
@@ -531,7 +531,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('analytics.php', 'analytics.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Analytics Cookie', 'analytics.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Analytics Cookie', 'analytics.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -544,7 +544,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('author-and-dates-top.php', 'author-and-dates-top.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Author and Dates Top', 'author-and-dates-top.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Author and Dates Top', 'author-and-dates-top.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -557,7 +557,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('breadcrumbs.php', 'breadcrumbs.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Breadcrumbs', 'breadcrumbs.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Breadcrumbs', 'breadcrumbs.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -570,7 +570,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('content-security-policy.php', 'content-security-policy.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Content Security Policy', 'content-security-policy.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Content Security Policy', 'content-security-policy.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -583,7 +583,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('cookie-notice-banner.php', 'cookie-notice-banner.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Cookie Notice Banner', 'cookie-notice-banner.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Cookie Notice Banner', 'cookie-notice-banner.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -596,7 +596,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('footer.php', 'footer.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Footer', 'footer.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Footer', 'footer.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -609,7 +609,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('head-files.php', 'head-files.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Head Files', 'head-files.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Head Files', 'head-files.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -622,7 +622,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('header.php', 'header.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Header', 'header.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Header', 'header.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -635,7 +635,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('header-search-bar.php', 'header-search-bar.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Header - Search Bar', 'header-search-bar.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Header - Search Bar', 'header-search-bar.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -648,7 +648,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('scripts.js', 'scripts.js');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Scripts', 'scripts.js', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Scripts', 'scripts.js', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -661,7 +661,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('sidebar-about.php', 'sidebar-about.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Sidebar - About', 'sidebar-about.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Sidebar - About', 'sidebar-about.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -674,7 +674,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('sidebar-blog-categories.php', 'sidebar-blog-categories.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Sidebar - Blog Categories', 'sidebar-blog-categories.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Sidebar - Blog Categories', 'sidebar-blog-categories.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -687,7 +687,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('sidebar-contact-us.php', 'sidebar-contact-us.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Sidebar - Contact Us', 'sidebar-contact-us.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Sidebar - Contact Us', 'sidebar-contact-us.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -700,7 +700,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('sidebar-table-of-contents.php', 'sidebar-table-of-contents.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Sidebar - Table of Contents', 'sidebar-table-of-contents.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Sidebar - Table of Contents', 'sidebar-table-of-contents.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -713,7 +713,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('slider.php', 'slider.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Slider', 'slider.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Slider', 'slider.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -726,7 +726,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('stylesheet.css', 'stylesheet.css');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Stylesheet', 'stylesheet.css', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Stylesheet', 'stylesheet.css', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -739,7 +739,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('sub-items.php', 'sub-items.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Sub Items', 'sub-items.php', '', '', 'includes', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Sub Items', 'sub-items.php', '', '', 'includes', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -752,7 +752,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('email-template.php', 'email-template.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Email Template - Main Wrapper', 'email-template.php', '', '', 'email_templates', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Email Template - Main Wrapper', 'email-template.php', '', '', 'email_templates', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -765,7 +765,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('email-template-max-failed-login-attempts.php', 'email-template-max-failed-login-attempts.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Email Template - Max Failed Login Attempts', 'email-template-max-failed-login-attempts.php', '', '', 'email_templates', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Email Template - Max Failed Login Attempts', 'email-template-max-failed-login-attempts.php', '', '', 'email_templates', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -778,7 +778,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('email-template-password-reset-admin.php', 'email-template-password-reset-admin.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Email Template - Password Reset - Admin', 'email-template-password-reset-admin.php', '', '', 'email_templates', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Email Template - Password Reset - Admin', 'email-template-password-reset-admin.php', '', '', 'email_templates', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -791,7 +791,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('email-template-possible-ddos-attack.php', 'email-template-possible-ddos-attack.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Email Template - Possible DDOS Attack', 'email-template-possible-ddos-attack.php', '', '', 'email_templates', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Email Template - Possible DDOS Attack', 'email-template-possible-ddos-attack.php', '', '', 'email_templates', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{
@@ -804,7 +804,7 @@ if((isset($install_template) && $install_template == 'Yes') || (isset($update_te
 {
 	createTemplateFile('email-template-possible-sql-injection-attempt.php', 'email-template-possible-sql-injection-attempt.php');
 	$results->getInsertRecord(__LINE__, __FILE__, 'template_files', $template_files_column_names, $template_files_placeholders, 
-	[$site_id, $template_id, '1', 'Email Template - Possible SQL Injection Attempt', 'email-template-possible-sql-injection-attempt.php', '', '', 'email_templates', '', 'No', '{}', $first_last_name, $first_last_name]);
+	[$site_id, $template_id, '1', 'Email Template - Possible SQL Injection Attempt', 'email-template-possible-sql-injection-attempt.php', '', '', 'email_templates', '', 'No', '', '{}', $first_last_name, $first_last_name]);
 	
 	if(function_exists('writeToInstallLog'))
 	{

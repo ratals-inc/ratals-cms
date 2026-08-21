@@ -20,7 +20,7 @@ if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/includes/admin-fields/ajax/ad
 }
 else
 {
-	if(isset($_POST['admin_table_name']) && $_POST['admin_table_name'] == 'media' && isset($_POST['admin_type']) && $_POST['admin_type'] == 'add' && isset($_POST['admin_class']) && $_POST['admin_class'] != 'add-video-embed')
+	if((isset($_POST['admin_table_name']) && $_POST['admin_table_name'] == 'media' && isset($_POST['admin_type']) && $_POST['admin_type'] == 'add' && isset($_POST['admin_class']) && $_POST['admin_class'] != 'add-video-embed') || (isset($_POST['media_popup_upload']) && $_POST['media_popup_upload'] == 'Yes'))
 	{
 		if(isset($_FILES['files']['name']))
 		{

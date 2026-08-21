@@ -1005,52 +1005,86 @@ if(isset($_POST['submit']))
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body { font-family: sans-serif, FontAwesome; margin: 0px; padding: 0px; font-size: 16px; }
+body { margin: 0px; padding: 0px; font-family: sans-serif, FontAwesome; box-sizing: border-box; font-size: 16px;
+--text-color: #1a1a1a;
+--muted-text-color: #656565;
+--box-bg-color: #ffffff;
+--box-border-color: #d6d6d6;
+--section-bg-color: #f3f3f3;
+--border-color: #e3e3e3;
+--primary-link-color: #2f8ec5;
+--link-hover-color: #24aef3;
+--primary-bg-color: #07344a;
+--primary-bg-color-text: #ffffff;
+--button-primary-bg-color: #07344a;
+--button-primary-border-color: #07344a;
+--button-primary-text-color: #ffffff;
+--button-primary-hover-bg-color: #106da3;
+--button-primary-hover-border-color: #106da3;
+--button-primary-focus-shadow-color: rgba(7, 52, 74, 0.22);
+--input-bg-color: #ffffff;
+--input-text-color: #1a1a1a;
+--input-border-color: #c6c6c6;
+--input-focus-border-color: #24aef3;
+--input-focus-shadow-color: rgba(36, 174, 243, 0.18);
+--error-color: #d11d1d;
+--success-color: #3f8f46;
+--notice-bg-color: #f3f3f3;
+--notice-border-color: #d6d6d6;
+--overlay-bg-color: rgb(40 40 40 / 65%);
+--main-border-radius: 5px;
+}
 body, div, input, select { box-sizing: border-box; }
-input, select { background-color: #fff; padding: 8px; height: 37px; border: 1px solid #dedede; width: 100%; border-radius: 5px; font-size: 15px;  }
-.body-pending-ajax { margin: 0; height: 100%; overflow: hidden; }
-.pending-ajax { background-color: #000000ad; top: 0; right: 0; bottom: 0; left: 0; position: fixed; text-align: center; z-index: 9999; }
+input, select { background-color: var(--input-bg-color); color: var(--input-text-color); padding: 8px 10px; height: 40px; border: 1px solid var(--input-border-color); width: 100%; border-radius: var(--main-border-radius); font-size: 15px; transition: border-color 150ms ease, box-shadow 150ms ease; }
+input:focus, select:focus { border-color: var(--input-focus-border-color); box-shadow: 0 0 0 3px var(--input-focus-shadow-color); outline: none; }
+.body-pending-ajax { margin: 0px; height: 100%; overflow: hidden; }
+.pending-ajax { background-color: var(--overlay-bg-color); top: 0px; right: 0px; bottom: 0px; left: 0px; position: fixed; text-align: center; z-index: 9999; }
 .pending-ajax-outer-container { display: table; width: 100%; height: 100%; }
-.pending-ajax-inner-container { display: table-cell; color: #000; vertical-align: middle; }
-.pending-ajax-inner-container span { background-color: #f1f1f1; padding: 10px 20px; border-radius: 25px; display: inline-block; }
-h1 { font-size: 40px; text-align: center; font-weight: 700; margin: 0px; padding-bottom: 12px; }
-h2 { font-size: 16px; text-align: center; font-weight: 400; margin: 0px 0px 20px 0px; padding: 0px; }
-a { color: #5a5aa9; }
-.box-wrapper { margin: 10px; }
+.pending-ajax-inner-container { display: table-cell; color: var(--text-color); vertical-align: middle; }
+.pending-ajax-inner-container span { background-color: var(--box-bg-color); padding: 10px 20px; border-radius: 25px; display: inline-block; box-shadow: 0px 4px 15px rgba(0,0,0,0.12); }
+h1 { font-size: 40px; text-align: center; font-weight: 700; margin: 0px; padding-bottom: 12px; color: var(--text-color); }
+h2 { font-size: 16px; text-align: center; font-weight: 400; margin: 0px 0px 20px 0px; padding: 0px; color: var(--muted-text-color); line-height: 22px; }
+a { color: var(--primary-link-color); text-decoration: none; }
+a:hover { color: var(--link-hover-color); text-decoration: underline; }
+.box-wrapper { margin: 20px; }
 .box-wrapper span { display: block; padding-bottom: 4px; }
-.box-wrapper .box { max-width: 1200px; margin: 30px auto 50px auto; box-shadow: 0 20px 50px 0 rgba(0,0,0,0.2); padding: 25px; }
-.box-wrapper .box .ratals-logo { text-align: center; }
-.box-wrapper .box .ratals-logo img { width: auto; max-height: 50px; }
-.box-wrapper .box .need-help { text-align: center; margin: 10px 0 0 0; }
+.box-wrapper .box { max-width: 1200px; margin: 30px auto 50px auto; background-color: var(--box-bg-color); border: 1px solid var(--box-border-color); border-radius: var(--main-border-radius); box-shadow: 0px 12px 35px rgba(0,0,0,0.12); padding: 30px; }
+.box-wrapper .box .ratals-logo { text-align: center; margin-bottom: 5px; }
+.box-wrapper .box .ratals-logo img { width: auto; max-height: 60px; }
+.box-wrapper .box .need-help { text-align: center; margin: 12px 0px 0px 0px; font-size: 14px; }
 .box-wrapper .box ul.two-column { margin: 0px; padding: 0px; --n: 2; display: grid; grid-template-columns: repeat(auto-fill, minmax(max(300px,(100% - (var(--n) - 1)*20px)/var(--n)), 1fr)); gap: 20px; width: calc(100% - 3px); }
 .box-wrapper .box ul.three-column { margin: 0px; padding: 0px; --n: 3; display: grid; grid-template-columns: repeat(auto-fill, minmax(max(180px,(100% - (var(--n) - 1)*20px)/var(--n)), 1fr)); gap: 20px; width: calc(100% - 3px); }
 .box-wrapper .box ul.four-column { margin: 0px; padding: 0px; --n: 4; display: grid; grid-template-columns: repeat(auto-fill, minmax(max(180px,(100% - (var(--n) - 1)*20px)/var(--n)), 1fr)); gap: 20px; width: calc(100% - 3px); }
 .box-wrapper .box ul.five-column { margin: 0px; padding: 0px; --n: 5; display: grid; grid-template-columns: repeat(auto-fill, minmax(max(180px,(100% - (var(--n) - 1)*20px)/var(--n)), 1fr)); gap: 20px; width: calc(100% - 3px); }
 .box-wrapper .box ul li { list-style: none; margin: 0px; }
 .box-wrapper .box ul li.full-row { grid-column: 1 / -1; }
-.box-wrapper .headline { font-size: 20px; text-align: center; padding: 10px; background: #f1f1f1; margin-top: 15px; }
-.box-wrapper .http-s { width: 82px; vertical-align: top; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-right: 0px; }
-.box-wrapper .www { width: 82px; vertical-align: top; border-radius: 0px; border-right: 1px dashed #dedede; border-left: 1px dashed #dedede; }
-.box-wrapper .tld { width: calc(100% - 165px); vertical-align: top; border-left: 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; }
-.box-wrapper button { font-size: 18px; padding: 10px; display: inline-block; width: 100%; border: 0px; background-color: #195c95; color: #fff; cursor: pointer; border-radius: 5px; }
+.box-wrapper .headline { font-weight: 600; padding: 10px 12px; background-color: var(--primary-bg-color); color: var(--primary-bg-color-text); border-radius: var(--main-border-radius); margin-top: 20px; }
+.box-wrapper .http-s { width: 87px; vertical-align: top; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-right: 0px; }
+.box-wrapper .www { width: 87px; vertical-align: top; border-radius: 0px; border-right: 1px dashed var(--input-border-color); border-left: 1px dashed var(--input-border-color); }
+.box-wrapper .tld { width: calc(100% - 175px); vertical-align: top; border-left: 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; }
+.box-wrapper button { font-size: 16px; font-weight: 600; padding: 10px 15px; display: inline-block; width: 100%; border: 1px solid var(--button-primary-border-color); background-color: var(--button-primary-bg-color); color: var(--button-primary-text-color); cursor: pointer; border-radius: var(--main-border-radius); transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease; }
+.box-wrapper button:hover { background-color: var(--button-primary-hover-bg-color); border-color: var(--button-primary-hover-border-color); }
+.box-wrapper button:focus { box-shadow: 0 0 0 3px var(--button-primary-focus-shadow-color); outline: none; }
 .box-wrapper .small-font { font-size: 14px; line-height: 20px; }
-.box-wrapper .note-small-font { font-size: 11px; margin-top: 3px; color: #7c7c7c; line-height: 15px; }
-.box-wrapper .sub-text { background-color: #f7f7f7; padding: 10px; line-height: 22px; color: #424242; border: 1px solid #f1f1f1; border-radius: 5px; }
+.box-wrapper .note-small-font { font-size: 11px; margin-top: 4px; color: var(--muted-text-color); line-height: 16px; }
+.box-wrapper .sub-text { background-color: var(--section-bg-color); padding: 12px 14px; line-height: 22px; color: var(--text-color); border: 1px solid var(--border-color); border-radius: var(--main-border-radius); }
 .box-wrapper .currency_format { font-weight: 600; }
 .box-wrapper .currency_format, .box-wrapper .currency_format span { display: inline; }
-.box-wrapper .email_connector { margin: 5px 0px; }
-.box-wrapper .email_connector label { cursor: pointer; }
-.box-wrapper .email_connector input { height: 18px; width: 18px; vertical-align: sub; margin: 0px 2px 0px 0px; cursor: pointer; }
-.box-wrapper .be-patient { font-size: 12px; line-height: 18px; text-align: center; color: #7c7c7c; margin-top: 10px; }
-.box-wrapper .password-requirements-wrap { background-color: #e7e7e7; padding: 10px; border-radius: 5px; font-size: 14px; }
-.box-wrapper .box ul li .password-requirements { margin: 0; padding: 8px 8px 0px 25px; }
-.box-wrapper .box ul li .password-requirements li { list-style: initial; padding-bottom: 2px;}
+.box-wrapper .email_connector { margin: 6px 0px; }
+.box-wrapper .email_connector label { cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+.box-wrapper .email_connector input { height: 18px; width: 18px; vertical-align: middle; margin: 0px; cursor: pointer; accent-color: var(--primary-bg-color); }
+.box-wrapper .be-patient { font-size: 12px; line-height: 18px; text-align: center; color: var(--muted-text-color); margin-top: 10px; }
+.box-wrapper .password-requirements-wrap { background-color: var(--notice-bg-color); border: 1px solid var(--notice-border-color); padding: 12px 14px; border-radius: var(--main-border-radius); font-size: 13px; line-height: 19px; }
+.box-wrapper .box ul li .password-requirements { margin: 0px; padding: 8px 8px 0px 22px; }
+.box-wrapper .box ul li .password-requirements li { list-style: initial; padding-bottom: 3px; }
 .box-wrapper .center { text-align: center; }
-.box-wrapper .error { color: #ff0000; }
-.footer { margin-bottom: 30px; text-align: center; font-size: 12px; }
+.box-wrapper .error { color: var(--error-color); margin-top: 12px; }
+.footer { margin-bottom: 30px; text-align: center; font-size: 12px; color: var(--muted-text-color); }
 .footer .footer-wrap { margin: 0px auto; max-width: 800px; }
-.footer .footer-wrap .text { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #e3e3e3; border-left: 100px solid transparent; border-right: 100px solid transparent; }
-.footer .footer-wrap .powered-by span { color: #757575 }
+.footer .footer-wrap .text { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); border-left: 100px solid transparent; border-right: 100px solid transparent; }
+.footer .footer-wrap .powered-by span { color: var(--muted-text-color); }
+.footer a { color: var(--primary-link-color); }
+.footer a:hover { color: var(--link-hover-color); }
 </style>
 <script>
 $(document).ready(function()
@@ -1189,8 +1223,8 @@ $(document).ready(function()
 <!-- End Pending Overlay -->
 <div class="box-wrapper">
 	<div class="box">
-        <div class="ratals-logo"><img src="/sites/ratals-logo.png" width="548" height="191" alt="Ratals Logo"></div>
-        <?php if(!empty($nginx_warning)) { echo $nginx_warning; } ?>
+        <div class="ratals-logo"><img src="/sites/ratals-logo.png" width="506" height="137" alt="Ratals Logo"></div>
+<?php if(!empty($nginx_warning)) { echo $nginx_warning; } ?>
         <p class="need-help">Need help? Watch our <a href="https://www.ratals.com/tutorials/installation/ratals-installation-guide/" target="_blank">Installation Guide videos</a> on ratals.com.</p>
 		<?php if(!empty($errors)) { echo '<span class="center error">Oh Snap! Something isn\'t right.</span>'; } ?>
 		<?php if(!empty($errors['database_connection'])) { echo $errors['database_connection']; } ?>
@@ -1658,8 +1692,8 @@ $(document).ready(function()
 				</div>
 			</li>
 			<li class="full-row">
-				<button id="install-button" name="submit" type="submit" class="button">Install Ratals</button>
-				<div class="be-patient"><strong>Note:</strong> After clicking "Install Ratals," it takes approximately 20 to 30 seconds for the software to create all database tables and set up the website theme. Please be patient.</div>
+				<button id="install-button" name="submit" type="submit" class="button">INSTALL RATALS</button>
+				<div class="be-patient"><strong>Note:</strong> After clicking "INSTALL RATALS," it takes approximately 20 to 30 seconds for the software to create all database tables and set up the website theme. Please be patient.</div>
 			</li>
 		</ul>
 		</form>
