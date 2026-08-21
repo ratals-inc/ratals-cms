@@ -43,8 +43,11 @@ try
 				'system_code' => $values['system_code']
 			);
 			
-			//Convert values to string and store in main compare array
-			$new_field_value_array[$values['system_code']] = array_map('strval', $new_field_value_data_set);
+			//Normalize values for comparison by converting non-NULL values to strings.
+			$new_field_value_array[$values['system_code']] = array_map(function($value)
+			{
+				return $value === NULL ? NULL : strval($value);
+			}, $new_field_value_data_set);
 			
 			//Store the full row for inserts
 			$temp_values = array_values($values);
@@ -66,8 +69,11 @@ try
 					'system_code' => $values['system_code']
 				);
 				
-				//Make sure array is all string so comparision works.
-				$current_fields[$column_name] = array_map('strval', $current_field_data_set);
+				//Normalize values for comparison by converting non-NULL values to strings.
+				$current_fields[$column_name] = array_map(function($value)
+				{
+					return $value === NULL ? NULL : strval($value);
+				}, $current_field_data_set);
 			}
 		}
 		

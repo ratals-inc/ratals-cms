@@ -238,7 +238,7 @@ else
 						<li class="table-cell-header analytics table-edit">Order Landed Cost</li>
 						<li class="table-cell-header analytics table-edit">Order Profit / Margin</li>
 						<li class="table-cell-header analytics table-edit">Average Order</li>
-						<li class="table-cell-header analytics table-edit">Abandonment Carts</li>
+						<li class="table-cell-header analytics table-edit">Abandonment Carts<div class="font-size-8px">With Contact Info</div></li>
                         <?php } ?>
 						<li class="table-cell-header analytics table-edit">Form Conversions</li>
 						<li class="table-cell-header analytics table-edit">Form Conversion Value</li>

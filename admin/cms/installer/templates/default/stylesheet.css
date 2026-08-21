@@ -1212,7 +1212,7 @@ li.customer-area-data-cell button.link:hover { text-decoration: underline; }
 .customer-area-data .text-like-field { padding: 10px 12px; border-radius: var(--border-radius-1); border: 1px solid var(--gray-5); font-size: 16px; background-color: var(--gray-6); color: var(--black-5); }
 
 /* Customer Account Control Warning */
-.customer-account-control { text-align: center; background-color: var(--red-1); color: var(--white-1); padding: 8px 12px; font-size: 14px; font-weight: 500; position: sticky; top: 47px; z-index: 50; border-bottom: 1px solid var(--red-2); }
+.customer-account-control { text-align: center; background-color: var(--red-1); color: var(--white-1); padding: 8px 12px; font-size: 14px; font-weight: 500; position: sticky; top: 47px; z-index: 50; }
 .customer-account-control span { font-weight: 700; }
 .customer-account-control button { display: inline-block; background-color: var(--yellow-1); color: var(--black-1); border: 1px solid var(--yellow-1); padding: 6px 10px; cursor: pointer; border-radius: var(--border-radius-1); position: sticky; top: 0; font-size: 13px; font-weight: 700; }
 

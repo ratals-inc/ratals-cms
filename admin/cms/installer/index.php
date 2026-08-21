@@ -233,12 +233,12 @@ if(isset($_POST['submit']))
 				
 				if(!empty($database_tables))
 				{
-					$errors['database_empty'] = '<span class="center error">The selected database is not empty. Please use an empty database before installing Ratals.</span>';
+					$errors['database_empty'] = '<span class="center error error-top-margin">The selected database is not empty. Please use an empty database before installing Ratals.</span>';
 				}
 			}
 			catch(Exception $e)
 			{
-				$errors['database_empty_check'] = '<span class="center error">Ratals connected to the database, but could not verify that it is empty. Please make sure the database user has permission to view and manage tables.</span>';
+				$errors['database_empty_check'] = '<span class="center error error-top-margin">Ratals connected to the database, but could not verify that it is empty. Please make sure the database user has permission to view and manage tables.</span>';
 			}
 			
 			//Make sure required database collation is available.
@@ -248,17 +248,17 @@ if(isset($_POST['submit']))
 				
 				if(empty($collation_check))
 				{
-					$errors['database_collation'] = '<span class="center error">The database server does not support the required utf8mb4_unicode_ci collation. Please contact your hosting provider before installing Ratals.</span>';
+					$errors['database_collation'] = '<span class="center error error-top-margin">The database server does not support the required utf8mb4_unicode_ci collation. Please contact your hosting provider before installing Ratals.</span>';
 				}
 			}
 			catch(Exception $e)
 			{
-				$errors['database_collation_check'] = '<span class="center error">Ratals connected to the database, but could not verify the required utf8mb4_unicode_ci collation. Please contact your hosting provider.</span>';
+				$errors['database_collation_check'] = '<span class="center error error-top-margin">Ratals connected to the database, but could not verify the required utf8mb4_unicode_ci collation. Please contact your hosting provider.</span>';
 			}
 		}
 		catch(Exception $e)
 		{
-			$errors['database_connection'] = '<span class="center error">Couldn\'t connect to the database with the provided credentials.</span>';
+			$errors['database_connection'] = '<span class="center error error-top-margin">Couldn\'t connect to the database with the provided credentials.</span>';
 		}
 	}
 	
@@ -450,15 +450,15 @@ if(isset($_POST['submit']))
 	}
 	elseif(strtolower($admin_directory) == 'ratals' || strtolower($admin_directory) == 'admin' || strtolower($admin_directory) == 'administrator' || strtolower($admin_directory) == 'admin-panel' || strtolower($admin_directory) == 'admin-login' || strtolower($admin_directory) == 'backend' || strtolower($admin_directory) == 'cms' || strtolower($admin_directory) == 'control' || strtolower($admin_directory) == 'control-panel' || strtolower($admin_directory) == 'cp' || strtolower($admin_directory) == 'dashboard' || strtolower($admin_directory) == 'login' || strtolower($admin_directory) == 'manage' || strtolower($admin_directory) == 'manager' || strtolower($admin_directory) == 'management' || strtolower($admin_directory) == 'panel' || strtolower($admin_directory) == 'root' || strtolower($admin_directory) == 'webadmin' || strtolower($admin_directory) == strtolower($first_name) || strtolower($admin_directory) == strtolower($last_name) || strtolower($admin_directory) == strtolower($site_name))
 	{
-		$errors['admin_directory'] = '<span class="error">Enter A Stronger Admin Login Path</span>';
+		$errors['admin_directory'] = '<span class="error">Enter a stronger Admin Login Path that\'s difficult to guess</span>';
 	}
 	elseif(!preg_match('/^[a-z0-9-]+$/', $admin_directory))
 	{
-		$errors['admin_directory'] = '<span class="error">Admin Login Path Can Only Contain Lowercase a-z, 0-9, and -</span>';
+		$errors['admin_directory'] = '<span class="error">Admin Login Path can only contain lowercase a-z, 0-9, and -</span>';
 	}
 	elseif(is_dir(INSTALLATION_ROOT."/".$admin_directory))
 	{
-		$errors['admin_directory'] = '<span class="error">Admin Login Path Is Not Available</span>';
+		$errors['admin_directory'] = '<span class="error">Admin Login Path is not available - choose something different</span>';
 	}
 	
 	$username = trim($_POST['username'] ?? '');
@@ -485,7 +485,7 @@ if(isset($_POST['submit']))
 	
 	if(!empty($password) && !empty($confirm_password) && $password != $confirm_password)
 	{
-		$errors['password_confirm_password'] = '<span class="center error">Password & Confirm Password didn\'t match.</span>';
+		$errors['password_confirm_password'] = '<span class="center error error-top-margin">Password & Confirm Password didn\'t match.</span>';
 	}
 	
 	if(!empty($password) && !empty($confirm_password) && $password == $confirm_password)
@@ -987,11 +987,11 @@ if(isset($_POST['submit']))
 			//Show installer-friendly error.
 			if($cleanup_failed === true)
 			{
-				$errors['installation'] = '<span class="center error">Installation failed while '.$installation_step.'. Ratals could not fully remove the partial installation. Please check your server error log for the exact cause of the failure and to see what could not be cleaned up before trying again.</span>';
+				$errors['installation'] = '<span class="center error error-top-margin">Installation failed while '.$installation_step.'. Ratals could not fully remove the partial installation. Please check your server error log for the exact cause of the failure and to see what could not be cleaned up before trying again.</span>';
 			}
 			else
 			{
-				$errors['installation'] = '<span class="center error">Installation failed while '.$installation_step.'. The partial installation was removed. Please check your server error log for the exact cause of the failure before trying again.</span>';
+				$errors['installation'] = '<span class="center error error-top-margin">Installation failed while '.$installation_step.'. The partial installation was removed. Please check your server error log for the exact cause of the failure before trying again.</span>';
 			}
 		}
 	}
@@ -1078,7 +1078,8 @@ a:hover { color: var(--link-hover-color); text-decoration: underline; }
 .box-wrapper .box ul li .password-requirements { margin: 0px; padding: 8px 8px 0px 22px; }
 .box-wrapper .box ul li .password-requirements li { list-style: initial; padding-bottom: 3px; }
 .box-wrapper .center { text-align: center; }
-.box-wrapper .error { color: var(--error-color); margin-top: 12px; }
+.box-wrapper .error { color: var(--error-color); }
+.box-wrapper .error-top-margin { margin-top: 12px; }
 .footer { margin-bottom: 30px; text-align: center; font-size: 12px; color: var(--muted-text-color); }
 .footer .footer-wrap { margin: 0px auto; max-width: 800px; }
 .footer .footer-wrap .text { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); border-left: 100px solid transparent; border-right: 100px solid transparent; }
@@ -1098,7 +1099,7 @@ $(document).ready(function()
 		setTimeout(function()
 		{
 			$installButton.prop("disabled", true);
-			$installButton.text("Installing Ratals...");
+			$installButton.text("INSTALLING RATALS...");
 		}, 10);
 		
 		//Optionally, show a message somewhere on the page
@@ -1226,7 +1227,7 @@ $(document).ready(function()
         <div class="ratals-logo"><img src="/sites/ratals-logo.png" width="506" height="137" alt="Ratals Logo"></div>
 <?php if(!empty($nginx_warning)) { echo $nginx_warning; } ?>
         <p class="need-help">Need help? Watch our <a href="https://www.ratals.com/tutorials/installation/ratals-installation-guide/" target="_blank">Installation Guide videos</a> on ratals.com.</p>
-		<?php if(!empty($errors)) { echo '<span class="center error">Oh Snap! Something isn\'t right.</span>'; } ?>
+		<?php if(!empty($errors)) { echo '<span class="center error error-top-margin">Oh Snap! Something isn\'t right.</span>'; } ?>
 		<?php if(!empty($errors['database_connection'])) { echo $errors['database_connection']; } ?>
         <?php if(!empty($errors['database_empty'])) { echo $errors['database_empty']; } ?>
         <?php if(!empty($errors['database_empty_check'])) { echo $errors['database_empty_check']; } ?>
@@ -1285,7 +1286,7 @@ $(document).ready(function()
 			</li>
 			<li>
 				<?php if(isset($errors['admin_directory'])) { echo $errors['admin_directory']; } else { echo '<span>Admin Login Path</span>'; } ?>
-				<input name="admin_directory" placeholder="Enter path only - no domain" type="text" value="<?php if(isset($_POST['submit'])) { echo $admin_directory; } ?>" />
+				<input name="admin_directory" placeholder="Enter path only - no domain" type="text" value="<?php if(isset($_POST['submit'])) { echo $admin_directory; } else { echo 'admin-login'; } ?>" />
 			</li>
 			<li>
 				<?php if(isset($errors['site_language'])) { echo $errors['site_language']; } else { echo '<span>Site Language</span>'; } ?>
@@ -1389,7 +1390,8 @@ $(document).ready(function()
 				<div class="headline">EMAIL SERVER SETUP</div>
 			</li>
 			<li class="full-row small-font sub-text">
-				Please enter your email account settings associated with cartrio.com. These settings should match the email account you set up in your hosting account to help improve email delivery with proper SPF and DKIM authentication. The default values shown below are common examples and may need to be changed. This email will be used to send you failed login alerts, SQL injection alerts, DDoS attack alerts, and other security notifications so you are aware if suspicious activity is detected.
+				Enter the email account settings associated with <?php echo $tld; ?>. These settings should match the email account you set up in your hosting account and will be used for outgoing email throughout your Ratals installation, including password recovery and security alerts. The default values are examples and may need to be changed for your hosting account.
+
 			</li>
 			<li class="full-row small-font">
 				<div class="email_connector"><label><input name="email_connector" type="checkbox"<?php if(isset($email_connector)) { echo $email_connector; } ?>> Email server is configured with a relay or connector and does not require a username and password.</label></div>

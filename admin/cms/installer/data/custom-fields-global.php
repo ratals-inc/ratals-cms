@@ -3,7 +3,7 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-$post_custom_fields = JSON_ENCODE(array('side_bar_company_image' => ($_SESSION['image-coming-soon-650-650.gif'] ?? 7).'~||~Company Photo', 'side_bar_company_title' => 'About Me or My Company', 'side_bar_company_text' => '<p>This is were you can put text to tell everyone why they should <a href="urlId('.($_SESSION['install_ids'][$site_id]['contact_us_page_url_id'] ?? 0).');">listen to you</a> or a little about your company. This is were you can put text to tell everyone why they should listen to you or a little about your company.</p><p>This is were you can put text to tell everyone why they should listen to you or a little about your company.</p>'));
+$post_custom_fields = JSON_ENCODE(array('side_bar_company_image' => ($_SESSION['image-coming-soon-650-650.gif'] ?? 7).'~||~Company Photo', 'side_bar_company_title' => 'About Me or My Company', 'side_bar_company_text' => '<p>Use this area to introduce yourself or your company, explain what you do, and tell visitors why they should <a href="urlId('.($_SESSION['install_ids'][$site_id]['contact_us_page_url_id'] ?? 0).');">contact you</a>. You can also highlight what makes you or your business unique.</p><p>Add more details here about yourself, your company, services, experience, or anything else you want visitors to know.</p>'));
 
 $column_names = '`id`, `site_id`, `custom_fields`, `created_date`, `created_by`, `updated_date`, `updated_by`';
 $placeholders = '?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?';

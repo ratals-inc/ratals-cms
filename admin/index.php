@@ -178,7 +178,7 @@ else
 			}
 			
 			$_SESSION['admin_id'] = $row['id'];
-			$_SESSION['admin_title'] = $row['admin_pages_name'];
+			$_SESSION['admin_title'] = str_replace('[ADMIN_DIRECTORY]', $_SESSION['admin_directory'], $row['admin_pages_name']);
 			$_SESSION['admin_url'] = $_SESSION['admin_directory'].'/'.$row['url'];
 			$_SESSION['admin_add_url'] = $_SESSION['admin_directory'].'/'.$row['add_url'];
 			$_SESSION['admin_edit_url'] = $_SESSION['admin_directory'].'/'.$row['edit_url'];
@@ -387,7 +387,7 @@ else
 				
 				if(!empty($page_sub_url_row))
 				{
-					$page_sub_url_name = $page_sub_url_row['admin_pages_name'];
+					$page_sub_url_name = str_replace('[ADMIN_DIRECTORY]', $_SESSION['admin_directory'], $page_sub_url_row['admin_pages_name']);
 				}
 			}
 			

@@ -68,8 +68,11 @@ try
 				'submit_button_type' => $values['submit_button_type']
 			);
 			
-			//Convert values to string and store in main compare array
-			$new_page_array[$values['url']] = array_map('strval', $new_page_data_set);
+			//Normalize values for comparison by converting non-NULL values to strings.
+			$new_page_array[$values['url']] = array_map(function($value)
+			{
+				return $value === NULL ? NULL : strval($value);
+			}, $new_page_data_set);
 			
 			//Store the full row for inserts
 			$temp_values = array_values($values);
@@ -117,8 +120,11 @@ try
 					'submit_button_type' => $values['submit_button_type']
 				);
 				
-				//Make sure array is all string so comparision works.
-				$current_fields[$column_name] = array_map('strval', $current_page_data_set);
+				//Normalize values for comparison by converting non-NULL values to strings.
+				$current_fields[$column_name] = array_map(function($value)
+				{
+					return $value === NULL ? NULL : strval($value);
+				}, $current_page_data_set);
 			}
 		}
 		
