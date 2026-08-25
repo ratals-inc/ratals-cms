@@ -13,16 +13,10 @@ else
 	{
 	?>
 	<script nonce="<?php echo NONCE; ?>">
-	$(document).ready(function()
+	$(document).on('input', '.tld', function()
 	{
-		$(document).on('input', '.tld', function()
-		{
-			var domainName = $(".tld").val()
-			$(".site-name").val(domainName);
-			$(".server-email").val('support@' + domainName);
-			$(".server-smpt-url").val('mail.' + domainName);
-			$(".server-email-username").val('support@' + domainName);
-		});
+		var domainName = $(".tld").val()
+		$(".new-site-name").val(domainName);
 	});
 	</script>
 	<?php } ?>

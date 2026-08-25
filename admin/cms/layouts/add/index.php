@@ -40,10 +40,7 @@ else
     <?php include_once(INSTALLATION_ROOT.'/admin/cms/includes/navigation.php');?>
     <div class="right">
       <!-- Start Notices -->
-      <?php 
-	  include(INSTALLATION_ROOT.'/admin/cms/includes/notices/index.php');
-	  echo $display_message; 
-	  ?>
+      <?php include(INSTALLATION_ROOT.'/admin/cms/includes/notices/index.php');?>
       <!-- End Notices -->
       <?php if($level >= $_SESSION['admin_page_level']) { ?>
       <!-- Start Edit View -->

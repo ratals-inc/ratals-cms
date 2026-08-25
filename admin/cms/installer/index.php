@@ -38,6 +38,7 @@ if(count($site_name_array) == 2)
 }
 
 //Get all timezones from php library and put in array.
+$server_timezone = date_default_timezone_get();
 $php_timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 $timezone_rows = array();
 if(!empty($php_timezones))
@@ -53,6 +54,9 @@ if(!empty($php_timezones))
 	}
 	sort($timezone_rows);
 }
+
+//Restore the server timezone.
+date_default_timezone_set($server_timezone);
 
 $all_time_zone_options = '';
 if(!empty($timezone_rows))
@@ -75,7 +79,7 @@ if(!empty($timezone_rows))
 			}
 			else
 			{
-				if('America/Denver' == $timezone_row["timezone"])
+				if($server_timezone == $timezone_row["timezone"])
 				{
 					$selected_item = " selected";
 				}
@@ -174,8 +178,9 @@ if(!empty($new_site_languages))
 }
 
 $errors = array();
-if(isset($_POST['submit']))
+if($_SERVER['REQUEST_METHOD'] === 'POST')
 {
+	//DATABASE SETUP
 	$database_hostname = trim($_POST['database_hostname'] ?? '');
 	if(empty($database_hostname))
 	{
@@ -184,6 +189,39 @@ if(isset($_POST['submit']))
 	elseif(strpos($database_hostname, "'") !== false)
 	{
 		$errors['database_hostname_quote'] = '<span class="error">Cannot contain single quotes.</span>';
+	}
+	
+	//Set localhost true or false.
+	$database_host_is_local = in_array(strtolower(trim($database_hostname)), ['localhost', '127.0.0.1', '::1'], true);
+	
+	//Get install token contents.
+	$install_token = '';
+	$install_token_file = INSTALLATION_ROOT.'/core/install-token.php';
+	
+	if(file_exists($install_token_file))
+	{
+		//Define RATALS_INSTALLER so install-token.php can be loaded by the installer.
+		//Without this constant, /core/install-token.php returns a 403 and prevents direct URL access.
+		if(!defined('RATALS_INSTALLER'))
+		{
+			define('RATALS_INSTALLER', true);
+		}
+		
+		require_once($install_token_file);
+	}
+	
+	//Installation using an install token.
+	if(!empty($install_token))
+	{
+		if(!isset($_POST['install_token']) || !hash_equals($install_token, $_POST['install_token']))
+		{
+			$errors['install_token'] = '<span class="center error error-top-margin">The installation token is invalid.</span>';
+		}
+	}
+	//Manual installation using a remote database.
+	elseif(!isset($errors['database_hostname']) && $database_host_is_local === false && file_exists($install_token_file))
+	{
+		$errors['install_token'] = '<span class="center error error-top-margin">To install Ratals using a remote database ('.$database_hostname.'), you must verify that you control the server files by deleting /core/install-token.php and then submitting the installation again.</span>';
 	}
 	
 	$database_name = trim($_POST['database_name'] ?? '');
@@ -216,7 +254,7 @@ if(isset($_POST['submit']))
 		$errors['database_password_quote'] = '<span class="error">Cannot contain single quotes.</span>';
 	}
 	
-	if(!empty($database_hostname) && !empty($database_name) && !empty($database_username) && !empty($database_password) && !isset($errors['database_hostname']) && !isset($errors['database_name']) && !isset($errors['database_username']) && !isset($errors['database_password']))
+	if(!empty($database_hostname) && !empty($database_name) && !empty($database_username) && !empty($database_password) && !isset($errors['database_hostname']) && !isset($errors['database_hostname_quote']) && !isset($errors['database_name']) && !isset($errors['database_name_quote']) && !isset($errors['database_username']) && !isset($errors['database_username_quote']) && !isset($errors['database_password']) && !isset($errors['database_password_quote']))
 	{
 		try
 		{
@@ -262,24 +300,14 @@ if(isset($_POST['submit']))
 		}
 	}
 	
+	//SITE SETUP
 	$site_name = trim($_POST['site_name'] ?? '');
 	if(empty($site_name))
 	{
 		$errors['site_name'] = '<span class="error">Site Name</span>';
 	}
-	
-	$https_in_url = trim($_POST['https_in_url'] ?? '');
-	if(empty($https_in_url))
-	{
-		$errors['https_in_url'] = '<span class="error">Select if you want "https" or "http" in your doamin</span>';
-	}
-	
-	$www_in_url = trim($_POST['www_in_url'] ?? '');
-	if(empty($www_in_url))
-	{
-		$errors['www_in_url'] = '<span class="error">Select if you want "www." or "no www." in your domain</span>';
-	}
-	
+	$https_in_url = trim($_POST['https_in_url'] ?? 'Yes');
+	$www_in_url = trim($_POST['www_in_url'] ?? 'Yes');
 	$tld = trim($_POST['tld'] ?? '');
 	if(empty($tld))
 	{
@@ -301,146 +329,44 @@ if(isset($_POST['submit']))
 			$errors['tld'] = '<span class="error">Invalid domain characters</span>';
 		}
 	}
+	$site_language = trim($_POST['site_language'] ?? 'en');
+	$timezone = trim($_POST['timezone'] ?? 'America/New_York');
+	$load_with_cache = trim($_POST['load_with_cache'] ?? 'Yes');
 	
-	$site_language = trim($_POST['site_language'] ?? '');
-	if(empty($site_language))
-	{
-		$errors['site_language'] = '<span class="error">Site Language</span>';
-	}
-	
-	$timezone = trim($_POST['timezone'] ?? '');
-	if(empty($timezone))
-	{
-		$errors['timezone'] = '<span class="error">Time Zone</span>';
-	}
-	
-	$load_with_cache = trim($_POST['load_with_cache'] ?? '');
-	if(empty($load_with_cache))
-	{
-		$errors['load_with_cache'] = '<span class="error">Load the Site with Cached Results</span>';
-	}
-	
-	$currency_type = trim($_POST['currency_type'] ?? '');
-	if(empty($currency_type))
-	{
-		$errors['currency_type'] = '<span class="error">Currency Type</span>';
-	}
-	
-	$front_symbol = ltrim($_POST['front_symbol'] ?? '');
+	//CURRENCY SETUP
+	$currency_type = trim($_POST['currency_type'] ?? 'USD');
+	$front_symbol = ltrim($_POST['front_symbol'] ?? '$');
 	$back_symbol = rtrim($_POST['back_symbol'] ?? '');
+	$thousand_separator = $_POST['thousand_separator'] ?? ',';
+	$fractional_separator = trim($_POST['fractional_separator'] ?? '.');
+	$zeros_after_separator = trim($_POST['zeros_after_separator'] ?? '2');
 	
-	$thousand_separator = $_POST['thousand_separator'];
-	if(empty($thousand_separator))
+	//SMTP EMAIL SETUP
+	$smtp_email_address = trim($_POST['smtp_email_address'] ?? '');
+	$smtp_email_name = trim($_POST['smtp_email_name'] ?? '');
+	$smtp_email_hostname = trim($_POST['smtp_email_hostname'] ?? '');
+	$smtp_email_port = trim($_POST['smtp_email_port'] ?? '');
+	if($smtp_email_port === '')
 	{
-		$errors['thousand_separator'] = '<span class="error">Thousand Separator</span>';
+		$smtp_email_port = NULL;
 	}
-		
-	$fractional_separator = trim($_POST['fractional_separator'] ?? '');
-	if(empty($fractional_separator))
-	{
-		$errors['fractional_separator'] = '<span class="error">Fractional Separator</span>';
-	}
+	$smtp_email_username = trim($_POST['smtp_email_username'] ?? '');
+	$smtp_email_password = trim($_POST['smtp_email_password'] ?? '');
 	
-	$zeros_after_separator = trim($_POST['zeros_after_separator'] ?? '');
-	if(empty($zeros_after_separator))
-	{
-		$errors['zeros_after_separator'] = '<span class="error">Zeros After Separator</span>';
-	}
-	
-	$email_connector = '';
-	if(isset($_POST['email_connector']))
-	{
-		$email_connector = ' checked';
-		$email_port = '25';
-	}
-	else
-	{
-		$email_port = '587';
-	}
-	
-	$server_email_name = trim($_POST['server_email_name'] ?? '');
-	if(empty($server_email_name))
-	{
-		$errors['server_email_name'] = '<span class="error">Server Email Name</span>';
-	}
-	
-	$server_email = trim($_POST['server_email'] ?? '');
-	if(empty($server_email))
-	{
-		$errors['server_email'] = '<span class="error">Server Email Address</span>';
-	}
-	
-	$server_smpt_url = trim($_POST['server_smpt_url'] ?? '');
-	if(empty($server_smpt_url))
-	{
-		$errors['server_smpt_url'] = '<span class="error">SMTP Server / Hostname</span>';
-	}
-	
-	$server_email_username = trim($_POST['server_email_username'] ?? '');
-	if(empty($server_email_username) && !isset($_POST['email_connector']))
-	{
-		$errors['server_email_username'] = '<span class="error">Server Email Username</span>';
-	}
-	
-	$server_email_password = trim($_POST['server_email_password'] ?? '');
-	if(empty($server_email_password) && !isset($_POST['email_connector']))
-	{
-		$errors['server_email_password'] = '<span class="error">Server Email Password</span>';
-	}
-	
+	//USER SETUP
 	$first_name = trim($_POST['first_name'] ?? '');
-	if(empty($first_name))
-	{
-		$errors['first_name'] = '<span class="error">First Name</span>';
-	}
-	
 	$last_name = trim($_POST['last_name'] ?? '');
-	if(empty($last_name))
-	{
-		$errors['last_name'] = '<span class="error">Last Name</span>';
-	}
-	
 	$country = trim($_POST['country'] ?? '');
 	if(empty($country))
 	{
 		$errors['country'] = '<span class="error">Country</span>';
 	}
-	
 	$street_address = trim($_POST['street_address'] ?? '');
-	if(empty($street_address))
-	{
-		$errors['street_address'] = '<span class="error">Street Address</span>';
-	}
-	
 	$city = trim($_POST['city'] ?? '');
-	if(empty($city))
-	{
-		$errors['city'] = '<span class="error">City</span>';
-	}
-	
 	$state = trim($_POST['state'] ?? '');
-	if(empty($state))
-	{
-		$errors['state'] = '<span class="error">State / Province / Region</span>';
-	}
-	
 	$postal_code = trim($_POST['postal_code'] ?? '');
-	if(empty($postal_code))
-	{
-		$errors['postal_code'] = '<span class="error">Postal Code</span>';
-	}
-	
 	$phone_number = trim($_POST['phone_number'] ?? '');
-	if(empty($phone_number))
-	{
-		$errors['phone_number'] = '<span class="error">Phone Number</span>';
-	}
-	
-	$display_contact_inforamtion = trim($_POST['display_contact_inforamtion'] ?? '');
-	if(empty($display_contact_inforamtion))
-	{
-		$errors['display_contact_inforamtion'] = '<span class="error">Display Contact Information on the Website</span>';
-	}
+	$display_contact_information = trim($_POST['display_contact_information'] ?? 'No');
 	
 	//Make sure Admin Login Path is not easy to find for for brute force login attackes and make sure new admin url directory is avaible to use. 
 	$admin_directory = trim($_POST['admin_directory'] ?? '');
@@ -469,6 +395,16 @@ if(isset($_POST['submit']))
 	elseif(strtolower($username) == 'admin' || strtolower($username) == 'administrator' || strtolower($username) == 'root' || strtolower($username) == strtolower($first_name) || strtolower($username) == strtolower($last_name) || strtolower($username) == strtolower($site_name) || strtolower($username) == strtolower($admin_directory))
 	{
 		$errors['username'] = '<span class="error">Enter A Stronger Username</span>';
+	}
+	
+	$user_email = trim($_POST['user_email'] ?? '');
+	if(empty($user_email))
+	{
+		$errors['user_email'] = '<span class="error">Admin User Email</span>';
+	}
+	elseif(strlen($user_email) < 6 || strpos($user_email, '@') === false || strpos($user_email, '.') === false)
+	{
+		$errors['user_email'] = '<span class="error">Valid Admin User Email Required</span>';
 	}
 	
 	$password = trim($_POST['password'] ?? '');
@@ -628,14 +564,15 @@ if(isset($_POST['submit']))
 				}
 			}
 			
-			$email = $server_email;
 			$redirect_to_opposite_url = 'Yes';
 			$auto_generate_canonical_url = 'Yes';
 			$url_extension = '/';
 			$add_site_name_to_title_tag = 'Yes';
 			$separate_site_name_in_title_tag_with = '-';
 			$pagination = 30;
-			$first_last_name = $first_name.' '.$last_name;
+			$first_last_name = trim($first_name.' '.$last_name);
+			$to_email_name = $first_last_name ?: 'Site Administrator';
+			$first_last_name = $first_last_name ?: 'Ratals Installer';
 			$new_user_id = 1;
 			
 			//Make sure last ids for installs are unset. These session variables are set in template-files.php.
@@ -818,6 +755,14 @@ if(isset($_POST['submit']))
 			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/urls.php');
 			
 			$installation_step = 'Completing installation';
+			
+			if(file_exists($install_token_file))
+			{
+				if(!unlink($install_token_file))
+				{
+					error_log('Could not remove the Ratals installation token file.');
+				}
+			}
 			
 			//Pause for 10 seconds to ensure the new admin URL is updated in the .htaccess file and the cache is cleared, allowing it to load properly.
 			sleep(10);
@@ -1070,15 +1015,13 @@ a:hover { color: var(--link-hover-color); text-decoration: underline; }
 .box-wrapper .sub-text { background-color: var(--section-bg-color); padding: 12px 14px; line-height: 22px; color: var(--text-color); border: 1px solid var(--border-color); border-radius: var(--main-border-radius); }
 .box-wrapper .currency_format { font-weight: 600; }
 .box-wrapper .currency_format, .box-wrapper .currency_format span { display: inline; }
-.box-wrapper .email_connector { margin: 6px 0px; }
-.box-wrapper .email_connector label { cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
-.box-wrapper .email_connector input { height: 18px; width: 18px; vertical-align: middle; margin: 0px; cursor: pointer; accent-color: var(--primary-bg-color); }
 .box-wrapper .be-patient { font-size: 12px; line-height: 18px; text-align: center; color: var(--muted-text-color); margin-top: 10px; }
 .box-wrapper .password-requirements-wrap { background-color: var(--notice-bg-color); border: 1px solid var(--notice-border-color); padding: 12px 14px; border-radius: var(--main-border-radius); font-size: 13px; line-height: 19px; }
 .box-wrapper .box ul li .password-requirements { margin: 0px; padding: 8px 8px 0px 22px; }
 .box-wrapper .box ul li .password-requirements li { list-style: initial; padding-bottom: 3px; }
 .box-wrapper .center { text-align: center; }
 .box-wrapper .error { color: var(--error-color); }
+.box-wrapper span.required { display: inline-block; color: var(--error-color); line-height: 0; font-weight: 700; }
 .box-wrapper .error-top-margin { margin-top: 12px; }
 .footer { margin-bottom: 30px; text-align: center; font-size: 12px; color: var(--muted-text-color); }
 .footer .footer-wrap { margin: 0px auto; max-width: 800px; }
@@ -1234,30 +1177,31 @@ $(document).ready(function()
         <?php if(!empty($errors['database_collation'])) { echo $errors['database_collation']; } ?>
         <?php if(!empty($errors['database_collation_check'])) { echo $errors['database_collation_check']; } ?>
         <?php if(!empty($errors['installation'])) { echo $errors['installation']; } ?>
+        <?php if(!empty($errors['install_token'])) { echo $errors['install_token']; } ?>
 		<?php if(isset($errors['password_confirm_password'])) { echo $errors['password_confirm_password']; } ?>
-		
+        
 		<form action="" method="POST">
 		<ul class="four-column">
 			<li class="full-row">
 				<div class="headline">DATABASE CONNECTION</div>
 			</li>
 			<li>
-				<?php if(isset($errors['database_hostname'])) { echo $errors['database_hostname']; } else { echo '<span>Database Hostname</span>'; } ?>
-				<input name="database_hostname" type="text" value="<?php if(isset($_POST['submit'])) { echo $database_hostname; } else { echo 'localhost'; } ?>" />
+				<?php if(isset($errors['database_hostname'])) { echo $errors['database_hostname']; } else { echo '<span>Database Hostname <span class="required">*</span></span>'; } ?>
+				<input name="database_hostname" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $database_hostname; } else { echo 'localhost'; } ?>" />
 				<div class="note-small-font"><?php if(isset($errors['database_hostname_quote'])) { echo $errors['database_hostname_quote']; } ?></div>
 			</li>
             <li>
-				<?php if(isset($errors['database_name'])) { echo $errors['database_name']; } else { echo '<span>Database Name</span>'; } ?>
-				<input name="database_name" type="text" value="<?php if(isset($_POST['submit'])) { echo $database_name; } ?>" />
+				<?php if(isset($errors['database_name'])) { echo $errors['database_name']; } else { echo '<span>Database Name <span class="required">*</span></span>'; } ?>
+				<input name="database_name" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $database_name; } ?>" />
 				<div class="note-small-font"><?php if(isset($errors['database_name_quote'])) { echo $errors['database_name_quote']; } ?></div>
 			</li>
 			<li>
-				<?php if(isset($errors['database_username'])) { echo $errors['database_username']; } else { echo '<span>Database Username</span>'; } ?>
-				<input name="database_username" type="text" value="<?php if(isset($_POST['submit'])) { echo $database_username; } ?>" />
+				<?php if(isset($errors['database_username'])) { echo $errors['database_username']; } else { echo '<span>Database Username <span class="required">*</span></span>'; } ?>
+				<input name="database_username" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $database_username; } ?>" />
 				<div class="note-small-font"><?php if(isset($errors['database_username_quote'])) { echo $errors['database_username_quote']; } ?></div>
 			</li>
 			<li>
-				<?php if(isset($errors['database_password'])) { echo $errors['database_password']; } else { echo '<span>Database Password</span>'; } ?>
+				<?php if(isset($errors['database_password'])) { echo $errors['database_password']; } else { echo '<span>Database Password <span class="required">*</span></span>'; } ?>
 				<input name="database_password" type="password" value="" />
 				<div class="note-small-font"><?php if(isset($errors['database_password_quote'])) { echo $errors['database_password_quote']; } ?></div>
 			</li>
@@ -1267,13 +1211,11 @@ $(document).ready(function()
 				<div class="headline">SITE SETTINGS</div>
 			</li>
 			<li>
-				<?php if(isset($errors['site_name'])) { echo $errors['site_name']; } else { echo '<span>Site Name</span>'; } ?>
+				<?php if(isset($errors['site_name'])) { echo $errors['site_name']; } else { echo '<span>Site Name <span class="required">*</span></span>'; } ?>
 				<input name="site_name" type="text" value="<?php echo $site_name; ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['https_in_url'])) { echo $errors['https_in_url']; } ?>
-				<?php if(isset($errors['www_in_url'])) { echo $errors['www_in_url']; } ?>
-				<?php if(isset($errors['tld'])) { echo $errors['tld']; } else { echo '<span>Domain</span>'; } ?>
+				<?php if(isset($errors['tld'])) { echo $errors['tld']; } else { echo '<span>Domain <span class="required">*</span></span>'; } ?>
                 <select name="https_in_url" class="http-s">
 					<option value="">Select</option>
                     <option value="No"<?php if(isset($_POST['https_in_url']) && $_POST['https_in_url'] == 'No') { echo ' selected'; } ?>>http://</option>
@@ -1285,23 +1227,23 @@ $(document).ready(function()
 				</select><input name="tld" class="tld" type="text" value="<?php echo htmlspecialchars($tld ?? '', ENT_QUOTES); ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['admin_directory'])) { echo $errors['admin_directory']; } else { echo '<span>Admin Login Path</span>'; } ?>
-				<input name="admin_directory" placeholder="Enter path only - no domain" type="text" value="<?php if(isset($_POST['submit'])) { echo $admin_directory; } else { echo 'admin-login'; } ?>" />
+				<?php if(isset($errors['admin_directory'])) { echo $errors['admin_directory']; } else { echo '<span>Admin Login Path <span class="required">*</span></span>'; } ?>
+				<input name="admin_directory" placeholder="Enter path only, i.e. admin-login - no domain" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $admin_directory; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['site_language'])) { echo $errors['site_language']; } else { echo '<span>Site Language</span>'; } ?>
+				<span>Site Language</span>
 				<select name="site_language" class="site_language">
 					<?php echo $all_language_options; ?>
 				</select>
 			</li>
 			<li>
-				<?php if(isset($errors['timezone'])) { echo $errors['timezone']; } else { echo '<span>Time Zone</span>'; } ?>
+				<span>Time Zone</span>
 				<select name="timezone" class="timezone">
 					<?php echo $all_time_zone_options; ?>
 				</select>
 			</li>
 			<li>
-				<?php if(isset($errors['load_with_cache'])) { echo $errors['load_with_cache']; } else { echo '<span>Load the Site with Cached Results</span>'; } ?>
+				<span>Load the Site with Cached Results</span>
 				<select name="load_with_cache" class="load_with_cache">
 					<option value="Yes"<?php if(isset($_POST['load_with_cache']) && $_POST['load_with_cache'] == 'Yes') { echo ' selected'; } ?>>Yes</option>
 					<option value="No"<?php if(isset($_POST['load_with_cache']) && $_POST['load_with_cache'] == 'No') { echo ' selected'; } ?>>No</option>
@@ -1317,7 +1259,7 @@ $(document).ready(function()
 				Currency format: <span class="currency_format"><span class="front_symbol"></span>1<span class="thousand_separator"></span>000<span class="fractional_separator"></span><span class="zeros_after_separator"></span><span class="back_symbol"></span></span>
 			</li>
 			<li>
-				<?php if(isset($errors['currency_type'])) { echo $errors['currency_type']; } else { echo '<span>Currency Type</span>'; } ?>
+				<span>Currency Type</span>
 				<select name="currency_type">
 					<option value=""></option>
 					<option value="AED"<?php if(isset($_POST['currency_type']) && $_POST['currency_type'] == 'AED') { echo ' selected'; } ?>>AED</option>
@@ -1350,15 +1292,15 @@ $(document).ready(function()
 				</select>
 			</li>
 			<li>
-				<?php if(isset($errors['front_symbol'])) { echo $errors['front_symbol']; } else { echo '<span>Front Symbol</span>'; } ?>
-				<input name="front_symbol" type="text" class="front_symbol_field" value="<?php if(isset($_POST['submit'])) { echo $front_symbol; } else { echo '$'; } ?>" />
+				<span>Front Symbol</span>
+				<input name="front_symbol" type="text" class="front_symbol_field" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $front_symbol; } else { echo '$'; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['back_symbol'])) { echo $errors['back_symbol']; } else { echo '<span>Back Symbol</span>'; } ?>
-				<input name="back_symbol" type="text" class="back_symbol_field" value="<?php if(isset($_POST['submit'])) { echo $back_symbol; } ?>" />
+				<span>Back Symbol</span>
+				<input name="back_symbol" type="text" class="back_symbol_field" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $back_symbol; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['thousand_separator'])) { echo $errors['thousand_separator']; } else { echo '<span>Thousand Separator</span>'; } ?>
+				<span>Thousand Separator</span>
 				<select name="thousand_separator" class="thousand_separator_field">
 					<option value=","<?php if(isset($_POST['thousand_separator']) && $_POST['thousand_separator'] == ',') { echo ' selected'; } elseif(!isset($_POST['thousand_separator'])) { echo ' selected'; } ?>>, (comma)</option>
 					<option value="."<?php if(isset($_POST['thousand_separator']) && $_POST['thousand_separator'] == '.') { echo ' selected'; } ?>>. (decimal point)</option>
@@ -1367,14 +1309,14 @@ $(document).ready(function()
 				</select>
 			</li>
 			<li>
-				<?php if(isset($errors['fractional_separator'])) { echo $errors['fractional_separator']; } else { echo '<span>Fractional Separator</span>'; } ?>
+				<span>Fractional Separator</span>
 				<select name="fractional_separator" class="fractional_separator_field">
 					<option value=","<?php if(isset($_POST['fractional_separator']) && $_POST['fractional_separator'] == ',') { echo ' selected'; } ?>>, (comma)</option>
 					<option value="."<?php if(isset($_POST['fractional_separator']) && $_POST['fractional_separator'] == '.') { echo ' selected'; } elseif(!isset($_POST['fractional_separator'])) { echo ' selected'; } ?>>. (decimal point)</option>
 				</select>
 			</li>
 			<li>
-				<?php if(isset($errors['zeros_after_separator'])) { echo $errors['zeros_after_separator']; } else { echo '<span>Zeros After Fractional Separator</span>'; } ?>
+				<span>Zeros After Fractional Separator</span>
 				<select name="zeros_after_separator" class="zeros_after_separator_field">
 					<option value="1"<?php if(isset($_POST['zeros_after_separator']) && $_POST['zeros_after_separator'] == '1') { echo ' selected'; } ?>>1</option>
 					<option value="2"<?php if(isset($_POST['zeros_after_separator']) && $_POST['zeros_after_separator'] == '2') { echo ' selected'; } elseif(!isset($_POST['zeros_after_separator'])) { echo ' selected'; } ?>>2</option>
@@ -1385,36 +1327,36 @@ $(document).ready(function()
 				</select>
 			</li>
 		</ul> 
-		<ul class="five-column">
+		<ul class="three-column">
 			<li class="full-row">
-				<div class="headline">EMAIL SERVER SETUP</div>
+				<div class="headline">OUTGOING SMTP EMAIL DELIVERY SETUP (OPTIONAL)</div>
 			</li>
 			<li class="full-row small-font sub-text">
-				Enter the email account settings associated with <?php echo $tld; ?>. These settings should match the email account you set up in your hosting account and will be used for outgoing email throughout your Ratals installation, including password recovery and security alerts. The default values are examples and may need to be changed for your hosting account.
-
+				If you can set up your SMTP email settings now, it will save you setup time later. If SMTP is not configured, Ratals will attempt to send email using your server's PHP mail function. PHP mail may be less reliable, and messages such as password recovery emails, security alerts, and other system notifications may be delivered to spam or junk folders.
 			</li>
-			<li class="full-row small-font">
-				<div class="email_connector"><label><input name="email_connector" type="checkbox"<?php if(isset($email_connector)) { echo $email_connector; } ?>> Email server is configured with a relay or connector and does not require a username and password.</label></div>
-			</li>
-			<li>
-				<?php if(isset($errors['server_email_name'])) { echo $errors['server_email_name']; } else { echo '<span>Server Email Name</span>'; } ?>
-				<input name="server_email_name" placeholder="i.e. Support" type="text" value="<?php if(isset($_POST['submit'])) { echo $server_email_name; } else { echo 'Support'; } ?>" />
+            <li>
+				<span>SMTP Email Address</span>
+				<input name="smtp_email_address" placeholder="i.e. support@<?php echo $tld; ?>" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $smtp_email_address; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['server_email'])) { echo $errors['server_email']; } else { echo '<span>Server Email Address</span>'; } ?>
-				<input name="server_email" placeholder="i.e. support@<?php echo $tld; ?>" type="text" value="<?php if(isset($_POST['submit'])) { echo $server_email; } else { echo 'support@'.$tld; } ?>" />
+				<span>SMTP Email Name</span>
+				<input name="smtp_email_name" placeholder="i.e. Support" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $smtp_email_name; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['server_smpt_url'])) { echo $errors['server_smpt_url']; } else { echo '<span>SMTP Server / Hostname</span>'; } ?>
-				<input name="server_smpt_url" placeholder="i.e. mail.<?php echo $tld; ?>" type="text" value="<?php if(isset($_POST['submit'])) { echo $server_smpt_url; } else { echo 'mail.'.$tld; } ?>" />
+				<span>SMTP Email Hostname</span>
+				<input name="smtp_email_hostname" placeholder="i.e. mail.<?php echo $tld; ?>" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $smtp_email_hostname; } ?>" />
+			</li>
+            <li>
+				<span>SMTP Email Port</span>
+				<input name="smtp_email_port" placeholder="i.e. 587 or 25 for relay/connector" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $smtp_email_port; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['server_email_username'])) { echo $errors['server_email_username']; } else { echo '<span>Server Email Username</span>'; } ?>
-				<input name="server_email_username" type="text" value="<?php if(isset($_POST['submit'])) { echo $server_email_username; } else { echo 'support@'.$tld; } ?>" />
+				<span>SMTP Email Username</span>
+				<input name="smtp_email_username" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $smtp_email_username; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['server_email_password'])) { echo $errors['server_email_password']; } else { echo '<span>Server Email Password</span>'; } ?>
-				<input name="server_email_password" type="password" value="" />
+				<span>SMTP Email Password</span>
+				<input name="smtp_email_password" type="password" value="" />
 			</li>
 		</ul>
 		<ul class="three-column">
@@ -1422,18 +1364,18 @@ $(document).ready(function()
 				<div class="headline">USER & COMPANY INFORMATION</div>
 			</li>
             <li class="full-row small-font sub-text">
-				This information is used to create your administrator profile and company contact information that can be displayed on your website. To prevent your company contact information from being displayed, select No for Display This Contact Information on the Website.
+				This information is used to create your administrator profile and company contact information. It can be completed or updated later from the Ratals admin. To prevent company contact information from being displayed on your website, select No for Display This Contact Information on the Website.
 			</li>
 			<li>
-				<?php if(isset($errors['first_name'])) { echo $errors['first_name']; } else { echo '<span>First Name</span>'; } ?>
-				<input name="first_name" type="text" value="<?php if(isset($_POST['submit'])) { echo $first_name; } ?>" />
+				<span>First Name</span>
+				<input name="first_name" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $first_name; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['last_name'])) { echo $errors['last_name']; } else { echo '<span>Last Name</span>'; } ?>
-				<input name="last_name" type="text" value="<?php if(isset($_POST['submit'])) { echo $last_name; } ?>" />
+				<span>Last Name</span>
+				<input name="last_name" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $last_name; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['country'])) { echo $errors['country']; } else { echo '<span>Country</span>'; } ?>
+				<?php if(isset($errors['country'])) { echo $errors['country']; } else { echo '<span>Country <span class="required">*</span></span>'; } ?>
 				<select name="country">
 					<option value=""></option>
 					<option value="AF"<?php if(isset($_POST['country']) && $_POST['country'] == 'AF') { echo ' selected'; } ?>>Afghanistan</option>
@@ -1638,48 +1580,52 @@ $(document).ready(function()
 				</select>
 			</li>
 			<li>
-				<?php if(isset($errors['street_address'])) { echo $errors['street_address']; } else { echo '<span>Street Address</span>'; } ?>
-				<input name="street_address" type="text" value="<?php if(isset($_POST['submit'])) { echo $street_address; } ?>" />
+				<span>Street Address</span>
+				<input name="street_address" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $street_address; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['city'])) { echo $errors['city']; } else { echo '<span>City</span>'; } ?>
-				<input name="city" type="text" value="<?php if(isset($_POST['submit'])) { echo $city; } ?>" />
+				<span>City</span>
+				<input name="city" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $city; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['state'])) { echo $errors['state']; } else { echo '<span>State / Province / Region</span>'; } ?>
-				<input name="state" type="text" value="<?php if(isset($_POST['submit'])) { echo $state; } ?>" />
+				<span>State / Province / Region</span>
+				<input name="state" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $state; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['postal_code'])) { echo $errors['postal_code']; } else { echo '<span>Postal Code</span>'; } ?>
-				<input name="postal_code" type="text" value="<?php if(isset($_POST['submit'])) { echo $postal_code; } ?>" />
+				<span>Postal Code</span>
+				<input name="postal_code" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $postal_code; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['phone_number'])) { echo $errors['phone_number']; } else { echo '<span>Phone Number</span>'; } ?>
-				<input name="phone_number" type="text" value="<?php if(isset($_POST['submit'])) { echo $phone_number; } ?>" />
+				<span>Phone Number</span>
+				<input name="phone_number" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $phone_number; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['display_contact_inforamtion'])) { echo $errors['display_contact_inforamtion']; } else { echo '<span>Display This Contact Information on the Website</span>'; } ?>
-				<select name="display_contact_inforamtion" class="display_contact_inforamtion">
-					<option value="No"<?php if(isset($_POST['display_contact_inforamtion']) && $_POST['display_contact_inforamtion'] == 'No') { echo ' selected'; } ?>>No</option>
-					<option value="Yes"<?php if(isset($_POST['display_contact_inforamtion']) && $_POST['display_contact_inforamtion'] == 'Yes') { echo ' selected'; } ?>>Yes</option>
+				<span>Display This Contact Information on the Website</span>
+				<select name="display_contact_information" class="display_contact_information">
+					<option value="No"<?php if(isset($_POST['display_contact_information']) && $_POST['display_contact_information'] == 'No') { echo ' selected'; } ?>>No</option>
+					<option value="Yes"<?php if(isset($_POST['display_contact_information']) && $_POST['display_contact_information'] == 'Yes') { echo ' selected'; } ?>>Yes</option>
 				</select>
 				<div class="note-small-font"><strong>Note:</strong> First and Last Name will not display on the website.</div>
 			</li>
 		</ul>
-		<ul class="three-column">
+		<ul class="four-column">
 			<li class="full-row">
 				<div class="headline">ADMIN LOGIN CREDENTIALS</div>
 			</li>
 			<li>
-				<?php if(isset($errors['username'])) { echo $errors['username']; } else { echo '<span>Admin Username</span>'; } ?>
-				<input name="username" type="text" value="<?php if(isset($_POST['submit'])) { echo $username; } ?>" />
+				<?php if(isset($errors['username'])) { echo $errors['username']; } else { echo '<span>Admin Username <span class="required">*</span></span>'; } ?>
+				<input name="username" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $username; } ?>" />
+			</li>
+            <li>
+				<?php if(isset($errors['user_email'])) { echo $errors['user_email']; } else { echo '<span>Admin User Email <span class="required">*</span></span>'; } ?>
+				<input name="user_email" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $user_email; } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['password'])) { echo $errors['password']; } else { echo '<span>Admin Password</span>'; } ?>
+				<?php if(isset($errors['password'])) { echo $errors['password']; } else { echo '<span>Admin Password <span class="required">*</span></span>'; } ?>
 				<input name="password" type="password" value="" />
 			</li>
 			<li>
-				<?php if(isset($errors['confirm_password'])) { echo $errors['confirm_password']; } else { echo '<span>Confirm Admin Password</span>'; } ?>
+				<?php if(isset($errors['confirm_password'])) { echo $errors['confirm_password']; } else { echo '<span>Confirm Admin Password <span class="required">*</span></span>'; } ?>
 				<input name="confirm_password" type="password" value="" />
 			</li>
 			<li class="full-row">
@@ -1704,7 +1650,7 @@ $(document).ready(function()
 <div class="footer">
 	<div class="footer-wrap">
 		<div class="text"><a href="https://www.ratals.com/terms-of-use/" target="_blank">Terms of Use</a> | <a href="https://www.ratals.com/privacy-policy/" target="_blank">Privacy Policy</a></div>
-		<div class="powered-by"><span>Copyright &copy; 2025-2025 - Powered By</span> <a href="https://www.ratals.com/" target="_blank">Ratals Inc.</a> <span>- All Rights Reserved.</span></div>
+		<div class="powered-by"><span>Copyright &copy; 2025-<?php echo date("Y"); ?> - Powered By</span> <a href="https://www.ratals.com/" target="_blank">Ratals Inc.</a> <span>- All Rights Reserved.</span></div>
 	</div>
 </div>
 </body>

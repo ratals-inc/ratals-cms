@@ -19,6 +19,9 @@ if(isset($_SESSION['current_update_log']) && file_exists($_SESSION['current_upda
 	';
 }
 
+include(INSTALLATION_ROOT.'/admin/cms/includes/notices/server-date-setup.php');
+include(INSTALLATION_ROOT.'/admin/cms/includes/notices/smtp-email-setup.php');
+
 if(!empty($sql_get_messages))
 {
 	foreach($sql_get_messages as $sql_get_message)

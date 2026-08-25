@@ -86,10 +86,7 @@ else
 	<!-- Start Right Column -->
 	<div class="right">
     <!-- Start Notices -->
-    <?php 
-	include(INSTALLATION_ROOT.'/admin/cms/includes/notices/index.php');
-	echo $display_message; 
-	?>
+    <?php include(INSTALLATION_ROOT.'/admin/cms/includes/notices/index.php'); ?>
     <!-- End Notices -->
     <?php if($level >= $_SESSION['admin_page_level']) { ?>
 	<?php 

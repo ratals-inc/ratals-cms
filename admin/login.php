@@ -88,14 +88,10 @@ else
 				$_SESSION['user_postal_code'] = $row['postal_code'];
 				$_SESSION['user_phone_number'] = $row['phone_number'];
 				$_SESSION['user_phone_number_ext'] = $row['phone_number_ext'];
-				$_SESSION['user_email'] = $row['email'];
-				$_SESSION['user_email_signiture'] = $row['email_signiture'];
-				$_SESSION['user_email_cc'] = $row['email_cc'];
-				$_SESSION['user_email_bcc'] = $row['email_bcc'];
-				$_SESSION['user_email_server_url'] = $row['email_server_url'];
-				$_SESSION['user_email_server_port'] = $row['email_server_port'];
-				$_SESSION['user_email_username'] = $row['email_username'];
-				$_SESSION['user_email_password'] = $row['email_password'];
+				$_SESSION['user_email_address'] = $row['user_email_address'];
+				$_SESSION['user_email_cc'] = $row['user_email_cc'];
+				$_SESSION['user_email_bcc'] = $row['user_email_bcc'];
+				$_SESSION['user_email_signature'] = $row['user_email_signature'];
 				$_SESSION['admin_language'] = '';
 				$_SESSION['user_admin_permissions_id'] = $row['admin_permissions_id'];
 				$_SESSION['user_allow_software_update_messages'] = $row['allow_software_update_messages'];
@@ -206,7 +202,7 @@ else
 					}
 					
 					//Send email if failed login max attempts.
-					if($failed_login_attempts_email_me == 'Yes' && !empty($failed_login_attempts_email_address) && !empty($failed_login_attempts_email_from) && !empty($failed_login_attempts_email_server_url) && !empty($failed_login_attempts_email_server_port))
+					if($failed_login_attempts_email_me == 'Yes' && !empty($failed_login_attempts_to_email_address))
 					{
 						//Get live template directory name.
 						$email_template_record = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '*', 'templates', 'WHERE `site_id` = ? AND `status` = ? LIMIT 1', [$_SESSION['site_id'], 1]);
@@ -223,9 +219,9 @@ else
 							
 							$message = str_replace('[EMAIL_MESSAGE]', $message, $email_template);
 						}
-						
+	
 						//Send Too Many Failed Login Attempts Email.
-						smtpSendEmail($failed_login_attempts_email_address, $failed_login_attempts_to_name, $failed_login_attempts_email_cc, $failed_login_attempts_email_bcc, $failed_login_attempts_email_from, $failed_login_attempts_email_from_name, $failed_login_attempts_email_from, $subject, $message, $failed_login_attempts_email_server_url, $failed_login_attempts_email_server_port, $failed_login_attempts_email_username, $failed_login_attempts_email_password, '');
+						smtpSendEmail($failed_login_attempts_to_email_address, $failed_login_attempts_to_email_name, $failed_login_attempts_email_cc, $failed_login_attempts_email_bcc, $contact_info_smtp_email_address, $contact_info_smtp_email_name, $contact_info_smtp_email_address, $subject, $message, $contact_info_smtp_email_hostname, $contact_info_smtp_email_port, $contact_info_smtp_email_username, $contact_info_smtp_email_password, '', '');
 					}
 				}
 				

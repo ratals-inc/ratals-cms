@@ -42,11 +42,6 @@ if(isset($admin_field_section_ids['display_cookie_notice']['id']))
 	$parameters[] = [$admin_field_section_ids['display_cookie_notice']['id'], 'Cookie Notice Settings', 'cookie_notice_settings', '', '{}', $first_last_name, $first_last_name];
 }
 
-if(isset($admin_field_section_ids['email_signiture']['id']))
-{
-	$parameters[] = [$admin_field_section_ids['email_signiture']['id'], 'Admin User SMTP Email Server Information', 'admin_user_smpt_email_server_information', 'When this is setup, this admin user will able to email from the admin area. These emails will be sent from this admin users email address if you enter in their SMTP server email details. If the customer reply\'s to the email it will email back to this admin user email address.', '{}', $first_last_name, $first_last_name];
-}
-
 if(isset($admin_field_section_ids['form_name_class']['id']))
 {
 	$parameters[] = [$admin_field_section_ids['form_name_class']['id'], 'CSS Class Names to Above Fields', 'form_css_class_names_to_above_fields', 'CSS classes should be defined in your website template stylesheet to customize the look and feel of this form.', '{}', $first_last_name, $first_last_name];
@@ -82,11 +77,6 @@ if(isset($admin_field_section_ids['name_class']['id']))
 	$parameters[] = [$admin_field_section_ids['name_class']['id'], 'CSS Class Names to Above Fields', 'css_class_names_to_above_fields', 'CSS classes should be defined in your website template stylesheet to customize the look and feel of this form field.', '{}', $first_last_name, $first_last_name];
 }
 
-if(isset($admin_field_section_ids['site_email']['id']))
-{
-	$parameters[] = [$admin_field_section_ids['site_email']['id'], 'Site Email Address & SMTP Email Setup', 'site_email_address_and_smtp_email_setup', 'This is the email address that will display on the site. This is also the SMTP server information that will send out emails for recover password, new customer account confirmations, order confirmations, and order shipped with tracking information. If the email server information is not filled in, these emails will not send.', '{}', $first_last_name, $first_last_name];
-}
-
 if(isset($admin_field_section_ids['site_search_results_per_page']['id']))
 {
 	$parameters[] = [$admin_field_section_ids['site_search_results_per_page']['id'], 'Site Search Settings', 'site_search_settings', '', '{}', $first_last_name, $first_last_name];
@@ -95,6 +85,11 @@ if(isset($admin_field_section_ids['site_search_results_per_page']['id']))
 if(isset($admin_field_section_ids['slides_in_view']['id']))
 {
 	$parameters[] = [$admin_field_section_ids['slides_in_view']['id'], 'Media Slider Settings', 'media_slider_settings', '', '{}', $first_last_name, $first_last_name];
+}
+
+if(isset($admin_field_section_ids['smtp_email_address']['id']))
+{
+	$parameters[] = [$admin_field_section_ids['smtp_email_address']['id'], 'Outgoing SMTP Email Delivery', 'outgoing_smtp_email_delivery', 'Configure the outgoing SMTP email account Ratals will use to send password recovery emails, security alerts, order notifications, and other system emails. If SMTP is not configured, Ratals will attempt to send email using your server\'s PHP mail function, which may be less reliable.', '{}', $first_last_name, $first_last_name];
 }
 
 if(isset($admin_field_section_ids['sql_injection_email_me']['id']))
@@ -110,6 +105,11 @@ if(isset($admin_field_section_ids['timer']['id']))
 if(isset($admin_field_section_ids['timezone']['id']))
 {
 	$parameters[] = [$admin_field_section_ids['timezone']['id'], 'Timezone Settings', 'timezone_settings', '', '{}', $first_last_name, $first_last_name];
+}
+
+if(isset($admin_field_section_ids['user_email_address']['id']))
+{
+	$parameters[] = [$admin_field_section_ids['user_email_address']['id'], 'User Email Information', 'user_email_information', '', '{}', $first_last_name, $first_last_name];
 }
 
 if(!isset($update_admin_field_sections) && !empty($parameters))

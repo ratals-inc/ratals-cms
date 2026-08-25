@@ -114,7 +114,7 @@ else
 		{
 			$post_hash_password = hash("sha512", trim($post_password ?? ''));
 			
-			$results->getUpdateRecord(__LINE__, __FILE__, 'users', '`password` = ?', 'WHERE `email` = ?', [$post_hash_password, $row['user_email']]);
+			$results->getUpdateRecord(__LINE__, __FILE__, 'users', '`password` = ?', 'WHERE `user_email_address` = ?', [$post_hash_password, $row['user_email']]);
 			
 			$results->getDeleteRecord(__LINE__, __FILE__, 'password_reset_tokens', 'WHERE `user_email` = ?', [$row['user_email']]);
 			

@@ -49,7 +49,7 @@ else
 		
 		if(!empty(trim($post_username ?? '')))
 		{
-			$user_row = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'users', 'WHERE (`email` = ? OR `username` = ?)', [$post_username, $post_username]);
+			$user_row = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'users', 'WHERE (`user_email_address` = ? OR `username` = ?)', [$post_username, $post_username]);
 			
 			if(empty($user_row)) 
 			{
@@ -65,13 +65,13 @@ else
 				$expires = date('U') + 1800;
 				
 				//Delete old recover password tokesn from database.
-				$results->getDeleteRecord(__LINE__, __FILE__, 'password_reset_tokens', 'WHERE `user_email` = ?', [$user_row['email']]);
+				$results->getDeleteRecord(__LINE__, __FILE__, 'password_reset_tokens', 'WHERE `user_email` = ?', [$user_row['user_email_address']]);
 				
 				//Insert new password token to reset password.
-				$results->getInsertRecord(__LINE__, __FILE__, 'password_reset_tokens', '`site_id`, `user_email`, `reset_selector`, `reset_token`, `reset_expires`', '?,?,?,?,?', [$site_id, $user_row['email'], $selector, $hashed_token, $expires]);
+				$results->getInsertRecord(__LINE__, __FILE__, 'password_reset_tokens', '`site_id`, `user_email`, `reset_selector`, `reset_token`, `reset_expires`', '?,?,?,?,?', [$site_id, $user_row['user_email_address'], $selector, $hashed_token, $expires]);
 				
 				
-				if(!empty($user_row['email']) && !empty($contact_info_email_from) && !empty($contact_info_email_server_url) && !empty($contact_info_email_server_port))
+				if(!empty($user_row['user_email_address']))
 				{
 					//Get live template directory name.
 					$email_template_record = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '*', 'templates', 'WHERE `site_id` = ? AND `status` = ? LIMIT 1', [$_SESSION['site_id'], 1]);
@@ -90,7 +90,7 @@ else
 					}
 					
 					//Send Password Reset Email.
-					smtpSendEmail($user_row['email'], $user_row['first_name'], $contact_info_email_cc, $contact_info_email_bcc, $contact_info_email_from, $contact_info_email_from_name, $contact_info_email_from, $subject, $message, $contact_info_email_server_url, $contact_info_email_server_port, $contact_info_email_username, $contact_info_email_password, '');
+					smtpSendEmail($user_row['user_email_address'], $user_row['first_name'], $contact_info_smtp_email_cc, $contact_info_smtp_email_bcc, $contact_info_smtp_email_address, $contact_info_smtp_email_name, $contact_info_smtp_email_address, $subject, $message, $contact_info_smtp_email_hostname, $contact_info_smtp_email_port, $contact_info_smtp_email_username, $contact_info_smtp_email_password, '', '');
 				}
 			} 
 		}

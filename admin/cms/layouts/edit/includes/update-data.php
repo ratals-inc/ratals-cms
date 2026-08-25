@@ -35,13 +35,9 @@ else
 					   || ($key_2 == 'api_client_secret' && !empty($value_2)) 
 					   || ($key_2 == 'api_public_key' && !empty($value_2)) 
 					   || ($key_2 == 'api_secret_key' && !empty($value_2))
-					   || ($key_2 == 'failed_login_attempts_email_password' && !empty($value_2))
-					   || ($key_2 == 'sql_injection_email_password' && !empty($value_2))
-					   || ($key_2 == 'ddos_email_password' && !empty($value_2))
-					   || ($key_2 == 'declined_cards_email_password' && !empty($value_2))
-					   || ($key_2 == 'email_password' && !empty($value_2))
+					   || ($key_2 == 'smtp_email_password' && !empty($value_2))
 					   
-					   || ($key_2 != 'id' && $key_2 != 'created_date' && $key_2 != 'created_by' && $key_2 != 'flat_url' && $key_2 != 'path_level' && $key_2 != 'hierarchy_url' && $key_2 != 'password' && $key_2 != 'api_client_secret' && $key_2 != 'api_public_key' && $key_2 != 'api_secret_key' && $key_2 != 'failed_login_attempts_email_password' && $key_2 != 'sql_injection_email_password' && $key_2 != 'ddos_email_password' && $key_2 != 'declined_cards_email_password' && $key_2 != 'email_password')
+					   || ($key_2 != 'id' && $key_2 != 'created_date' && $key_2 != 'created_by' && $key_2 != 'flat_url' && $key_2 != 'path_level' && $key_2 != 'hierarchy_url' && $key_2 != 'password' && $key_2 != 'api_client_secret' && $key_2 != 'api_public_key' && $key_2 != 'api_secret_key' && $key_2 != 'smtp_email_password')
 					   )
 					{
 						if($key_2 == 'updated_date' || $key_2 == 'answered_date' || $key_2 == 'approved_date')

@@ -1107,9 +1107,6 @@ ul.orders-boxes li.three-column { grid-column: span 3; }
 .edit-wrapper .edit-field select.http-s { width: 87px; vertical-align: top; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-right: 0px; }
 .edit-wrapper .edit-field select.www { width: 87px; vertical-align: top; border-radius: 0px; border-right: 1px dashed var(--input-border-color); border-left: 1px dashed var(--input-border-color); }
 .edit-wrapper .edit-field input[type=text].tld { width: calc(100% - 175px); vertical-align: top; border-left: 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; }
-.edit-wrapper .edit-field .email_connector { margin: 6px 0px; }
-.edit-wrapper .edit-field .email_connector label { cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
-.edit-wrapper .edit-field .email_connector input { height: 18px; width: 18px; vertical-align: middle; margin: 0px; cursor: pointer; accent-color: var(--primary-bg-color); }
 
 /* Notices */
 .notices { padding: 12px 14px; background-color: var(--notice-bg-color); margin-bottom: 15px; font-size: 14px; border: 1px solid var(--notice-border-color); border-radius: var(--main-border-radius); }
@@ -1132,6 +1129,12 @@ ul.orders-boxes li.three-column { grid-column: span 3; }
 .accounting-statements-account-type { background-color: var(--accounting-type-bg-color) !important; }
 .accounting-statements-account-total { background-color: var(--accounting-total-bg-color) !important; font-weight: 600; }
 .chart-of-accounts-headings { font-family: "Arial Black"; font-weight: bold; color: var(--accounting-heading-color); }
+
+/* Setup Message */
+.setup-message { width: 100%; padding: 7px 10px; background-color: var(--notice-bg-color); border: 1px solid var(--notice-border-color); color: var(--text-color); font-size: 13px; line-height: 1.5; border-radius: var(--main-border-radius); margin-bottom: 8px; }
+.setup-message strong { font-weight: 600; }
+.setup-message a { color: var(--link-color); font-weight: 600; text-decoration: none; }
+.setup-message a:hover { color: var(--link-hover-color); text-decoration: underline; }
 
 /* Inline Styles */
 .background-color-bedab5-padding { background-color: var(--inline-success-bg-color); padding: 3px; }

@@ -177,7 +177,7 @@ else
 				
 				$column_names = '`site_id`, `lead_status`, `affiliate_account_id`, `affiliate_lead_commission_amount`, `valid_lead`, `follow_up_date`, `lead_value_amount`, `notes`, `lead`, `forms_frontend_name`, `forms_id`, `submitted_from_url`, `timer`, `pageviews`, `click_path`, `referer_source`, `referer_url`, `form_conversion_value`, `ip_address`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`';
 				$placeholders = '?, ?, ?, ?, ?, NULL, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, UTC_TIMESTAMP(), ?, UTC_TIMESTAMP(), ?';
-				$parameters = array($site_id, $form_status, $set_lead_affiliate_id, $set_lead_commission_amount, '', '', '', $sql_form_rows['frontend_name'], $sql_form_rows['id'], $final_url_with_question_mark, $form_timer, $form_pageviews, $form_click_path, $_SESSION['referer_domain'], $_SESSION['referer_url'], $sql_form_rows['form_conversion_value'], $_SERVER['REMOTE_ADDR'], '[]', 'Customer', 'Customer');
+				$parameters = array($site_id, $form_status, $set_lead_affiliate_id, $set_lead_commission_amount, '', '', '', $sql_form_rows['frontend_name'], $sql_form_rows['id'], $final_url_with_question_mark, $form_timer, $form_pageviews, $form_click_path, $_SESSION['referer_domain'] ?? '', $_SESSION['referer_url'] ?? '', $sql_form_rows['form_conversion_value'], $_SERVER['REMOTE_ADDR'], '[]', 'Customer', 'Customer');
 				$results->getInsertRecord(__LINE__, __FILE__, 'leads', $column_names, $placeholders, $parameters);
 				
 				$last_lead_id_row = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'leads', 'ORDER BY `id` DESC LIMIT 1', []);

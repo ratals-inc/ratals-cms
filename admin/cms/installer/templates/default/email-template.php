@@ -9,7 +9,7 @@ $email_context = [
     'logo_media' => $_SESSION['logo_media'] ?? $logo_media ?? '',
     'contact_info_display' => $_SESSION['contact_info_display_contact_info'] ?? $contact_info_display_contact_info ?? 'No',
     'contact_info_phone_number' => $_SESSION['contact_info_phone_number'] ?? $contact_info_phone_number ?? '',
-    'contact_info_email_from' => $_SESSION['contact_info_email_from'] ?? $email_from ?? '',
+    'contact_info_smtp_email_address' => $_SESSION['contact_info_smtp_email_address'] ?? $contact_info_smtp_email_address ?? '',
     'contact_info_street_address' => $_SESSION['contact_info_street_address'] ?? $contact_info_street_address ?? '',
     'contact_info_city' => $_SESSION['contact_info_city'] ?? $contact_info_city ?? '',
     'contact_info_state' => $_SESSION['contact_info_state'] ?? $contact_info_state ?? '',
@@ -61,7 +61,7 @@ table td { border-collapse: collapse; }
 								<td align="center">
 									<b><a href="'.$email_context['domain'].'" target="_blank" style="font-size: 32px; color: #ffffff; text-decoration: none;">'.$email_logo_site_name.'</a></b><br>
 									'.$email_contact_info_phone_number.'
-									<a href="mailto:'.$email_context['contact_info_email_from'].'" target="_blank" style="color: #ffffff; text-decoration: none; display: inline-block; margin-top: 4px;">'.$email_context['contact_info_email_from'].'</a><br>
+									<a href="mailto:'.$email_context['contact_info_smtp_email_address'].'" target="_blank" style="color: #ffffff; text-decoration: none; display: inline-block; margin-top: 4px;">'.$email_context['contact_info_smtp_email_address'].'</a><br>
 								</td>
 							</tr>
 						</table>

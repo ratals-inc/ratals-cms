@@ -16,7 +16,7 @@ else
 			public function email_aecn($table_name, $admin_field, &$post_values, &$errors)
 			{
 				//Check to make sure the email is not being used by another user. For admin users.
-				if(isset($post_values['users']['email']) && !empty($post_values['users']['email']))
+				if(isset($post_values['users']['user_email_address']) && !empty($post_values['users']['user_email_address']))
 				{
 					$username_exist = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '*', 'users', 'WHERE `email` = ? AND `id` != ?', [$post_values[$table_name][$admin_field["column_name"]], trim($_GET["rid"] ?? '')]);
 					

@@ -28,15 +28,15 @@ else
                     <option value="">Select</option>
                     <option value="Yes"<?php if(isset($_POST['www_in_url']) && $_POST['www_in_url'] == 'Yes') { echo ' selected'; } ?>>www.</option>
                     <option value="No"<?php if(isset($_POST['www_in_url']) && $_POST['www_in_url'] == 'No') { echo ' selected'; } ?>>none</option>
-                </select><input name="tld" class="tld" placeholder="ratals.com" type="text" value="<?php if(isset($_POST['submit'])) { echo $tld; } ?>" />
+                </select><input name="tld" class="tld" placeholder="your-domain.com" type="text" value="<?php if(isset($_POST['submit'])) { echo $tld; } ?>" />
             <div class="small-text"></div>
             </div>
             </div>
             
             <div class="edit">
-            <div class="edit-label"><?php if(isset($errors['site_name'])) { echo $errors['site_name']; } else { echo '<span>Site Name</span>'; } ?></div>
+            <div class="edit-label"><?php if(isset($errors['new_site_name'])) { echo $errors['new_site_name']; } else { echo '<span>Site Name</span>'; } ?></div>
             <div class="edit-field">
-                <input name="site_name" class="site-name" type="text" value="<?php echo $site_name; ?>" />
+                <input name="new_site_name" class="new-site-name" type="text" value="<?php if(isset($_POST['submit'])) { echo $new_site_name; } ?>" />
             <div class="small-text"></div>
             </div>
             </div>
@@ -167,53 +167,53 @@ else
             </div>
             
             <div class="header-text margin-bottom-13">
-              <div class="text float-none">Email Server Setup<div class="section-notes">Please enter a default server email address for the domain your're adding. This email will be used for sending order confirmations, password recovery, security alerts, and more.</div></div>
-              
+              <div class="text float-none">Outgoing SMTP Email Delivery Setup<div class="section-notes">Enter the SMTP email delivery settings for the site you're adding. These settings are used for password recovery, security alerts, and other outgoing email.</div></div>
             </div>
             
             <div class="edit">
+            <div class="edit-label"><?php if(isset($errors['smtp_email_name'])) { echo $errors['smtp_email_name']; } else { echo '<span>SMTP Email Name</span>'; } ?></div>
             <div class="edit-field">
-                <div class="email_connector"><label><input name="email_connector" type="checkbox"<?php if(isset($email_connector)) { echo $email_connector; } ?>> Email server is configured with a relay or connector and does not require a username and password.</label></div>
+                <input name="smtp_email_name" placeholder="i.e. Support" type="text" value="<?php if(isset($_POST['submit'])) { echo $smtp_email_name; } ?>" />
             <div class="small-text"></div>
             </div>
             </div>
             
             <div class="edit">
-            <div class="edit-label"><?php if(isset($errors['server_email_name'])) { echo $errors['server_email_name']; } else { echo '<span>Server Email Name</span>'; } ?></div>
+            <div class="edit-label"><?php if(isset($errors['smtp_email_address'])) { echo $errors['smtp_email_address']; } else { echo '<span>SMTP Email Address</span>'; } ?></div>
             <div class="edit-field">
-                <input name="server_email_name" placeholder="i.e. Support" type="text" value="<?php if(isset($_POST['submit'])) { echo $server_email_name; } else { echo 'Support'; } ?>" />
+                <input name="smtp_email_address" placeholder="i.e. support@your-domain.com" type="text" value="<?php if(isset($_POST['submit'])) { echo $smtp_email_address; } ?>" />
             <div class="small-text"></div>
             </div>
             </div>
             
             <div class="edit">
-            <div class="edit-label"><?php if(isset($errors['server_email'])) { echo $errors['server_email']; } else { echo '<span>Server Email Address</span>'; } ?></div>
+            <div class="edit-label"><?php if(isset($errors['smtp_email_hostname'])) { echo $errors['smtp_email_hostname']; } else { echo '<span>SMTP Email Hostname</span>'; } ?></div>
             <div class="edit-field">
-                <input name="server_email" class="server-email" placeholder="i.e. support@domain.com" type="text" value="<?php if(isset($_POST['submit'])) { echo $server_email; } else { echo 'support@'; } ?>" />
+                <input name="smtp_email_hostname" placeholder="i.e. mail.your-domain.com" type="text" value="<?php if(isset($_POST['submit'])) { echo $smtp_email_hostname; } ?>" />
             <div class="small-text"></div>
             </div>
             </div>
             
             <div class="edit">
-            <div class="edit-label"><?php if(isset($errors['server_smpt_url'])) { echo $errors['server_smpt_url']; } else { echo '<span>Server SMTP Email URL</span>'; } ?></div>
+            <div class="edit-label"><?php if(isset($errors['smtp_email_port'])) { echo $errors['smtp_email_port']; } else { echo '<span>SMTP Email Port</span>'; } ?></div>
             <div class="edit-field">
-                <input name="server_smpt_url" class="server-smpt-url" placeholder="i.e. mail.domain.com" type="text" value="<?php if(isset($_POST['submit'])) { echo $server_smpt_url; } else { echo 'mail.'; } ?>" />
+                <input name="smtp_email_port" placeholder="i.e. 587 or 25 for relay/connector" type="text" value="<?php if(isset($_POST['submit'])) { echo $smtp_email_port; } ?>" />
             <div class="small-text"></div>
             </div>
             </div>
             
             <div class="edit">
-            <div class="edit-label"><?php if(isset($errors['server_email_username'])) { echo $errors['server_email_username']; } else { echo '<span>Server Email Username</span>'; } ?></div>
+            <div class="edit-label"><span>SMTP Email Username</span></div>
             <div class="edit-field">
-                <input name="server_email_username" class="server-email-username" type="text" value="<?php if(isset($_POST['submit'])) { echo $server_email_username; } else { echo 'support@'; } ?>" />
+                <input name="smtp_email_username" type="text" value="<?php if(isset($_POST['submit'])) { echo $smtp_email_username; } ?>" />
             <div class="small-text"></div>
             </div>
             </div>
             
             <div class="edit">
-            <div class="edit-label"><?php if(isset($errors['server_email_password'])) { echo $errors['server_email_password']; } else { echo '<span>Server Email Password</span>'; } ?></div>
+            <div class="edit-label"><span>SMTP Email Password</span></div>
             <div class="edit-field">
-                <input name="server_email_password" type="password" value="" />
+                <input name="smtp_email_password" type="password" value="" />
             <div class="small-text"></div>
             </div>
             </div>
@@ -223,7 +223,7 @@ else
             </div>
             
             <div class="edit">
-            <div class="edit-label"><?php if(isset($errors['street_address'])) { echo $errors['street_address']; } else { echo '<span>Street Address</span>'; } ?></div>
+            <div class="edit-label"><span>Street Address</span></div>
             <div class="edit-field">
                 <input name="street_address" type="text" value="<?php if(isset($_POST['submit'])) { echo $street_address; } ?>" />
             <div class="small-text"></div>
@@ -231,7 +231,7 @@ else
             </div>
             
             <div class="edit">
-            <div class="edit-label"><?php if(isset($errors['city'])) { echo $errors['city']; } else { echo '<span>City</span>'; } ?></div>
+            <div class="edit-label"><span>City</span></div>
             <div class="edit-field">
                 <input name="city" type="text" value="<?php if(isset($_POST['submit'])) { echo $city; } ?>" />
             <div class="small-text"></div>
@@ -247,7 +247,7 @@ else
             </div>
             
             <div class="edit">
-            <div class="edit-label"><?php if(isset($errors['state'])) { echo $errors['state']; } else { echo '<span>State / Province / Region</span>'; } ?></div>
+            <div class="edit-label"><span>State / Province / Region</span></div>
             <div class="edit-field">
                 <input name="state" type="text" value="<?php if(isset($_POST['submit'])) { echo $state; } ?>" />
             <div class="small-text">Two-letter abbreviation, such as "NY".</div>
@@ -255,7 +255,7 @@ else
             </div>
             
             <div class="edit">
-            <div class="edit-label"><?php if(isset($errors['postal_code'])) { echo $errors['postal_code']; } else { echo '<span>Postal Code</span>'; } ?></div>
+            <div class="edit-label"><span>Postal Code</span></div>
             <div class="edit-field">
                 <input name="postal_code" type="text" value="<?php if(isset($_POST['submit'])) { echo $postal_code; } ?>" />
             <div class="small-text"></div>
@@ -263,7 +263,7 @@ else
             </div>
             
             <div class="edit">
-            <div class="edit-label"><?php if(isset($errors['phone_number'])) { echo $errors['phone_number']; } else { echo '<span>Phone Number</span>'; } ?></div>
+            <div class="edit-label"><span>Phone Number</span></div>
             <div class="edit-field">
                 <input name="phone_number" type="text" value="<?php if(isset($_POST['submit'])) { echo $phone_number; } ?>" />
             <div class="small-text"></div>
@@ -271,11 +271,11 @@ else
             </div>
             
             <div class="edit">
-            <div class="edit-label"><?php if(isset($errors['display_contact_inforamtion'])) { echo $errors['display_contact_inforamtion']; } else { echo '<span>Display This Contact Information on the Website</span>'; } ?></div>
+            <div class="edit-label"><?php if(isset($errors['display_contact_information'])) { echo $errors['display_contact_information']; } else { echo '<span>Display This Contact Information on the Website</span>'; } ?></div>
             <div class="edit-field">
-                <select name="display_contact_inforamtion" class="display_contact_inforamtion">
-                    <option value="No"<?php if(isset($_POST['display_contact_inforamtion']) && $_POST['display_contact_inforamtion'] == 'No') { echo ' selected'; } ?>>No</option>
-                    <option value="Yes"<?php if(isset($_POST['display_contact_inforamtion']) && $_POST['display_contact_inforamtion'] == 'Yes') { echo ' selected'; } ?>>Yes</option>
+                <select name="display_contact_information" class="display_contact_information">
+                    <option value="No"<?php if(isset($_POST['display_contact_information']) && $_POST['display_contact_information'] == 'No') { echo ' selected'; } ?>>No</option>
+                    <option value="Yes"<?php if(isset($_POST['display_contact_information']) && $_POST['display_contact_information'] == 'Yes') { echo ' selected'; } ?>>Yes</option>
                 </select>
             <div class="small-text"><strong>Note:</strong> First and Last Name will not display on the website.</div>
             </div>

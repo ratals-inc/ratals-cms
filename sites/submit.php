@@ -556,7 +556,7 @@ else
 					$column_names = '`site_id`, `cart_id`, `first_name`, `last_name`, `company_name`, `email`, `street_address_1`, `street_address_2`, `city`, `country`, `state`, `postal_code`, `phone_number`, `phone_number_ext`, `address_type`, `loading_dock`, `default_billing_country`, `tax_exempt`, `cookie_id`, `referer_source`, `referer_url`, `recovery_emails_sent`, `recovery_email_token`, `updated_date`, `created_date`';
 					$placeholders = '?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),UTC_TIMESTAMP()';
 					
-					$parameters = array($_SESSION['site_id'], $sql_get_cart_id_row['id'], $first_name, $last_name, $company_name, $email_address, $address_one, $address_two, $city, $country, $state, $postal_code, $phone_number, $phone_ext, $address_type, $loading_dock, $default_billing_country, $tax_exempt, $_SESSION['cart_cookie_id'], $_SESSION['referer_domain'], $_SESSION['referer_url'], '0', $recovery_email_token);
+					$parameters = array($_SESSION['site_id'], $sql_get_cart_id_row['id'], $first_name, $last_name, $company_name, $email_address, $address_one, $address_two, $city, $country, $state, $postal_code, $phone_number, $phone_ext, $address_type, $loading_dock, $default_billing_country, $tax_exempt, $_SESSION['cart_cookie_id'], $_SESSION['referer_domain'] ?? '', $_SESSION['referer_url'] ?? '', '0', $recovery_email_token);
 					
 					$results->getInsertRecord(__LINE__, __FILE__, 'abandonment_cart_leads', $column_names, $placeholders, $parameters);
 					

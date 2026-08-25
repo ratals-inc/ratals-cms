@@ -7,3 +7,4 @@ include('ajax.php');
 include('header.php');
 include('script.php');
 include('addon.php');
+echo $display_message; 

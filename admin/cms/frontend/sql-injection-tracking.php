@@ -12,7 +12,7 @@ else
 	//Do not flag sql injection once logged into the admin as this should be an admin user.
 	if(!isset($_SESSION['user_id']) || empty($_SESSION['user_id']))
 	{
-		if((!empty($_POST) || !empty($_GET)) && $sql_injection_email_me == 'Yes' && !empty($sql_injection_email_address) && !empty($sql_injection_email_from) && !empty($sql_injection_email_server_url) && !empty($sql_injection_email_server_port))
+		if((!empty($_POST) || !empty($_GET)) && $sql_injection_email_me == 'Yes' && !empty($sql_injection_to_email_address))
 		{
 			$posted_string_raw = '';
 			$posted_string = '';
@@ -97,7 +97,7 @@ else
 				}
 				
 				//Send Possible SQL Injection Attempt Email.
-				smtpSendEmail($sql_injection_email_address, $sql_injection_to_name, $sql_injection_email_cc, $sql_injection_email_bcc, $sql_injection_email_from, $sql_injection_email_from_name, $sql_injection_email_from, $subject, $message, $sql_injection_email_server_url, $sql_injection_email_server_port, $sql_injection_email_username, $sql_injection_email_password, '');
+				smtpSendEmail($sql_injection_to_email_address, $sql_injection_to_email_name, $sql_injection_email_cc, $sql_injection_email_bcc, $contact_info_smtp_email_address, $contact_info_smtp_email_name, $contact_info_smtp_email_address, $subject, $message, $contact_info_smtp_email_hostname, $contact_info_smtp_email_port, $contact_info_smtp_email_username, $contact_info_smtp_email_password, '', '');
 			}
 		}
 	}

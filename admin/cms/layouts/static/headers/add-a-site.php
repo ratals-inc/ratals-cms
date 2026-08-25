@@ -12,6 +12,7 @@ else
 	if($_SESSION['admin_assigned_type'] == 'add_a_site')
 	{
 		//Get all timezones from php library and put in array.
+		$server_timezone = date_default_timezone_get();
 		$php_timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 		$timezone_rows = array();
 		if(!empty($php_timezones))
@@ -27,6 +28,8 @@ else
 			}
 			sort($timezone_rows);
 		}
+		//Restore the server timezone.
+		date_default_timezone_set($server_timezone);
 		
 		$all_time_zone_options = '';
 		if(!empty($timezone_rows))
@@ -49,7 +52,7 @@ else
 					}
 					else
 					{
-						if('America/Denver' == $timezone_row["timezone"])
+						if($server_timezone == $timezone_row["timezone"])
 						{
 							$selected_item = " selected";
 						}
@@ -155,7 +158,7 @@ else
 			$https_in_url = trim($_POST['https_in_url'] ?? '');
 			if(empty($https_in_url))
 			{
-				$errors['https_in_url'] = '<div class="error">Select if you want "https" or "http" in your doamin</div>';
+				$errors['https_in_url'] = '<div class="error">Select if you want "https" or "http" in your domain</div>';
 			}
 			
 			$www_in_url = trim($_POST['www_in_url'] ?? '');
@@ -167,7 +170,7 @@ else
 			$tld = trim($_POST['tld'] ?? '');
 			if(empty($tld))
 			{
-				$errors['tld'] = '<div class="error">Enter your domain name (e.g. ratals.com)</div>';
+				$errors['tld'] = '<div class="error">Enter your domain name (e.g. your-domain.com)</div>';
 			}
 			else
 			{
@@ -190,10 +193,10 @@ else
 				}
 			}
 			
-			$site_name = trim($_POST['site_name'] ?? '');
-			if(empty($site_name))
+			$new_site_name = trim($_POST['new_site_name'] ?? '');
+			if(empty($new_site_name))
 			{
-				$errors['site_name'] = '<span class="error">Site Name</span>';
+				$errors['new_site_name'] = '<span class="error">Site Name</span>';
 			}
 			
 			$site_language = trim($_POST['site_language'] ?? '');
@@ -223,7 +226,7 @@ else
 			$front_symbol = ltrim($_POST['front_symbol'] ?? '');
 			$back_symbol = rtrim($_POST['back_symbol'] ?? '');
 			
-			$thousand_separator = $_POST['thousand_separator'];
+			$thousand_separator = $_POST['thousand_separator'] ?? '';
 			if(empty($thousand_separator))
 			{
 				$errors['thousand_separator'] = '<span class="error">Thousand Separator</span>';
@@ -242,16 +245,8 @@ else
 			}
 			
 			$street_address = trim($_POST['street_address'] ?? '');
-			if(empty($street_address))
-			{
-				$errors['street_address'] = '<span class="error">Street Address</span>';
-			}
 			
 			$city = trim($_POST['city'] ?? '');
-			if(empty($city))
-			{
-				$errors['city'] = '<span class="error">City</span>';
-			}
 			
 			$country = trim($_POST['country'] ?? '');
 			if(empty($country))
@@ -260,75 +255,54 @@ else
 			}
 			
 			$state = trim($_POST['state'] ?? '');
-			if(empty($state))
-			{
-				$errors['state'] = '<span class="error">State / Province / Region</span>';
-			}
 			
 			$postal_code = trim($_POST['postal_code'] ?? '');
-			if(empty($postal_code))
-			{
-				$errors['postal_code'] = '<span class="error">Postal Code</span>';
-			}
 			
 			$phone_number = trim($_POST['phone_number'] ?? '');
-			if(empty($phone_number))
+			
+			$display_contact_information = trim($_POST['display_contact_information'] ?? '');
+			if(empty($display_contact_information))
 			{
-				$errors['phone_number'] = '<span class="error">Phone Number</span>';
+				$errors['display_contact_information'] = '<span class="error">Display Contact Information on the Website</span>';
 			}
 			
-			$display_contact_inforamtion = trim($_POST['display_contact_inforamtion'] ?? '');
-			if(empty($display_contact_inforamtion))
+			$smtp_email_name = trim($_POST['smtp_email_name'] ?? '');
+			if(empty($smtp_email_name))
 			{
-				$errors['display_contact_inforamtion'] = '<span class="error">Display Contact Information on the Website</span>';
+				$errors['smtp_email_name'] = '<span class="error">SMTP Email Name</span>';
 			}
 			
-			$email_connector = '';
-			if(isset($_POST['email_connector']))
+			$smtp_email_address = trim($_POST['smtp_email_address'] ?? '');
+			if(empty($smtp_email_address))
 			{
-				$email_connector = ' checked';
-				$email_port = '25';
-			}
-			else
-			{
-				$email_port = '587';
+				$errors['smtp_email_address'] = '<span class="error">SMTP Email Address</span>';
 			}
 			
-			$server_email_name = trim($_POST['server_email_name'] ?? '');
-			if(empty($server_email_name))
+			$smtp_email_hostname = trim($_POST['smtp_email_hostname'] ?? '');
+			if(empty($smtp_email_hostname))
 			{
-				$errors['server_email_name'] = '<span class="error">Server Email Name</span>';
+				$errors['smtp_email_hostname'] = '<span class="error">SMTP Email Hostname</span>';
 			}
 			
-			$server_email = trim($_POST['server_email'] ?? '');
-			if(empty($server_email))
+			$smtp_email_port = trim($_POST['smtp_email_port'] ?? '');
+			if(empty($smtp_email_port))
 			{
-				$errors['server_email'] = '<span class="error">Server Email Address</span>';
+				$errors['smtp_email_port'] = '<span class="error">SMTP Email Port</span>';
 			}
 			
-			$server_smpt_url = trim($_POST['server_smpt_url'] ?? '');
-			if(empty($server_smpt_url))
-			{
-				$errors['server_smpt_url'] = '<span class="error">Server SMTP Email URL</span>';
-			}
+			$smtp_email_username = trim($_POST['smtp_email_username'] ?? '');
 			
-			$server_email_username = trim($_POST['server_email_username'] ?? '');
-			if(empty($server_email_username) && !isset($_POST['email_connector']))
-			{
-				$errors['server_email_username'] = '<span class="error">Server Email Username</span>';
-			}
-			
-			$server_email_password = trim($_POST['server_email_password'] ?? '');
-			if(empty($server_email_password) && !isset($_POST['email_connector']))
-			{
-				$errors['server_email_password'] = '<span class="error">Server Email Password</span>';
-			}
+			$smtp_email_password = trim($_POST['smtp_email_password'] ?? '');
 			
 			if(count($errors) == 0) 
 			{
 				$admin_directory = $_SESSION['admin_directory'];
-				$first_last_name = $_SESSION['user_first_last_name'];
-				$email = $server_email;
+				
+				$first_last_name = trim($_SESSION['user_first_last_name']);
+				$to_email_name = $first_last_name ?: 'Site Administrator';
+				$first_last_name = $first_last_name ?: 'Ratals Installer';
+				$user_email = $_SESSION['user_email_address'];
+				$site_name = $new_site_name;
 				$tld = trim($tld, '/');
 				$redirect_to_opposite_url = 'Yes';
 				$auto_generate_canonical_url = 'Yes';
