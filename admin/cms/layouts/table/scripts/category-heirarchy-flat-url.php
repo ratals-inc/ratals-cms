@@ -18,11 +18,11 @@ else
         {
             if(this.value == "1")
             {
-                window.location.href = "/<?php echo $_SESSION['admin_url']; ?>/";
+                window.location.href = "<?php echo $_SESSION['admin_url']; ?>/";
             }
             else if(this.value == "2")
             {
-                window.location.href = "/<?php echo $_SESSION['admin_url']; ?>/?layout=hierarchy&path-ids=0";
+                window.location.href = "<?php echo $_SESSION['admin_url']; ?>/?layout=hierarchy&path-ids=0";
             }
         });	
     });

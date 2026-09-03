@@ -24,10 +24,16 @@ else
 					$class_for_urls_table_fields = ' url';
 				}
 				
+				$field_required = '';
+				if($admin_field["required"] == 'Yes')
+				{
+					$field_required = ' <span class="required-asterisk">*</span>';
+				}
+				
 				if($sites["auto_generate_canonical_url"] == 'Yes') { $auto_gen_canonical = 'Yes'; } else { $auto_gen_canonical = 'No'; }
 				echo '
 				<div class="edit'.$class_for_urls_table_fields.' '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 				<div class="edit-field">';
 				echo '
 				<input type="text" name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'" value="'.htmlspecialchars($field_value ?? '').'" id="'.htmlspecialchars($table_name.'_'.$admin_field["column_name"] ?? '').'">

@@ -18,7 +18,7 @@ else
 		{
 			$results->getUpdateRecord(__LINE__, __FILE__, 'comments', '`status` = ?, `approved_by` = ?, `approved_date` = UTC_TIMESTAMP()', 'WHERE `id` = ? AND `site_id` = ? AND `post_url_id` = ?', ['1', $_SESSION['user_first_last_name'], $_POST['id'], $_SESSION["site_set_for_editing"], trim($_GET["rid"] ?? '')]);
 			
-			$results->getUpdateRecord(__LINE__, __FILE__, 'posts', '`updated_by` = ?, `updated_date` = UTC_TIMESTAMP()', 'WHERE `urls_id` = ? AND `site_id` = ?', [$_SESSION['user_first_last_name'], trim($_GET["rid"] ?? ''), $_SESSION["site_set_for_editing"]]);
+			$results->getUpdateRecord(__LINE__, __FILE__, 'posts', '`updated_by` = ?, `updated_date` = UTC_TIMESTAMP()', 'WHERE `urls_id` = ? AND `site_id` = ?', [$_SESSION['user_username'], trim($_GET["rid"] ?? ''), $_SESSION["site_set_for_editing"]]);
 			
 			//Clear cache on save.
 			if($_SESSION['admin_site_id_global'] == 'No')
@@ -30,7 +30,7 @@ else
 				clearAllSiteCache();
 			}
 			
-			header("Location: /".$_SESSION['admin_url_with_rid']."");
+			header("Location: ".$_SESSION['admin_url_with_rid']."");
 			exit();
 		}
 		
@@ -38,7 +38,7 @@ else
 		{
 			$results->getDeleteRecord(__LINE__, __FILE__, 'comments', 'WHERE `site_id` = ? AND `id` = ? AND `post_url_id` = ?', [$_SESSION["site_set_for_editing"], $_POST['id'], trim($_GET["rid"] ?? '')]);
 			
-			$results->getUpdateRecord(__LINE__, __FILE__, 'posts', '`updated_by` = ?, `updated_date` = UTC_TIMESTAMP()', 'WHERE `urls_id` = ? AND `site_id` = ?', [$_SESSION['user_first_last_name'], trim($_GET["rid"] ?? ''), $_SESSION["site_set_for_editing"]]);
+			$results->getUpdateRecord(__LINE__, __FILE__, 'posts', '`updated_by` = ?, `updated_date` = UTC_TIMESTAMP()', 'WHERE `urls_id` = ? AND `site_id` = ?', [$_SESSION['user_username'], trim($_GET["rid"] ?? ''), $_SESSION["site_set_for_editing"]]);
 			
 			//Clear cache on save.
 			if($_SESSION['admin_site_id_global'] == 'No')
@@ -50,7 +50,7 @@ else
 				clearAllSiteCache();
 			}
 			
-			header("Location: /".$_SESSION['admin_url_with_rid']."");
+			header("Location: ".$_SESSION['admin_url_with_rid']."");
 			exit();
 		}
 	}

@@ -64,7 +64,7 @@ if(!empty($sql_get_messages))
 		//Get php version.
 		$php_version = phpversion();
 		$old_php_version = "[CURRENT_PHP_VERSION]"; 
-		$new_php_version = $php_version; 
+		$new_php_version = (float) $php_version; 
 		$new_message = str_replace($old_php_version, $new_php_version, $new_message);
 		
 		$mysql_version = '';
@@ -73,7 +73,7 @@ if(!empty($sql_get_messages))
 			$mysql_version = explode('-', $my_sql_version[0]['version()']);
 			
 			$old_mysql_version = "[CURRENT_MYSQL_VERSION]"; 
-			$new_mysql_version = $mysql_version[0];
+			$new_mysql_version = (float) $mysql_version[0];
 			$new_message = str_replace($old_mysql_version, $new_mysql_version, $new_message);
 		}
 		

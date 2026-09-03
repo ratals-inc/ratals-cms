@@ -8,6 +8,6 @@ $column_names = '`id`, `site_id`, `display_contact_info_on_site`, `street_addres
 $placeholders = 'NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP()';
 
 $parameters = array();
-$parameters[] = [$site_id, $display_contact_information, $street_address, $city, $country, $state, $postal_code, '00.0000', '00.0000', 'Monday - Friday, 8:00 am - 5:00 pm', 'Monday|08:00|16:00||,Tuesday|08:00|16:00||,Wednesday|08:00|16:00||,Thursday|08:00|16:00||,Friday|08:00|16:00||', $phone_number, $country, $site_language, '"facebook_url","twitter_url","youtube_url"', $smtp_email_address, $smtp_email_name, '', '',	$smtp_email_hostname, $smtp_email_port, $smtp_email_username, $smtp_email_password, '{}', $first_last_name, $first_last_name];
+$parameters[] = [$site_id, $display_contact_information, $street_address, $city, $country, $state, $postal_code, '00.0000', '00.0000', 'Monday - Friday, 8:00 am - 5:00 pm', 'Monday|08:00|16:00||,Tuesday|08:00|16:00||,Wednesday|08:00|16:00||,Thursday|08:00|16:00||,Friday|08:00|16:00||', $phone_number, $country, $site_language, '"facebook_url","twitter_url","youtube_url"', $smtp_email_address, $smtp_email_name, '', '',	$smtp_email_hostname, $smtp_email_port, $smtp_email_username, $smtp_email_password, '{}', $install_update_username, $install_update_username];
 
 $results->getinsertMultipleRecords(__LINE__, __FILE__, 'site_contact_info', $column_names, $placeholders, $parameters);

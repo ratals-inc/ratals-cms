@@ -72,10 +72,16 @@ else
 					}
 				}
 				
+				$field_required = '';
+				if($admin_field["required"] == 'Yes')
+				{
+					$field_required = ' <span class="required-asterisk">*</span>';
+				}
+				
 				echo '<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
 					<div class="edit-label">
 					<div class="header-text margin-bottom-13">
-					<div class="text">'.htmlspecialchars($admin_field["name"] ?? '').'
+					<div class="text">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'
 					<div class="section-notes">URLs are determined by the Flat and Hierarchy URLs set above and by the URL structure selected under Website > Site Settings > URL Settings. This ensures each record has one canonical URL to help prevent duplicate content issues. The categories selected here simply control which categories this post will display in.</div>
 					</div>
 					</div>

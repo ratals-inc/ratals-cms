@@ -101,7 +101,7 @@ if(file_exists($temp_extract_dir.'/admin/cms/installer/database/tables/index.php
 				$db_core_table_values = json_decode($db_core_table_values, true);
 				
 				//Get current table columns to compare for differences.
-				$current_database_columns = $results_schema->getSchemaSelectMultipleRecordsKeyName(__LINE__, __FILE__, '`column_name`, `column_type`, `character_set_name`, `collation_name`, `extra`, `column_key`, `is_nullable`, `column_default`, `ordinal_position`', 'columns', 'WHERE `table_schema` = ? AND `table_name` = ? ORDER BY `ORDINAL_POSITION` ASC', [$_SESSION['site_db_name'], $db_core_table_name], 'COLUMN_NAME');
+				$current_database_columns = $results_schema->getSchemaSelectMultipleRecordsKeyName(__LINE__, __FILE__, '`column_name`, `column_type`, `character_set_name`, `collation_name`, `extra`, `column_key`, `is_nullable`, `column_default`, `ordinal_position`', 'columns', 'WHERE `table_schema` = ? AND `table_name` = ? ORDER BY `ordinal_position` ASC', [$_SESSION['site_db_name'], $db_core_table_name], 'column_name');
 				
 				//Normalize current DB columns.
 				if(!empty($current_database_columns))
@@ -408,7 +408,7 @@ if(file_exists($temp_extract_dir.'/admin/cms/installer/database/tables/index.php
 		}
 		
 		//Get all tables in the database to compare with current tables.
-		$current_database_tables = $results_schema->getSchemaSelectMultipleRecordsOneColumn(__LINE__, __FILE__, '`TABLE_NAME`', 'tables', 'WHERE table_schema = ? ORDER BY table_name ASC', [$_SESSION['site_db_name']], 'TABLE_NAME');
+		$current_database_tables = $results_schema->getSchemaSelectMultipleRecordsOneColumn(__LINE__, __FILE__, '`table_name`', 'tables', 'WHERE table_schema = ? ORDER BY table_name ASC', [$_SESSION['site_db_name']], 'table_name');
 		
 		//////////REMOVE ALL KEYS/INDEXS THAT HAVE CHANGED, THEN ADD BACK WITH CHANGES PLUS NEW KEYS/INDEXS - WILL ONLY CHANGE RATALS DEFAULT INDEXES STARTING WITH 'ratals_'//////////
 		if(isset($update_table_keys) && !empty($update_table_keys))

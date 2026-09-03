@@ -99,7 +99,7 @@ include_once('sites/functions.php');
 <?php
 if(isset($_SESSION['user_id'])) 
 {
-	echo '<div class="edit-page"><a href="/'.$_SESSION['admin_directory'].'/website/'.$pages_data['table_name'].'/edit/?rid='.$id.'" target="_blank">Edit in Admin</a></div>';
+	echo '<div class="edit-page"><a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/'.$pages_data['table_name'].'/edit/?rid='.$id.'" target="_blank">Edit in Admin</a></div>';
 }
 ?>
 <!-- End Edit Admin Page --><?php //END CAUTION! ?>
@@ -124,11 +124,11 @@ $(document).ready(function()
 		var comment = $('textarea[name=comment_'+idThree+']').val();
 		
 		var post = 'one=' + idOne + '&two=' + idTwo + '&three=' + idThree + '&name=' + name + '&email=' + email + '&comment=' + comment + '&type=post_page_submit_comment'; 
-		$.post("/sites/submit.php", post, function(theResponse)
+		$.post("<?php echo INSTALLATION_URL_PATH; ?>/sites/submit.php", post, function(theResponse)
 		{		
 			if(theResponse == 1)
 			{
-				$("#comment-response-" + idThree + "").html('<div class="color-text-margin"><strong>Thank you for submitting your comment.</strong></div>');
+				$("#comment-response-" + idThree + "").html('<div class="color-text-margin"><strong>Thank you for submitting your comment. It will be reviewed for approval soon.</strong></div>');
 				$('input[name=name_'+idThree+']').val("");
 				$('input[name=email_'+idThree+']').val("");
 				$('textarea[name=comment_'+idThree+']').val("");
@@ -206,12 +206,12 @@ $(document).ready(function()
         </div>
     </div>
     <!-- End Blog Post -->
-    <?php if(!empty($data_array['sub_items'])) { ?>
-        <!-- Start Sub Items -->
-        <div class="post-sub-items-style">
-            <?php include('sub-items.php'); ?>
+    <?php if(!empty($data_array['design_blocks'])) { ?>
+        <!-- Start Design Blocks -->
+        <div class="post-design-blocks-style">
+            <?php include('design-blocks.php'); ?>
         </div>
-        <!-- End Sub Items -->
+        <!-- End Design Blocks -->
     <?php } ?>
     <!-- Start Comments -->
     <div class="post-comments">

@@ -46,7 +46,7 @@ else
 	  ?>
 	  <ul class="edit-table-row">
 		<input name="assigned_form_fields[]" type="hidden" value="<?php echo $form_fields_assigned['id']; ?>">
-		<div class="edit-table-cell"><a href="/<?php echo $_SESSION['admin_directory']; ?>/website/form-fields/edit/?rid=<?php echo $form_fields_assigned['id']; ?>" target="_blank"><?php echo $form_fields_assigned['id']; ?></a></div>
+		<div class="edit-table-cell"><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/website/form-fields/edit/?rid=<?php echo $form_fields_assigned['id']; ?>" target="_blank"><?php echo $form_fields_assigned['id']; ?></a></div>
 		<div class="edit-table-cell"><?php echo $form_fields_assigned['frontend_name']; ?></div>
 		<div class="edit-table-cell"><?php echo $form_fields_assigned['admin_name']; ?></div>
 		<div class="edit-table-cell"><?php echo $form_fields_assigned['form_field_type']; ?></div>
@@ -141,7 +141,7 @@ else
 							  <div class="column-box-left"><input name="form_fields[]" type="checkbox" value="<?php echo $form_fields_assigned['id']; ?>" checked></div>
 							  <div class="column-box-right">
 							  <div class="column-box-name"><?php echo $form_fields_assigned['frontend_name']; ?></div>
-							  <div class="column-box-type">ID: <a href="/<?php echo $_SESSION['admin_directory']; ?>/website/form-fields/edit/?rid=<?php echo $form_fields_assigned['id']; ?>" target="_blank"><?php echo $form_fields_assigned['id']; ?></a> | Field Type: <?php echo $form_fields_assigned['form_field_type']; ?></div>
+							  <div class="column-box-type">ID: <a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/website/form-fields/edit/?rid=<?php echo $form_fields_assigned['id']; ?>" target="_blank"><?php echo $form_fields_assigned['id']; ?></a> | Field Type: <?php echo $form_fields_assigned['form_field_type']; ?></div>
 							  </div>
 							  </div>
 							  </div>
@@ -163,7 +163,7 @@ else
 					  <div class="column-box-left"><input name="form_fields[]" type="checkbox" value="<?php echo $form_fields_not_assigned['id']; ?>"></div>
 					  <div class="column-box-right">
 					  <div class="column-box-name"><?php echo $form_fields_not_assigned['frontend_name']; ?></div>
-					  <div class="column-box-type">ID: <a href="/<?php echo $_SESSION['admin_directory']; ?>/website/form-fields/edit/?rid=<?php echo $form_fields_not_assigned['id']; ?>" target="_blank"><?php echo $form_fields_not_assigned['id']; ?></a> | Field Type: <?php echo $form_fields_not_assigned['form_field_type']; ?></div>
+					  <div class="column-box-type">ID: <a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/website/form-fields/edit/?rid=<?php echo $form_fields_not_assigned['id']; ?>" target="_blank"><?php echo $form_fields_not_assigned['id']; ?></a> | Field Type: <?php echo $form_fields_not_assigned['form_field_type']; ?></div>
 					  </div>
 					  </div>
 					  </div>

@@ -474,8 +474,9 @@ function initEditor(wrapper)
 			const optionsWindow = insertBtn.closest('.editor-media-options-window');
 			const lazyLoad = optionsWindow.querySelector('.editor-media-lazy-load').value;
 			const fetchPriority = optionsWindow.querySelector('.editor-media-fetch-priority').value;
+			const maxDisplayWidth = optionsWindow.querySelector('.editor-media-max-display-width').value.trim();
 			
-			const mediaEmbed = 'mediaId(' + window.wysiwygSelectedMediaId + ', ' + lazyLoad + ', ' + fetchPriority + ', altTitleTag(""));';
+			const mediaEmbed = 'mediaId(' + window.wysiwygSelectedMediaId + ', ' + lazyLoad + ', ' + fetchPriority + ', maxDisplayPixelWidth("' + maxDisplayWidth + '"), altTitleTag(""));';
 			
 			const selection = window.getSelection();
 			

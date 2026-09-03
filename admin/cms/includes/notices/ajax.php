@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 4));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.

@@ -9,6 +9,6 @@ $column_names = '`id`, `site_id`, `custom_fields`, `created_date`, `created_by`,
 $placeholders = '?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?';
 
 $parameters = array();
-$parameters[] = [NULL, $site_id, $post_custom_fields, $first_last_name, $first_last_name];
+$parameters[] = [NULL, $site_id, $post_custom_fields, $install_update_username, $install_update_username];
 
 $results->getInsertMultipleRecords(__LINE__, __FILE__, 'custom_fields_global', $column_names, $placeholders, $parameters);

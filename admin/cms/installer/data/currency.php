@@ -8,6 +8,6 @@ $column_names = '`id`, `site_id`, `currency_type`, `front_symbol`, `back_symbol`
 $placeholders = 'NULL,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?';
 
 $parameters = array();
-$parameters[] = [$site_id, $currency_type, $front_symbol, $back_symbol, $thousand_separator, $fractional_separator, $zeros_after_separator, 1.0000, '{}', $first_last_name, $first_last_name];
+$parameters[] = [$site_id, $currency_type, $front_symbol, $back_symbol, $thousand_separator, $fractional_separator, $zeros_after_separator, 1.0000, '{}', $install_update_username, $install_update_username];
 
 $results->getinsertMultipleRecords(__LINE__, __FILE__, 'currency', $column_names, $placeholders, $parameters);

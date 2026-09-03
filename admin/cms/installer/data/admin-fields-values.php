@@ -769,9 +769,9 @@ $parameter[] = [0, 'ERP', '3', '', 'admin_page_level', 'admin_page_level_erp', $
 $parameter[] = [0, 'AI', '4', '', 'admin_page_level', 'admin_page_level_erp', $values_counter++];
 
 $values_counter = 1;
+$parameter[] = [0, 'Admin Menu Items', 'admin_menu_items', '', 'sub_items_labels', 'sub_items_labels_admin_menu_items', $values_counter++];
+$parameter[] = [0, 'Admin Menu Items', 'admin_menus', '', 'sub_items_labels', 'sub_items_labels_admin_menus', $values_counter++];
 $parameter[] = [0, 'List Items', 'admin_fields_lists', '', 'sub_items_labels', 'sub_items_labels_admin_fields_lists', $values_counter++];
-$parameter[] = [0, 'Menu Items', 'admin_menu_items', '', 'sub_items_labels', 'sub_items_labels_admin_menu_items', $values_counter++];
-$parameter[] = [0, 'Menu Items', 'admin_menus', '', 'sub_items_labels', 'sub_items_labels_admin_menus', $values_counter++];
 $parameter[] = [0, 'Menu Items', 'menu_items', '', 'sub_items_labels', 'sub_items_labels_menu_items', $values_counter++];
 $parameter[] = [0, 'Menu Items', 'menus', '', 'sub_items_labels', 'sub_items_labels_menus', $values_counter++];
 $parameter[] = [0, 'Options', 'custom_fields', '', 'sub_items_labels', 'sub_items_labels_custom_fields', $values_counter++];

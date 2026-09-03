@@ -48,16 +48,16 @@ else
 				
 				if($site_results[$url_result['site_id']]['url_structure'] == 'Hierarchy')
 				{
-					$hreflang .= '<link rel="alternate" href="'.$hl_domain.'/'.$url_result['hierarchy_url'].$hl_url_extention.'" hreflang="'.$site_results[$url_result['site_id']]['site_language'].'" />';
+					$hreflang .= '<link rel="alternate" href="'.$hl_domain.INSTALLATION_URL_PATH.'/'.$url_result['hierarchy_url'].$hl_url_extention.'" hreflang="'.$site_results[$url_result['site_id']]['site_language'].'" />';
 				}
 				elseif($site_results[$url_result['site_id']]['url_structure'] == 'Flat')
 				{
-					$hreflang .= '<link rel="alternate" href="'.$hl_domain.'/'.$url_result['flat_url'].$hl_url_extention.'" hreflang="'.$site_results[$url_result['site_id']]['site_language'].'" />';
+					$hreflang .= '<link rel="alternate" href="'.$hl_domain.INSTALLATION_URL_PATH.'/'.$url_result['flat_url'].$hl_url_extention.'" hreflang="'.$site_results[$url_result['site_id']]['site_language'].'" />';
 				}
 			}
 			else
 			{
-				$hreflang .= '<link rel="alternate" href="'.$hl_domain.'" hreflang="'.$site_results[$url_result['site_id']]['site_language'].'" />';
+				$hreflang .= '<link rel="alternate" href="'.$hl_domain.INSTALLATION_URL_PATH.'" hreflang="'.$site_results[$url_result['site_id']]['site_language'].'" />';
 			}
 		}
 	}

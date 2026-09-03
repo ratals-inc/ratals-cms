@@ -51,7 +51,7 @@ include_once('sites/functions.php');
 	"@context": "https://schema.org",
 	"@type": "Corporation",
 	"name": "<?php echo $site_name ?? ''; ?>",
-	"url": "<?php echo $domain.'/'; ?>",
+	"url": "<?php echo $domain.INSTALLATION_URL_PATH.'/'; ?>",
 	"logo": "<?php echo $logo_media_url ?? ''; ?>"<?php if($contact_info_display_contact_info == 'Yes') { ?>,
 	"contactPoint": {
 		"@type": "ContactPoint",
@@ -72,7 +72,7 @@ include_once('sites/functions.php');
 <?php
 if(isset($_SESSION['user_id'])) 
 {
-	echo '<div class="edit-page"><a href="/'.$_SESSION['admin_directory'].'/website/'.$pages_data['table_name'].'/edit/?rid='.$id.'" target="_blank">Edit in Admin</a></div>';
+	echo '<div class="edit-page"><a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/'.$pages_data['table_name'].'/edit/?rid='.$id.'" target="_blank">Edit in Admin</a></div>';
 }
 ?>
 <!-- End Edit Admin Page --><?php //END CAUTION! ?>
@@ -95,10 +95,10 @@ if(isset($_SESSION['user_id']))
                     </div>
                     <?php } ?>
                     <?php if(!empty($data_array['posts'])) { ?>
-                    <!-- Start Sub Items -->
-                    <div class="categories-store-sub-items-style">
-                        <div class="sub-items sub-items-bottom-padding">
-                            <div class="sub-items-wrap container-width">
+                    <!-- Start Design Blocks -->
+                    <div class="categories-store-design-blocks-style">
+                        <div class="design-blocks design-blocks-bottom-padding">
+                            <div class="design-blocks-wrap container-width">
                                 <ul class="grid-<?php echo empty($data_array['grid_columns']) ? '2' : $data_array['grid_columns']; ?>">
                                     <?php 
                                     foreach($data_array['posts'] as $posts)
@@ -155,7 +155,7 @@ if(isset($_SESSION['user_id']))
                             <?php } ?>
                         </div>
                     </div>
-                    <!-- End Sub Items -->
+                    <!-- End Design Blocks -->
                     <?php } ?>
                     <?php if(isset($data_array['author_bio']['author_page_url']) && !empty($data_array['author_bio']['author_page_url'])) { ?>
                     <!-- Stat Author Bio -->
@@ -195,12 +195,12 @@ if(isset($_SESSION['user_id']))
         </div>
     </div>
     <!-- End Blog -->
-    <?php if(!empty($data_array['sub_items'])) { ?>
-        <!-- Start Sub Items -->
-        <div class="pages-sub-items-style">
-            <?php include('sub-items.php'); ?>
+    <?php if(!empty($data_array['design_blocks'])) { ?>
+        <!-- Start Design Blocks -->
+        <div class="pages-design-blocks-style">
+            <?php include('design-blocks.php'); ?>
         </div>
-        <!-- End Sub Items -->
+        <!-- End Design Blocks -->
     <?php } ?>
     <?php if(!empty($bottom_content)) { ?>
         <!-- Start Bottom Content -->

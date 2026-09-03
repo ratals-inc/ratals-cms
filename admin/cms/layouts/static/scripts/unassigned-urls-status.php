@@ -32,7 +32,7 @@ else
 				value = 1;
 			}
 			
-			$.post("/<?php echo $_SESSION['admin_directory']; ?>/cms/layouts/static/ajax/unassigned-urls-status.php",{type:'unassignedStatus',recordId:recordId,urlId:urlId,value:value},
+			$.post("<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/cms/layouts/static/ajax/unassigned-urls-status.php",{type:'unassignedStatus',recordId:recordId,urlId:urlId,value:value},
 			function(theResponse)
 			{
 				//alert(theResponse);

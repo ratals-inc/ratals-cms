@@ -5,8 +5,11 @@
 
 //Get current MySQL UTC date and time.
 $database_current_date = $results->getRawQuery(__LINE__, __FILE__, 'SELECT UTC_TIMESTAMP() AS current_utc_date', []);
-
 $database_current_utc_date = $database_current_date[0]['current_utc_date'] ?? '';
+
+//Check if MySQL supports named timezone conversions.
+$database_timezone_check = $results->getRawQuery(__LINE__, __FILE__, "SELECT CONVERT_TZ(UTC_TIMESTAMP(), 'UTC', 'America/New_York') AS converted_date", []);
+$database_timezone_supported = !empty($database_timezone_check[0]['converted_date']);
 
 //Get current PHP UTC date and time.
 $php_current_utc_date = gmdate('Y-m-d H:i:s');
@@ -43,6 +46,11 @@ if(!empty($database_current_utc_date))
 else
 {
 	$server_date_time_warning = true;
+}
+
+if($database_timezone_supported === false)
+{
+	$display_message .= '<div class="setup-message"><strong>Database Timezone Support Is Not Available:</strong> Your database server is unable to convert named timezones. Ratals uses database timezone conversions to display dates and times correctly throughout the system. Please make sure the MySQL or MariaDB timezone tables are installed and populated.</div>';
 }
 
 if($server_date_time_warning === true)

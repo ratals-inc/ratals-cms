@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -23,7 +24,7 @@ else
 	{
 		if(!isset($_SESSION['user_id']))
 		{
-			echo '<div class="validation">Looks like your login session has ended. Please <a href="/'.$_SESSION['admin_directory'].'/login.php">login here</a>.</div>';
+			echo '<div class="validation">Looks like your login session has ended. Please <a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/login.php">login here</a>.</div>';
 			exit();
 		}
 		

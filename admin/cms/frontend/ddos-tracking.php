@@ -26,7 +26,7 @@ else
 			//Check if IP has a record for being blocked. We flag a row with `emailed` = yes when blocking them. This means we email the admin that user was blocked.
 			$site_security_record_emailed_count = $results->getSelectCountRecords(__LINE__, __FILE__, '*', 'ddos_tracking', 'WHERE `site_id` = ? AND `created_date` > UTC_TIMESTAMP() - INTERVAL ? MINUTE AND `ip_address` = ? AND `emailed` = ? LIMIT 1', [$site_id, $time_period_block, $_SERVER['REMOTE_ADDR'], 'Yes']);
 			
-			if($site_security_record_count >= $max_pageviews_block && !empty($auto_blocked_email_address)&& !empty($ddos_email_from) && !empty($ddos_email_server_url) && !empty($ddos_email_server_port) && empty($site_security_record_emailed_count))
+			if($site_security_record_count >= $max_pageviews_block && !empty($ddos_to_email_address) && empty($site_security_record_emailed_count))
 			{
 				if($auto_blocked_ip_email_me == 'Email Me and Block IP')
 				{
@@ -80,7 +80,7 @@ else
 				}
 				
 				//Send DDOS Attack Email.
-				smtpSendEmail($auto_blocked_email_address, $ddos_to_name, $ddos_email_cc, $ddos_email_bcc, $ddos_email_from, $ddos_email_from_name, $ddos_email_from, $subject, $message, $ddos_email_server_url, $ddos_email_server_port, $ddos_email_username, $ddos_email_password, '');
+				smtpSendEmail($ddos_to_email_address, $ddos_to_email_name, $ddos_email_cc, $ddos_email_bcc, $contact_info_smtp_email_address, $contact_info_smtp_email_name, $contact_info_smtp_email_address, $subject, $message, $contact_info_smtp_email_hostname, $contact_info_smtp_email_port, $contact_info_smtp_email_username, $contact_info_smtp_email_password, '', '');
 				
 				//Insert new pageviews for DDOS tracking so we know we emailed. This record inserted tells us that the admin was emailed that an IP was blocked.
 				$results->getInsertRecord(__LINE__, __FILE__, 'ddos_tracking', '`site_id`, `ip_address`, `emailed`, `created_date`', '?, ?, ?, UTC_TIMESTAMP()', [$site_id, $_SERVER['REMOTE_ADDR'], 'Yes', ]);
@@ -102,7 +102,7 @@ else
 					$site_phone_number_blocked = ' or '.$contact_info_phone_number;
 				}
 				
-				echo '<div class="text-align-padding">Oops! It looks like something went wrong. Please contat us at "'.$contact_info_email.$site_phone_number_blocked.'" for help.</div>';
+				echo '<div class="text-align-padding">Oops! It looks like something went wrong. Please contat us at "'.$contact_info_smtp_email_address.$site_phone_number_blocked.'" for help.</div>';
 				exit();
 			}
 		}

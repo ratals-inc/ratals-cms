@@ -15,7 +15,7 @@ else
 	
 	if(!function_exists('getItemsDataMedia'))
 	{
-		function getItemsDataMedia($media_data, $page_group)
+		function getItemsDataMedia($media_data, $design_block)
 		{
 			global $pages_data, $lazy_load_media_row;
 			
@@ -38,15 +38,15 @@ else
 			$media_array[2] = 'lazyLoadNo';
 			$media_array[3] = 'fetchPriorityAuto';
 			
-			//Used for sub-items
-			if(!empty($page_group))
+			//Used for design-blocks
+			if(!empty($design_block))
 			{
-				if(isset($page_group['lazy_load_media']) && $page_group['lazy_load_media'] == 'Yes')
+				if(isset($design_block['lazy_load_media']) && $design_block['lazy_load_media'] == 'Yes')
 				{
 					$media_array[2] = 'lazyLoadYes';
 				}
 				
-				if(isset($page_group['fetch_priority']) && $page_group['fetch_priority'] == 'Yes')
+				if(isset($design_block['fetch_priority']) && $design_block['fetch_priority'] == 'Yes')
 				{
 					$media_array[3] = 'fetchPriorityHigh';
 				}
@@ -103,7 +103,7 @@ else
 	//This gets the data for sub_items and products to load for things like prices, image, review score, URL, etc.
 	if(!function_exists('getItemsData'))
 	{
-		function getItemsData($site_id, $domain, $home_page, $url_structure, $sites_end_urls_with, $url, $page_group, $assigned_products_sub_items)
+		function getItemsData($site_id, $domain, $home_page, $url_structure, $sites_end_urls_with, $url, $design_block, $assigned_products_sub_items)
 		{
 			global $currency_zeros_after_separator, $currency_fractional_separator;
 			
@@ -188,8 +188,8 @@ else
 						$sub_item_data['media_data'] = '';
 						if(isset($sql_sub_item_page_data_row['media']) && !empty($sql_sub_item_page_data_row['media']))
 						{
-							$media_item_data = getItemsDataMedia($sql_sub_item_page_data_row['media'], $page_group);
-							$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], $media_item_data[1]);
+							$media_item_data = getItemsDataMedia($sql_sub_item_page_data_row['media'], $design_block);
+							$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], '', $media_item_data[1]);
 						}
 					}
 					//Get price for type == 'sub_products'
@@ -228,8 +228,8 @@ else
 						//If product page, set media from product page.
 						if(isset($sql_sub_item_page_data_row['media']) && !empty($sql_sub_item_page_data_row['media']))
 						{
-							$media_item_data = getItemsDataMedia($sql_sub_item_page_data_row['media'], $page_group);
-							$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], $media_item_data[1]);
+							$media_item_data = getItemsDataMedia($sql_sub_item_page_data_row['media'], $design_block);
+							$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], '', $media_item_data[1]);
 						}
 					}
 					//Get price for type == 'inventory'
@@ -259,14 +259,14 @@ else
 								
 								if(isset($inventory_item_data['media']) && !empty($inventory_item_data['media']))
 								{
-									$media_item_data = getItemsDataMedia($inventory_item_data['media'], $page_group);
-									$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], $media_item_data[1]);
+									$media_item_data = getItemsDataMedia($inventory_item_data['media'], $design_block);
+									$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], '', $media_item_data[1]);
 								}
 								//If inventory does not have media, get media set on the product page
 								elseif(isset($sql_sub_item_page_data_row['media']) && !empty($sql_sub_item_page_data_row['media']))
 								{
-									$media_item_data = getItemsDataMedia($sql_sub_item_page_data_row['media'], $page_group);
-									$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], $media_item_data[1]);
+									$media_item_data = getItemsDataMedia($sql_sub_item_page_data_row['media'], $design_block);
+									$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], '', $media_item_data[1]);
 								}
 							}
 							else
@@ -278,14 +278,14 @@ else
 								
 								if(isset($inventory_item_data['media']) && !empty($inventory_item_data['media']))
 								{
-									$media_item_data = getItemsDataMedia($inventory_item_data['media'], $page_group);
-									$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], $media_item_data[1]);
+									$media_item_data = getItemsDataMedia($inventory_item_data['media'], $design_block);
+									$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], '', $media_item_data[1]);
 								}
 								//If inventory does not have media, get media set on the product page
 								elseif(isset($sql_sub_item_page_data_row['media']) && !empty($sql_sub_item_page_data_row['media']))
 								{
-									$media_item_data = getItemsDataMedia($sql_sub_item_page_data_row['media'], $page_group);
-									$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], $media_item_data[1]);
+									$media_item_data = getItemsDataMedia($sql_sub_item_page_data_row['media'], $design_block);
+									$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], '', $media_item_data[1]);
 								}
 							}
 						}
@@ -298,22 +298,22 @@ else
 							
 							if(isset($inventory_item_data['media']) && !empty($inventory_item_data['media']))
 							{
-								$media_item_data = getItemsDataMedia($inventory_item_data['media'], $page_group);
-								$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], $media_item_data[1]);
+								$media_item_data = getItemsDataMedia($inventory_item_data['media'], $design_block);
+								$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], '', $media_item_data[1]);
 							}
 							//If inventory does not have media, get media set on the product page
 							elseif(isset($sql_sub_item_page_data_row['media']) && !empty($sql_sub_item_page_data_row['media']))
 							{
-								$media_item_data = getItemsDataMedia($sql_sub_item_page_data_row['media'], $page_group);
-								$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], $media_item_data[1]);
+								$media_item_data = getItemsDataMedia($sql_sub_item_page_data_row['media'], $design_block);
+								$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], '', $media_item_data[1]);
 							}
 						}
 					}
 					//If page is page, post, category, etc., set media from the page type.
 					elseif(isset($sql_sub_item_page_data_row['media']) && !empty($sql_sub_item_page_data_row['media']))
 					{
-						$media_item_data = getItemsDataMedia($sql_sub_item_page_data_row['media'], $page_group);
-						$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], $media_item_data[1]);
+						$media_item_data = getItemsDataMedia($sql_sub_item_page_data_row['media'], $design_block);
+						$sub_item_data['media_html_code'] = mediaId($media_item_data[0], $media_item_data[2], $media_item_data[3], '', $media_item_data[1]);
 					}
 				}
 				

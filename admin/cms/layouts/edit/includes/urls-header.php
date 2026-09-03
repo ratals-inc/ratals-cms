@@ -48,12 +48,13 @@ else
 	?>
 	<div class="url-field-edit">
 	<?php if(trim($_GET["rid"] ?? '') == $sites['homepage']) { $url_link_id = 0; } else { $url_link_id = trim($_GET["rid"] ?? ''); } ?>
-	<a href="<?php echo $view_frontend_of_site.'/'.$display_url_link; ?>" target="_blank"><?php echo $view_frontend_of_site.'/'.$display_url_link; ?></a> 
+	<a href="<?php echo $view_frontend_of_site.INSTALLATION_URL_PATH.'/'.$display_url_link; ?>" target="_blank"><?php echo $view_frontend_of_site.INSTALLATION_URL_PATH.'/'.$display_url_link; ?></a> 
 	| 
 	<span class="link" id="toogle-url-data">Edit URL</span> 
 	| 
 	Enbed URL in Content: <strong>urlId(<?php echo $url_link_id;?>);</strong> 
 	| 
 	Enbed URL in Template Code: <strong>&lt;?php echo urlId(<?php echo $url_link_id;?>); ?&gt;</strong>
+    <?php if($home_page == trim($_GET["rid"] ?? '')) { ?><div class="homepage-selection"><strong>Homepage:</strong> To change which page is used as your website homepage, go <a href="<?php echo INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/site-settings/url-settings/'; ?>">here</a> and select the URL you want to use as the homepage.</div><?php } ?>
 	</div>
 <?php } ?>

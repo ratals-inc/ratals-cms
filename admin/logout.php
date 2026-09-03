@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
@@ -19,6 +20,6 @@ else
 	$admin_directory = $_SESSION['admin_directory'];
 	session_unset();
 	session_destroy();
-	header("Location: /".$admin_directory."/?login=logout");
+	header("Location: ".INSTALLATION_URL_PATH."/".$admin_directory."/?login=logout");
 	exit;
 }

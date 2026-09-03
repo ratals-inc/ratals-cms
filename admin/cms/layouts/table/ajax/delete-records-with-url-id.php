@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -51,15 +52,15 @@ else
 				
 				$results->getDeleteRecord(__LINE__, __FILE__, $correct_table_name, 'WHERE `site_id` = ? AND `urls_id` = ?', [$_SESSION["site_set_for_editing"], $row_id]);
 				
-				$results->getDeleteRecord(__LINE__, __FILE__, 'assignments_sub_items', 'WHERE `site_id` = ? AND `parent_id` = ?', [$_SESSION["site_set_for_editing"], $row_id]);
+				$results->getDeleteRecord(__LINE__, __FILE__, 'assignments_design_blocks', 'WHERE `site_id` = ? AND `parent_id` = ?', [$_SESSION["site_set_for_editing"], $row_id]);
 				
-				$results->getDeleteRecord(__LINE__, __FILE__, 'assignments_sub_items', 'WHERE `site_id` = ? AND `child_id` = ?', [$_SESSION["site_set_for_editing"], $row_id]);
+				$results->getDeleteRecord(__LINE__, __FILE__, 'assignments_design_blocks', 'WHERE `site_id` = ? AND `child_id` = ?', [$_SESSION["site_set_for_editing"], $row_id]);
 				
 				$results->getDeleteRecord(__LINE__, __FILE__, 'assignments_posts', 'WHERE `site_id` = ? AND `parent_id` = ?', [$_SESSION["site_set_for_editing"], $row_id]);
 				
 				$results->getDeleteRecord(__LINE__, __FILE__, 'assignments_posts', 'WHERE `site_id` = ? AND `child_id` = ?', [$_SESSION["site_set_for_editing"], $row_id]);
 				
-				$results->getDeleteRecord(__LINE__, __FILE__, 'page_groups', 'WHERE `site_id` = ? AND `urls_id` = ?', [$_SESSION["site_set_for_editing"], $row_id]);
+				$results->getDeleteRecord(__LINE__, __FILE__, 'design_blocks', 'WHERE `site_id` = ? AND `urls_id` = ?', [$_SESSION["site_set_for_editing"], $row_id]);
 				
 				$results->getDeleteRecord(__LINE__, __FILE__, 'menu_items', 'WHERE `site_id` = ? AND `links_to` = ?', [$_SESSION["site_set_for_editing"], $row_id]);
 				
@@ -105,7 +106,7 @@ else
 					}
 					
 					//Update any sub_products that have this product attached to it.
-					$sql_select_assignments = $results->getSelectUnionMultipleRecords(__LINE__, __FILE__, '`id`, `type`, `child_id`, `sub_products_ids`, `inventory_id`', 'assignments_products', 'assignments_sub_items', 'WHERE `type` = ? AND `sub_products_ids` LIKE ?', ['sub_products', '%|'.$row_id.':%']);
+					$sql_select_assignments = $results->getSelectUnionMultipleRecords(__LINE__, __FILE__, '`id`, `type`, `child_id`, `sub_products_ids`, `inventory_id`', 'assignments_products', 'assignments_design_blocks', 'WHERE `type` = ? AND `sub_products_ids` LIKE ?', ['sub_products', '%|'.$row_id.':%']);
 				
 					if(!empty($sql_select_assignments))
 					{
@@ -189,7 +190,7 @@ else
 							$column_values = array($sub_products_ids, $sub_products_price, $sub_products_sale_price, $sub_products_sale_price_from, $sub_products_sale_price_to, $review_score, $first_active_media_id, $sql_select_assignments_row['child_id'], 'sub_products');
 							
 							$results->getUpdateRecord(__LINE__, __FILE__, 'assignments_products', $column_list, $where_clause, $column_values);
-							$results->getUpdateRecord(__LINE__, __FILE__, 'assignments_sub_items', $column_list, $where_clause, $column_values);
+							$results->getUpdateRecord(__LINE__, __FILE__, 'assignments_design_blocks', $column_list, $where_clause, $column_values);
 						}
 					}
 				}

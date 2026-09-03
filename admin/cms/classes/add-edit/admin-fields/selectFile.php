@@ -15,9 +15,15 @@ else
 		{
 			public function selectFileAeaf($table_name, $admin_field, $field_value, &$errors, &$post_values)
 			{
+				$field_required = '';
+				if($admin_field["required"] == 'Yes')
+				{
+					$field_required = ' <span class="required-asterisk">*</span>';
+				}
+				
 				echo '
 				<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 				<div class="edit-field text">
 				<input type="file" name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'" value="" id="'.htmlspecialchars($table_name.'_'.$admin_field["column_name"] ?? '').'" class="padding-border-none">
 				<div class="small-text">'.$admin_field["notes"].'</div>

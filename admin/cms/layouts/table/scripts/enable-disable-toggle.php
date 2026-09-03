@@ -38,7 +38,7 @@ else
             $("body").addClass("body-pending-ajax");
             $(".pending-ajax").show();
             
-            $.post("/<?php echo $_SESSION['admin_directory']; ?>/cms/layouts/table/ajax/enable-disable-toggle.php",{type:'changeActive',field:row_id,value:value,tableName:table_name,subItem:subItem,assignInventory:assignInventoryValue},
+            $.post("<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/cms/layouts/table/ajax/enable-disable-toggle.php",{type:'changeActive',field:row_id,value:value,tableName:table_name,subItem:subItem,assignInventory:assignInventoryValue},
             function(data)
             {
                 if(data == 1)

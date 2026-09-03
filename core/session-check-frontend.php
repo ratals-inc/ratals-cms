@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 if(file_exists(INSTALLATION_ROOT.'/hooks/core/session-check-frontend.php'))
 {
@@ -14,6 +15,7 @@ if(file_exists(INSTALLATION_ROOT.'/hooks/core/session-check-frontend.php'))
 }
 else
 {
+	require_once(INSTALLATION_ROOT.'/admin/cms/functions/http-or-https.php');
 	require_once(INSTALLATION_ROOT.'/admin/cms/frontend/requested-url.php');
 	require_once('session-setting.php');
 	

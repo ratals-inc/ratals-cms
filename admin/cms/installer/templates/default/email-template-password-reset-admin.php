@@ -7,7 +7,7 @@ $warp_with_email_template = 'Yes';
 
 $subject = "Password Reset - ".$site_name;
 
-$url = $domain."/".$_SESSION['admin_directory']."/reset-password.php?selector=".$selector."&validator=".bin2hex($token);
+$url = $domain.INSTALLATION_URL_PATH."/".$_SESSION['admin_directory']."/reset-password.php?selector=".$selector."&validator=".bin2hex($token);
 $message = "<p>We've received a password reset request. The link to reset your password is below. If you did not make this request, you can ignore this email.</p><p>Here is your password reset link: ";
 $message .= '<a href="'.$url.'" target="_blank" style="word-break: break-all;">'.$url.'</a></p>';
 $message .= "<p>Thanks,<br>".$site_name." Team</p>";

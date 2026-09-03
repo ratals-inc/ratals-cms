@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 require_once(INSTALLATION_ROOT.'/core/session-check-frontend.php');
 

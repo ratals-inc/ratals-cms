@@ -138,20 +138,20 @@ else
 		
         if(selected_media.includes("images"))
         {
-            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"><svg viewBox="0 0 512 512"><path d="M506 256A250 250 0 1 1 6 256 250 250 0 0 1 506 256M173 151A16 16 0 1 0 151 173L234 256 151 339A16 16 0 0 0 173 361L256 278 339 361A16 16 0 0 0 361 339L278 256 361 173A16 16 0 0 0 339 151L256 234Z"></path></svg></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><img src="'+selected_media+'"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
+            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"><svg viewBox="0 0 512 512"><path d="M506 256A250 250 0 1 1 6 256 250 250 0 0 1 506 256M173 151A16 16 0 1 0 151 173L234 256 151 339A16 16 0 0 0 173 361L256 278 339 361A16 16 0 0 0 361 339L278 256 361 173A16 16 0 0 0 339 151L256 234Z"></path></svg></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><img src="'+selected_media+'"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
         }
         else if(selected_media.includes("files"))
         {
-            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"><svg viewBox="0 0 512 512"><path d="M506 256A250 250 0 1 1 6 256 250 250 0 0 1 506 256M173 151A16 16 0 1 0 151 173L234 256 151 339A16 16 0 0 0 173 361L256 278 339 361A16 16 0 0 0 361 339L278 256 361 173A16 16 0 0 0 339 151L256 234Z"></path></svg></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><object data="'+selected_media+'" type="application/'+fileExtType+'" class="select-media-popup"></object><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
+            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"><svg viewBox="0 0 512 512"><path d="M506 256A250 250 0 1 1 6 256 250 250 0 0 1 506 256M173 151A16 16 0 1 0 151 173L234 256 151 339A16 16 0 0 0 173 361L256 278 339 361A16 16 0 0 0 361 339L278 256 361 173A16 16 0 0 0 339 151L256 234Z"></path></svg></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><object data="'+selected_media+'" type="application/'+fileExtType+'" class="select-media-popup"></object><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
         }
         else if(selected_media.includes("videos"))
         {
-            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><video controls="" preload="none" class="select-media-popup"><source src="'+selected_media+'" type="video/'+fileExtType+'"></video><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
+            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><video controls="" preload="none" class="select-media-popup"><source src="'+selected_media+'" type="video/'+fileExtType+'"></video><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
         }
         //Video Embed
         else
         {
-            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"><svg viewBox="0 0 512 512"><path d="M506 256A250 250 0 1 1 6 256 250 250 0 0 1 506 256M173 151A16 16 0 1 0 151 173L234 256 151 339A16 16 0 0 0 173 361L256 278 339 361A16 16 0 0 0 361 339L278 256 361 173A16 16 0 0 0 339 151L256 234Z"></path></svg></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><div class="video-embed"><iframe class="select-media-popup" src="'+selected_media+'" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
+            var html = '<li class="media" id="removeMultipleMedia_'+i+'"><i class="close removeMultipleMedia" data-click="'+i+','+deleteColumnName+'" title="Remove Media"><svg viewBox="0 0 512 512"><path d="M506 256A250 250 0 1 1 6 256 250 250 0 0 1 506 256M173 151A16 16 0 1 0 151 173L234 256 151 339A16 16 0 0 0 173 361L256 278 339 361A16 16 0 0 0 361 339L278 256 361 173A16 16 0 0 0 339 151L256 234Z"></path></svg></i><i class="move move-handle" aria-hidden="true" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i><div class="video-embed"><iframe class="select-media-popup" src="'+selected_media+'" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="hidden" value="'+id+'"><div class="text"><div class="tag"><input name="'+columnNames.columnName+'['+columnNames.counter+'][]" type="text" value="" placeholder="'+selected_tag+'"></div>Media ID: <a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/media/?textfield-id='+id+'" target="_blank">'+id+'</a></div></li>';
         }
 		
 		if(addMultipleMedia == 'Yes')
@@ -196,7 +196,7 @@ else
            //alert("Search Media Keyword: " + searchMedia);
             $.ajax(
             {
-                 url: "/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/media-popup-ajax.php",
+                 url: "<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/media-popup-ajax.php",
                  method:"POST",
                  data:{limit:limit, start:start, sortBy:sortBy, images:mediaType, searchMedia:searchMedia},
                  cache:false,
@@ -348,31 +348,34 @@ else
         });
         
         var input = document.getElementById("search_media");
-        input.addEventListener("keypress", function(event) 
-        {
-            if (event.key === "Enter")
-            {
-                searchMediaSet = $("#search_media").val();
-                action = 'active';
-                searchMediaChanged = 'yes';
-                $(".clear-media-search").show();
-                $("#load_data").empty();
-                load_images(30, 0, sortBySet, mediaTypeSet, searchMediaSet);
-            }
-        });
-        
-        $('#clear-media-search').click(function()
-        {
-            action = 'active';
-            clearChanged = 'yes';
-            $("#sort_by").val("0");
-            $("#media_type").val("0");
-            $("#search_media").val("");
-            searchMediaSet = '';
-            $(".clear-media-search").hide();
-            $("#load_data").empty();
-            load_images(30, 0, 0, 0, '');
-        });
+		input.addEventListener("keydown", function(event) 
+		{
+			if(event.key === "Enter")
+			{
+				event.preventDefault();
+				searchMediaSet = $("#search_media").val();
+				action = 'active';
+				searchMediaChanged = 'yes';
+				$(".clear-media-search").show();
+				$("#load_data").empty();
+				load_images(30, 0, sortBySet, mediaTypeSet, searchMediaSet);
+			}
+		});
+		
+		$('#clear-media-search').click(function()
+		{
+			action = 'active';
+			clearChanged = 'yes';
+			sortBySet = 0;
+			mediaTypeSet = 0;
+			searchMediaSet = '';
+			$("#sort_by").val("0");
+			$("#media_type").val("0");
+			$("#search_media").val("");
+			$(".clear-media-search").hide();
+			$("#load_data").empty();
+			load_images(30, 0, 0, 0, '');
+		});
     });
 	
 	$(document).on('click', '.upload-media-button', function()
@@ -493,7 +496,7 @@ else
 			
 			let xhr = new XMLHttpRequest();
 			
-			xhr.open("POST", "/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/add-media.php", true);
+			xhr.open("POST", "<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/add-media.php", true);
 			
 			xhr.upload.onprogress = function(event)
 			{

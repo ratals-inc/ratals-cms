@@ -44,10 +44,15 @@ else
 						{
 							$column_names .= '`'.$key_2.'` = UTC_TIMESTAMP(),';
 						}
-						elseif($key_2 == 'updated_by' || $key_2 == 'answered_by' || $key_2 == 'approved_by')
+						elseif($key_2 == 'answered_by' || $key_2 == 'approved_by')
 						{
 							$column_names .= '`'.$key_2.'` = ?,';
 							$column_value[] = $_SESSION['user_first_last_name'];
+						}
+						elseif($key_2 == 'updated_by')
+						{
+							$column_names .= '`'.$key_2.'` = ?,';
+							$column_value[] = $_SESSION['user_username'];
 						}
 						elseif($key_2 == 'site_id')
 						{
@@ -203,23 +208,23 @@ else
 		
 		if(!empty($row['save_url']) && isset($_GET['sub-page-rid']) && !empty(trim($_GET["rid"] ?? '')) && !empty(trim($_GET["sub-rid"] ?? '')))
 		{
-			header("Location: /".$_SESSION['admin_save_url']."/?rid=".$_GET['sub-page-rid']."&sub-rid=".trim($_GET["sub-rid"] ?? '')."&updated=success");
+			header("Location: ".$_SESSION['admin_save_url']."/?rid=".$_GET['sub-page-rid']."&sub-rid=".trim($_GET["sub-rid"] ?? '')."&updated=success");
 			exit();
 		}
 		elseif(!empty($row['save_url']) && isset($_GET['sub-page-rid']) && !empty($_GET['sub-page-rid']) && !empty(trim($_GET["rid"] ?? '')) && empty(trim($_GET["sub-rid"] ?? '')) && strpos($_SESSION['admin_save_url'].'/', '/edit/') !== false)
 		{
 			//Added this rule for /admin/website/template-files/edit/?sub-page-rid=1&rid=41
-			header("Location: /".$_SESSION['admin_save_url']."/?sub-page-rid=".$_GET['sub-page-rid']."&rid=".trim($_GET["rid"] ?? '')."&updated=success");
+			header("Location: ".$_SESSION['admin_save_url']."/?sub-page-rid=".$_GET['sub-page-rid']."&rid=".trim($_GET["rid"] ?? '')."&updated=success");
 			exit();
 		}
 		elseif(!empty($row['save_url']) && isset($_GET['sub-page-rid']) && !empty($_GET['sub-page-rid']) && !empty(trim($_GET["rid"] ?? '')) && empty(trim($_GET["sub-rid"] ?? '')))
 		{
-			header("Location: /".$_SESSION['admin_save_url']."/?rid=".$_GET['sub-page-rid']."&updated=success");
+			header("Location: ".$_SESSION['admin_save_url']."/?rid=".$_GET['sub-page-rid']."&updated=success");
 			exit();
 		}
 		elseif(!empty($row['save_url']))
 		{
-			header("Location: /".$_SESSION['admin_save_url']."/?updated=success");
+			header("Location: ".$_SESSION['admin_save_url']."/?updated=success");
 			exit();
 		}
 		elseif(!empty(trim($_GET["rid"] ?? '')))

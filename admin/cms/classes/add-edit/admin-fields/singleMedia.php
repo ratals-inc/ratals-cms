@@ -69,15 +69,15 @@ else
 								{
 									$original_media_id = $sql_media_rows["original_media_id"];
 									
-									$media[] = array('type' => 'Image', 'media_url' => $domain.'/sites/media/images/'.$original_media_id.'/'.$sql_media_rows['media_url'], 'media_tag' => $sql_media_rows['media_tag'], 'media_tag_value' => $media_id_tag[1], 'media_id_value' => $media_id_tag[0]);
+									$media[] = array('type' => 'Image', 'media_url' => $domain.INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.$sql_media_rows['media_url'], 'media_tag' => $sql_media_rows['media_tag'], 'media_tag_value' => $media_id_tag[1], 'media_id_value' => $media_id_tag[0]);
 								}
 								elseif($sql_media_rows['media_type'] == 'File')
 								{
-									$media[] = array('type' => 'File', 'media_url' => $domain.'/sites/media/files/'.$sql_media_rows['media_url'], 'media_tag' => $sql_media_rows['media_tag'], 'media_tag_value' => $media_id_tag[1], 'media_id_value' => $media_id_tag[0]);
+									$media[] = array('type' => 'File', 'media_url' => $domain.INSTALLATION_URL_PATH.'/sites/media/files/'.$sql_media_rows['media_url'], 'media_tag' => $sql_media_rows['media_tag'], 'media_tag_value' => $media_id_tag[1], 'media_id_value' => $media_id_tag[0]);
 								}
 								elseif($sql_media_rows['media_type'] == 'Video')
 								{
-									$media[] = array('type' => 'Video', 'media_url' => $domain.'/sites/media/videos/'.$sql_media_rows['media_url'], 'media_tag' => $sql_media_rows['media_tag'], 'media_tag_value' => $media_id_tag[1], 'media_id_value' => $media_id_tag[0]);
+									$media[] = array('type' => 'Video', 'media_url' => $domain.INSTALLATION_URL_PATH.'/sites/media/videos/'.$sql_media_rows['media_url'], 'media_tag' => $sql_media_rows['media_tag'], 'media_tag_value' => $media_id_tag[1], 'media_id_value' => $media_id_tag[0]);
 								}
 								elseif($sql_media_rows['media_type'] == 'Video Embed')
 								{
@@ -94,8 +94,14 @@ else
 						$admin_field['frontend_name'] = $custom_field_name[$_SESSION['admin_language']]['frontend_name'] ?? '';
 					}
 					
+					$field_required = '';
+					if($admin_field["required"] == 'Yes')
+					{
+						$field_required = ' <span class="required-asterisk">*</span>';
+					}
+					
 					echo '<div class="edit">
-					<div class="edit-label">'.((isset($admin_field["name"])) ? htmlspecialchars($admin_field["name"] ?? '') : htmlspecialchars($admin_field["frontend_name"] ?? '')).'</div>
+					<div class="edit-label">'.((isset($admin_field["name"])) ? htmlspecialchars($admin_field["name"] ?? '') : htmlspecialchars($admin_field["frontend_name"] ?? '')).$field_required.'</div>
 					<div class="edit-field text">
 					<ul class="multiple-media multiple-media-'.htmlspecialchars($admin_field["column_name"] ?? '').'" id="sortMultipleMedia-'.htmlspecialchars($admin_field["column_name"] ?? '').'">';
 					
@@ -112,7 +118,7 @@ else
 								<i class="move move-handle" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i>
 								<img src="'.htmlspecialchars($media_data['media_url'] ?? '').'" id="media_swap_image_'.$_SESSION['multiple_media_counter'].'">
 								<input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'['.$counter.'][]" type="hidden" value="'.htmlspecialchars($media_data['media_id_value'] ?? '').'">
-								<div class="text"><div class="tag"><input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'['.$counter.'][]" type="text" value="'.htmlspecialchars($media_data['media_tag_value'] ?? '').'" placeholder="'.htmlspecialchars($media_data['media_tag'] ?? '').'"></div>Media ID: <a href="'.$domain.'/'.$_SESSION['admin_directory'].'/media/?textfield-id='.htmlspecialchars($media_data['media_id_value'] ?? '').'" target="_blank">'.htmlspecialchars($media_data['media_id_value'] ?? '').'</a>
+								<div class="text"><div class="tag"><input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'['.$counter.'][]" type="text" value="'.htmlspecialchars($media_data['media_tag_value'] ?? '').'" placeholder="'.htmlspecialchars($media_data['media_tag'] ?? '').'"></div>Media ID: <a href="'.$domain.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/media/?textfield-id='.htmlspecialchars($media_data['media_id_value'] ?? '').'" target="_blank">'.htmlspecialchars($media_data['media_id_value'] ?? '').'</a>
 								</div></li>';
 							}
 							elseif($media_data['type'] == 'File')
@@ -123,7 +129,7 @@ else
 								<i class="move move-handle" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i>
 								<object data="'.htmlspecialchars($media_data['media_url'] ?? '').'" type="application/'.end($media_popup_file_array).'" id="selected_image_'.htmlspecialchars($all_media_popup_row["id"] ?? '').'" width="100%" height="100%"></object>
 								<input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'['.$counter.'][]" type="hidden" value="'.htmlspecialchars($media_data['media_id_value'] ?? '').'">
-								<div class="text"><div class="tag"><input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'['.$counter.'][]" type="text" value="'.htmlspecialchars($media_data['media_tag_value'] ?? '').'" placeholder="'.htmlspecialchars($media_data['media_tag'] ?? '').'"></div>Media ID: <a href="'.$domain.'/'.$_SESSION['admin_directory'].'/media/?textfield-id='.htmlspecialchars($media_data['media_id_value'] ?? '').'" target="_blank">'.htmlspecialchars($media_data['media_id_value'] ?? '').'</a>
+								<div class="text"><div class="tag"><input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'['.$counter.'][]" type="text" value="'.htmlspecialchars($media_data['media_tag_value'] ?? '').'" placeholder="'.htmlspecialchars($media_data['media_tag'] ?? '').'"></div>Media ID: <a href="'.$domain.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/media/?textfield-id='.htmlspecialchars($media_data['media_id_value'] ?? '').'" target="_blank">'.htmlspecialchars($media_data['media_id_value'] ?? '').'</a>
 								</div></li>';
 							}
 							elseif($media_data['type'] == 'Video')
@@ -134,7 +140,7 @@ else
 								<i class="move move-handle" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i>
 								<video controls="" preload="none"><source src="'.htmlspecialchars($media_data['media_url'] ?? '').'" type="video/'.$media_popup_video_array[1].'"></video>
 								<input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'['.$counter.'][]" type="hidden" value="'.htmlspecialchars($media_data['media_id_value'] ?? '').'">
-								<div class="text"><div class="tag"><input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'['.$counter.'][]" type="text" value="'.htmlspecialchars($media_data['media_tag_value'] ?? '').'" placeholder="'.htmlspecialchars($media_data['media_tag'] ?? '').'"></div>Media ID: <a href="'.$domain.'/'.$_SESSION['admin_directory'].'/media/?textfield-id='.htmlspecialchars($media_data['media_id_value'] ?? '').'" target="_blank">'.htmlspecialchars($media_data['media_id_value'] ?? '').'</a>
+								<div class="text"><div class="tag"><input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'['.$counter.'][]" type="text" value="'.htmlspecialchars($media_data['media_tag_value'] ?? '').'" placeholder="'.htmlspecialchars($media_data['media_tag'] ?? '').'"></div>Media ID: <a href="'.$domain.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/media/?textfield-id='.htmlspecialchars($media_data['media_id_value'] ?? '').'" target="_blank">'.htmlspecialchars($media_data['media_id_value'] ?? '').'</a>
 								</div></li>';
 							}
 							elseif($media_data['type'] == 'Video Embed')
@@ -144,7 +150,7 @@ else
 								<i class="move move-handle" title="Sort Media"><svg viewBox="0 0 512 512"><path d="m245 7a16 16 0 0 1 22 0l63 63a16 16 0 0 1-22 22l-36-36v120a16 16 0 0 1-32 0v-120l-36 36a16 16 0 1 1-22-22zm11 312a16 16 0 0 1 16 16v120l36-36a16 16 0 0 1 22 22l-63 63a16 16 0 0 1-22 0l-63-63a16 16 0 0 1 22-22l36 36v-120a16 16 0 0 1 16-16m-249-52a16 16 0 0 1 0-22l63-63a16 16 0 1 1 22 22l-36 36h120a16 16 0 0 1 0 32h-120l36 36a16 16 0 0 1-22 22zm312-11a16 16 0 0 1 16-16h120l-36-36a16 16 0 0 1 22-22l63 63a16 16 0 0 1 0 22l-63 63a16 16 0 0 1-22-22l36-36h-120a16 16 0 0 1-16-16"></path></svg></i>
 								<div class="video-embed"><iframe width="100%" height="" src="'.htmlspecialchars($media_data['media_url'] ?? '').'" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
 								<input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'['.$counter.'][]" type="hidden" value="'.htmlspecialchars($media_data['media_id_value'] ?? '').'">
-								<div class="text"><div class="tag"><input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'['.$counter.'][]" type="text" value="'.htmlspecialchars($media_data['media_tag_value'] ?? '').'" placeholder="'.htmlspecialchars($media_data['media_tag'] ?? '').'"></div>Media ID: <a href="'.$domain.'/'.$_SESSION['admin_directory'].'/media/?textfield-id='.htmlspecialchars($media_data['media_id_value'] ?? '').'" target="_blank">'.htmlspecialchars($media_data['media_id_value'] ?? '').'</a>
+								<div class="text"><div class="tag"><input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'['.$counter.'][]" type="text" value="'.htmlspecialchars($media_data['media_tag_value'] ?? '').'" placeholder="'.htmlspecialchars($media_data['media_tag'] ?? '').'"></div>Media ID: <a href="'.$domain.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/media/?textfield-id='.htmlspecialchars($media_data['media_id_value'] ?? '').'" target="_blank">'.htmlspecialchars($media_data['media_id_value'] ?? '').'</a>
 								</div></li>';
 							}
 							

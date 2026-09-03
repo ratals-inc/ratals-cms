@@ -3,7 +3,7 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-$database_table_name = 'assignments_sub_items';
+$database_table_name = 'assignments_design_blocks';
 $current_database_table_names[] = $database_table_name;
 $column_counter = 1;
 
@@ -18,7 +18,7 @@ array(
 	'parent_id_table_name' => array('column_name' => 'parent_id_table_name', 'column_type' => 'varchar(255)', 'character_set_name' => 'utf8mb4', 'collation_name' => 'utf8mb4_unicode_ci', 'extra' => '', 'column_key' => '', 'is_nullable' => 'no', 'column_default' => '', 'ordinal_position' => $column_counter++),
 	'child_id_table_name' => array('column_name' => 'child_id_table_name', 'column_type' => 'varchar(255)', 'character_set_name' => 'utf8mb4', 'collation_name' => 'utf8mb4_unicode_ci', 'extra' => '', 'column_key' => '', 'is_nullable' => 'no', 'column_default' => '', 'ordinal_position' => $column_counter++),
 	'type' => array('column_name' => 'type', 'column_type' => 'varchar(255)', 'character_set_name' => 'utf8mb4', 'collation_name' => 'utf8mb4_unicode_ci', 'extra' => '', 'column_key' => '', 'is_nullable' => 'no', 'column_default' => '', 'ordinal_position' => $column_counter++),
-	'pages_groups_id' => array('column_name' => 'pages_groups_id', 'column_type' => 'int', 'character_set_name' => '', 'collation_name' => '', 'extra' => '', 'column_key' => '', 'is_nullable' => 'yes', 'column_default' => '0', 'ordinal_position' => $column_counter++),
+	'design_blocks_id' => array('column_name' => 'design_blocks_id', 'column_type' => 'int', 'character_set_name' => '', 'collation_name' => '', 'extra' => '', 'column_key' => '', 'is_nullable' => 'yes', 'column_default' => '0', 'ordinal_position' => $column_counter++),
 	'parent_id' => array('column_name' => 'parent_id', 'column_type' => 'int', 'character_set_name' => '', 'collation_name' => '', 'extra' => '', 'column_key' => '', 'is_nullable' => 'no', 'column_default' => '0', 'ordinal_position' => $column_counter++),
 	'child_id' => array('column_name' => 'child_id', 'column_type' => 'int', 'character_set_name' => '', 'collation_name' => '', 'extra' => '', 'column_key' => '', 'is_nullable' => 'no', 'column_default' => '0', 'ordinal_position' => $column_counter++),
 	'inventory_attribute_value_ids' => array('column_name' => 'inventory_attribute_value_ids', 'column_type' => 'text', 'character_set_name' => 'utf8mb4', 'collation_name' => 'utf8mb4_unicode_ci', 'extra' => '', 'column_key' => '', 'is_nullable' => 'yes', 'column_default' => '', 'ordinal_position' => $column_counter++),
@@ -50,7 +50,7 @@ array(
 	array(
 		array('index_name' => 'ratals_index_1', 'non_unique' => '1', 'seq_in_index' => '1', 'column_name' => 'site_id', 'index_type' => 'btree'),
 		array('index_name' => 'ratals_index_1', 'non_unique' => '1', 'seq_in_index' => '2', 'column_name' => 'parent_id', 'index_type' => 'btree'),
-		array('index_name' => 'ratals_index_1', 'non_unique' => '1', 'seq_in_index' => '3', 'column_name' => 'pages_groups_id', 'index_type' => 'btree'),
+		array('index_name' => 'ratals_index_1', 'non_unique' => '1', 'seq_in_index' => '3', 'column_name' => 'design_blocks_id', 'index_type' => 'btree'),
 		array('index_name' => 'ratals_index_1', 'non_unique' => '1', 'seq_in_index' => '4', 'column_name' => 'status', 'index_type' => 'btree'),
 		array('index_name' => 'ratals_index_1', 'non_unique' => '1', 'seq_in_index' => '5', 'column_name' => 'sort', 'index_type' => 'btree')
 	)

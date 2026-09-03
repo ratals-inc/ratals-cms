@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 4));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -214,7 +215,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 	$_SESSION['current_update_log'] = $progress_log_file;
 	
 	//Build URL for the actual updater
-	$update_url = $domain.'/'.$_SESSION['admin_directory'].'/temp_extract/admin/cms/includes/notices/update.php';
+	$update_url = $domain.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/temp_extract/admin/cms/includes/notices/update.php';
 	
 	//Token file
 	$update_token = bin2hex(random_bytes(32));

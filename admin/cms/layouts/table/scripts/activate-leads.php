@@ -28,7 +28,7 @@ else
                 $("body").addClass("body-pending-ajax");
                 $(".pending-ajax").show();
                 
-                $.post("/<?php echo $_SESSION['admin_directory']; ?>/cms/layouts/table/ajax/activate-leads.php",{activateRow:activateRow,type:'activateLeads'},
+                $.post("<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/cms/layouts/table/ajax/activate-leads.php",{activateRow:activateRow,type:'activateLeads'},
                 function(data)
                 {
                     if(data == 1)

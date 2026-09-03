@@ -23,7 +23,7 @@ else
 	//Build Final URLs
 	if(!empty($domain))
 	{
-		$final_url_home_page = $domain.'/';
+		$final_url_home_page = $domain.INSTALLATION_URL_PATH.'/';
 		$final_url_home_page_with_question_mark = $final_url_home_page.$questionmark_in_url;
 		
 		if(empty($path_url))

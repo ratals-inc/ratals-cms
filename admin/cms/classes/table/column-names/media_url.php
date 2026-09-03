@@ -23,15 +23,15 @@ else
 					{
 						$original_media_id = $sql_custom_fields_rows["original_media_id"];
 						
-						echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><img src="/sites/media/images/'.$original_media_id.'/'.$sql_custom_fields_rows["media_url"].'"/><div>File Name:<br><a href="'.$_SESSION['view_frontend_of_site'].'/sites/media/images/'.$original_media_id.'/'.$sql_custom_fields_rows["media_url"].'" target="_blank">'.$sql_custom_fields_rows["media_url"].'</a></div></li>';
+						echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><img src="'.INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.$sql_custom_fields_rows["media_url"].'"/><div>File Name:<br><a href="'.$_SESSION['view_frontend_of_site'].INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.$sql_custom_fields_rows["media_url"].'" target="_blank">'.$sql_custom_fields_rows["media_url"].'</a></div></li>';
 					}
 					elseif($sql_custom_fields_rows["media_type"] == 'File')
 					{
-						echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><object class="width-max-height-aspect-margin" data="/sites/media/files/'.$sql_custom_fields_rows["media_url"].'" type="application/'.$media_output_data[1].'"></object><div>File Name:<br><a href="'.$_SESSION['view_frontend_of_site'].'/sites/media/files/'.$sql_custom_fields_rows["media_url"].'" target="_blank">'.$sql_custom_fields_rows["media_url"].'</a></div></li>';
+						echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><object class="width-max-height-aspect-margin" data="'.INSTALLATION_URL_PATH.'/sites/media/files/'.$sql_custom_fields_rows["media_url"].'" type="application/'.$media_output_data[1].'"></object><div>File Name:<br><a href="'.$_SESSION['view_frontend_of_site'].INSTALLATION_URL_PATH.'/sites/media/files/'.$sql_custom_fields_rows["media_url"].'" target="_blank">'.$sql_custom_fields_rows["media_url"].'</a></div></li>';
 					}
 					elseif($sql_custom_fields_rows["media_type"] == 'Video')
 					{
-						echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><video controls preload="none"><source src="/sites/media/videos/'.$sql_custom_fields_rows["media_url"].'" type="video/'.$media_output_data[1].'"></video><div>File Name:<br><a href="'.$_SESSION['view_frontend_of_site'].'/sites/media/videos/'.$sql_custom_fields_rows["media_url"].'" target="_blank">'.$sql_custom_fields_rows["media_url"].'</a></div></li>';
+						echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><video controls preload="none"><source src="'.INSTALLATION_URL_PATH.'/sites/media/videos/'.$sql_custom_fields_rows["media_url"].'" type="video/'.$media_output_data[1].'"></video><div>File Name:<br><a href="'.$_SESSION['view_frontend_of_site'].INSTALLATION_URL_PATH.'/sites/media/videos/'.$sql_custom_fields_rows["media_url"].'" target="_blank">'.$sql_custom_fields_rows["media_url"].'</a></div></li>';
 					}
 					elseif($sql_custom_fields_rows["media_type"] == 'Video Embed')
 					{

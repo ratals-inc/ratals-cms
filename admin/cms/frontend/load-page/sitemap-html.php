@@ -33,7 +33,7 @@ else
 					}
 					else
 					{						
-						$pages_data['sitemap'][$table_name][] = array('url' => $domain, 'meta_title' => $urls_record_data["meta_title"]);
+						$pages_data['sitemap'][$table_name][] = array('url' => $domain.INSTALLATION_URL_PATH, 'meta_title' => $urls_record_data["meta_title"]);
 					}
 				}
 			}

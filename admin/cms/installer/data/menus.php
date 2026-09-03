@@ -8,9 +8,9 @@ $placeholders = '?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?';
 
 $parameters = array();
 
-$parameters[] = [$_SESSION['install_ids'][$site_id]['header_menu_id'] ?? NULL, $site_id, 1, 'Header', 'Header', 4, '', 'header', '{}', $first_last_name, $first_last_name];
-$parameters[] = [$_SESSION['install_ids'][$site_id]['footer_catetories_menu_id'] ?? NULL, $site_id, 1, 'Footer Company', 'COMPANY', 6, '', 'footer_company', '{}', $first_last_name, $first_last_name];
-$parameters[] = [$_SESSION['install_ids'][$site_id]['connect_on_social_menu_id'] ?? NULL, $site_id, 1, 'Connect on Social', 'CONTACT US', 8, '', 'connect_on_social', '{}', $first_last_name, $first_last_name];
-$parameters[] = [$_SESSION['install_ids'][$site_id]['footer_bottom_menu_id'] ?? NULL, $site_id, 1, 'Footer Links', 'LINKS', 3, '', 'footer_links', '{}', $first_last_name, $first_last_name];
+$parameters[] = [$_SESSION['install_ids'][$site_id]['header_menu_id'] ?? NULL, $site_id, 1, 'Header', 'Header', 4, '', 'header', '{}', $install_update_username, $install_update_username];
+$parameters[] = [$_SESSION['install_ids'][$site_id]['footer_catetories_menu_id'] ?? NULL, $site_id, 1, 'Footer Company', 'COMPANY', 6, '', 'footer_company', '{}', $install_update_username, $install_update_username];
+$parameters[] = [$_SESSION['install_ids'][$site_id]['connect_on_social_menu_id'] ?? NULL, $site_id, 1, 'Connect on Social', 'CONTACT US', 8, '', 'connect_on_social', '{}', $install_update_username, $install_update_username];
+$parameters[] = [$_SESSION['install_ids'][$site_id]['footer_bottom_menu_id'] ?? NULL, $site_id, 1, 'Footer Links', 'LINKS', 3, '', 'footer_links', '{}', $install_update_username, $install_update_username];
 
 $results->getinsertMultipleRecords(__LINE__, __FILE__, 'menus', $column_names, $placeholders, $parameters);

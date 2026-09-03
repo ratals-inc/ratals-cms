@@ -180,17 +180,17 @@ else
 				}
 				
 				$selected_page = '';
-				if(isset($menu['admin_page']['url']) && $_SESSION['admin_directory']."/".$menu['admin_page']['url'] == $path_url) { $selected_page = ' class="sub-menu-active"'; }
-				elseif(isset($menu['admin_page']['url']) && $_SESSION['admin_directory']."/".$menu['admin_page']['url'].'/edit' == $path_url) { $selected_page = ' class="sub-menu-active"'; }
+				if(isset($menu['admin_page']['url']) && trim(INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory']."/".$menu['admin_page']['url'], '/') == $path_url) { $selected_page = ' class="sub-menu-active"'; }
+				elseif(isset($menu['admin_page']['url']) && trim(INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory']."/".$menu['admin_page']['url'].'/edit', '/') == $path_url) { $selected_page = ' class="sub-menu-active"'; }
 				//for here: admin5/accounting/accounts_payable/bills/inventory - keeps sub menu button selected
-				elseif(isset($menu['admin_page']['url']) && $_SESSION['admin_directory']."/".$menu['admin_page']['url'].'/inventory' == $path_url) { $selected_page = ' class="sub-menu-active"'; }
+				elseif(isset($menu['admin_page']['url']) && trim(INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory']."/".$menu['admin_page']['url'].'/inventory', '/') == $path_url) { $selected_page = ' class="sub-menu-active"'; }
 				//for here: admin5/accounting/accounts_payable/bills/inventory/edit - keeps sub menu button selected
-				elseif(isset($menu['admin_page']['url']) && $_SESSION['admin_directory']."/".$menu['admin_page']['url'].'/inventory/edit' == $path_url) { $selected_page = ' class="sub-menu-active"'; }
+				elseif(isset($menu['admin_page']['url']) && trim(INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory']."/".$menu['admin_page']['url'].'/inventory/edit', '/') == $path_url) { $selected_page = ' class="sub-menu-active"'; }
 				
 				$sub_menu_results .= '<li>'; 
 				if(isset($menu['admin_page']['url']) && !empty($menu['admin_page']['url']))
 				{
-					$sub_menu_results .= '<a href="/'.$_SESSION['admin_directory'].'/'.$menu['admin_page']['url'].'/'.$link_parameters.'"'.$selected_page.$link_target.'>'.$menu['name'].$sub_items_arrow.'</a>'; 
+					$sub_menu_results .= '<a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$menu['admin_page']['url'].'/'.$link_parameters.'"'.$selected_page.$link_target.'>'.$menu['name'].$sub_items_arrow.'</a>'; 
 				}
 				else
 				{

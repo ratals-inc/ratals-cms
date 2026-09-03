@@ -123,7 +123,7 @@ foreach($media_to_install as $media_file_array)
 	{
 		//Insert original media recorded into db.
 		$inserted_media_id_row = $results->getInsertRecord(__LINE__, __FILE__, 'media', $media_column_names, $media_placeholders,					  
-		['Image', 'Yes', NULL, $file_name_and_extenstion, $file_name_alt_tag, '', $file_width, $file_height, '', '', '{}', $first_last_name, $first_last_name]);
+		['Image', 'Yes', NULL, $file_name_and_extenstion, $file_name_alt_tag, '', $file_width, $file_height, '', '', '{}', $install_update_username, $install_update_username]);
 		$_SESSION[$file_name_and_extenstion] = $inserted_media_id_row;
 		
 		//Create media folder using original media id.
@@ -177,7 +177,7 @@ foreach($media_to_install as $media_file_array)
 					$media_size_webp = filesize($webp_image_path);
 					$size_webp = convertBytesToSize($media_size_webp);
 					$results->getInsertRecord(__LINE__, __FILE__, 'media', $media_column_names, $media_placeholders,					  
-					['Image', 'No', $inserted_media_id_row, $file_name_only.'.webp', $file_name_alt_tag, $size_webp, $file_width, $file_height, '', '', '{}', $first_last_name, $first_last_name]);
+					['Image', 'No', $inserted_media_id_row, $file_name_only.'.webp', $file_name_alt_tag, $size_webp, $file_width, $file_height, '', '', '{}', $install_update_username, $install_update_username]);
 				}
 				elseif(file_exists($webp_image_path))
 				{
@@ -199,7 +199,7 @@ foreach($media_to_install as $media_file_array)
 					$media_size_avif = filesize($avif_image_path);
 					$size_avif = convertBytesToSize($media_size_avif);
 					$results->getInsertRecord(__LINE__, __FILE__, 'media', $media_column_names, $media_placeholders,					  
-					['Image', 'No', $inserted_media_id_row, $file_name_only.'.avif', $file_name_alt_tag, $size_avif, $file_width, $file_height, '', '', '{}', $first_last_name, $first_last_name]);
+					['Image', 'No', $inserted_media_id_row, $file_name_only.'.avif', $file_name_alt_tag, $size_avif, $file_width, $file_height, '', '', '{}', $install_update_username, $install_update_username]);
 				}
 				elseif(file_exists($avif_image_path))
 				{

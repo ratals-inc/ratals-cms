@@ -24,15 +24,21 @@ else
 					$admin_field['frontend_name'] = $custom_field_name[$_SESSION['admin_language']]['frontend_name'] ?? '';
 				}
 				
-				$admin_user_email_signiture = '';
-				if(empty($field_value) && $admin_field["column_name"] == 'sales_message' && isset($_SESSION['user_email_signiture']) && !empty($_SESSION['user_email_signiture']))
+				$admin_user_email_signature = '';
+				if(empty($field_value) && $admin_field["column_name"] == 'sales_message' && isset($_SESSION['user_email_signature']) && !empty($_SESSION['user_email_signature']))
 				{
-					$field_value = $_SESSION['user_email_signiture'];
+					$field_value = $_SESSION['user_email_signature'];
+				}
+				
+				$field_required = '';
+				if($admin_field["required"] == 'Yes')
+				{
+					$field_required = ' <span class="required-asterisk">*</span>';
 				}
 				
 				echo '
 				<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-				<div class="edit-label">'.((isset($admin_field["name"])) ? htmlspecialchars($admin_field["name"] ?? '') : htmlspecialchars($admin_field["frontend_name"] ?? '')).'</div>
+				<div class="edit-label">'.((isset($admin_field["name"])) ? htmlspecialchars($admin_field["name"] ?? '') : htmlspecialchars($admin_field["frontend_name"] ?? '')).$field_required.'</div>
 				<div class="edit-field html-text-editor">';
 				$editor_name = htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '');
 				$editor_content = $field_value;

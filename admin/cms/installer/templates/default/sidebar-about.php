@@ -10,7 +10,7 @@ if(in_array('sidebar-about.php', $data_array['active_template_includes'])) { ?>
 		$image_data = customField('[COMPANY_IMAGE]', $rid);
 		if(!empty($image_data))
 		{
-			$media_output = mediaId($image_data[0], 'No', 'Yes', $image_data[1]);
+			$media_output = mediaId($image_data[0], 'No', 'Yes', '', $image_data[1]);
 			echo '<div class="img">'.$media_output.'</div>';
 		}
 		?>

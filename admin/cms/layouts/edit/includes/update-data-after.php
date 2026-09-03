@@ -44,11 +44,17 @@ else
 							$column_names .= $key_2.',';
 							$column_placeholders .= 'UTC_TIMESTAMP(),';
 						}
-						elseif($key_2 == 'created_by' || $key_2 == 'updated_by' || $key_2 == 'answered_by' || $key_2 == 'approved_by')
+						elseif($key_2 == 'answered_by' || $key_2 == 'approved_by')
 						{
 							$column_names .= $key_2.',';
 							$column_placeholders .= '?,';
 							$column_value[] = $_SESSION['user_first_last_name'];
+						}
+						elseif($key_2 == 'created_by' || $key_2 == 'updated_by')
+						{
+							$column_names .= $key_2.',';
+							$column_placeholders .= '?,';
+							$column_value[] = $_SESSION['user_username'];
 						}
 						elseif($key_2 == 'site_id')
 						{
@@ -165,15 +171,15 @@ else
 					$results->getUpdateRecord(__LINE__, __FILE__, 'assignments_products', $column_names, $where_clause, $post_values_array);
 				}
 				
-				$results->getUpdateRecord(__LINE__, __FILE__, 'assignments_sub_items', $column_names, $where_clause, $post_values_array);
+				$results->getUpdateRecord(__LINE__, __FILE__, 'assignments_design_blocks', $column_names, $where_clause, $post_values_array);
 			}
 			
-			//If admin edit page is being updated for a table that has a url, update the assignments_sub_items table for any records with this URL ID for the current status.
+			//If admin edit page is being updated for a table that has a url, update the assignments_design_blocks table for any records with this URL ID for the current status.
 			//$admin_fields_has_url variable is being set in the file of /admin/includes/admin-fields/get-fields.php
 			$column_names = '`item_status` = ?';
 			$where_clause = 'WHERE `site_id` = ? AND `child_id` = ?';
 			$parameters = array($post_values['urls']['url_status'], $_SESSION["site_set_for_editing"], trim($_GET["rid"] ?? ''));
-			$results->getUpdateRecord(__LINE__, __FILE__, 'assignments_sub_items', $column_names, $where_clause, $parameters);
+			$results->getUpdateRecord(__LINE__, __FILE__, 'assignments_design_blocks', $column_names, $where_clause, $parameters);
 		}
 		
 		//If a Post Page is being updated, update assignments_posts table so the Post is displaying in the correct blog categories.
@@ -313,7 +319,7 @@ else
 				$results->getUpdateRecord(__LINE__, __FILE__, 'assignments_products', $column_names, $where_clause, $post_values_array);
 			}
 			
-			$results->getUpdateRecord(__LINE__, __FILE__, 'assignments_sub_items', $column_names, $where_clause, $post_values_array);
+			$results->getUpdateRecord(__LINE__, __FILE__, 'assignments_design_blocks', $column_names, $where_clause, $post_values_array);
 		}
 		
 		//Update admin directory folder name to what user saves it as.
@@ -344,12 +350,12 @@ else
 			}
 			
 			//Update database with new virtual admin directory name.
-			$results->getUpdateRecord(__LINE__, __FILE__, 'sites', '`admin_directory` = ?, `updated_by` = ?, `updated_date` = UTC_TIMESTAMP()', '', [$post_values['sites']['admin_directory'], $_SESSION['user_first_last_name']]);
+			$results->getUpdateRecord(__LINE__, __FILE__, 'sites', '`admin_directory` = ?, `updated_by` = ?, `updated_date` = UTC_TIMESTAMP()', '', [$post_values['sites']['admin_directory'], $_SESSION['user_username']]);
 			
 			//Pause for 10 seconds to ensure the new admin URL is updated in the .htaccess file and the cache is cleared, allowing it to load properly.
 			sleep(10);
 			
-			header("Location: /".$post_values['sites']['admin_directory']."/website/site-settings/url-settings/?updated=success&update-admin-url=".$post_values['sites']['admin_directory']);
+			header("Location: ".INSTALLATION_URL_PATH."/".$post_values['sites']['admin_directory']."/website/site-settings/url-settings/?updated=success&update-admin-url=".$post_values['sites']['admin_directory']);
 			exit();
 		}
 		
@@ -358,7 +364,7 @@ else
 		{
 			$export_table_setup = $results_schema->getSchemaSelectSingleRecord(__LINE__, __FILE__, '*', 'tables', 'WHERE `table_schema` = ? AND `table_name` = ?', [$_SESSION['site_db_name'], $post_values['export_data']['table_to_export']]);
 			
-			$export_table_columns = $results_schema->getSchemaSelectMultipleRecords(__LINE__, __FILE__, '*', 'columns', 'WHERE `table_schema` = ? AND `table_name` = ? ORDER BY `columns`.`ORDINAL_POSITION` ASC', [$_SESSION['site_db_name'], $export_table_setup['TABLE_NAME']]);
+			$export_table_columns = $results_schema->getSchemaSelectMultipleRecords(__LINE__, __FILE__, '*', 'columns', 'WHERE `table_schema` = ? AND `table_name` = ? ORDER BY `columns`.`ordinal_position` ASC', [$_SESSION['site_db_name'], $export_table_setup['table_name']]);
 			
 			$row_values = '';
 			
@@ -391,10 +397,10 @@ else
 					$export_where_statement = 'WHERE '.trim($export_where_statement, ' AND');
 				}
 				
-				$exported_results = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', $export_table_setup['TABLE_NAME'], $export_where_statement, $export_parameters);
+				$exported_results = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', $export_table_setup['table_name'], $export_where_statement, $export_parameters);
 				
 				header("Content-Type: application/vnd.ms-excel; charset=utf-8");
-				header("Content-Disposition: attachment; filename=".$export_table_setup['TABLE_NAME'].".xls");
+				header("Content-Disposition: attachment; filename=".$export_table_setup['table_name'].".xls");
 				header("Pragma: no-cache");
 				header("Expires: 0");
 				
@@ -406,7 +412,7 @@ else
 				$row_values .= '<tr>';
 				foreach($export_table_columns as $export_table_column)
 				{
-					$row_values .= '<th>'.$export_table_column['COLUMN_NAME'].'</th>';
+					$row_values .= '<th>'.$export_table_column['column_name'].'</th>';
 				}
 				$row_values .= '</tr>';
 				
@@ -430,7 +436,7 @@ else
 		}
 		
 		//When an admin user imports into a database table the insert/update is done with this code. The insert/update array that is perpared for the import is done in admin/includes/admin-fields/validation.
-		if($_SESSION['admin_table_name'] == 'import_data' && isset($post_values['import_data']['select_file_to_import']) && !empty($post_values['import_data']['select_file_to_import']) && isset($export_table_setup['TABLE_NAME']) && !empty($export_table_setup['TABLE_NAME']))
+		if($_SESSION['admin_table_name'] == 'import_data' && isset($post_values['import_data']['select_file_to_import']) && !empty($post_values['import_data']['select_file_to_import']) && isset($export_table_setup['table_name']) && !empty($export_table_setup['table_name']))
 		{
 			if(!empty($insert_parameters) && empty($errors))
 			{
@@ -439,7 +445,7 @@ else
 				//echo '<br>'.$insert_placeholders;
 				//echo '<pre>'; print_r($insert_parameters); echo '</pre>';
 				
-				$results->getInsertMultipleRecords(__LINE__, __FILE__, $export_table_setup['TABLE_NAME'], $insert_columns, $insert_placeholders, $insert_parameters);
+				$results->getInsertMultipleRecords(__LINE__, __FILE__, $export_table_setup['table_name'], $insert_columns, $insert_placeholders, $insert_parameters);
 			}
 			
 			if(!empty($update_parameters) && empty($errors))
@@ -448,7 +454,7 @@ else
 				//echo '<br>'.$update_columns;
 				//echo '<pre>'; print_r($update_parameters); echo '</pre>';
 				
-				$results->getUpdateMultipleRecords(__LINE__, __FILE__, $export_table_setup['TABLE_NAME'], $update_columns, 'WHERE `id` = ?', $update_parameters);
+				$results->getUpdateMultipleRecords(__LINE__, __FILE__, $export_table_setup['table_name'], $update_columns, 'WHERE `id` = ?', $update_parameters);
 			}
 			
 			//die;
@@ -539,16 +545,16 @@ else
 			}
 			
 			//Get schema data so default avlue can be set back to the column.
-			$current_database_columns = $results_schema->getSchemaSelectMultipleRecordsKeyName(__LINE__, __FILE__, '`column_name`, `column_default`', 'columns', 'WHERE `table_schema` = ? AND `table_name` = ?', [$_SESSION['site_db_name'], $post_values['database_tables']['database_table_name']], 'COLUMN_NAME');
+			$current_database_columns = $results_schema->getSchemaSelectMultipleRecordsKeyName(__LINE__, __FILE__, '`column_name`, `column_default`', 'columns', 'WHERE `table_schema` = ? AND `table_name` = ?', [$_SESSION['site_db_name'], $post_values['database_tables']['database_table_name']], 'column_name');
 			
 			//Order all columns to correct order.
 			$last_column_name_modified = '';
 			foreach($database_columns_submitted as $database_column_submitted)
 			{
 				$column_default = '';
-				if(isset($current_database_columns[$all_admin_fields_array[$database_column_submitted]['column_name']]['COLUMN_DEFAULT']))
+				if(isset($current_database_columns[$all_admin_fields_array[$database_column_submitted]['column_name']]['column_default']))
 				{
-					$column_default = $current_database_columns[$all_admin_fields_array[$database_column_submitted]['column_name']]['COLUMN_DEFAULT'];
+					$column_default = $current_database_columns[$all_admin_fields_array[$database_column_submitted]['column_name']]['column_default'];
 				}
 				
 				$table_columns = '';
@@ -631,12 +637,12 @@ else
 			foreach($database_tables_with_old_column_name as $database_table_with_old_column_name)
 			{
 				//Get schema data so default value can be set back to the column.
-				$current_database_columns = $results_schema->getSchemaSelectMultipleRecordsKeyName(__LINE__, __FILE__, '`column_name`, `column_default`', 'columns', 'WHERE `table_schema` = ? AND `table_name` = ?', [$_SESSION['site_db_name'], $database_table_with_old_column_name['database_table_name']], 'COLUMN_NAME');
+				$current_database_columns = $results_schema->getSchemaSelectMultipleRecordsKeyName(__LINE__, __FILE__, '`column_name`, `column_default`', 'columns', 'WHERE `table_schema` = ? AND `table_name` = ?', [$_SESSION['site_db_name'], $database_table_with_old_column_name['database_table_name']], 'column_name');
 			
 				$column_default = '';
-				if(isset($current_database_columns[$database_old_column_name['column_name']]['COLUMN_DEFAULT']))
+				if(isset($current_database_columns[$database_old_column_name['column_name']]['column_default']))
 				{
-					$column_default = $current_database_columns[$database_old_column_name['column_name']]['COLUMN_DEFAULT'];
+					$column_default = $current_database_columns[$database_old_column_name['column_name']]['column_default'];
 				}
 				
 				if(isset($database_old_column_name['column_name']) && !empty($database_old_column_name['column_name']) && isset($database_new_column_name) && !empty($database_new_column_name) && $database_old_column_name['column_name'] != $database_new_column_name)
@@ -705,13 +711,13 @@ else
 		
 		if($_SESSION['admin_table_name'] == 'custom_fields' || $_SESSION['admin_table_name'] == 'custom_fields_options')
 		{
-			$assignment_tables = array('assignments_products', 'assignments_sub_items');
+			$assignment_tables = array('assignments_products', 'assignments_design_blocks');
 			
 			foreach($assignment_tables as $assignment_table)
 			{
 				$sql_select_assignments_rows = array();
 				
-				if($assignment_table == 'assignments_sub_items' || ($commerce_installed && $assignment_table == 'assignments_products'))
+				if($assignment_table == 'assignments_design_blocks' || ($commerce_installed && $assignment_table == 'assignments_products'))
 				{
 					//Update inventroy on the assignment table rows impacted by this custom field change.
 					if($_SESSION['admin_table_name'] == 'custom_fields' && isset($_GET['rid']) && !empty($_GET['rid']))

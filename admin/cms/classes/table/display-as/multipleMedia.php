@@ -49,31 +49,31 @@ else
 							{
 								$media_data = explode('~||~', $media_ids);
 								
-								$media_library_links .= '<a href="/'.$_SESSION['admin_directory'].'/media/?textfield-id='.$media_data[0].'" target="_blank">'.$media_data[0].'</a>, ';
+								$media_library_links .= '<a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/media/?textfield-id='.$media_data[0].'" target="_blank">'.$media_data[0].'</a>, ';
 							}
 							$media_library_links = trim($media_library_links, ' ,');
 						}
 						else
 						{
 							$media_data = explode('~||~', $media_column_name_data);
-							$media_library_links = '<a href="/'.$_SESSION['admin_directory'].'/media/?textfield-id='.$media_data[0].'" target="_blank">'.$media_data[0].'</a>';
+							$media_library_links = '<a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/media/?textfield-id='.$media_data[0].'" target="_blank">'.$media_data[0].'</a>';
 						}
 						
 						if($sql_get_assigned_media_url_row["media_type"] == 'Image')
 						{
 							$original_media_id = $sql_get_assigned_media_url_row["original_media_id"];
 							
-							echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><img src="/sites/media/images/'.$original_media_id.'/'.$sql_get_assigned_media_url_row["media_url"].'" /><div>Media Type: Image</div><div>Media ID: '.$media_library_links.'</div></li>';
+							echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><img src="'.INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.$sql_get_assigned_media_url_row["media_url"].'" /><div>Media Type: Image</div><div>Media ID: '.$media_library_links.'</div></li>';
 						}
 						elseif($sql_get_assigned_media_url_row["media_type"] == 'File')
 						{
 							$media_data_type = explode('.', $sql_get_assigned_media_url_row["media_url"]);
-							echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><object data="/sites/media/files/'.$sql_get_assigned_media_url_row["media_url"].'" type="application/'.$media_data_type[1].'" width="150px" height="75px"></object><div>Media Type: File</div><div>Media ID: '.$media_library_links.'</div></li>';
+							echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><object data="'.INSTALLATION_URL_PATH.'/sites/media/files/'.$sql_get_assigned_media_url_row["media_url"].'" type="application/'.$media_data_type[1].'" width="150px" height="75px"></object><div>Media Type: File</div><div>Media ID: '.$media_library_links.'</div></li>';
 						}
 						elseif($sql_get_assigned_media_url_row["media_type"] == 'Video')
 						{
 							$media_data_type = explode('.', $sql_get_assigned_media_url_row["media_url"]);
-							echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><video controls preload="none"><source src="/sites/media/videos/'.$sql_get_assigned_media_url_row["media_url"].'" type="video/'.$media_data_type[1].'"></video><div>Media Type: Video</div><div>Media ID: '.$media_library_links.'</div></li>';
+							echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><video controls preload="none"><source src="'.INSTALLATION_URL_PATH.'/sites/media/videos/'.$sql_get_assigned_media_url_row["media_url"].'" type="video/'.$media_data_type[1].'"></video><div>Media Type: Video</div><div>Media ID: '.$media_library_links.'</div></li>';
 						}
 						elseif($sql_get_assigned_media_url_row["media_type"] == 'Video Embed')
 						{
@@ -82,7 +82,7 @@ else
 					}
 					else 
 					{ 
-						echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'">Cannot find media id <a href="/'.$_SESSION['admin_directory'].'/media/?textfield-id='.$get_media_id.'">'.$get_media_id.'</a></li>'; 
+						echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'">Cannot find media id <a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/media/?textfield-id='.$get_media_id.'">'.$get_media_id.'</a></li>'; 
 					}
 				}
 				else

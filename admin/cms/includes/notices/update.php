@@ -9,6 +9,7 @@ if(!defined('INSTALLATION_ROOT'))
 	//admin/temp_extract/admin/cms/includes/notices/update.php
 	define('INSTALLATION_ROOT', dirname(__DIR__, 6));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -111,7 +112,8 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 	register_shutdown_function(function()
 	{
 		$error = error_get_last();
-		if($error)
+		
+		if($error && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true))
 		{
 			writeToInstallLog('FATAL ERROR ['.$error['type'].']: '.$error['message'].' | File: '.$error['file'].' | Line: '.$error['line']);
 		}
@@ -119,26 +121,126 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 	
 	function removeInstallDirectory($directory_path)
 	{
-		if(is_dir($directory_path))
+		if(!is_dir($directory_path))
 		{
-			$directory_contents = scandir($directory_path);
-			foreach($directory_contents as $item)
+			return true;
+		}
+		
+		$directory_contents = scandir($directory_path);
+		
+		if($directory_contents === false)
+		{
+			return false;
+		}
+		
+		$cleanup_successful = true;
+		
+		foreach($directory_contents as $item)
+		{
+			if($item !== "." && $item !== "..")
 			{
-				if($item !== "." && $item !== "..")
+				$item_path = $directory_path.'/'.$item;
+				
+				if(is_dir($item_path))
 				{
-					$item_path = $directory_path.'/'.$item;
-					if(is_dir($item_path))
+					if(removeInstallDirectory($item_path) === false)
 					{
-						removeInstallDirectory($item_path);
+						$cleanup_successful = false;
 					}
-					else
+				}
+				else
+				{
+					if(file_exists($item_path) && !@unlink($item_path))
 					{
-						unlink($item_path);
+						$cleanup_successful = false;
 					}
 				}
 			}
-			rmdir($directory_path);
 		}
+		
+		if($cleanup_successful === true && is_dir($directory_path))
+		{
+			if(!@rmdir($directory_path))
+			{
+				$cleanup_successful = false;
+			}
+		}
+		
+		return $cleanup_successful;
+	}
+	
+	//If an update is running on a Windows machine, such as localhost, the cleanup cannot be completed because Windows will not allow the update folder to be deleted while the update file is still running. This function provides a fallback to finish the cleanup after the update process exits.
+	function startUpdateCleanup($cleanup_url)
+	{
+		$cleanup_started_file = INSTALLATION_ROOT.'/update-cleanup-started.txt';
+		$cleanup_token_file = INSTALLATION_ROOT.'/update-cleanup-token.txt';
+		
+		if(file_exists($cleanup_started_file))
+		{
+			@unlink($cleanup_started_file);
+		}
+		
+		try
+		{
+			$cleanup_token = bin2hex(random_bytes(32));
+		}
+		catch(\Throwable $e)
+		{
+			return false;
+		}
+		
+		if(file_put_contents($cleanup_token_file, $cleanup_token, LOCK_EX) === false)
+		{
+			return false;
+		}
+		
+		$post_fields = array('type' => 'updateCleanup', 'cleanup_token' => $cleanup_token);
+		
+		$started = false;
+		
+		//Try starting up to 5 times to make sure cleanup starts.
+		for($i = 0; $i < 5; $i++)
+		{
+			$ch = curl_init($cleanup_url);
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post_fields));
+			curl_setopt($ch, CURLOPT_COOKIE, session_name().'='.session_id());
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, 500);
+			curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+			
+			curl_exec($ch);
+			curl_close($ch);
+			
+			clearstatcache(true, $cleanup_started_file);
+			
+			//Check every 100ms for 2 seconds to make sure the cleanup request started.
+			for($j = 0; $j < 20; $j++)
+			{
+				if(file_exists($cleanup_started_file))
+				{
+					$started = true;
+					break 2;
+				}
+				
+				usleep(100000);
+				clearstatcache(true, $cleanup_started_file);
+			}
+		}
+		
+		if($started === true && file_exists($cleanup_started_file))
+		{
+			@unlink($cleanup_started_file);
+		}
+		
+		//Remove token if the cleanup request never started.
+		if($started === false && file_exists($cleanup_token_file))
+		{
+			@unlink($cleanup_token_file);
+		}
+		
+		return $started;
 	}
 	
 	function recursiveCopy($staging_directory, $live_directory)
@@ -411,8 +513,8 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 			}
 		}
 		
-		//Set $first_last_name
-		$first_last_name = 'System Update';
+		//Set $install_update_username
+		$install_update_username = 'System Update';
 		
 		//UPDATE DATABASE
 		if(file_exists($temp_extract_dir.'/admin/cms/includes/notices/updates/database.php'))
@@ -428,7 +530,7 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 		}
 		
 		//Get all installed tables after running the table update to determine which are available for updates.
-		$existing_database_tables = $results_schema->getSchemaSelectMultipleRecordsOneColumn(__LINE__, __FILE__, 'TABLE_NAME', 'tables', 'WHERE `table_schema` = ?', [$_SESSION['site_db_name']], 'TABLE_NAME');
+		$existing_database_tables = $results_schema->getSchemaSelectMultipleRecordsOneColumn(__LINE__, __FILE__, 'table_name', 'tables', 'WHERE `table_schema` = ?', [$_SESSION['site_db_name']], 'table_name');
 		
 		//UPDATE ADMIN FIELDS
 		if(file_exists($temp_extract_dir.'/admin/cms/includes/notices/updates/admin-fields.php'))
@@ -692,28 +794,6 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 			writeToInstallLog('OPcache cleared after update so new PHP files take effect.');
 		}
 		
-		writeToInstallLog('Software update process completed successfully.');
-		
-		writeToInstallLog('---------------------------------- END UPDATE ----------------------------------');
-		
-		//Clean up temp once after loop copy to live
-		if(is_dir($temp_extract_dir))
-		{
-			removeInstallDirectory($temp_extract_dir);
-		}
-		
-		if(file_exists($started_file))
-		{
-			unlink($started_file);
-		}
-		
-		//Delete update progress file.
-		unset($_SESSION['current_update_log']);
-		if(file_exists($progress_log_file))
-		{
-			unlink($progress_log_file);
-		}
-		
 		//CREATE NOTICE THAT SOFTWARE HAS BEEN UPDATED.
 		//Get php version.
 		$php_version = phpversion();
@@ -793,15 +873,28 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 		//Insert notice that software has been updated.
 		$results->getInsertRecord(__LINE__, __FILE__, 'notices', '`id`, `site_id`, `status`, `notice_subject`, `notice_message`, `notice_url`, `notice_update_software`, `notice_upgrade_from`, `notice_upgrade_to`, `notice_software_version`, `required_php_version`, `required_mysql_version`, `system_code`, `custom_fields`, `created_date`', '?,?,?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP()', [NULL, 0, 1, $message_to_insert['subject'], $message_to_insert['message'], $message_to_insert['link'], $message_to_insert['update_software'], '', '', $message_to_insert['software_version'], $message_to_insert['required_php'], $message_to_insert['required_mysql'], 'updated_from_'.$old_version.'_to_'.$message_to_insert['software_version'], '{}']);
 		
-		echo "1";
-		exit;
-	}
-	catch(\Throwable $e)
-	{
-		//Remove extrated directory if error is thrown
-		if(isset($temp_extract_dir) && is_dir($temp_extract_dir))
+		writeToInstallLog('Software update process completed successfully.');
+		
+		writeToInstallLog('---------------------------------- END UPDATE ----------------------------------');
+		
+		//Clean up temp once after loop copy to live.
+		$cleanup_successful = true;
+		
+		if(is_dir($temp_extract_dir))
 		{
-			removeInstallDirectory($temp_extract_dir);
+			$cleanup_successful = removeInstallDirectory($temp_extract_dir);
+		}
+		
+		//If the temp directory could not be completely removed, start a separate
+		//cleanup request from outside temp_extract to finish cleanup after this file exits.
+		if($cleanup_successful === false)
+		{
+			$cleanup_url = $domain.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/cms/includes/notices/fallback-cleanup.php';
+			
+			if(startUpdateCleanup($cleanup_url) === false)
+			{
+				writeToInstallLog('Warning: Could not start background cleanup of temporary update files.');
+			}
 		}
 		
 		if(file_exists($started_file))
@@ -816,7 +909,12 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 			unlink($progress_log_file);
 		}
 		
-		//Log and return the error to AJAX
+		echo "1";
+		exit;
+	}
+	catch(\Throwable $e)
+	{
+		//Log and return the error to AJAX.
 		$errorMessage = $e->getMessage();
 		$errorFile = $e->getFile();
 		$errorLine = $e->getLine();
@@ -825,7 +923,37 @@ if(isset($_POST['noticeId']) && !empty($_POST['noticeId']) && isset($_POST['vers
 		$fullError = "Update failed:\n"."Message: ".$errorMessage."\n"."File: ".$errorFile."\n"."Line: ".$errorLine."\n"."Trace:\n".$errorTrace;
 		writeToInstallLog($fullError);
 		
-		echo json_encode(['status'  => 'error', 'message' => $errorMessage, 'file'    => $errorFile, 'line'    => $errorLine]);
+		//Remove extracted directory if error is thrown.
+		$cleanup_successful = true;
+		
+		if(isset($temp_extract_dir) && is_dir($temp_extract_dir))
+		{
+			$cleanup_successful = removeInstallDirectory($temp_extract_dir);
+		}
+		
+		//If the temp directory could not be completely removed, start a separate
+		//cleanup request from outside temp_extract to finish cleanup after this file exits.
+		if($cleanup_successful === false)
+		{
+			$cleanup_url = $domain.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/cms/includes/notices/fallback-cleanup.php';
+			
+			if(startUpdateCleanup($cleanup_url) === false)
+			{
+				writeToInstallLog('Warning: Could not start background cleanup of temporary update files.');
+			}
+		}
+		
+		if(file_exists($started_file))
+		{
+			unlink($started_file);
+		}
+		
+		echo json_encode([
+			'status' => 'error',
+			'message' => $errorMessage,
+			'file' => $errorFile,
+			'line' => $errorLine
+		]);
 		
 		exit;
 	}

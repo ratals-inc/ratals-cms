@@ -17,22 +17,28 @@ else
 			{
 				if($_SESSION['admin_type'] == 'edit' && $current_values['custom_fields']['cf_display_as'] != 'swatch' && $current_values['custom_fields']['field_type'] == 'Content Field')
 				{
+					$field_required = '';
+					if($admin_field["required"] == 'Yes')
+					{
+						$field_required = ' <span class="required-asterisk">*</span>';
+					}
+					
 					echo '
 					<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-						<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+						<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 						<div class="edit-field text embed">';
 						
 							if($current_values['custom_fields']['cf_display_as'] == "singleMedia")
 							{ 
 							?>
                                 If this embed media is a large image and will load high up in the page, you should use this with High Fetch Priority:<br>
-                                <strong>Embed Code:</strong> &lt;?php $image_data = customField('<?php echo trim($_GET["rid"] ?? ''); ?>', $rid); if(!empty($image_data)) { $media_output = mediaId($image_data[0], 'lazyLoadNo', 'fetchPriorityHigh', $image_data[1]); echo $media_output; } ?&gt;
+                                <strong>Embed Code:</strong> &lt;?php $image_data = customField('<?php echo trim($_GET["rid"] ?? ''); ?>', $rid); if(!empty($image_data)) { $media_output = mediaId($image_data[0], 'lazyLoadNo', 'fetchPriorityHigh', '', $image_data[1]); echo $media_output; } ?&gt;
                                 <br><br>
 								If this embed media will load high up in the page, you should use this with No Lazy Loading:<br>
-                                <strong>Embed Code:</strong> &lt;?php $image_data = customField('<?php echo trim($_GET["rid"] ?? ''); ?>', $rid); if(!empty($image_data)) { $media_output = mediaId($image_data[0], 'lazyLoadNo', 'fetchPriorityAuto', $image_data[1]); echo $media_output; } ?&gt;
+                                <strong>Embed Code:</strong> &lt;?php $image_data = customField('<?php echo trim($_GET["rid"] ?? ''); ?>', $rid); if(!empty($image_data)) { $media_output = mediaId($image_data[0], 'lazyLoadNo', 'fetchPriorityAuto', '', $image_data[1]); echo $media_output; } ?&gt;
                                 <br><br>
                                 If this embed media will load after you scroll some, you should use this with Lazy Loading:<br>
-                                <strong>Embed Code:</strong> &lt;?php $image_data = customField('<?php echo trim($_GET["rid"] ?? ''); ?>', $rid); if(!empty($image_data)) { $media_output = mediaId($image_data[0], 'lazyLoadYes', 'fetchPriorityAuto', $image_data[1]); echo $media_output; } ?&gt;
+                                <strong>Embed Code:</strong> &lt;?php $image_data = customField('<?php echo trim($_GET["rid"] ?? ''); ?>', $rid); if(!empty($image_data)) { $media_output = mediaId($image_data[0], 'lazyLoadYes', 'fetchPriorityAuto', '', $image_data[1]); echo $media_output; } ?&gt;
 							<?php 
 							}
 							else

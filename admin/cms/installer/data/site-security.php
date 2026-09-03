@@ -8,6 +8,6 @@ $column_names = '`id`, `site_id`, `top_ip_address`, `site_blocked_ips`, `site_al
 $placeholders = 'NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP()';
 
 $parameters = array();
-$parameters[] = [$site_id, 10, '', $_SERVER['REMOTE_ADDR'], 'Yes', '5', 'Yes', $user_email, $to_email_name, '', '', '', 'Yes', $user_email, $to_email_name, '', '', '500', '60', 'Email Me', $user_email, $to_email_name, '', '', '', '{}', $first_last_name, $first_last_name];
+$parameters[] = [$site_id, 10, '', $_SERVER['REMOTE_ADDR'], 'Yes', '5', 'Yes', $user_email, $to_email_name, '', '', '', 'Yes', $user_email, $to_email_name, '', '', '500', '60', 'Email Me', $user_email, $to_email_name, '', '', '', '{}', $install_update_username, $install_update_username];
 
 $results->getinsertMultipleRecords(__LINE__, __FILE__, 'site_security', $column_names, $placeholders, $parameters);

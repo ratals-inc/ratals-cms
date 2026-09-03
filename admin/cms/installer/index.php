@@ -14,11 +14,8 @@ if(!(extension_loaded('gd') && function_exists('imagecreate')))
 require_once(INSTALLATION_ROOT.'/core/server-software.php');
 
 //Detect if user is on https.
-$https_status = false;
-if((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') || (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on') || (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443))
-{
-    $https_status = true;
-}
+require_once(INSTALLATION_ROOT.'/admin/cms/functions/http-or-https.php');
+$https_status = getRequestScheme() === 'https';
 
 //If a session has not been started, start it.
 if(session_status() === PHP_SESSION_NONE)
@@ -186,10 +183,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 	{
 		$errors['database_hostname'] = '<span class="error">Database Hostname</span>';
 	}
-	elseif(strpos($database_hostname, "'") !== false)
-	{
-		$errors['database_hostname_quote'] = '<span class="error">Cannot contain single quotes.</span>';
-	}
 	
 	//Set localhost true or false.
 	$database_host_is_local = in_array(strtolower(trim($database_hostname)), ['localhost', '127.0.0.1', '::1'], true);
@@ -221,7 +214,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 	//Manual installation using a remote database.
 	elseif(!isset($errors['database_hostname']) && $database_host_is_local === false && file_exists($install_token_file))
 	{
-		$errors['install_token'] = '<span class="center error error-top-margin">To install Ratals using a remote database ('.$database_hostname.'), you must verify that you control the server files by deleting /core/install-token.php and then submitting the installation again.</span>';
+		$errors['install_token'] = '<span class="center error error-top-margin">To install Ratals using a remote database ('.htmlspecialchars($database_hostname, ENT_QUOTES, 'UTF-8').'), you must verify that you control the server files by deleting /core/install-token.php and then submitting the installation again.</span>';
 	}
 	
 	$database_name = trim($_POST['database_name'] ?? '');
@@ -229,32 +222,20 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 	{
 		$errors['database_name'] = '<span class="error">Database Name</span>';
 	}
-	elseif(strpos($database_name, "'") !== false)
-	{
-		$errors['database_name_quote'] = '<span class="error">Cannot contain single quotes.</span>';
-	}
 	
 	$database_username = trim($_POST['database_username'] ?? '');
 	if(empty($database_username))
 	{
 		$errors['database_username'] = '<span class="error">Database Username</span>';
 	}
-	elseif(strpos($database_username, "'") !== false)
-	{
-		$errors['database_username_quote'] = '<span class="error">Cannot contain single quotes.</span>';
-	}
 	
-	$database_password = trim($_POST['database_password'] ?? '');
-	if(empty($database_password))
+	$database_password = $_POST['database_password'] ?? '';
+	if(empty($database_password) && $database_host_is_local === false)
 	{
 		$errors['database_password'] = '<span class="error">Database Password</span>';
 	}
-	elseif(strpos($database_password, "'") !== false)
-	{
-		$errors['database_password_quote'] = '<span class="error">Cannot contain single quotes.</span>';
-	}
 	
-	if(!empty($database_hostname) && !empty($database_name) && !empty($database_username) && !empty($database_password) && !isset($errors['database_hostname']) && !isset($errors['database_hostname_quote']) && !isset($errors['database_name']) && !isset($errors['database_name_quote']) && !isset($errors['database_username']) && !isset($errors['database_username_quote']) && !isset($errors['database_password']) && !isset($errors['database_password_quote']))
+	if(!empty($database_hostname) && !empty($database_name) && !empty($database_username) && ($database_host_is_local === true || !empty($database_password)) && !isset($errors['database_hostname']) && !isset($errors['database_name']) && !isset($errors['database_username']) && !isset($errors['database_password']))
 	{
 		try
 		{
@@ -306,8 +287,16 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 	{
 		$errors['site_name'] = '<span class="error">Site Name</span>';
 	}
-	$https_in_url = trim($_POST['https_in_url'] ?? 'Yes');
-	$www_in_url = trim($_POST['www_in_url'] ?? 'Yes');
+	$https_in_url = 'No';
+	if(isset($_POST['https_in_url']) && ($_POST['https_in_url'] === 'Yes' || $_POST['https_in_url'] === 'No'))
+	{
+		$https_in_url = $_POST['https_in_url'];
+	}
+	$www_in_url = 'No';
+	if(isset($_POST['www_in_url']) && ($_POST['www_in_url'] === 'Yes' || $_POST['www_in_url'] === 'No'))
+	{
+		$www_in_url = $_POST['www_in_url'];
+	}
 	$tld = trim($_POST['tld'] ?? '');
 	if(empty($tld))
 	{
@@ -329,17 +318,55 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 			$errors['tld'] = '<span class="error">Invalid domain characters</span>';
 		}
 	}
-	$site_language = trim($_POST['site_language'] ?? 'en');
-	$timezone = trim($_POST['timezone'] ?? 'America/New_York');
-	$load_with_cache = trim($_POST['load_with_cache'] ?? 'Yes');
+	$site_language = 'en';
+	if(isset($_POST['site_language']) && !empty(trim($_POST['site_language'])))
+	{
+		$site_language = trim($_POST['site_language']);
+	}
+	
+	$timezone = 'America/New_York';
+	if(isset($_POST['timezone']) && !empty(trim($_POST['timezone'])))
+	{
+		$timezone = trim($_POST['timezone']);
+	}
+	
+	$load_with_cache = 'Yes';
+	if(isset($_POST['load_with_cache']) && !empty($_POST['load_with_cache']) && ($_POST['load_with_cache'] === 'Yes' || $_POST['load_with_cache'] === 'No'))
+	{
+		$load_with_cache = $_POST['load_with_cache'];
+	}
 	
 	//CURRENCY SETUP
-	$currency_type = trim($_POST['currency_type'] ?? 'USD');
-	$front_symbol = ltrim($_POST['front_symbol'] ?? '$');
-	$back_symbol = rtrim($_POST['back_symbol'] ?? '');
-	$thousand_separator = $_POST['thousand_separator'] ?? ',';
-	$fractional_separator = trim($_POST['fractional_separator'] ?? '.');
-	$zeros_after_separator = trim($_POST['zeros_after_separator'] ?? '2');
+	$currency_type = 'USD';
+	if(isset($_POST['currency_type']) && !empty(trim($_POST['currency_type'])))
+	{
+		$currency_type = trim($_POST['currency_type']);
+	}
+	$front_symbol = '$';
+	if(isset($_POST['front_symbol']) && !empty(trim($_POST['front_symbol'])))
+	{
+		$front_symbol = trim($_POST['front_symbol']);
+	}
+	$back_symbol = '';
+	if(isset($_POST['back_symbol']) && !empty(trim($_POST['back_symbol'])))
+	{
+		$back_symbol = trim($_POST['back_symbol']);
+	}
+	$thousand_separator = ',';
+	if(isset($_POST['thousand_separator']) && !empty($_POST['thousand_separator']))
+	{
+		$thousand_separator = $_POST['thousand_separator'];
+	}
+	$fractional_separator = '.';
+	if(isset($_POST['fractional_separator']) && !empty(trim($_POST['fractional_separator'])))
+	{
+		$fractional_separator = trim($_POST['fractional_separator']);
+	}
+	$zeros_after_separator = '2';
+	if(isset($_POST['zeros_after_separator']) && !empty(trim($_POST['zeros_after_separator'])))
+	{
+		$zeros_after_separator = trim($_POST['zeros_after_separator']);
+	}
 	
 	//SMTP EMAIL SETUP
 	$smtp_email_address = trim($_POST['smtp_email_address'] ?? '');
@@ -351,7 +378,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 		$smtp_email_port = NULL;
 	}
 	$smtp_email_username = trim($_POST['smtp_email_username'] ?? '');
-	$smtp_email_password = trim($_POST['smtp_email_password'] ?? '');
+	$smtp_email_password = $_POST['smtp_email_password'] ?? '';
 	
 	//USER SETUP
 	$first_name = trim($_POST['first_name'] ?? '');
@@ -366,7 +393,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 	$state = trim($_POST['state'] ?? '');
 	$postal_code = trim($_POST['postal_code'] ?? '');
 	$phone_number = trim($_POST['phone_number'] ?? '');
-	$display_contact_information = trim($_POST['display_contact_information'] ?? 'No');
+	$display_contact_information = 'No';
+	if(isset($_POST['display_contact_information']) && !empty($_POST['display_contact_information']) && ($_POST['display_contact_information'] === 'Yes' || $_POST['display_contact_information'] === 'No'))
+	{
+		$display_contact_information = $_POST['display_contact_information'];
+	}
 	
 	//Make sure Admin Login Path is not easy to find for for brute force login attackes and make sure new admin url directory is avaible to use. 
 	$admin_directory = trim($_POST['admin_directory'] ?? '');
@@ -374,7 +405,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 	{
 		$errors['admin_directory'] = '<span class="error">Admin Login Path</span>';
 	}
-	elseif(strtolower($admin_directory) == 'ratals' || strtolower($admin_directory) == 'admin' || strtolower($admin_directory) == 'administrator' || strtolower($admin_directory) == 'admin-panel' || strtolower($admin_directory) == 'admin-login' || strtolower($admin_directory) == 'backend' || strtolower($admin_directory) == 'cms' || strtolower($admin_directory) == 'control' || strtolower($admin_directory) == 'control-panel' || strtolower($admin_directory) == 'cp' || strtolower($admin_directory) == 'dashboard' || strtolower($admin_directory) == 'login' || strtolower($admin_directory) == 'manage' || strtolower($admin_directory) == 'manager' || strtolower($admin_directory) == 'management' || strtolower($admin_directory) == 'panel' || strtolower($admin_directory) == 'root' || strtolower($admin_directory) == 'webadmin' || strtolower($admin_directory) == strtolower($first_name) || strtolower($admin_directory) == strtolower($last_name) || strtolower($admin_directory) == strtolower($site_name))
+	elseif(strtolower($admin_directory) == 'ratals' || strtolower($admin_directory) == 'admin' || strtolower($admin_directory) == 'administrator' || strtolower($admin_directory) == 'admin-panel' || strtolower($admin_directory) == 'admin-login' || strtolower($admin_directory) == 'hard-to-guess' || strtolower($admin_directory) == 'backend' || strtolower($admin_directory) == 'cms' || strtolower($admin_directory) == 'control' || strtolower($admin_directory) == 'control-panel' || strtolower($admin_directory) == 'cp' || strtolower($admin_directory) == 'dashboard' || strtolower($admin_directory) == 'login' || strtolower($admin_directory) == 'manage' || strtolower($admin_directory) == 'manager' || strtolower($admin_directory) == 'management' || strtolower($admin_directory) == 'panel' || strtolower($admin_directory) == 'root' || strtolower($admin_directory) == 'webadmin' || strtolower($admin_directory) == strtolower($first_name) || strtolower($admin_directory) == strtolower($last_name) || strtolower($admin_directory) == strtolower($site_name))
 	{
 		$errors['admin_directory'] = '<span class="error">Enter a stronger Admin Login Path that\'s difficult to guess</span>';
 	}
@@ -407,13 +438,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 		$errors['user_email'] = '<span class="error">Valid Admin User Email Required</span>';
 	}
 	
-	$password = trim($_POST['password'] ?? '');
+	$password = $_POST['password'] ?? '';
+	$password_value = $password;
 	if(empty($password))
 	{
 		$errors['password'] = '<span class="error">Admin Password</span>';
 	}
 	
-	$confirm_password = trim($_POST['confirm_password'] ?? '');
+	$confirm_password = $_POST['confirm_password'] ?? '';
 	if(empty($confirm_password))
 	{
 		$errors['confirm_password'] = '<span class="error">Confirm Admin Password</span>';
@@ -446,10 +478,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 		{
 			$errors['password'] = '<span class="error">Password must have at least 1 number.</span>';
 		}
-		else
-		{
-			$password = hash("sha512", $password);
-		}
 	}
 	
 	if(count($errors) == 0) 
@@ -459,6 +487,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 		$original_admin_htaccess_contents = null;
 		$original_user_ini_contents = null;
 		$original_admin_user_ini_contents = null;
+		$password = hash("sha512", $password);
 		
 		try
 		{
@@ -572,7 +601,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 			$pagination = 30;
 			$first_last_name = trim($first_name.' '.$last_name);
 			$to_email_name = $first_last_name ?: 'Site Administrator';
-			$first_last_name = $first_last_name ?: 'Ratals Installer';
+			$install_update_username = $username ?: 'Ratals Installer';
 			$new_user_id = 1;
 			
 			//Make sure last ids for installs are unset. These session variables are set in template-files.php.
@@ -593,19 +622,19 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 			}
 			
 			$old_database_hostname = '[DATABASE_HOSTNAME]'; 
-			$new_database_hostname = $database_hostname;
+			$new_database_hostname = addcslashes($database_hostname, "\\'");
 			$database_connection_file = str_replace($old_database_hostname, $new_database_hostname, $database_connection_file);
 			
 			$old_database_name = '[DATABASE_NAME]'; 
-			$new_database_name = $database_name;
+			$new_database_name = addcslashes($database_name, "\\'");
 			$database_connection_file = str_replace($old_database_name, $new_database_name, $database_connection_file);
 			
 			$old_database_username = '[DATABASE_USERNAME]'; 
-			$new_database_username = $database_username;
+			$new_database_username = addcslashes($database_username, "\\'");
 			$database_connection_file = str_replace($old_database_username, $new_database_username, $database_connection_file);
 			
 			$old_database_password = '[DATABASE_PASSWORD]'; 
-			$new_database_password = $database_password;
+			$new_database_password = addcslashes($database_password, "\\'");
 			$database_connection_file = str_replace($old_database_password, $new_database_password, $database_connection_file);
 			
 			clearstatcache(); //Clear file cache to make sure its writting to the real file and not buffer version/cache.
@@ -737,14 +766,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 			
 			$installation_step = 'Installing site data';
 			
-			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/assignments-sub-items.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/assignments-design-blocks.php');
 			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/blocking-spam.php');
 			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/currency.php');
 			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/custom-fields-global.php');
 			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/custom-fields.php');
 			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/menus-items.php');
 			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/menus.php');
-			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/page-groups.php');
+			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/design-blocks.php');
 			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/pages.php');
 			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/search-engines.php');
 			require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/site-contact-info.php');
@@ -767,7 +796,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 			//Pause for 10 seconds to ensure the new admin URL is updated in the .htaccess file and the cache is cleared, allowing it to load properly.
 			sleep(10);
 			
-			header("Location: /".$admin_directory."/?signup=success");
+			header("Location: ".INSTALLATION_URL_PATH."/".$admin_directory."/?signup=success");
 			exit;
 		}
 		//Remove anything installed if the installation failed.
@@ -946,7 +975,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST')
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Install Ratals - Ratals Inc.</title>
-<script src="/sites/libraries/jquery-3.7.1.min.js"></script>
+<script src="<?php echo INSTALLATION_URL_PATH; ?>/sites/libraries/jquery-3.7.1.min.js"></script>
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
@@ -1167,7 +1196,7 @@ $(document).ready(function()
 <!-- End Pending Overlay -->
 <div class="box-wrapper">
 	<div class="box">
-        <div class="ratals-logo"><img src="/sites/ratals-logo.png" width="506" height="137" alt="Ratals Logo"></div>
+        <div class="ratals-logo"><img src="<?php echo INSTALLATION_URL_PATH; ?>/sites/ratals-logo.png" width="506" height="137" alt="Ratals Logo"></div>
 <?php if(!empty($nginx_warning)) { echo $nginx_warning; } ?>
         <p class="need-help">Need help? Watch our <a href="https://www.ratals.com/tutorials/installation/ratals-installation-guide/" target="_blank">Installation Guide videos</a> on ratals.com.</p>
 		<?php if(!empty($errors)) { echo '<span class="center error error-top-margin">Oh Snap! Something isn\'t right.</span>'; } ?>
@@ -1187,23 +1216,20 @@ $(document).ready(function()
 			</li>
 			<li>
 				<?php if(isset($errors['database_hostname'])) { echo $errors['database_hostname']; } else { echo '<span>Database Hostname <span class="required">*</span></span>'; } ?>
-				<input name="database_hostname" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $database_hostname; } else { echo 'localhost'; } ?>" />
-				<div class="note-small-font"><?php if(isset($errors['database_hostname_quote'])) { echo $errors['database_hostname_quote']; } ?></div>
+				<input name="database_hostname" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($database_hostname, ENT_QUOTES, 'UTF-8'); } else { echo 'localhost'; } ?>" />
 			</li>
             <li>
 				<?php if(isset($errors['database_name'])) { echo $errors['database_name']; } else { echo '<span>Database Name <span class="required">*</span></span>'; } ?>
-				<input name="database_name" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $database_name; } ?>" />
-				<div class="note-small-font"><?php if(isset($errors['database_name_quote'])) { echo $errors['database_name_quote']; } ?></div>
+				<input name="database_name" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($database_name, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<?php if(isset($errors['database_username'])) { echo $errors['database_username']; } else { echo '<span>Database Username <span class="required">*</span></span>'; } ?>
-				<input name="database_username" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $database_username; } ?>" />
-				<div class="note-small-font"><?php if(isset($errors['database_username_quote'])) { echo $errors['database_username_quote']; } ?></div>
+				<input name="database_username" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($database_username, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
-				<?php if(isset($errors['database_password'])) { echo $errors['database_password']; } else { echo '<span>Database Password <span class="required">*</span></span>'; } ?>
-				<input name="database_password" type="password" value="" />
-				<div class="note-small-font"><?php if(isset($errors['database_password_quote'])) { echo $errors['database_password_quote']; } ?></div>
+                <?php $password_required = ''; if(isset($database_host_is_local) && $database_host_is_local === false) $password_required = ' <span class="required">*</span>'; ?>
+				<?php if(isset($errors['database_password'])) { echo $errors['database_password']; } else { echo '<span>Database Password'.$password_required.'</span>'; } ?>
+                <input name="database_password" type="password" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($database_password, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 		</ul>
 		<ul class="two-column">
@@ -1212,7 +1238,7 @@ $(document).ready(function()
 			</li>
 			<li>
 				<?php if(isset($errors['site_name'])) { echo $errors['site_name']; } else { echo '<span>Site Name <span class="required">*</span></span>'; } ?>
-				<input name="site_name" type="text" value="<?php echo $site_name; ?>" />
+				<input name="site_name" type="text" value="<?php echo htmlspecialchars($site_name, ENT_QUOTES, 'UTF-8') ?>" />
 			</li>
 			<li>
 				<?php if(isset($errors['tld'])) { echo $errors['tld']; } else { echo '<span>Domain <span class="required">*</span></span>'; } ?>
@@ -1228,7 +1254,7 @@ $(document).ready(function()
 			</li>
 			<li>
 				<?php if(isset($errors['admin_directory'])) { echo $errors['admin_directory']; } else { echo '<span>Admin Login Path <span class="required">*</span></span>'; } ?>
-				<input name="admin_directory" placeholder="Enter path only, i.e. admin-login - no domain" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $admin_directory; } ?>" />
+				<input name="admin_directory" placeholder="Enter a unique, hard-to-guess path - no domain" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($admin_directory, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<span>Site Language</span>
@@ -1293,11 +1319,11 @@ $(document).ready(function()
 			</li>
 			<li>
 				<span>Front Symbol</span>
-				<input name="front_symbol" type="text" class="front_symbol_field" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $front_symbol; } else { echo '$'; } ?>" />
+				<input name="front_symbol" type="text" class="front_symbol_field" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($front_symbol, ENT_QUOTES, 'UTF-8'); } else { echo '$'; } ?>" />
 			</li>
 			<li>
 				<span>Back Symbol</span>
-				<input name="back_symbol" type="text" class="back_symbol_field" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $back_symbol; } ?>" />
+				<input name="back_symbol" type="text" class="back_symbol_field" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($back_symbol, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<span>Thousand Separator</span>
@@ -1336,27 +1362,27 @@ $(document).ready(function()
 			</li>
             <li>
 				<span>SMTP Email Address</span>
-				<input name="smtp_email_address" placeholder="i.e. support@<?php echo $tld; ?>" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $smtp_email_address; } ?>" />
+				<input name="smtp_email_address" placeholder="i.e. support@<?php echo htmlspecialchars($tld, ENT_QUOTES, 'UTF-8'); ?>" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($smtp_email_address, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<span>SMTP Email Name</span>
-				<input name="smtp_email_name" placeholder="i.e. Support" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $smtp_email_name; } ?>" />
+				<input name="smtp_email_name" placeholder="i.e. Support" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($smtp_email_name, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<span>SMTP Email Hostname</span>
-				<input name="smtp_email_hostname" placeholder="i.e. mail.<?php echo $tld; ?>" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $smtp_email_hostname; } ?>" />
+				<input name="smtp_email_hostname" placeholder="i.e. mail.<?php echo htmlspecialchars($tld, ENT_QUOTES, 'UTF-8'); ?>" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($smtp_email_hostname, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
             <li>
 				<span>SMTP Email Port</span>
-				<input name="smtp_email_port" placeholder="i.e. 587 or 25 for relay/connector" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $smtp_email_port; } ?>" />
+				<input name="smtp_email_port" placeholder="i.e. 587 or 25 for relay/connector" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($smtp_email_port ?? '', ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<span>SMTP Email Username</span>
-				<input name="smtp_email_username" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $smtp_email_username; } ?>" />
+				<input name="smtp_email_username" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($smtp_email_username, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<span>SMTP Email Password</span>
-				<input name="smtp_email_password" type="password" value="" />
+                <input name="smtp_email_password" type="password" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($smtp_email_password, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 		</ul>
 		<ul class="three-column">
@@ -1368,11 +1394,11 @@ $(document).ready(function()
 			</li>
 			<li>
 				<span>First Name</span>
-				<input name="first_name" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $first_name; } ?>" />
+				<input name="first_name" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($first_name, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<span>Last Name</span>
-				<input name="last_name" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $last_name; } ?>" />
+				<input name="last_name" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($last_name, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<?php if(isset($errors['country'])) { echo $errors['country']; } else { echo '<span>Country <span class="required">*</span></span>'; } ?>
@@ -1581,23 +1607,23 @@ $(document).ready(function()
 			</li>
 			<li>
 				<span>Street Address</span>
-				<input name="street_address" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $street_address; } ?>" />
+				<input name="street_address" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($street_address, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<span>City</span>
-				<input name="city" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $city; } ?>" />
+				<input name="city" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($city, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<span>State / Province / Region</span>
-				<input name="state" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $state; } ?>" />
+				<input name="state" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($state, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<span>Postal Code</span>
-				<input name="postal_code" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $postal_code; } ?>" />
+				<input name="postal_code" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($postal_code, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<span>Phone Number</span>
-				<input name="phone_number" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $phone_number; } ?>" />
+				<input name="phone_number" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($phone_number, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<span>Display This Contact Information on the Website</span>
@@ -1614,19 +1640,19 @@ $(document).ready(function()
 			</li>
 			<li>
 				<?php if(isset($errors['username'])) { echo $errors['username']; } else { echo '<span>Admin Username <span class="required">*</span></span>'; } ?>
-				<input name="username" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $username; } ?>" />
+				<input name="username" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($username, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
             <li>
 				<?php if(isset($errors['user_email'])) { echo $errors['user_email']; } else { echo '<span>Admin User Email <span class="required">*</span></span>'; } ?>
-				<input name="user_email" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo $user_email; } ?>" />
+				<input name="user_email" type="text" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($user_email, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<?php if(isset($errors['password'])) { echo $errors['password']; } else { echo '<span>Admin Password <span class="required">*</span></span>'; } ?>
-				<input name="password" type="password" value="" />
+                <input name="password" type="password" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($password_value, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li>
 				<?php if(isset($errors['confirm_password'])) { echo $errors['confirm_password']; } else { echo '<span>Confirm Admin Password <span class="required">*</span></span>'; } ?>
-				<input name="confirm_password" type="password" value="" />
+				<input name="confirm_password" type="password" value="<?php if($_SERVER['REQUEST_METHOD'] === 'POST') { echo htmlspecialchars($confirm_password, ENT_QUOTES, 'UTF-8'); } ?>" />
 			</li>
 			<li class="full-row">
 				<div class="password-requirements-wrap">

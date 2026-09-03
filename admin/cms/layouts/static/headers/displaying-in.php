@@ -36,14 +36,14 @@ else
 			}
 		}
 		
-		$sql_get_assignments_sub_items = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'assignments_sub_items', 'WHERE `child_id` = ? AND `child_id_table_name` = ? AND `site_id` = ?', [$displaying_in_record_id, $_SESSION['admin_table_name'], $_SESSION["site_set_for_editing"]]);
-		$assignments_sub_items_rows = array();
-		if(!empty($sql_get_assignments_sub_items))
+		$sql_get_assignments_design_blocks = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'assignments_design_blocks', 'WHERE `child_id` = ? AND `child_id_table_name` = ? AND `site_id` = ?', [$displaying_in_record_id, $_SESSION['admin_table_name'], $_SESSION["site_set_for_editing"]]);
+		$assignments_design_blocks_rows = array();
+		if(!empty($sql_get_assignments_design_blocks))
 		{
-			foreach($sql_get_assignments_sub_items as $sql_get_assignments_sub_items_rows)
+			foreach($sql_get_assignments_design_blocks as $sql_get_assignments_design_blocks_rows)
 			{
-				$sql_get_assignments_sub_items_rows['assignment_table_name'] = 'sub_items';
-				$assignments_sub_items_rows[] = $sql_get_assignments_sub_items_rows;
+				$sql_get_assignments_design_blocks_rows['assignment_table_name'] = 'design_blocks';
+				$assignments_design_blocks_rows[] = $sql_get_assignments_design_blocks_rows;
 			}
 		}
 		
@@ -62,6 +62,6 @@ else
 			}
 		}
 		
-		$assignments_rows = array_merge($contextual_link_rows, $assignments_products_rows, $assignments_sub_items_rows);
+		$assignments_rows = array_merge($contextual_link_rows, $assignments_products_rows, $assignments_design_blocks_rows);
 	}
 }

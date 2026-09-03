@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', __DIR__);
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 require_once(INSTALLATION_ROOT.'/core/session-check-frontend.php');
 
@@ -39,7 +40,24 @@ else
 		$path_urls_to_never_cache = array_merge($path_urls_to_never_cache, explode(',', $pages_not_to_cache));
 	}
 	
-	if(!isset($_SESSION['user_id']) && $load_pages_with_cached_results == 'Yes' && empty($_POST) && !in_array($path_url, $path_urls_to_never_cache) && strpos($url, '?') === false && strpos($url, '#') === false)
+	//If installed in a subdirectory, make sure the cache check accounts for it too.
+	$cache_path_url = $path_url;
+	if(!empty(INSTALLATION_URL_PATH))
+	{
+		$installation_path_url = trim(INSTALLATION_URL_PATH, '/');
+	
+		if(strpos($cache_path_url, $installation_path_url.'/') === 0)
+		{
+			$cache_path_url = substr($cache_path_url, strlen($installation_path_url) + 1);
+		}
+		elseif($cache_path_url == $installation_path_url)
+		{
+			$cache_path_url = '';
+		}
+	}
+	
+	//Start - check if cached page exist and if page should be cached.
+	if(!isset($_SESSION['user_id']) && $load_pages_with_cached_results == 'Yes' && empty($_POST) && !in_array($path_url, $path_urls_to_never_cache) && !in_array($cache_path_url, $path_urls_to_never_cache) && strpos($url, '?') === false && strpos($url, '#') === false)
 	{
 		if(!empty($path_url))
 		{
@@ -127,7 +145,7 @@ else
 		include INSTALLATION_ROOT."/admin/cms/frontend/load-template-file.php"; //This loads the correct template file into the URL so the page loads as desired.
 		
 		//Start - if page is not cached, cache it.
-		if(!isset($_SESSION['user_id']) && $load_pages_with_cached_results == 'Yes' && empty($_POST) && !in_array($path_url, $path_urls_to_never_cache) && $pages_data['page_not_found_404'] != 'Yes' && isset($cache_file_path) && !empty($cache_file_path) &&  strpos($url, '?') === false && strpos($url, '#') === false)
+		if(!isset($_SESSION['user_id']) && $load_pages_with_cached_results == 'Yes' && empty($_POST) && !in_array($path_url, $path_urls_to_never_cache) && !in_array($cache_path_url, $path_urls_to_never_cache) && $pages_data['page_not_found_404'] != 'Yes' && isset($cache_file_path) && !empty($cache_file_path) && strpos($url, '?') === false && strpos($url, '#') === false)
 		{
 			//Create cache directory structure if it doesn't exist for requested url.
 			$cache_file_path_directory_levels = '';
@@ -172,7 +190,7 @@ else
 			//Remove header link to edit page in admin when logged into admin.
 			$search_for_edit_admin_page = "#<!-- Start Edit Admin Page -->(.*?)<!-- End Edit Admin Page -->#s";
 			$replace_with_edit_admin_page = "<!-- Start Edit Admin Page -->
-			<?php if(isset(\$_SESSION['user_id'])) { echo '<div class=\"edit-page\"><a href=\"/'.\$_SESSION['admin_directory'].'/website/".$pages_data['table_name']."/edit/?rid=".$id."\" target=\"_blank\">Edit in Admin</a></div>'; } ?>
+			<?php if(isset(\$_SESSION['user_id'])) { echo '<div class=\"edit-page\"><a href=\"'.INSTALLATION_URL_PATH.'/'.\$_SESSION['admin_directory'].'/website/".$pages_data['table_name']."/edit/?rid=".$id."\" target=\"_blank\">Edit in Admin</a></div>'; } ?>
 			<!-- End Edit Admin Page -->";
 			$html_of_loaded_page = preg_replace($search_for_edit_admin_page, $replace_with_edit_admin_page, $html_of_loaded_page);
 			

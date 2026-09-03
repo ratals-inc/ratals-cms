@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -72,7 +73,7 @@ else
 				$sql_menu_items_check = $results->getSelectCountRecords(__LINE__, __FILE__, '*', 'menu_items', 'WHERE `menus_id` = ? AND `site_id` = ?', [$get_rid, $_SESSION["site_set_for_editing"]]);
 				
 				//Update number of menu items left under menu
-				$results->getUpdateRecord(__LINE__, __FILE__, 'menus', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(), `updated_by` = ?', 'WHERE `id` = ? AND `site_id` = ?', [$sql_menu_items_check, $_SESSION['user_first_last_name'], $get_rid, $_SESSION["site_set_for_editing"]]);
+				$results->getUpdateRecord(__LINE__, __FILE__, 'menus', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(), `updated_by` = ?', 'WHERE `id` = ? AND `site_id` = ?', [$sql_menu_items_check, $_SESSION['user_username'], $get_rid, $_SESSION["site_set_for_editing"]]);
 			
 				if(!empty(trim($get_sub_rid ?? '')))
 				{
@@ -80,7 +81,7 @@ else
 					$sql_menu_items_check = $results->getSelectCountRecords(__LINE__, __FILE__, '*', 'menu_items', 'WHERE `menus_id` = ? AND `site_id` = ? AND `parent_id` = ?', [$get_rid, $_SESSION["site_set_for_editing"], trim($get_sub_rid ?? '')]);
 					
 					//Update number of menu items left under a sub sub menu item
-					$results->getUpdateRecord(__LINE__, __FILE__, 'menu_items', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(), `updated_by` = ?', 'WHERE `menus_id` = ? AND `site_id` = ? AND `id` = ?', [$sql_menu_items_check, $_SESSION['user_first_last_name'], $get_rid, $_SESSION["site_set_for_editing"], trim($get_sub_rid ?? '')]);
+					$results->getUpdateRecord(__LINE__, __FILE__, 'menu_items', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(), `updated_by` = ?', 'WHERE `menus_id` = ? AND `site_id` = ? AND `id` = ?', [$sql_menu_items_check, $_SESSION['user_username'], $get_rid, $_SESSION["site_set_for_editing"], trim($get_sub_rid ?? '')]);
 				}
 			}
 		}

@@ -103,9 +103,15 @@ else
 					}
 				}
 				
+				$field_required = '';
+				if($admin_field["required"] == 'Yes')
+				{
+					$field_required = ' <span class="required-asterisk">*</span>';
+				}
+				
 				echo '
 				<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 				<div class="edit-field">
 				  <div class="overflow-x-border-radius">
 					<div class="database-table-columns">

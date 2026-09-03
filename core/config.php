@@ -38,7 +38,6 @@ else
 		if(strpos($database_connection_file, '[DATABASE_NAME]') !== false)
 		{
 			//Database has not been installed yet so display create account form.
-			header("HTTP/1.1 404"); 
 			include_once(INSTALLATION_ROOT.'/admin/cms/installer/index.php');
 			die();
 		}
@@ -46,7 +45,6 @@ else
 	else
 	{
 		//Database has not been installed yet so display create account form.
-		header("HTTP/1.1 404"); 
 		include_once(INSTALLATION_ROOT.'/admin/cms/installer/index.php');
 		die();
 	}
@@ -71,11 +69,10 @@ else
 	}
 	
 	//Check to make sure the database table of sites is installed before trying to load the site. If its not installed, display the the create account page.
-	$existing_database_tables = $results_schema->getSchemaSelectMultipleRecordsOneColumn(__LINE__, __FILE__, 'TABLE_NAME', 'tables', 'WHERE `table_schema` = ?', [$_SESSION['site_db_name']], 'TABLE_NAME');
+	$existing_database_tables = $results_schema->getSchemaSelectMultipleRecordsOneColumn(__LINE__, __FILE__, 'table_name', 'tables', 'WHERE `table_schema` = ?', [$_SESSION['site_db_name']], 'table_name');
 	if(!in_array('sites', $existing_database_tables))
 	{
 		//Database has not been installed yet so display create account form.
-		header("HTTP/1.1 404"); 
 		include_once(INSTALLATION_ROOT.'/admin/cms/installer/index.php');
 		die();
 	}
@@ -153,7 +150,7 @@ else
 	//Get all sites.
 	include INSTALLATION_ROOT."/admin/cms/frontend/site.php";
 	
-	if(empty($license['last_seen']) || strtotime($license['last_seen']) < strtotime('-7 days')) 
+	if(empty($license['last_seen']) || strtotime($license['last_seen']) < strtotime('-3 days')) 
 	{
 		//Connect to API messages.
 		if(file_exists(rtrim(INSTALLATION_ROOT, '/').'/admin/cms/api/connect.php'))
@@ -221,7 +218,7 @@ else
 		include INSTALLATION_ROOT.'/admin/cms/functions/password-validation.php'; //This validates passwords when accounts are created or passwords are updated.
 		include INSTALLATION_ROOT.'/admin/cms/functions/sliders.php'; //This loads sliders.
 		include INSTALLATION_ROOT.'/admin/cms/functions/smtp-send-email.php'; //This function send out the site emails with SMTP.
-		include INSTALLATION_ROOT.'/admin/cms/functions/sub-items.php'; //This gets sub items or load assignments_sub_items tables.
+		include INSTALLATION_ROOT.'/admin/cms/functions/design-blocks.php'; //This gets sub items or load assignments_design_blocks tables.
 		include INSTALLATION_ROOT.'/admin/cms/functions/update-leads-from-junk-to-active.php';
 		include INSTALLATION_ROOT.'/admin/cms/functions/urls.php'; //This gets URLs - multiple functions in this file.
 		include INSTALLATION_ROOT.'/admin/cms/functions/currency-format.php'; //This formats prices / currencies.

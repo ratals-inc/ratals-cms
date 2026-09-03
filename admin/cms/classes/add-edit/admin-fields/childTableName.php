@@ -15,9 +15,15 @@ else
 		{
 			public function childTableNameAeaf($table_name, $admin_field, $field_value, &$errors, &$post_values)
 			{
+				$field_required = '';
+				if($admin_field["required"] == 'Yes')
+				{
+					$field_required = ' <span class="required-asterisk">*</span>';
+				}
+				
 				echo '
 				<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 				<div class="edit-field">
 				<select name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'" id="'.htmlspecialchars($table_name.'_'.$admin_field["column_name"] ?? '').'">
 				<option value=""></option>
@@ -31,18 +37,18 @@ else
 					foreach($all_table_names as $all_table_name)
 					{
 						//Check if site_id column exist on the table to be able to create an admin page.
-						$table_column_names = $_SESSION['results_schema']->getSchemaSelectSingleRecord(__LINE__, __FILE__, '*', 'columns', 'WHERE `table_schema` = ? AND `table_name` = ? AND `COLUMN_NAME` = ? ORDER BY `columns`.`ORDINAL_POSITION` ASC', [$_SESSION['site_db_name'], $all_table_name['TABLE_NAME'], 'site_id']);
+						$table_column_names = $_SESSION['results_schema']->getSchemaSelectSingleRecord(__LINE__, __FILE__, '*', 'columns', 'WHERE `table_schema` = ? AND `table_name` = ? AND `column_name` = ? ORDER BY `columns`.`ordinal_position` ASC', [$_SESSION['site_db_name'], $all_table_name['table_name'], 'site_id']);
 						
-						if(!empty($table_column_names) || $all_table_name['TABLE_NAME'] == 'sites')
+						if(!empty($table_column_names) || $all_table_name['table_name'] == 'sites')
 						{
 							$selected_item = '';
 							
-							if(isset($all_table_name['TABLE_NAME']))
+							if(isset($all_table_name['table_name']))
 							{
-								$admin_field_id = $all_table_name['TABLE_NAME'];
-								$admin_field_label = $all_table_name['TABLE_NAME'];
+								$admin_field_id = $all_table_name['table_name'];
+								$admin_field_label = $all_table_name['table_name'];
 								
-								if(!empty($all_table_name['TABLE_NAME']) && $field_value == $all_table_name['TABLE_NAME'])
+								if(!empty($all_table_name['table_name']) && $field_value == $all_table_name['table_name'])
 								{
 									$selected_item = " selected";
 								}

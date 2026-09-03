@@ -56,7 +56,7 @@ else
 							<ul>
 								<li>Product image: 1500x1500 px</li>
 								<li>Blog post image: 1500x1500 px</li>
-								<li>Blog post sub-item image: 1500x1500 px</li>
+								<li>Blog post design block image: 1500x1500 px</li>
 								<li>Desktop slider image: 1500x300 px</li>
 								<li>Tablet slider image: 1025x300 px</li>
 								<li>Mobile slider image: 600x300 px</li>
@@ -86,18 +86,18 @@ else
 						$edit_media_row = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '*', 'media', 'WHERE `media_url` = ? LIMIT 1', [$current_values[$table_name][$admin_field["column_name"]]]);
 						$original_media_id = $edit_media_row['original_media_id'];
 						
-						$media_directory_name = $_SESSION['view_frontend_of_site'].'/sites/media/images/'.$original_media_id.'/'.htmlspecialchars($current_values[$table_name][$admin_field["column_name"]] ?? '');
-						$display_media = '<img src="/sites/media/images/'.$original_media_id.'/'.htmlspecialchars($current_values[$table_name][$admin_field["column_name"]] ?? '').'">';
+						$media_directory_name = $_SESSION['view_frontend_of_site'].INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.htmlspecialchars($current_values[$table_name][$admin_field["column_name"]] ?? '');
+						$display_media = '<img src="'.INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.htmlspecialchars($current_values[$table_name][$admin_field["column_name"]] ?? '').'">';
 					}
 					elseif($current_values['media']['media_type'] == 'File')
 					{
-						$media_directory_name = $_SESSION['view_frontend_of_site'].'/sites/media/files/'.htmlspecialchars($current_values[$table_name][$admin_field["column_name"]] ?? '');
-						$display_media = '<object class="display-width-max-height-aspect" data="/sites/media/files/'.htmlspecialchars($current_values[$table_name][$admin_field["column_name"]] ?? '').'" type="application/'.$media_data_type[1].'" width="100%" height="100%"></object>';
+						$media_directory_name = $_SESSION['view_frontend_of_site'].INSTALLATION_URL_PATH.'/sites/media/files/'.htmlspecialchars($current_values[$table_name][$admin_field["column_name"]] ?? '');
+						$display_media = '<object class="display-width-max-height-aspect" data="'.INSTALLATION_URL_PATH.'/sites/media/files/'.htmlspecialchars($current_values[$table_name][$admin_field["column_name"]] ?? '').'" type="application/'.$media_data_type[1].'" width="100%" height="100%"></object>';
 					}
 					elseif($current_values['media']['media_type'] == 'Video')
 					{
-						$media_directory_name = $_SESSION['view_frontend_of_site'].'/sites/media/videos/'.htmlspecialchars($current_values[$table_name][$admin_field["column_name"]] ?? '');
-						$display_media = '<video controls="" class="display-width-max-height-aspect"><source src="/sites/media/videos/'.htmlspecialchars($current_values[$table_name][$admin_field["column_name"]] ?? '').'" type="video/'.$media_data_type[1].'"></video>';
+						$media_directory_name = $_SESSION['view_frontend_of_site'].INSTALLATION_URL_PATH.'/sites/media/videos/'.htmlspecialchars($current_values[$table_name][$admin_field["column_name"]] ?? '');
+						$display_media = '<video controls="" class="display-width-max-height-aspect"><source src="'.INSTALLATION_URL_PATH.'/sites/media/videos/'.htmlspecialchars($current_values[$table_name][$admin_field["column_name"]] ?? '').'" type="video/'.$media_data_type[1].'"></video>';
 					}
 					elseif($current_values['media']['media_type'] == 'Video Embed')
 					{
@@ -114,9 +114,15 @@ else
 					</div>';
 					echo '</div>'; 
 					
+					$field_required = '';
+					if($admin_field["required"] == 'Yes')
+					{
+						$field_required = ' <span class="required-asterisk">*</span>';
+					}
+					
 					echo '
 					<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-					<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+					<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 					<div class="edit-field text">
 					<input type="text" name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'" value="'.htmlspecialchars($field_value ?? '').'" id="'.htmlspecialchars($table_name.'_'.$admin_field["column_name"] ?? '').'">
 					<div class="small-text"><a href="'.$media_directory_name.'" target="_blank">'.$media_directory_name.'</a></div>

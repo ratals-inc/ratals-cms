@@ -47,12 +47,18 @@ else
 					echo '<div id="url-data" class="url-data'.$display_url_data.'">';
 				}
 				
+				$field_required = '';
+				if($admin_field["required"] == 'Yes')
+				{
+					$field_required = ' <span class="required-asterisk">*</span>';
+				}
+				
 				echo '
 				<div class="edit'.$class_for_urls_table_fields.' '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 				<div class="edit-field">
 				<input type="text" name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'" value="'.htmlspecialchars($field_value ?? '').'" id="'.htmlspecialchars($table_name.'_'.$admin_field["column_name"] ?? '').'">
-				<div class="edit-field-padding edit-field-url"><a href="'.$_SESSION['view_frontend_of_site'].'/'.$field_value.$display_url_extension.'" target="_blank" id="href_flat_url">'.$_SESSION['view_frontend_of_site'].'/<span id="display-flat-url">'.$field_value.'</span><span id="display_flat_url_extension">'.$display_url_extension.'</span></a></div>
+				<div class="edit-field-padding edit-field-url"><a href="'.$_SESSION['view_frontend_of_site'].INSTALLATION_URL_PATH.'/'.$field_value.$display_url_extension.'" target="_blank" id="href_flat_url">'.$_SESSION['view_frontend_of_site'].INSTALLATION_URL_PATH.'/<span id="display-flat-url">'.$field_value.'</span><span id="display_flat_url_extension">'.$display_url_extension.'</span></a></div>
 				<div class="small-text">'.$admin_field["notes"].'</div>
 				</div>';
 				if(isset($errors[$table_name][$admin_field["column_name"]])) { echo '<div class="validation">'.htmlspecialchars($errors[$table_name][$admin_field["column_name"]] ?? '').'</div>'; }

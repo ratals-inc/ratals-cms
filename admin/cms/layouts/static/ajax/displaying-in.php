@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -32,7 +33,7 @@ else
 		}
 		elseif($assignment_table == '2')
 		{
-			$results->getUpdateRecord(__LINE__, __FILE__, 'assignments_sub_items', '`status` = ?', 'WHERE `id` = ? AND `site_id` = ?', [$_POST['value'], $_POST['id'], $_SESSION["site_set_for_editing"]]);
+			$results->getUpdateRecord(__LINE__, __FILE__, 'assignments_design_blocks', '`status` = ?', 'WHERE `id` = ? AND `site_id` = ?', [$_POST['value'], $_POST['id'], $_SESSION["site_set_for_editing"]]);
 		}
 		
 		if($value == 1)
@@ -68,7 +69,7 @@ else
 		}
 		elseif($assignment_table == '2')
 		{
-			$results->getDeleteRecord(__LINE__, __FILE__, 'assignments_sub_items', 'WHERE `id` = ? AND `site_id` = ?', [$_POST['id'], $_SESSION["site_set_for_editing"]]);
+			$results->getDeleteRecord(__LINE__, __FILE__, 'assignments_design_blocks', 'WHERE `id` = ? AND `site_id` = ?', [$_POST['id'], $_SESSION["site_set_for_editing"]]);
 		}
 		
 		//Clear cache on save.

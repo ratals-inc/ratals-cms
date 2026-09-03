@@ -68,7 +68,7 @@ else
 		}
 		
 		//Get sub items assigned.
-		$pages_data['sub_items'] = getSubItems($pages_data, $site_id, $pages_data['id'], $domain, $home_page, $url_structure, $sites_end_urls_with, $url);
+		$pages_data['design_blocks'] = getSubItems($pages_data, $site_id, $pages_data['id'], $domain, $home_page, $url_structure, $sites_end_urls_with, $url);
 		
 		//This gets blog categories that show in the sidebar.
 		include "sidebar-blog-categories.php";

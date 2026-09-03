@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 4));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -26,7 +27,19 @@ if(file_exists($progress_log_file))
 {
 	$log = file_get_contents($progress_log_file);
 	$response['log_exists'] = true;
-
+	
+	//Check if the update failed.
+	if(strpos($log, 'Update failed:') !== false || strpos($log, 'UNCAUGHT EXCEPTION:') !== false || strpos($log, 'FATAL ERROR [') !== false)
+	{
+		$response['status'] = 'error';
+		$response['step_name'] = 'Update failed';
+		$response['error_message'] = 'The software update failed. Please check the software update log for details.';
+		
+		header('Content-Type: application/json');
+		echo json_encode($response);
+		exit;
+	}
+	
 	$checkpoints = array(
 		'Files extracted to staging folder.' => 0,
 		'Installing/updating database tables, columns, and indexes...' => 5,
@@ -50,7 +63,7 @@ if(file_exists($progress_log_file))
 		'Copying update files from staging folder to live directory...' => 95,
 		'Software update process completed successfully.' => 100
 	);
-
+	
 	foreach(array_reverse($checkpoints, true) as $pattern => $percent)
 	{
 		if(strpos($log, $pattern) !== false)

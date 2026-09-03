@@ -16,7 +16,23 @@ else
 	$url_data = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'urls', 'WHERE `id` = ? AND `site_id` = ?'.$page_status_setting.' LIMIT 1', [$home_page, $site_id]);
 	
 	$pages_data = array();
-	if(!empty($url_data) && ($path_url == $url_data['hierarchy_url'] || $path_url == $url_data['flat_url'] || $path_url == '/' ||  $path_url == 'index' || $_SERVER["REQUEST_URI"] == '/' || strpos($_SERVER["REQUEST_URI"], '/?') === 0)) 
+	
+	//Create URL path used for database URL lookups.
+	$installation_path_url = trim(INSTALLATION_URL_PATH, '/');
+	$database_path_url = $path_url;
+	if(!empty($installation_path_url))
+	{
+		if(strpos($database_path_url, $installation_path_url.'/') === 0)
+		{
+			$database_path_url = substr($database_path_url, strlen($installation_path_url) + 1);
+		}
+		elseif($database_path_url == $installation_path_url)
+		{
+			$database_path_url = '';
+		}
+	}
+	
+	if(!empty($url_data) && ($database_path_url == $url_data['hierarchy_url'] || $database_path_url == $url_data['flat_url'] || $database_path_url == '' || $database_path_url == 'index' || $_SERVER["REQUEST_URI"] == '/' || $_SERVER["REQUEST_URI"] == INSTALLATION_URL_PATH.'/' || $_SERVER["REQUEST_URI"] == INSTALLATION_URL_PATH.'/index' || strpos($_SERVER["REQUEST_URI"], '/?') === 0))
 	{ 
 		//Get homepage record data
 		if(!empty($url_data))
@@ -32,7 +48,7 @@ else
 	elseif($url_structure == 'Hierarchy') 
 	{ 
 		//Get URL data
-		$url_data = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'urls', 'WHERE `site_id` = ? AND `hierarchy_url` = ?'.$page_status_setting.' LIMIT 1', [$site_id, $path_url]);
+		$url_data = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'urls', 'WHERE `site_id` = ? AND `hierarchy_url` = ?'.$page_status_setting.' LIMIT 1', [$site_id, $database_path_url]);
 		
 		if(!empty($url_data)) 
 		{
@@ -41,14 +57,14 @@ else
 			
 			if(!empty($page_data))
 			{
-				$pages_data = array_merge($page_data, $url_data, array('home_page_record_id' => '', 'path_url' => $url_data["hierarchy_url"], 'page_not_found_404' => 'No'));
+				$pages_data = array_merge($page_data, $url_data, array('home_page_record_id' => '', 'path_url' => trim($installation_path_url.'/'.$url_data["hierarchy_url"], '/'), 'page_not_found_404' => 'No'));
 			}
 		}
 		
 		if(empty($pages_data["id"]) && $redirect_to_opposite_url == 'Yes') 
 		{
 			//Get URL data
-			$url_data = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'urls', 'WHERE `site_id` = ? AND `flat_url` = ?'.$page_status_setting.' LIMIT 1', [$site_id, $path_url]);
+			$url_data = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'urls', 'WHERE `site_id` = ? AND `flat_url` = ?'.$page_status_setting.' LIMIT 1', [$site_id, $database_path_url]);
 			
 			if(!empty($url_data))
 			{
@@ -57,7 +73,7 @@ else
 				
 				if(!empty($page_data))
 				{
-					$pages_data = array_merge($page_data, $url_data, array('home_page_record_id' => '', 'path_url' => $url_data["hierarchy_url"], 'page_not_found_404' => 'No'));
+					$pages_data = array_merge($page_data, $url_data, array('home_page_record_id' => '', 'path_url' => trim($installation_path_url.'/'.$url_data["hierarchy_url"], '/'), 'page_not_found_404' => 'No'));
 				}
 			}
 		}
@@ -65,7 +81,7 @@ else
 	elseif($url_structure == 'Flat')
 	{ 
 		//Get URL data
-		$url_data = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'urls', 'WHERE `site_id` = ? AND `flat_url` = ?'.$page_status_setting.' LIMIT 1', [$site_id, $path_url]);
+		$url_data = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'urls', 'WHERE `site_id` = ? AND `flat_url` = ?'.$page_status_setting.' LIMIT 1', [$site_id, $database_path_url]);
 		
 		if(!empty($url_data)) 
 		{
@@ -74,14 +90,14 @@ else
 			
 			if(!empty($page_data))
 			{
-				$pages_data = array_merge($page_data, $url_data, array('home_page_record_id' => '', 'path_url' => $url_data["flat_url"], 'page_not_found_404' => 'No'));
+				$pages_data = array_merge($page_data, $url_data, array('home_page_record_id' => '', 'path_url' => trim($installation_path_url.'/'.$url_data["flat_url"], '/'), 'page_not_found_404' => 'No'));
 			}
 		}
 		
 		if(empty($pages_data["id"]) && $redirect_to_opposite_url == 'Yes') 
 		{
 			//Get URL data
-			$url_data = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'urls', 'WHERE `site_id` = ? AND `hierarchy_url` = ?'.$page_status_setting.' LIMIT 1', [$site_id, $path_url]);
+			$url_data = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'urls', 'WHERE `site_id` = ? AND `hierarchy_url` = ?'.$page_status_setting.' LIMIT 1', [$site_id, $database_path_url]);
 			
 			if(!empty($url_data))
 			{
@@ -90,7 +106,7 @@ else
 				
 				if(!empty($page_data))
 				{
-					$pages_data = array_merge($page_data, $url_data, array('home_page_record_id' => '', 'path_url' => $url_data["flat_url"], 'page_not_found_404' => 'No'));
+					$pages_data = array_merge($page_data, $url_data, array('home_page_record_id' => '', 'path_url' => trim($installation_path_url.'/'.$url_data["flat_url"], '/'), 'page_not_found_404' => 'No'));
 				}
 			}
 		}
@@ -155,15 +171,15 @@ else
 	$meta_keywords = $pages_data['meta_keywords'];
 	$content_title = $pages_data['content_title'];
 	$table_of_contents = urlId($pages_data['table_of_contents']);
-	$table_of_contents = mediaId($table_of_contents, '', '', '');
+	$table_of_contents = mediaId($table_of_contents, '', '', '', '');
 	$table_of_contents = getNonce($table_of_contents);
 	$pages_data['table_of_contents'] = $table_of_contents;
 	$top_content = urlId($pages_data['top_content']);
-	$top_content = mediaId($top_content, '', '', '');
+	$top_content = mediaId($top_content, '', '', '', '');
 	$top_content = getNonce($top_content);
 	$pages_data['top_content'] = $top_content;
 	$bottom_content = urlId($pages_data['bottom_content']);
-	$bottom_content = mediaId($bottom_content, '', '', '');
+	$bottom_content = mediaId($bottom_content, '', '', '', '');
 	$bottom_content = getNonce($bottom_content);
 	$pages_data['bottom_content'] = $bottom_content;
 	$pages_media = $pages_data['media'];

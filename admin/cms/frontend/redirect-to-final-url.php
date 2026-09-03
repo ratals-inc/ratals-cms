@@ -20,7 +20,7 @@ else
 		}
 		elseif(!empty($questionmark_in_url))
 		{
-			//Went back and forth on 301 or 302 here. If we redirect a page with parameters as 302 and the URL with parameters has link juice, it will not pass to the new URL. If we redirect with 301, it's going to tell the search engines that the new URL with parameters is the URL to index. We're hoping the canonical meta tag with push everything to the page with no parameters. We went with a 301 so the links are at least following to the new URL.
+			//Went back and forth on 301 or 302 here. If we redirect a page with parameters as 302 and the URL with parameters has link juice, it will not pass to the new URL. If we redirect with 301, it's going to tell the search engines that the new URL with parameters is the URL to index. We're hoping the canonical meta tag will push everything to the page with no parameters.
 			header("HTTP/2 301 Moved Permanently");
 			header("Location: ".$final_url_home_page_with_question_mark);
 			exit;
@@ -44,7 +44,7 @@ else
 		}
 		elseif(!empty($questionmark_in_url))
 		{
-			//Went back and forth on 301 or 302 here. If we redirect a page with parameters as 302 and the URL with parameters has link juice, it will not pass to the new URL. If we redirect with 301, it's going to tell the search engines that the new URL with parameters is the URL to index. We're hoping the canonical meta tag with push everything to the page with no parameters. We went with a 301 so the links are at least following to the new URL.
+			//Went back and forth on 301 or 302 here. If we redirect a page with parameters as 302 and the URL with parameters has link juice, it will not pass to the new URL. If we redirect with 301, it's going to tell the search engines that the new URL with parameters is the URL to index. We're hoping the canonical meta tag will push everything to the page with no parameters.
 			header("HTTP/2 301 Moved Permanently");
 			header("Location: ".$final_url_with_question_mark);
 			exit;

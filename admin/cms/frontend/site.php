@@ -41,10 +41,10 @@ else
 		$domain_only = $tld_domain;
 		$_SESSION['domain_only'] = $tld_domain;
 	}
-	else//if($path_url != 'create-account')
+	else
 	{
 		//Site does not exist in DB.
-		header("HTTP/1.1 404"); 
+		http_response_code(404); 
 		include_once(INSTALLATION_ROOT.'/sites/site-not-found.php');
 		die();
 	}

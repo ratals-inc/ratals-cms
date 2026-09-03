@@ -55,7 +55,7 @@ include_once('sites/functions.php');
 <?php
 if(isset($_SESSION['user_id'])) 
 {
-	echo '<div class="edit-page"><a href="/'.$_SESSION['admin_directory'].'/website/'.$pages_data['table_name'].'/edit/?rid='.$id.'" target="_blank">Edit in Admin</a></div>';
+	echo '<div class="edit-page"><a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/'.$pages_data['table_name'].'/edit/?rid='.$id.'" target="_blank">Edit in Admin</a></div>';
 }
 ?>
 <!-- End Edit Admin Page --><?php //END CAUTION! ?>
@@ -78,14 +78,14 @@ if(isset($_SESSION['user_id']))
                 <?php include('author-and-dates-top.php'); ?>
                 <?php if(!empty($top_content)) { ?><div class="top-content"><?php echo $top_content; ?></div><?php } ?>
                 <?php 
-                if(!empty($data_array['sub_items'])) 
+                if(!empty($data_array['design_blocks'])) 
                 {
                 ?>
-                    <!-- Start Sub Items -->
-                    <div class="pages-sub-items-style">
-                        <?php include('sub-items.php'); ?>
+                    <!-- Start Design Blocks -->
+                    <div class="pages-design-blocks-style">
+                        <?php include('design-blocks.php'); ?>
                     </div>
-                    <!-- End Sub Items -->
+                    <!-- End Design Blocks -->
                 <?php } ?>
             </div>
         </div>

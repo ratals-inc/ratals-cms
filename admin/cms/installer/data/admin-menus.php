@@ -9,15 +9,17 @@ $placeholders = 'NULL,0,1,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?';
 
 $parameters = array();
 
-$parameters[] = ['Admin - Main Menu', 93, 'Main Menu', [], 'admin_main_menu', '{}', $first_last_name, $first_last_name];
+$parameters[] = ['Admin - Main Menu', 93, 'Main Menu', [], 'admin_main_menu', '{}', $install_update_username, $install_update_username];
 
-$parameters[] = ['Categories - Sub Menu', 3, 'Sub Menu', ['website/categories/edit', 'website/categories/products-and-inventory-assigned', 'website/categories/assign-products-to-category', 'website/categories/assign-products-to-category/inventory', 'website/categories/search-filters', 'website/categories/sub-items', 'website/categories/displaying-in'], 'categories_sub_menu', '{}', $first_last_name, $first_last_name];
+$parameters[] = ['Authors - Sub Menu', 2, 'Sub Menu', ['website/authors/edit', 'website/authors/design-blocks'], 'authors_sub_menu', '{}', $install_update_username, $install_update_username];
 
-$parameters[] = ['Pages - Sub Menu', 3, 'Sub Menu', ['website/pages/edit', 'website/pages/sub-items', 'website/pages/displaying-in'], 'pages_sub_menu', '{}', $first_last_name, $first_last_name];
+$parameters[] = ['Categories - Sub Menu', 3, 'Sub Menu', ['website/categories/edit', 'website/categories/products-and-inventory-assigned', 'website/categories/assign-products-to-category', 'website/categories/assign-products-to-category/inventory', 'website/categories/search-filters', 'website/categories/design-blocks', 'website/categories/displaying-in'], 'categories_sub_menu', '{}', $install_update_username, $install_update_username];
 
-$parameters[] = ['Posts - Sub Menu', 4, 'Sub Menu', ['website/posts/edit', 'website/posts/sub-items', 'website/posts/comments', 'website/posts/displaying-in'], 'posts_sub_menu', '{}', $first_last_name, $first_last_name];
+$parameters[] = ['Pages - Sub Menu', 3, 'Sub Menu', ['website/pages/edit', 'website/pages/design-blocks', 'website/pages/displaying-in'], 'pages_sub_menu', '{}', $install_update_username, $install_update_username];
 
-$parameters[] = ['Forms - Sub Menu', 3, 'Sub Menu', ['website/forms/edit', 'website/forms/form-fields', 'website/forms/media-swatches'], 'forms_sub_menu', '{}', $first_last_name, $first_last_name];
+$parameters[] = ['Posts - Sub Menu', 4, 'Sub Menu', ['website/posts/edit', 'website/posts/design-blocks', 'website/posts/comments', 'website/posts/displaying-in'], 'posts_sub_menu', '{}', $install_update_username, $install_update_username];
+
+$parameters[] = ['Forms - Sub Menu', 3, 'Sub Menu', ['website/forms/edit', 'website/forms/form-fields', 'website/forms/media-swatches'], 'forms_sub_menu', '{}', $install_update_username, $install_update_username];
 
 $current_admin_pages = $results->getSelectMultipleRecordsKeyName(__LINE__, __FILE__, '*', 'admin_pages', '', [], 'system_code');
 
@@ -70,7 +72,7 @@ else
 						 'menu_locations' => $param[3], 
 						 'system_code' => $param[4], 
 						 'custom_fields' => $param[5], 
-						 'updated_by' => $first_last_name, 
-						 'created_by' => $first_last_name];
+						 'updated_by' => $install_update_username, 
+						 'created_by' => $install_update_username];
 	}
 }

@@ -18,7 +18,7 @@ if(isset($sql_get_messages) && !empty($sql_get_messages))
 			$("body").addClass("body-pending-ajax");
 			$(".pending-ajax").show();
 			
-			$.post("/'.$_SESSION['admin_directory'].'/cms/includes/notices/ajax.php",{type:"markAdRead",id:messageId},
+			$.post("'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/cms/includes/notices/ajax.php",{type:"markAdRead",id:messageId},
 			function(data)
 			{
 				if(data == 1)
@@ -60,7 +60,7 @@ if(isset($sql_get_messages) && !empty($sql_get_messages))
 				var newVersionNumber = dataArray[1];
 				var upgradeToName = dataArray[2];
 				
-				$.post("/'.$_SESSION['admin_directory'].'/cms/includes/notices/start-update.php",{type:"updateSoftwareNow",noticeId:rowId,versionNumber:newVersionNumber,upgradeTo:upgradeToName},
+				$.post("'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/cms/includes/notices/start-update.php",{type:"updateSoftwareNow",noticeId:rowId,versionNumber:newVersionNumber,upgradeTo:upgradeToName},
 				function(data)
 				{
 					try
@@ -73,7 +73,7 @@ if(isset($sql_get_messages) && !empty($sql_get_messages))
 						}
 						else
 						{
-							fetch("/'.$_SESSION['admin_directory'].'/cms/includes/notices/unset-progress-session.php")
+							fetch("'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/cms/includes/notices/unset-progress-session.php")
 							.finally(() => 
 							{
 								alert("Error: " + updateResult.message);
@@ -83,7 +83,7 @@ if(isset($sql_get_messages) && !empty($sql_get_messages))
 					}
 					catch(e)
 					{
-						fetch("/'.$_SESSION['admin_directory'].'/cms/includes/notices/unset-progress-session.php")
+						fetch("'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/cms/includes/notices/unset-progress-session.php")
 						.finally(() => 
 						{
 							alert("Unexpected response: " + data);
@@ -107,7 +107,7 @@ if(isset($_SESSION['current_update_log']) && file_exists($_SESSION['current_upda
 	var lastPercentage = 0;
 	async function checkProgress()
 	{
-		var updateResponse = await fetch("/'.$_SESSION['admin_directory'].'/cms/includes/notices/update-progress.php");
+		var updateResponse = await fetch("'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/cms/includes/notices/update-progress.php");
 		var updateData = await updateResponse.json();
 		
 		var bar = document.querySelector("#progress-bar");
@@ -128,12 +128,28 @@ if(isset($_SESSION['current_update_log']) && file_exists($_SESSION['current_upda
 			}
 		}
 		
-		if(updateData.log_exists)
+		//If the update failed, stop polling and show the error.
+		if(updateData.status === "error")
+		{
+			if(bar && text)
+			{
+				text.textContent = updateData.error_message;
+			}
+			
+			//Unset update session so progress bar and this js no longer loads.
+			fetch("'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/cms/includes/notices/unset-progress-session.php")
+			.finally(() =>
+			{
+				alert(updateData.error_message);
+				location.reload();
+			});
+		}
+		else if(updateData.log_exists)
 		{
 			setTimeout(checkProgress, 2000);
 		}
-		//When update log file is deleted as the update is completed, reload the page to remove the progress bar
-		else if(!updateData.log_exists)
+		//When update log file is deleted as the update is completed, reload the page to remove the progress bar.
+		else
 		{
 			if(bar && text)
 			{
@@ -141,10 +157,10 @@ if(isset($_SESSION['current_update_log']) && file_exists($_SESSION['current_upda
 				text.textContent = "Software update process completed successfully. (100%)";
 			}
 			
-			//Unset update session so progress bar and this js no longer loads
-			fetch("/'.$_SESSION['admin_directory'].'/cms/includes/notices/unset-progress-session.php")
+			//Unset update session so progress bar and this js no longer loads.
+			fetch("'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/cms/includes/notices/unset-progress-session.php")
 			
-			//Delay the page reload by 1 second so user to read progress bar step.
+			//Delay the page reload by 1 second so user can read progress bar step.
 			setTimeout(() => 
 			{
 				location.reload();

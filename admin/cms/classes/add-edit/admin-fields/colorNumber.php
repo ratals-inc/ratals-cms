@@ -46,9 +46,15 @@ else
 				//Only swatches and boxes display select a color for a swatch display.
 				if((isset($custom_field_type) && $custom_field_type['display_as'] == 'swatch') || (isset($form_field_type) && $form_field_type['form_field_type'] == 'Swatch'))
 				{
+					$field_required = '';
+					if($admin_field["required"] == 'Yes')
+					{
+						$field_required = ' <span class="required-asterisk">*</span>';
+					}
+					
 					echo '
 					<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-					<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+					<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 					<div class="edit-field">
 					<input type="color" name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'" value="'.htmlspecialchars($field_value ?? '').'" id="'.htmlspecialchars($table_name.'_'.$admin_field["column_name"] ?? '').'" class="height-padding-cursor">
 					<div class="small-text">'.$admin_field["notes"].'</div>

@@ -14,7 +14,7 @@ else
 		if(!isset($_GET['section']))
 		{
 			//Redirect to 404 page if section is not set in url.
-			header("Location: ".$domain."/404/");
+			header("Location: ".$domain.INSTALLATION_URL_PATH."/404/");
 			exit();
 		}
 		
@@ -23,7 +23,7 @@ else
 		if(empty($validate_url_section_name['table_name']))
 		{
 			//If section set in url is not found in the urls table, redirect to 404 page.
-			header("Location: ".$domain."/404/");
+			header("Location: ".$domain.INSTALLATION_URL_PATH."/404/");
 			exit();
 		}
 		//print_r($validate_url_section_name);

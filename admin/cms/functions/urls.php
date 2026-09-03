@@ -27,11 +27,11 @@ else
 				
 				if($url_structure == 'Hierarchy')
 				{
-				   $url = $domain."/".$hierarchy_url.$url_end_url_with.$inventory_attribute_url; 
+				   $url = $domain.INSTALLATION_URL_PATH."/".$hierarchy_url.$url_end_url_with.$inventory_attribute_url; 
 				}
 				elseif($url_structure == 'Flat')
 				{
-				   $url = $domain."/".$flat_url.$url_end_url_with.$inventory_attribute_url; 
+				   $url = $domain.INSTALLATION_URL_PATH."/".$flat_url.$url_end_url_with.$inventory_attribute_url; 
 				}
 			}
 			else
@@ -41,7 +41,7 @@ else
 			
 			if($home_page == $url_id && empty($custom_link))
 			{
-			   $url = $domain."/";
+			   $url = $domain.INSTALLATION_URL_PATH."/";
 			}
 			elseif(!empty($custom_link))
 			{
@@ -98,11 +98,11 @@ else
 									
 									if($url_structure == 'Hierarchy') 
 									{ 
-										$url_url_results["fetch_url"] = $domain."/".$sql_fetch_url_rows["hierarchy_url"].$url_end_url_with; 
+										$url_url_results["fetch_url"] = $domain.INSTALLATION_URL_PATH."/".$sql_fetch_url_rows["hierarchy_url"].$url_end_url_with; 
 									}
 									elseif($url_structure == 'Flat') 
 									{
-										$url_url_results["fetch_url"] = $domain."/".$sql_fetch_url_rows["flat_url"].$url_end_url_with; 
+										$url_url_results["fetch_url"] = $domain.INSTALLATION_URL_PATH."/".$sql_fetch_url_rows["flat_url"].$url_end_url_with; 
 									}
 								} 
 								else 
@@ -112,7 +112,7 @@ else
 								
 								if($home_page == $sql_fetch_url_rows["id"] && empty($sql_fetch_url_rows["custom_link"])) 
 								{
-									$url_url_results["fetch_url"] = $domain."/";
+									$url_url_results["fetch_url"] = $domain.INSTALLATION_URL_PATH."/";
 								}
 								else
 								{
@@ -127,7 +127,7 @@ else
 							else
 							{
 								//If the page/url is not enabled set the link to the homepage or the domain.
-								$get_enbeded_urls[] = array("replace" => "urlId(".$correct_url_result.");", "url" => $domain.'/?url-id-disabled-or-deleted='.$correct_url_result);
+								$get_enbeded_urls[] = array("replace" => "urlId(".$correct_url_result.");", "url" => $domain.INSTALLATION_URL_PATH.'/?url-id-disabled-or-deleted='.$correct_url_result);
 							}
 						}
 					}
@@ -186,11 +186,11 @@ else
 						
 						if($url_structure == 'Hierarchy')
 						{
-							$url_url_results["fetch_url"] = $domain."/".$pages_hierarchy_url_value.$url_end_url_with; 
+							$url_url_results["fetch_url"] = $domain.INSTALLATION_URL_PATH."/".$pages_hierarchy_url_value.$url_end_url_with; 
 						}
 						elseif($url_structure == 'Flat')
 						{
-							$url_url_results["fetch_url"] = $domain."/".$sql_fetch_url_rows["flat_url"].$url_end_url_with; 
+							$url_url_results["fetch_url"] = $domain.INSTALLATION_URL_PATH."/".$sql_fetch_url_rows["flat_url"].$url_end_url_with; 
 						}
 					}
 					else
@@ -200,7 +200,7 @@ else
 					
 					if($home_page == $pages_unique_id_value && empty($sql_fetch_url_rows["custom_link"]))
 					{
-						$url_url_results["fetch_url"] = $domain."/";
+						$url_url_results["fetch_url"] = $domain.INSTALLATION_URL_PATH."/";
 					}
 					else
 					{
@@ -214,7 +214,7 @@ else
 				}
 				else
 				{
-					$get_url_from_id = $domain.'/?url-id-disabled-or-deleted='.$get_url_from_id;
+					$get_url_from_id = $domain.INSTALLATION_URL_PATH.'/?url-id-disabled-or-deleted='.$get_url_from_id;
 				}
 			}
 			
@@ -243,7 +243,7 @@ else
 			$url_end_url_with = '';
 			$admin_final_url = '';
 			
-			$admin_url_id = array('id' => $pages_unique_id_value, 'domain' => $view_frontend_of_site, 'url_path' => $pages_url_path, 'url_extension' => $url_end_url_with, 'final_url' => $admin_final_url);
+			$admin_url_id = array('id' => $pages_unique_id_value, 'domain' => $view_frontend_of_site, 'installation_url_path' => INSTALLATION_URL_PATH, 'url_path' => $pages_url_path, 'url_extension' => $url_end_url_with, 'final_url' => $admin_final_url);
 			
 			if(!empty($sql_fetch_url_rows))
 			{
@@ -274,15 +274,15 @@ else
 					
 					if($url_structure == 'Hierarchy')
 					{
-						$admin_final_url = $view_frontend_of_site."/".$pages_url_path.$url_end_url_with; 
+						$admin_final_url = $view_frontend_of_site.INSTALLATION_URL_PATH."/".$pages_url_path.$url_end_url_with; 
 					}
 					elseif($url_structure == 'Flat')
 					{
-						$admin_final_url = $view_frontend_of_site."/".$sql_fetch_url_rows["flat_url"].$url_end_url_with; 
+						$admin_final_url = $view_frontend_of_site.INSTALLATION_URL_PATH."/".$sql_fetch_url_rows["flat_url"].$url_end_url_with; 
 					}
 				}
 				
-				$admin_url_id = array('id' => $pages_unique_id_value, 'domain' => $view_frontend_of_site, 'url_path' => $pages_url_path, 'url_extension' => $url_end_url_with, 'final_url' => $admin_final_url);
+				$admin_url_id = array('id' => $pages_unique_id_value, 'domain' => $view_frontend_of_site, 'installation_url_path' => INSTALLATION_URL_PATH, 'url_path' => $pages_url_path, 'url_extension' => $url_end_url_with, 'final_url' => $admin_final_url);
 			}
 			
 			return $admin_url_id;

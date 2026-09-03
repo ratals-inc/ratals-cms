@@ -42,7 +42,7 @@ else
 					$sql_get_sub_categories_count = $_SESSION['results']->getSelectCountRecords(__LINE__, __FILE__, '*', 'urls', 'WHERE `site_id` = ? AND `path_level` = ?', [$_SESSION["site_set_for_editing"], $new_path_level_link]);
 				}
 				
-				echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><a href="/'.$_SESSION['admin_sub_items_url'].'/?layout=hierarchy&path-ids='.$new_path_level_link.'">'.$sql_get_sub_categories_count.' '.htmlspecialchars($sub_items_label ?? '').'</a></li>';
+				echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><a href="'.$_SESSION['admin_sub_items_url'].'/?layout=hierarchy&path-ids='.$new_path_level_link.'">'.$sql_get_sub_categories_count.' '.htmlspecialchars($sub_items_label ?? '').'</a></li>';
 			}
 		}
 		

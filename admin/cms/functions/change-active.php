@@ -28,7 +28,7 @@ else
 			else
 			{
 				$global_record_or_not = '';
-				if($_SESSION['admin_site_id_global'] == 'No' || $database_table_name == 'custom_fields' || $database_table_name == 'assignments_sub_items') 
+				if($_SESSION['admin_site_id_global'] == 'No' || $database_table_name == 'custom_fields' || $database_table_name == 'assignments_design_blocks') 
 				{
 					$global_record_or_not = " AND (`site_id` = '".$_SESSION["site_set_for_editing"]."' || `site_id` = '0')";
 				}
@@ -68,11 +68,11 @@ else
 				
 				$sql_get_pending_reviews_rows = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, 'avg(score) as review_score', 'reviews', 'WHERE `site_id` = ? AND `product_url_id` = ? AND `status` = ?', [$_SESSION["site_set_for_editing"], $sql_get_review_row['product_url_id'], '1']);
 				
-				$_SESSION['results']->getUpdateRecord(__LINE__, __FILE__, 'products', '`review_score` = ?, `updated_by` = ?, `updated_date` = UTC_TIMESTAMP()', 'WHERE `urls_id` = ? AND `site_id` = ?', [$sql_get_pending_reviews_rows['review_score'], $_SESSION['user_first_last_name'], $sql_get_review_row['product_url_id'], $_SESSION["site_set_for_editing"]]);
+				$_SESSION['results']->getUpdateRecord(__LINE__, __FILE__, 'products', '`review_score` = ?, `updated_by` = ?, `updated_date` = UTC_TIMESTAMP()', 'WHERE `urls_id` = ? AND `site_id` = ?', [$sql_get_pending_reviews_rows['review_score'], $_SESSION['user_username'], $sql_get_review_row['product_url_id'], $_SESSION["site_set_for_editing"]]);
 				
 				$_SESSION['results']->getUpdateRecord(__LINE__, __FILE__, 'assignments_products', '`product_review_score` = ?', 'WHERE `child_id` = ? AND `site_id` = ?', [$sql_get_pending_reviews_rows['review_score'], $sql_get_review_row['product_url_id'], $_SESSION["site_set_for_editing"]]);
 				
-				$_SESSION['results']->getUpdateRecord(__LINE__, __FILE__, 'assignments_sub_items', '`product_review_score` = ?', 'WHERE `child_id` = ? AND `site_id` = ?', [$sql_get_pending_reviews_rows['review_score'], $sql_get_review_row['product_url_id'], $_SESSION["site_set_for_editing"]]);
+				$_SESSION['results']->getUpdateRecord(__LINE__, __FILE__, 'assignments_design_blocks', '`product_review_score` = ?', 'WHERE `child_id` = ? AND `site_id` = ?', [$sql_get_pending_reviews_rows['review_score'], $sql_get_review_row['product_url_id'], $_SESSION["site_set_for_editing"]]);
 			}
 			
 			echo "1";

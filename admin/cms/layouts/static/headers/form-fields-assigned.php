@@ -70,7 +70,7 @@ else
 				$update_form_fields = trim($update_form_fields ?? '', ',');
 			}
 			
-			$results->getUpdateRecord(__LINE__, __FILE__, 'forms', '`form_fields_ids` = ?, `updated_by` = ?, `updated_date` = UTC_TIMESTAMP()', 'WHERE `id` = ?', [$update_form_fields, $_SESSION['user_first_last_name'], $db_id]);
+			$results->getUpdateRecord(__LINE__, __FILE__, 'forms', '`form_fields_ids` = ?, `updated_by` = ?, `updated_date` = UTC_TIMESTAMP()', 'WHERE `id` = ?', [$update_form_fields, $_SESSION['user_username'], $db_id]);
 			
 			//Clear cache on save.
 			if($_SESSION['admin_site_id_global'] == 'No')
@@ -82,7 +82,7 @@ else
 				clearAllSiteCache();
 			}
 			
-			header("Location: /".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&updated=success"); exit();
+			header("Location: ".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&updated=success"); exit();
 		}
 	}
 }

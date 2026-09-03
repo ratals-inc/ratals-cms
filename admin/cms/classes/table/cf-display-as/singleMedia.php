@@ -51,30 +51,30 @@ else
 								foreach($media_tag_items_array as $media_items)
 								{
 									$media_item_id = explode('~||~', $media_items);
-									$media_data .= '<a href="/'.$_SESSION['admin_directory'].'/media/?textfield-id='.$media_item_id[0].'" target="_blank">'.$media_item_id[0].'</a>, ';
+									$media_data .= '<a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/media/?textfield-id='.$media_item_id[0].'" target="_blank">'.$media_item_id[0].'</a>, ';
 								}
 								$media_data = trim($media_data ?? '', ', ');
 							}
 							elseif(!empty($media_tag_item_array))
 							{
-								$media_data = '<a href="/'.$_SESSION['admin_directory'].'/media/?textfield-id='.$media_tag_item_array[0].'" target="_blank">'.$media_tag_item_array[0].'</a>';
+								$media_data = '<a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/media/?textfield-id='.$media_tag_item_array[0].'" target="_blank">'.$media_tag_item_array[0].'</a>';
 							}
 							
 							if($sql_media_tag_row["media_type"] == 'Image')
 							{
 								$original_media_id = $sql_media_tag_row["original_media_id"];
 								
-								echo '<li class="table-cell-results media-center"><img src="/sites/media/images/'.$original_media_id.'/'.$sql_media_tag_row["media_url"].'" /><div>Media IDs: '.$media_data.'</div></li>';
+								echo '<li class="table-cell-results media-center"><img src="'.INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.$sql_media_tag_row["media_url"].'" /><div>Media IDs: '.$media_data.'</div></li>';
 							}
 							elseif($sql_media_tag_row["media_type"] == 'File')
 							{
 								$media_data_type = explode('.', $sql_media_tag_row["media_url"]);
-								echo '<li class="table-cell-results media-center"><object class="width-max-height-aspect-16-16-margin" data="/sites/media/files/'.$sql_media_tag_row["media_url"].'" type="application/'.$media_data_type[1].'"></object><div>Media IDs: '.$media_data.'</div></li>';
+								echo '<li class="table-cell-results media-center"><object class="width-max-height-aspect-16-16-margin" data="'.INSTALLATION_URL_PATH.'/sites/media/files/'.$sql_media_tag_row["media_url"].'" type="application/'.$media_data_type[1].'"></object><div>Media IDs: '.$media_data.'</div></li>';
 							}
 							elseif($sql_media_tag_row["media_type"] == 'Video')
 							{
 								$media_data_type = explode('.', $sql_media_tag_row["media_url"]);
-								echo '<li class="table-cell-results media-center"><video controls preload="none"><source src="/sites/media/videos/'.$sql_media_tag_row["media_url"].'" type="video/'.$media_data_type[1].'"></video><div>Media IDs: '.$media_data.'</div></li>';
+								echo '<li class="table-cell-results media-center"><video controls preload="none"><source src="'.INSTALLATION_URL_PATH.'/sites/media/videos/'.$sql_media_tag_row["media_url"].'" type="video/'.$media_data_type[1].'"></video><div>Media IDs: '.$media_data.'</div></li>';
 							}
 							elseif($sql_media_tag_row["media_type"] == 'Video Embed')
 							{

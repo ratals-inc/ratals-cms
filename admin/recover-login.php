@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
@@ -54,7 +55,7 @@ else
 			if(empty($user_row)) 
 			{
 				//Send them to a success page when not successful so we dont tell hackers if user is valid.
-				header("Location: /".$_SESSION['admin_directory']."/?recovery=success"); exit();
+				header("Location: ".INSTALLATION_URL_PATH."/".$_SESSION['admin_directory']."/?recovery=success"); exit();
 			} 
 			else 
 			{
@@ -97,7 +98,7 @@ else
 	
 		if(count($errors) == 0) 
 		{
-			header("Location: /".$_SESSION['admin_directory']."/?recovery=success"); exit();
+			header("Location: ".INSTALLATION_URL_PATH."/".$_SESSION['admin_directory']."/?recovery=success"); exit();
 		}
 	}
 	?>

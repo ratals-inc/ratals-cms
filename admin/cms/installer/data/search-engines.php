@@ -8,6 +8,6 @@ $column_names = '`id`, `site_id`, `meta_robots`, `custom_fields`, `created_by`, 
 $placeholders = 'NULL,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP()';
 
 $parameters = array();
-$parameters[] = [$site_id, '', '{}', $first_last_name, $first_last_name];
+$parameters[] = [$site_id, '', '{}', $install_update_username, $install_update_username];
 
 $results->getinsertMultipleRecords(__LINE__, __FILE__, 'search_engines', $column_names, $placeholders, $parameters);

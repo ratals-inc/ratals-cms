@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -111,7 +112,7 @@ else
 			$sql_template_files_check = $results->getSelectCountRecords(__LINE__, __FILE__, '*', 'template_files', 'WHERE `templates_id` = ? AND `site_id` = ?', [$get_rid, $_SESSION["site_set_for_editing"]]);
 			
 			//Update template files count
-			$results->getUpdateRecord(__LINE__, __FILE__, 'templates', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(),`updated_by` = ?', 'WHERE `id` = ? AND `site_id` = ?', [$sql_template_files_check, $_SESSION['user_first_last_name'], $get_rid, $_SESSION["site_set_for_editing"]]);
+			$results->getUpdateRecord(__LINE__, __FILE__, 'templates', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(),`updated_by` = ?', 'WHERE `id` = ? AND `site_id` = ?', [$sql_template_files_check, $_SESSION['user_username'], $get_rid, $_SESSION["site_set_for_editing"]]);
 		}
 		
 		//Clear cache on save.

@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -144,9 +145,8 @@ else
 		exit();
 	}
 	
-	//Use the current logged-in user's name.
-	//If $first_last_name is already created by your AJAX bootstrap, this uses it.
-	$current_user_name = $first_last_name ?? ($_SESSION['first_last_name'] ?? 'System');
+	//Use the current logged-in admin username for audit fields.
+	$current_user_name = $_SESSION['user_username'] ?? 'System';
 	
 	//Create the new template_files database record.
 	$column_names = '`site_id`, `templates_id`, `status`, `name`, `filename`, `php_array`, `file_code`, `template_type`, `assigned_type`, `default_file`, `copy_template_file`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`';
@@ -193,7 +193,7 @@ else
 		'template_file_id' => $inserted_id,
 		'name' => $new_name,
 		'filename' => $new_filename,
-		'redirect' => '/'.$_SESSION['admin_directory'].'/website/template-files/edit/?sub-page-rid='.$template_id.'&rid='.$inserted_id.'&copied=success'
+		'redirect' => INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/template-files/edit/?sub-page-rid='.$template_id.'&rid='.$inserted_id.'&copied=success'
 	]);
 	
 	exit();

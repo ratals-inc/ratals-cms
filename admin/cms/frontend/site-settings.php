@@ -77,7 +77,7 @@ else
 	{
 		$media_array = explode('~||~', $site_settings["site_logo_media_id"]);
 		
-		$logo_media = mediaId($media_array[0], 'lazyLoadNo', 'fetchPriorityHigh', $media_array[1]);
+		$logo_media = mediaId($media_array[0], 'lazyLoadNo', 'fetchPriorityHigh', '', $media_array[1]);
 		$_SESSION['logo_media'] = $logo_media;
 		
 		$logo_data_array = mediaIdArray($media_array[0]);
@@ -152,7 +152,7 @@ else
 				$custom_video_icon_meta_tag = $sql_media_video_icon_row[0]["media_tag"];
 			}
 			
-			$media_video_icon = displayMedia($sql_media_video_icon_row, $domain, 'No', 'Yes', $custom_video_icon_meta_tag);
+			$media_video_icon = displayMedia($sql_media_video_icon_row, $domain, 'No', 'Yes', $custom_video_icon_meta_tag, '100');
 			$_SESSION['media_video_icon'] = $media_video_icon;
 			$_SESSION['media_video_icon_no_picture_tag'] = str_replace(array('<picture>', '</picture>'), '', $media_video_icon ?? '');
 			$media_video_icon_url = $sql_media_video_icon_row[0]["media_url"];
@@ -182,7 +182,7 @@ else
 				$custom_video_icon_meta_tag = $sql_media_file_icon_row[0]["media_tag"];
 			}
 			
-			$media_file_icon = displayMedia($sql_media_file_icon_row, $domain, 'No', 'Yes', $custom_video_icon_meta_tag);
+			$media_file_icon = displayMedia($sql_media_file_icon_row, $domain, 'No', 'Yes', $custom_video_icon_meta_tag, '100');
 			$_SESSION['media_file_icon'] = $media_file_icon;
 			$_SESSION['media_file_icon_no_picture_tag'] = str_replace(array('<picture>', '</picture>'), '', $media_file_icon ?? '');
 			$media_file_icon_url = $sql_media_file_icon_row[0]["media_url"];

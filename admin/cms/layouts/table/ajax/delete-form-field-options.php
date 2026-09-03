@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -33,7 +34,7 @@ else
 				$sql_form_option_count = $results->getSelectCountRecords(__LINE__, __FILE__, '*', 'form_values', 'WHERE `form_fields_id` = ?', [$sql_get_form_field_option_data['form_fields_id']]);
 				
 				//Update form options count
-				$results->getUpdateRecord(__LINE__, __FILE__, 'form_fields', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(),`updated_by` = ?', 'WHERE `id` = ?', [$sql_form_option_count, $_SESSION['user_first_last_name'], $sql_get_form_field_option_data['form_fields_id']]);
+				$results->getUpdateRecord(__LINE__, __FILE__, 'form_fields', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(),`updated_by` = ?', 'WHERE `id` = ?', [$sql_form_option_count, $_SESSION['user_username'], $sql_get_form_field_option_data['form_fields_id']]);
 			}
 		}
 		

@@ -18,9 +18,15 @@ else
 				//If admin_fields page in admin for $admin_field['column_name'] == "admin_fields_lists_system_code" display it as a dropdown with all list names.
 				if($_SESSION['admin_table_name'] == "admin_fields" && $admin_field['column_name'] == "admin_fields_lists_system_code")
 				{
+					$field_required = '';
+					if($admin_field["required"] == 'Yes')
+					{
+						$field_required = ' <span class="required-asterisk">*</span>';
+					}
+					
 					echo '
 					<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-					<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+					<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 					<div class="edit-field">
 					<select name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'" id="'.htmlspecialchars($table_name.'_'.$admin_field["column_name"] ?? '').'">
 					<option value="0"></option>

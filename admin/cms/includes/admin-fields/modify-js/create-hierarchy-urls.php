@@ -33,14 +33,14 @@ else
 		});
 		
 		var fetch = 'edit_id=' + edit_id + '&last_id=' + last_id + '&all_ids=' + all_ids + '&type=<?php echo $current_values['urls']['table_name']; ?>' + '&fetch_categories=yes'; 
-		$.post("/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/create-hierarchy-urls.php", fetch, function(theResponse)
+		$.post("<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/create-hierarchy-urls.php", fetch, function(theResponse)
 		{
 			//alert(theResponse);
 			$("#display-sub-categories").html(theResponse);
 		}); 
 		
 		var fetch2 = 'last_id=' + last_id + '&all_ids=' + all_ids + '&type=<?php echo $current_values['urls']['table_name']; ?>' + '&fetch_url=yes'; 
-		$.post("/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/create-hierarchy-urls.php", fetch2, function(theResponse)
+		$.post("<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/create-hierarchy-urls.php", fetch2, function(theResponse)
 		{
 			//alert(theResponse);
 			$("#display-hierarchy-url").html(theResponse);
@@ -48,7 +48,7 @@ else
 			var hierarchyURL = $("#urls_hierarchy_url").val();
 			var hierarchyURLPath = theResponse;
 			var hierarchyURLExtension = $('#display_url_extension').text();
-			var hrefHierarchyURL = '<?php echo $domain; ?>/'+hierarchyURLPath+hierarchyURL+hierarchyURLExtension;
+			var hrefHierarchyURL = '<?php echo $domain.INSTALLATION_URL_PATH; ?>/'+hierarchyURLPath+hierarchyURL+hierarchyURLExtension;
 			$("#href_hierarchy_url").attr('href', hrefHierarchyURL);
 		});
 	});
@@ -116,7 +116,7 @@ else
 			$("#urls_flat_url").val(flatURL);
 			
 			var flatURLExtension = $('#display_flat_url_extension').text();
-			var hrefFlatURL = '<?php echo $domain; ?>/'+flatURL+flatURLExtension;
+			var hrefFlatURL = '<?php echo $domain.INSTALLATION_URL_PATH; ?>/'+flatURL+flatURLExtension;
 			$("#href_flat_url").attr('href', hrefFlatURL);
 		});
 		//End set correct Flat URL name
@@ -132,7 +132,7 @@ else
 			
 			var hierarchyURLPath = $('#display-hierarchy-url').text();
 			var hierarchyURLExtension = $('#display_url_extension').text();
-			var hrefHierarchyURL = '<?php echo $domain; ?>/'+hierarchyURLPath+hierarchyURL+hierarchyURLExtension;
+			var hrefHierarchyURL = '<?php echo $domain.INSTALLATION_URL_PATH; ?>/'+hierarchyURLPath+hierarchyURL+hierarchyURLExtension;
 			$("#href_hierarchy_url").attr('href', hrefHierarchyURL);
 		});
 		//End set correct URL name
@@ -153,13 +153,13 @@ else
 			   
 			   var flatURL = $("#urls_flat_url").val();
 			   var flatURLExtension = $('#display_flat_url_extension').text();
-			   var hrefFlatURL = '<?php echo $domain; ?>/'+flatURL+flatURLExtension;
+			   var hrefFlatURL = '<?php echo $domain.INSTALLATION_URL_PATH; ?>/'+flatURL+flatURLExtension;
 			   $("#href_flat_url").attr('href', hrefFlatURL);
 			   
 			   var hierarchyURL = $("#urls_hierarchy_url").val();
 			   var hierarchyURLPath = $('#display-hierarchy-url').text();
 			   var hierarchyURLExtension = $('#display_url_extension').text();
-			   var hrefHierarchyURL = '<?php echo $domain; ?>/'+hierarchyURLPath+hierarchyURL+hierarchyURLExtension;
+			   var hrefHierarchyURL = '<?php echo $domain.INSTALLATION_URL_PATH; ?>/'+hierarchyURLPath+hierarchyURL+hierarchyURLExtension;
 			   $("#href_hierarchy_url").attr('href', hrefHierarchyURL);
 			}
 			else if(url_extension.length == 0)
@@ -200,14 +200,14 @@ else
 		});
 		
 		var fetch = 'edit_id=' + edit_id + '&last_id=' + last_id + '&all_ids=' + all_ids + '&type=<?php echo $_SESSION['admin_table_name']; ?>' + '&fetch_categories=yes'; 
-		$.post("/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/create-hierarchy-urls.php", fetch, function(theResponse)
+		$.post("<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/create-hierarchy-urls.php", fetch, function(theResponse)
 		{
 			//alert(theResponse);
 			$("#display-sub-categories").html(theResponse);
 		}); 
 		
 		var fetch2 = 'last_id=' + last_id + '&all_ids=' + all_ids + '&type=<?php echo $_SESSION['admin_table_name']; ?>' + '&fetch_url=yes'; 
-		$.post("/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/create-hierarchy-urls.php", fetch2, function(theResponse)
+		$.post("<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/create-hierarchy-urls.php", fetch2, function(theResponse)
 		{
 			//alert(theResponse);
 			$("#display-hierarchy-url").html(theResponse);
@@ -215,7 +215,7 @@ else
 			var hierarchyURL = $("#urls_hierarchy_url").val();
 			var hierarchyURLPath = theResponse;
 			var hierarchyURLExtension = $('#display_url_extension').text();
-			var hrefHierarchyURL = '<?php echo $domain; ?>/'+hierarchyURLPath+hierarchyURL+hierarchyURLExtension;
+			var hrefHierarchyURL = '<?php echo $domain.INSTALLATION_URL_PATH; ?>/'+hierarchyURLPath+hierarchyURL+hierarchyURLExtension;
 			$("#href_hierarchy_url").attr('href', hrefHierarchyURL);
 		});
 	});
@@ -283,7 +283,7 @@ else
 			$("#urls_flat_url").val(flatURL);
 			
 			var flatURLExtension = $('#display_flat_url_extension').text();
-			var hrefFlatURL = '<?php echo $domain; ?>/'+flatURL+flatURLExtension;
+			var hrefFlatURL = '<?php echo $domain.INSTALLATION_URL_PATH; ?>/'+flatURL+flatURLExtension;
 			$("#href_flat_url").attr('href', hrefFlatURL);
 		});
 		//End set correct Flat URL name
@@ -299,7 +299,7 @@ else
 			
 			var hierarchyURLPath = $('#display-hierarchy-url').text();
 			var hierarchyURLExtension = $('#display_url_extension').text();
-			var hrefHierarchyURL = '<?php echo $domain; ?>/'+hierarchyURLPath+hierarchyURL+hierarchyURLExtension;
+			var hrefHierarchyURL = '<?php echo $domain.INSTALLATION_URL_PATH; ?>/'+hierarchyURLPath+hierarchyURL+hierarchyURLExtension;
 			$("#href_hierarchy_url").attr('href', hrefHierarchyURL);
 		});
 		//End set correct URL name
@@ -320,13 +320,13 @@ else
 			   
 			   var flatURL = $("#urls_flat_url").val();
 			   var flatURLExtension = $('#display_flat_url_extension').text();
-			   var hrefFlatURL = '<?php echo $domain; ?>/'+flatURL+flatURLExtension;
+			   var hrefFlatURL = '<?php echo $domain.INSTALLATION_URL_PATH; ?>/'+flatURL+flatURLExtension;
 			   $("#href_flat_url").attr('href', hrefFlatURL);
 			   
 			   var hierarchyURL = $("#urls_hierarchy_url").val();
 			   var hierarchyURLPath = $('#display-hierarchy-url').text();
 			   var hierarchyURLExtension = $('#display_url_extension').text();
-			   var hrefHierarchyURL = '<?php echo $domain; ?>/'+hierarchyURLPath+hierarchyURL+hierarchyURLExtension;
+			   var hrefHierarchyURL = '<?php echo $domain.INSTALLATION_URL_PATH; ?>/'+hierarchyURLPath+hierarchyURL+hierarchyURLExtension;
 			   $("#href_hierarchy_url").attr('href', hrefHierarchyURL);
 			}
 			else if(url_extension.length == 0)
@@ -345,7 +345,8 @@ else
 		
 		$('#urls_meta_title').on('input', function() 
 		{
-			var titleName = $("#urls_meta_title").val().toLowerCase().replace(/[^a-z0-9]/g, "-");
+			var titleName = $("#urls_meta_title").val().toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-").replace(/^-+|-+$/g, "");
+			
 			$("#urls_flat_url").val(titleName);
 			$("#display-flat-url").text(titleName);
 			$("#urls_hierarchy_url").val(titleName);

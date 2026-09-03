@@ -94,7 +94,7 @@ else
 							
 							if(!is_numeric($custom_field_content))
 							{
-								$custom_field_content = mediaId($custom_field_content, '', '', '');
+								$custom_field_content = mediaId($custom_field_content, '', '', '', '');
 							}
 						}
 						

@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
@@ -20,14 +21,13 @@ else
 	{
 		header('Cache-Control: no-cache');
 		header('Pragma: no-cache');
-		//header("Content-Security-Policy: default-src 'self' *.googleapis.com *.gstatic.com; script-src 'self'; style-src 'self' 'unsafe-inline' *.googleapis.com *.gstatic.com;");
 	}
 	
-	//If logged in and revisit /$_SESSION['admin_directory']/login.php send to default admin page.
+	//If logged in and revisit INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory']/login.php send to default admin page.
 	$current_url = explode('?', $url);
-	if(isset($_SESSION['user_id']) && $current_url[0] == $domain.'/'.$_SESSION['admin_directory'].'/login.php')
+	if(isset($_SESSION['user_id']) && $current_url[0] == $domain.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/login.php')
 	{
-		header("Location: ".$domain."/".$_SESSION['admin_directory']."/dashboard/"); 
+		header("Location: ".$domain.INSTALLATION_URL_PATH."/".$_SESSION['admin_directory']."/dashboard/"); 
 		exit();
 	}
 	
@@ -58,7 +58,7 @@ else
 			
 			if(empty($row))
 			{
-				$errors['valid_user'] = '<div class="success-blue">Oops! Something doesn\'t look right. Please enter a valid username and password.</div>';
+				$errors['valid_user'] = '<div class="validate-red">Oops! Something doesn\'t look right. Please enter a valid username and password.</div>';
 			}
 			else
 			{ 
@@ -66,7 +66,7 @@ else
 				
 				if($hash_password != $row['password'])
 				{
-					$errors['valid_user'] = '<div class="success-blue">Oops! Something doesn\'t look right. Please enter a valid username and password.</div>';
+					$errors['valid_user'] = '<div class="validate-red">Oops! Something doesn\'t look right. Please enter a valid username and password.</div>';
 				}
 			}
 			
@@ -106,7 +106,7 @@ else
 					{
 						$default_admin_url = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'admin_pages', 'WHERE `id` = ?', [$permissions_admin_pages_ids['default_admin_page']]);
 						
-						$_SESSION['user_admin_permissions_default_url'] = $domain.'/'.$_SESSION['admin_directory'].'/'.$default_admin_url['url'].'/';
+						$_SESSION['user_admin_permissions_default_url'] = $domain.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$default_admin_url['url'].'/';
 					}
 				}
 				
@@ -167,17 +167,17 @@ else
 				}
 				
 				//Take admin user back to same url if they got logged out.
-				if(empty($_SESSION['user_admin_permissions_default_url']) && strpos($_SERVER['REQUEST_URI'], $_SESSION['admin_directory'].'/?') !== false)
+				if(empty($_SESSION['user_admin_permissions_default_url']) && strpos($_SERVER['REQUEST_URI'], INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/?') !== false)
 				{
-					header("Location: ".$_SERVER['REQUEST_SCHEME']."://".$_SERVER['HTTP_HOST'].'/'.$_SESSION['admin_directory'].'/dashboard/');
+					header("Location: ".getRequestScheme().'://'.$_SERVER['HTTP_HOST'].INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/dashboard/');
 				}
-				elseif(!empty($_SESSION['user_admin_permissions_default_url']) && strpos($_SERVER['REQUEST_URI'], $_SESSION['admin_directory'].'/?') !== false)
+				elseif(!empty($_SESSION['user_admin_permissions_default_url']) && strpos($_SERVER['REQUEST_URI'], INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/?') !== false)
 				{
 					header("Location: ".$_SESSION['user_admin_permissions_default_url']);
 				}
 				else
 				{
-					header("Location: ".$_SERVER['REQUEST_SCHEME']."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+					header("Location: ".getRequestScheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 				}
 				exit();
 			}
@@ -253,8 +253,8 @@ else
 		?>
 			<?php if(isset($errors['valid_user'])) { echo $errors['valid_user']; } ?>
 			<?php if(isset($_GET['login']) && $_GET['login'] == 'logout') { echo '<div class="success-blue">You have logged out successfully.</div>'; } ?>
-			<?php if(isset($_GET['login']) && $_GET['login'] == 'login') { echo '<div class="success-blue">Please login.</div>'; } ?>
-			<?php if(isset($_GET['signup']) && $_GET['signup'] == 'success') { echo '<div class="success-blue">Your account has been created successfully.</div>'; } ?>
+			<?php if(isset($_GET['signup']) && $_GET['signup'] == 'success') { echo '<div class="success-blue">Your account has been created successfully.</div>'; }
+			elseif(isset($_GET['login']) && $_GET['login'] == 'login') { echo '<div class="success-blue">Please login.</div>'; } ?>
 			<?php if(isset($_GET['password-updated']) && $_GET['password-updated'] == 'success') { echo '<div class="success-blue">Your password has been reset successfully.</div>'; } ?>
 			<?php if(isset($_GET['recovery']) && $_GET['recovery'] == 'success') { echo '<div class="success-blue">Please check your email for a reset password link.</div>'; } ?>
 			<form method="POST">
@@ -269,7 +269,7 @@ else
 			  <div class="button">
 				<button name="submit" type="submit" class="button">Login</button>
 			  </div>
-			  <div class="recover"><a href="<?php echo '/'.$_SESSION['admin_directory'].'/' ?>recover-login.php">Recover Login</a></div>
+			  <div class="recover"><a href="<?php echo INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/' ?>recover-login.php">Recover Login</a></div>
 			</form>
 		<?php
 		}

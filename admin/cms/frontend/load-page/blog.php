@@ -108,7 +108,7 @@ else
 							if(!empty($sql_author_bio_row['author_photo']))
 							{
 								$author_bio_data = explode('~||~', $sql_author_bio_row['author_photo']);
-								$author_bio = array('author_bio' => $sql_author_bio_row + array('author_page_url' => $author_page_url) + array('author_photo_url' => $author_photo_url) + array('author_media' => mediaId($author_bio_data[0], 'No', 'Yes', $author_bio_data[1])));
+								$author_bio = array('author_bio' => $sql_author_bio_row + array('author_page_url' => $author_page_url) + array('author_photo_url' => $author_photo_url) + array('author_media' => mediaId($author_bio_data[0], 'No', 'Yes', '', $author_bio_data[1])));
 							}
 							else
 							{
@@ -181,14 +181,14 @@ else
 							foreach($media_items as $media_item)
 							{
 								$media_array = explode('~||~', $media_item);
-								$first_media_assigned[] = mediaId($media_array[0], $lazy_load_item, $fetch_priority_sub_products, $media_array[1]);
+								$first_media_assigned[] = mediaId($media_array[0], $lazy_load_item, $fetch_priority_sub_products, '', $media_array[1]);
 								break; //break to only get the first media.
 							}
 						}
 						else
 						{
 							$media_array = explode('~||~', $blog_post['media']);
-							$first_media_assigned[] = mediaId($media_array[0], $lazy_load_item, $fetch_priority_sub_products, $media_array[1]);
+							$first_media_assigned[] = mediaId($media_array[0], $lazy_load_item, $fetch_priority_sub_products, '', $media_array[1]);
 						}
 					}
 					

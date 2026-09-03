@@ -385,21 +385,21 @@ else
 									$abandonment_cart_leads_data = 0;
 									if(!empty($analytics['abandonment_cart_leads']) && isset($_GET['source']))
 									{
-										$abandonment_cart_leads_data = '<a href="/'.$_SESSION['admin_directory'].'/customers/abandonment-cart-leads/?'.$search_date_range.'textfield-referer-source='.$source.'&dropdown-contact-info-available=Yes">'.$analytics['abandonment_cart_leads'].'</a>';
+										$abandonment_cart_leads_data = '<a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/customers/abandonment-cart-leads/?'.$search_date_range.'textfield-referer-source='.$source.'&dropdown-contact-info-available=Yes">'.$analytics['abandonment_cart_leads'].'</a>';
 									}
 									elseif(!empty($analytics['abandonment_cart_leads']))
 									{
-										$abandonment_cart_leads_data = '<a href="/'.$_SESSION['admin_directory'].'/customers/abandonment-cart-leads/?'.$search_date_range.'dropdown-contact-info-available=Yes">'.$analytics['abandonment_cart_leads'].'</a>';
+										$abandonment_cart_leads_data = '<a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/customers/abandonment-cart-leads/?'.$search_date_range.'dropdown-contact-info-available=Yes">'.$analytics['abandonment_cart_leads'].'</a>';
 									}
 									
 									$form_conversions_data = 0;
 									if(!empty($analytics['form_conversions']) && isset($_GET['source']))
 									{
-										$form_conversions_data = '<a href="/'.$_SESSION['admin_directory'].'/customers/leads/?'.$search_date_range.'textfield-referer-source='.$source.'">'.$analytics['form_conversions'].'</a>';
+										$form_conversions_data = '<a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/customers/leads/?'.$search_date_range.'textfield-referer-source='.$source.'">'.$analytics['form_conversions'].'</a>';
 									}
 									elseif(!empty($analytics['form_conversions']))
 									{
-										$form_conversions_data = '<a href="/'.$_SESSION['admin_directory'].'/customers/leads/?'.trim($search_date_range ?? '', '&').'">'.$analytics['form_conversions'].'</a>';
+										$form_conversions_data = '<a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/customers/leads/?'.trim($search_date_range ?? '', '&').'">'.$analytics['form_conversions'].'</a>';
 									}
 								?>
 									<ul class="table-row-results">
@@ -525,8 +525,8 @@ else
 						<ul class="table-row-results total-results">
 							<li class="table-cell-results table-edit">Totals</li>
 							<?php if(isset($_GET['source'])) { echo '<li class="table-cell-results table-edit"></li>'; } ?>
-							<li class="table-cell-results table-edit"><a href="<?php echo '/'.$_SESSION['admin_directory'].'/analytics/unique-visitors/?from_date='.$from_date_date_only.'&to_date='.$to_date_date_only; ?>"><?php echo number_format($total_unique_visitors); ?></a></li>
-							<li class="table-cell-results table-edit"><a href="<?php echo '/'.$_SESSION['admin_directory'].'/analytics/pageviews/?from_date='.$from_date_date_only.'&to_date='.$to_date_date_only; ?>"><?php echo number_format($total_pageviews); ?></a></li>
+							<li class="table-cell-results table-edit"><a href="<?php echo INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/analytics/unique-visitors/?from_date='.$from_date_date_only.'&to_date='.$to_date_date_only; ?>"><?php echo number_format($total_unique_visitors); ?></a></li>
+							<li class="table-cell-results table-edit"><a href="<?php echo INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/analytics/pageviews/?from_date='.$from_date_date_only.'&to_date='.$to_date_date_only; ?>"><?php echo number_format($total_pageviews); ?></a></li>
                             <?php if($commerce_installed) { ?>
 							<li class="table-cell-results table-edit"><?php echo number_format($total_orders); ?></li>
 							<li class="table-cell-results table-edit"><?php echo number_format($total_conversion_rate, '2'); ?>%</li>
@@ -558,7 +558,7 @@ else
 		?>
 		<li class="boxes">
 			<div class="bashboard-box">
-				<div class="headline"><a href="/<?php echo $_SESSION['admin_directory']; ?>/website/interactions/posts-comments/">Pending Blog Post Comments</a></div>
+				<div class="headline"><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/website/interactions/posts-comments/">Pending Blog Post Comments</a></div>
 				<div class="box">
 				<?php 
 				if(!empty($sql_pending_posts_comments))
@@ -569,7 +569,7 @@ else
 						$posts_comments_conversion_rate = ($sql_pending_posts_comments / $total_unique_visitors) * 100;
 					}
 					
-					echo 'Pending Post Comments: <a href="/'.$_SESSION['admin_directory'].'/website/interactions/posts-comments/?dropdown-status=2&textfield-created-date-start-range='.$from_date_date_only.'&textfield-created-date-end-range='.$to_date_date_only.'">'.$sql_pending_posts_comments.'</a><br>';
+					echo 'Pending Post Comments: <a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/interactions/posts-comments/?dropdown-status=2&textfield-created-date-start-range='.$from_date_date_only.'&textfield-created-date-end-range='.$to_date_date_only.'">'.$sql_pending_posts_comments.'</a><br>';
 					echo 'Conversion Rate: '.number_format($posts_comments_conversion_rate, '2').'%';
 				}
 				else
@@ -591,7 +591,7 @@ else
 		?>
 		<li class="boxes">
 			<div class="bashboard-box">
-				<div class="headline"><a href="/<?php echo $_SESSION['admin_directory']; ?>/website/interactions/reviews/">Pending Product Reviews</a></div>
+				<div class="headline"><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/website/interactions/reviews/">Pending Product Reviews</a></div>
 				<div class="box">
 				<?php 
 				if(!empty($sql_pending_reviews))
@@ -602,7 +602,7 @@ else
 						$reviews_conversion_rate = ($sql_pending_reviews / $total_unique_visitors) * 100;
 					}
 					
-					echo 'Pending Reviews: <a href="/'.$_SESSION['admin_directory'].'/website/interactions/reviews/?dropdown-status=2&textfield-created-date-start-range='.$from_date_date_only.'&textfield-created-date-end-range='.$to_date_date_only.'">'.$sql_pending_reviews.'</a><br>';
+					echo 'Pending Reviews: <a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/interactions/reviews/?dropdown-status=2&textfield-created-date-start-range='.$from_date_date_only.'&textfield-created-date-end-range='.$to_date_date_only.'">'.$sql_pending_reviews.'</a><br>';
 					echo 'Conversion Rate: '.number_format($reviews_conversion_rate, '2').'%';
 				}
 				else
@@ -624,7 +624,7 @@ else
 		?>
 		<li class="boxes">
 			<div class="bashboard-box">
-				<div class="headline"><a href="/<?php echo $_SESSION['admin_directory']; ?>/website/interactions/questions-and-answers/">Pending Product Questions</a></div>
+				<div class="headline"><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/website/interactions/questions-and-answers/">Pending Product Questions</a></div>
 				<div class="box">
 				<?php 
 				if(!empty($sql_pending_q_and_a))
@@ -635,7 +635,7 @@ else
 						$q_and_a_conversion_rate = ($sql_pending_q_and_a / $total_unique_visitors) * 100;
 					}
 					
-					echo 'Pending Q & A: <a href="/'.$_SESSION['admin_directory'].'/website/interactions/questions-and-answers/?dropdown-status=2&textfield-created-date-start-range='.$from_date_date_only.'&textfield-created-date-end-range='.$to_date_date_only.'">'.$sql_pending_q_and_a.'</a><br>';
+					echo 'Pending Q & A: <a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/interactions/questions-and-answers/?dropdown-status=2&textfield-created-date-start-range='.$from_date_date_only.'&textfield-created-date-end-range='.$to_date_date_only.'">'.$sql_pending_q_and_a.'</a><br>';
 					echo 'Conversion Rate: '.number_format($q_and_a_conversion_rate, '2').'%';
 				}
 				else
@@ -656,12 +656,12 @@ else
 		?>
         <li class="boxes">
 			<div class="bashboard-box">
-				<div class="headline"><a href="/<?php echo $_SESSION['admin_directory']; ?>/marketing/affiliates/">Pending Affiliate Applications</a></div>
+				<div class="headline"><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/marketing/affiliates/">Pending Affiliate Applications</a></div>
 				<div class="box">
 				<?php 
 				if(!empty($sql_pending_affiliate_applications))
 				{
-					echo 'Pending Affiliate Applications: <a href="/'.$_SESSION['admin_directory'].'/marketing/affiliates/?dropdown-status=2">'.$sql_pending_affiliate_applications.'</a>';
+					echo 'Pending Affiliate Applications: <a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/marketing/affiliates/?dropdown-status=2">'.$sql_pending_affiliate_applications.'</a>';
 				}
 				else
 				{
@@ -682,7 +682,7 @@ else
 		?>
 		<li class="boxes">
 			<div class="bashboard-box">
-				<div class="headline"><a href="/<?php echo $_SESSION['admin_directory']; ?>/customers/leads/">Forms Submissions / Leads</a></div>
+				<div class="headline"><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/customers/leads/">Forms Submissions / Leads</a></div>
 				<div class="box">
 				<?php 
 				if(!empty($sql_form_leads))
@@ -693,7 +693,7 @@ else
 						$lead_conversion_rate = ($sql_form_leads / $total_unique_visitors) * 100;
 					}
 					
-					echo 'Total Form Submissions: <a href="/'.$_SESSION['admin_directory'].'/customers/leads/?textfield-created-date-start-range='.$from_date_date_only.'&textfield-created-date-end-range='.$to_date_date_only.'">'.$sql_form_leads.'</a><br>';
+					echo 'Total Form Submissions: <a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/customers/leads/?textfield-created-date-start-range='.$from_date_date_only.'&textfield-created-date-end-range='.$to_date_date_only.'">'.$sql_form_leads.'</a><br>';
 					echo 'Conversion Rate: '.number_format($lead_conversion_rate, '2').'%';
 				}
 				else
@@ -726,14 +726,14 @@ else
 		?>
 		<li class="boxes">
 			<div class="bashboard-box">
-				<div class="headline"><a href="/<?php echo $_SESSION['admin_directory']; ?>/purchasing/inventory/?total-qty-available=ascend&textfield-has-dropship-center=No">Lowest Inventory Available with No Dropship Center</a></div>
+				<div class="headline"><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/purchasing/inventory/?total-qty-available=ascend&textfield-has-dropship-center=No">Lowest Inventory Available with No Dropship Center</a></div>
 				<div class="box">
 				<?php 
 				if(!empty($sql_lowest_inventory))
 				{
 					foreach($sql_lowest_inventory as $lowest_inventory)
 					{
-						echo 'Qty Available: '.$lowest_inventory['total_qty_available'].' - <a href="/'.$_SESSION['admin_directory'].'/purchasing/inventory/edit/?rid='.$lowest_inventory['id'].'">'.$lowest_inventory['name'].'</a><br>';
+						echo 'Qty Available: '.$lowest_inventory['total_qty_available'].' - <a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/purchasing/inventory/edit/?rid='.$lowest_inventory['id'].'">'.$lowest_inventory['name'].'</a><br>';
 					}
 				}
 				else
@@ -753,14 +753,14 @@ else
 		?>
 		<li class="boxes">
 			<div class="bashboard-box">
-				<div class="headline"><a href="/<?php echo $_SESSION['admin_directory']; ?>/website/interactions/site-searches/?total-searches=descend">Top Site Searches</a></div>
+				<div class="headline"><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/website/interactions/site-searches/?total-searches=descend">Top Site Searches</a></div>
 				<div class="box">
 				<?php 
 				if(!empty($sql_top_site_searches))
 				{
 					foreach($sql_top_site_searches as $top_site_searches)
 					{
-						echo 'Searches: <a href="/'.$_SESSION['admin_directory'].'/website/interactions/site-searches/?textfield-keyword='.$top_site_searches['keyword'].'&textfield-created-date-start-range='.$from_date_date_only.'&textfield-created-date-end-range='.$to_date_date_only.'">'.$top_site_searches['total_searches'].'</a> - <a href="'.$view_frontend_of_site.'/search/?search='.$top_site_searches['keyword'].'" target="_blank">'.$top_site_searches['keyword'].'</a><br>';
+						echo 'Searches: <a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/interactions/site-searches/?textfield-keyword='.$top_site_searches['keyword'].'&textfield-created-date-start-range='.$from_date_date_only.'&textfield-created-date-end-range='.$to_date_date_only.'">'.$top_site_searches['total_searches'].'</a> - <a href="'.$view_frontend_of_site.INSTALLATION_URL_PATH.'/search/?search='.$top_site_searches['keyword'].'" target="_blank">'.$top_site_searches['keyword'].'</a><br>';
 					}
 				}
 				else
@@ -780,14 +780,14 @@ else
 		?>
         <li class="boxes">
 			<div class="bashboard-box">
-				<div class="headline"><a href="/<?php echo $_SESSION['admin_directory']; ?>/website/404-urls/?total-404s=descend">Top 404 Errors</a></div>
+				<div class="headline"><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/website/404-urls/?total-404s=descend">Top 404 Errors</a></div>
 				<div class="box">
 				<?php 
 				if(!empty($sql_top_404_errors))
 				{
 					foreach($sql_top_404_errors as $top_404_errors)
 					{
-						echo 'Total: <a href="/'.$_SESSION['admin_directory'].'/website/404-urls/?textfield-url-404='.$top_404_errors['url_404'].'&textfield-created-date-start-range='.$from_date_date_only.'&textfield-created-date-end-range='.$to_date_date_only.'">'.$top_404_errors['total_404s'].'</a> - <a href="'.$top_404_errors['url_404'].'" target="_blank">'.$top_404_errors['url_404'].'</a><br>';
+						echo 'Total: <a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/404-urls/?textfield-url-404='.$top_404_errors['url_404'].'&textfield-created-date-start-range='.$from_date_date_only.'&textfield-created-date-end-range='.$to_date_date_only.'">'.$top_404_errors['total_404s'].'</a> - <a href="'.$top_404_errors['url_404'].'" target="_blank">'.$top_404_errors['url_404'].'</a><br>';
 					}
 				}
 				else
@@ -812,7 +812,7 @@ else
 		?>
 		<li class="boxes">
 			<div class="bashboard-box">
-				<div class="headline"><a href="/<?php echo $_SESSION['admin_directory']; ?>/marketing/shopping-feeds/">Shopping Feeds</a></div>
+				<div class="headline"><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/marketing/shopping-feeds/">Shopping Feeds</a></div>
 				<div class="box">
 				<?php 
 				$has_results = 'No';
@@ -850,7 +850,7 @@ else
 		?>
         <li class="boxes">
 			<div class="bashboard-box">
-				<div class="headline"><a href="/<?php echo $_SESSION['admin_directory']; ?>/security/site-security/">Top IPs Hitting The Site - Last 24 Hours</a></div>
+				<div class="headline"><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/security/site-security/">Top IPs Hitting The Site - Last 24 Hours</a></div>
 				<div class="box">
 				<?php 
 				if(!empty($sql_top_ip_hits))
@@ -878,14 +878,14 @@ else
 		?>
 		<li class="boxes">
 			<div class="bashboard-box">
-				<div class="headline"><a href="/<?php echo $_SESSION['admin_directory']; ?>/security/declined-card-attempts/">Top IPs with Declined Card Attempts - Last 24 Hours</a></div>
+				<div class="headline"><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/security/declined-card-attempts/">Top IPs with Declined Card Attempts - Last 24 Hours</a></div>
 				<div class="box">
 				<?php 
 				if(!empty($sql_top_ip_with_declined_card_attempts))
 				{
 					foreach($sql_top_ip_with_declined_card_attempts as $declined_card_attempts)
 					{
-						echo 'Declined Card Attempts: '.$declined_card_attempts['counter'].' - IP: <a href="/'.$_SESSION['admin_directory'].'/security/declined-card-attempts/?textfield-ip-address='.$declined_card_attempts['ip_address'].'">'.$declined_card_attempts['ip_address'].'</a><br>';
+						echo 'Declined Card Attempts: '.$declined_card_attempts['counter'].' - IP: <a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/security/declined-card-attempts/?textfield-ip-address='.$declined_card_attempts['ip_address'].'">'.$declined_card_attempts['ip_address'].'</a><br>';
 					}
 				}
 				else
@@ -905,14 +905,14 @@ else
 		?>
         <li class="boxes">
 			<div class="bashboard-box">
-				<div class="headline"><a href="/<?php echo $_SESSION['admin_directory']; ?>/security/failed-logins/">Top IPs with Failed Login Attempts - Last Hour</a></div>
+				<div class="headline"><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/security/failed-logins/">Top IPs with Failed Login Attempts - Last Hour</a></div>
 				<div class="box">
 				<?php 
 				if(!empty($sql_top_ip_with_failed_login_attempts))
 				{
 					foreach($sql_top_ip_with_failed_login_attempts as $failed_login_attempts)
 					{
-						echo 'Failed Login Attempts: '.$failed_login_attempts['counter'].' - IP: <a href="/'.$_SESSION['admin_directory'].'/security/failed-logins/?textfield-ip-address='.$failed_login_attempts['ip_address'].'">'.$failed_login_attempts['ip_address'].'</a><br>';
+						echo 'Failed Login Attempts: '.$failed_login_attempts['counter'].' - IP: <a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/security/failed-logins/?textfield-ip-address='.$failed_login_attempts['ip_address'].'">'.$failed_login_attempts['ip_address'].'</a><br>';
 					}
 				}
 				else

@@ -9,16 +9,16 @@ if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/functions/assignments-insert-
 }
 else
 {
-	//When you add or edit sub items this is used. It creates the data to INSERT it into the assignments_sub_items tables. This is used on sub-items url like this: website/categories/sub-items
+	//When you add or edit sub items this is used. It creates the data to INSERT it into the assignments_design_blocks tables. This is used on design-blocks url like this: website/categories/design-blocks
 	if(!function_exists('assignmentsInsertRecord'))
 	{
 		function assignmentsInsertRecord($table_name, $post_group_id, $parent_id, $insert_items)
 		{
 			//Get next sort number.
-			$sql_get_page_groups_row = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '*', $table_name, 'WHERE `pages_groups_id` = ? AND `parent_id` = ? ORDER BY `sort` DESC LIMIT 1', [$post_group_id, $parent_id]);
-			if(!empty($sql_get_page_groups_row['sort']))	
+			$sql_get_design_blocks_row = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '*', $table_name, 'WHERE `design_blocks_id` = ? AND `parent_id` = ? ORDER BY `sort` DESC LIMIT 1', [$post_group_id, $parent_id]);
+			if(!empty($sql_get_design_blocks_row['sort']))	
 			{
-				$order_counter = $sql_get_page_groups_row['sort'] + 1;
+				$order_counter = $sql_get_design_blocks_row['sort'] + 1;
 			}
 			else
 			{
@@ -82,7 +82,7 @@ else
 					$inventory_status = NULL;
 					$inventory_assigned_to_product_status = 1;
 					$type = $insert_item['item_type'];
-					$pages_groups_id = $post_group_id;
+					$design_blocks_id = $post_group_id;
 					$inventory_attribute_value_ids = '';
 					$sub_products_ids = '';
 					$product_price = NULL;
@@ -450,7 +450,7 @@ else
 						}
 					}
 					
-					$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, $table_name, '`site_id`, `status`, `item_status`, `inventory_status`, `inventory_assigned_to_product_status`, `parent_id_table_name`, `child_id_table_name`, `type`, `pages_groups_id`, `parent_id`, `child_id`, `inventory_attribute_value_ids`, `sub_products_ids`, `product_price`, `product_sale_price`, `product_sale_price_from`, `product_sale_price_to`, `product_review_score`, `inventory_id`, `inventory_price`, `inventory_sale_price`, `inventory_sale_price_from`, `inventory_sale_price_to`, `inventory_url`, `media_id`, `media_tag`, `inventory_track_quantity`, `inventory_quantity_available`, `inventory_allow_backorders`, `inventory_ships_within`, `sort`, `updated_date`', "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?", [$_SESSION["site_set_for_editing"], $status, $record_data['url_status'], $inventory_status, $inventory_assigned_to_product_status, $_SESSION['admin_table_name'], $insert_item['table_name'], $type, $pages_groups_id, $parent_id, $insert_item["item_id"], $inventory_attribute_value_ids, $sub_products_ids, $product_price, $product_sale_price, $product_sale_price_from, $product_sale_price_to, $product_review_score, $inventory_id, $inventory_price, $inventory_sale_price, $inventory_sale_price_from, $inventory_sale_price_to, $inventory_url, $first_media_id, $first_media_tag, $inventory_track_quantity, $inventory_quantity_available, $inventory_allow_backorders, $inventory_ships_within, $order_counter, $updated_date]);
+					$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, $table_name, '`site_id`, `status`, `item_status`, `inventory_status`, `inventory_assigned_to_product_status`, `parent_id_table_name`, `child_id_table_name`, `type`, `design_blocks_id`, `parent_id`, `child_id`, `inventory_attribute_value_ids`, `sub_products_ids`, `product_price`, `product_sale_price`, `product_sale_price_from`, `product_sale_price_to`, `product_review_score`, `inventory_id`, `inventory_price`, `inventory_sale_price`, `inventory_sale_price_from`, `inventory_sale_price_to`, `inventory_url`, `media_id`, `media_tag`, `inventory_track_quantity`, `inventory_quantity_available`, `inventory_allow_backorders`, `inventory_ships_within`, `sort`, `updated_date`', "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?", [$_SESSION["site_set_for_editing"], $status, $record_data['url_status'], $inventory_status, $inventory_assigned_to_product_status, $_SESSION['admin_table_name'], $insert_item['table_name'], $type, $design_blocks_id, $parent_id, $insert_item["item_id"], $inventory_attribute_value_ids, $sub_products_ids, $product_price, $product_sale_price, $product_sale_price_from, $product_sale_price_to, $product_review_score, $inventory_id, $inventory_price, $inventory_sale_price, $inventory_sale_price_from, $inventory_sale_price_to, $inventory_url, $first_media_id, $first_media_tag, $inventory_track_quantity, $inventory_quantity_available, $inventory_allow_backorders, $inventory_ships_within, $order_counter, $updated_date]);
 					
 					$order_counter = $order_counter + 1;
 				}

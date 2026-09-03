@@ -29,7 +29,7 @@ else
 		//Delete conflicting url redirects
 		if(isset($_POST['cancel'])) 
 		{
-			header("Location: /".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&redirects=canceled");
+			header("Location: ".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&redirects=canceled");
 			exit();
 		}
 		
@@ -41,7 +41,7 @@ else
 				$results->getDeleteRecord(__LINE__, __FILE__, 'redirects', 'WHERE `site_id` = ? AND `old_url` = ?', [$_SESSION["site_set_for_editing"], $conflicting_redirect]);
 			}
 			
-			header("Location: /".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&redirects=deleted");
+			header("Location: ".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&redirects=deleted");
 			exit();
 		}
 		
@@ -108,15 +108,15 @@ else
 				{
 					if($insert_redirects["url_type"] == $url_structure_set && $insert_redirects["redirect_type"] != "404")	
 					{
-						$results->getInsertRecord(__LINE__, __FILE__, 'redirects', '`site_id`, `status`, `redirect_type`, `old_url`, `new_url`, `custom_fields`, `updated_by`, `updated_date`, `created_by`, `created_date`', '?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP()', [$_SESSION["site_set_for_editing"], '1', $insert_redirects["redirect_type"], $insert_redirects["old_url"], $insert_redirects["new_url"], '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+						$results->getInsertRecord(__LINE__, __FILE__, 'redirects', '`site_id`, `status`, `redirect_type`, `old_url`, `new_url`, `custom_fields`, `updated_by`, `updated_date`, `created_by`, `created_date`', '?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP()', [$_SESSION["site_set_for_editing"], '1', $insert_redirects["redirect_type"], $insert_redirects["old_url"], $insert_redirects["new_url"], '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 					}
 				}
 				
-				header("Location: /".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&redirects=updated-created");
+				header("Location: ".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&redirects=updated-created");
 				exit();	
 			}
 			
-			header("Location: /".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&redirects=updated");
+			header("Location: ".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&redirects=updated");
 			exit();	
 		}
 	}

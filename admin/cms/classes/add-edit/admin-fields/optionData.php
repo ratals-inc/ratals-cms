@@ -53,7 +53,7 @@ else
 							
 							echo '
 							<div class="edit options-data-bottom '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-							<div class="edit-label">Label</div>
+							<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
 							<div class="edit-field">
 							<input type="text" name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']['.$site_settings_language['site_language'].'][label]' ?? '').'" value="'.htmlspecialchars($admin_field_data_label ?? '').'" id="'.htmlspecialchars($table_name.'_'.$admin_field["column_name"] ?? '').'">
 							<div class="small-text">'.$admin_field["notes"].'</div>
@@ -69,7 +69,7 @@ else
 								<div class="edit-field text">
 								'.htmlspecialchars($admin_field_data_value ?? '').'
 								<input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']['.$site_settings_language['site_language'].'][value]' ?? '').'" type="hidden" value="'.htmlspecialchars($admin_field_data_value ?? '').'">
-								<div class="small-text">'.$admin_field["notes"].'</div>
+								<div class="small-text">The URL value used to identify this option in URLs. This cannot be changed after the option is created.</div>
 								</div>';
 								if(isset($errors[$table_name][$admin_field["column_name"]][$site_settings_language['site_language']]['value'])) { echo '<div class="validation">'.htmlspecialchars($errors[$table_name][$admin_field["column_name"]][$site_settings_language['site_language']]['value'] ?? '').'</div>'; }
 								echo '</div>';
@@ -81,7 +81,7 @@ else
 								<div class="edit-label">URL Value</div>
 								<div class="edit-field">
 								<input type="text" name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']['.$site_settings_language['site_language'].'][value]' ?? '').'" value="'.htmlspecialchars($admin_field_data_value ?? '').'" id="'.htmlspecialchars($table_name.'_'.$admin_field["column_name"] ?? '').'">
-								<div class="small-text">'.$admin_field["notes"].'</div>
+								<div class="small-text">Enter the URL value used to identify this option in URLs. Use only lowercase letters, numbers, and dashes. Example: option-value</div>
 								</div>';
 								if(isset($errors[$table_name][$admin_field["column_name"]][$site_settings_language['site_language']]['value'])) { echo '<div class="validation">'.htmlspecialchars($errors[$table_name][$admin_field["column_name"]][$site_settings_language['site_language']]['value'] ?? '').'</div>'; }
 								echo '</div>';

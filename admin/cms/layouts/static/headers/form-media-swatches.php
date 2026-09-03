@@ -211,7 +211,7 @@ else
 				clearAllSiteCache();
 			}
 			
-			header("Location: /".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&updated=success"); exit();
+			header("Location: ".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&updated=success"); exit();
 		}
 	}
 }

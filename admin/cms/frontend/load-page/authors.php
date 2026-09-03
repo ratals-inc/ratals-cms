@@ -37,7 +37,7 @@ else
 				if(!empty($sql_author_bio_row['author_photo']))
 				{
 					$author_bio_data = explode('~||~', $sql_author_bio_row['author_photo']);
-					$pages_data['author_bio'] = $sql_author_bio_row + array('author_page_url' => $author_page_url) + array('author_photo_url' => $author_photo_url) + array('author_media' => mediaId($author_bio_data[0], 'No', 'Yes', $author_bio_data[1]));
+					$pages_data['author_bio'] = $sql_author_bio_row + array('author_page_url' => $author_page_url) + array('author_photo_url' => $author_photo_url) + array('author_media' => mediaId($author_bio_data[0], 'No', 'Yes', '', $author_bio_data[1]));
 				}
 				else
 				{

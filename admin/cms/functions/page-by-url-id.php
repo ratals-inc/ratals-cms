@@ -36,11 +36,11 @@ else
 						
 						if($url_structure == 'Hierarchy')
 						{
-						   $url = $domain."/".$url_row['hierarchy_url'].$url_end_url_with; 
+						   $url = $domain.INSTALLATION_URL_PATH."/".$url_row['hierarchy_url'].$url_end_url_with; 
 						}
 						elseif($url_structure == 'Flat')
 						{
-						   $url = $domain."/".$url_row['flat_url'].$url_end_url_with; 
+						   $url = $domain.INSTALLATION_URL_PATH."/".$url_row['flat_url'].$url_end_url_with; 
 						}
 					}
 					else
@@ -50,7 +50,7 @@ else
 					
 					if($home_page == $url_row['id'] && empty($url_row['custom_link']))
 					{
-					   $url = $domain."/";
+					   $url = $domain.INSTALLATION_URL_PATH."/";
 					}
 					else
 					{

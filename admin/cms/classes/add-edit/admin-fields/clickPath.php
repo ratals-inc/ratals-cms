@@ -15,10 +15,16 @@ else
 		{
 			public function clickPathAeaf($table_name, $admin_field, $field_value, &$errors, &$post_values)
 			{
+				$field_required = '';
+				if($admin_field["required"] == 'Yes')
+				{
+					$field_required = ' <span class="required-asterisk">*</span>';
+				}
+				
 				$field_value_array = explode(',', $field_value);
 				echo '
 				<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 				<div class="edit-field text">';
 				echo '<ol>';
 				foreach($field_value_array as $field_value_data)

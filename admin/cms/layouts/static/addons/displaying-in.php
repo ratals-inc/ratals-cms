@@ -43,7 +43,7 @@ else
 				{
 					$assignment_table = 1;
 				}
-				elseif($assignments_row['assignment_table_name'] == 'sub_items')
+				elseif($assignments_row['assignment_table_name'] == 'design_blocks')
 				{
 					$assignment_table = 2;
 				}
@@ -68,17 +68,17 @@ else
 				$admin_edit_page = 'Can\'t find admin edit URL.';
 				if(isset($admin_edit_url['url']))
 				{
-					$admin_edit_page = '<a href="/'.$_SESSION['admin_directory'].'/'.$admin_edit_url['url'].'/?rid='.$assignments_row['parent_id'].'" target="_blank">'.$assignments_row['parent_id'].'</a>';
+					$admin_edit_page = '<a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$admin_edit_url['url'].'/?rid='.$assignments_row['parent_id'].'" target="_blank">'.$assignments_row['parent_id'].'</a>';
 				}
 				
 				$edit_inventory = '';
-				if($assignments_row["type"] == 'inventory') { $edit_inventory = ' - ID: <a href="/'.$_SESSION['admin_directory'].'/purchasing/inventory/edit/?rid='.$assignments_row['inventory_id'].'" target="_blank">'.$assignments_row['inventory_id'].'</a>'; }
+				if($assignments_row["type"] == 'inventory') { $edit_inventory = ' - ID: <a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/purchasing/inventory/edit/?rid='.$assignments_row['inventory_id'].'" target="_blank">'.$assignments_row['inventory_id'].'</a>'; }
 			
 				if(empty($get_url_data["custom_link"])) 
 				{
 					if(!empty($get_url_data["url_extension"])) { $end_url_with = $get_url_data["url_extension"]; } else { $end_url_with = $sites["global_url_extension"]; }
-					if($sites["url_structure"] == 'Hierarchy') { $final_url = $domain."/".$get_url_data["hierarchy_url"].$end_url_with; } 
-					elseif($sites["url_structure"] == 'Flat') { $final_url = $domain."/".$get_url_data["flat_url"].$end_url_with; }
+					if($sites["url_structure"] == 'Hierarchy') { $final_url = $domain.INSTALLATION_URL_PATH."/".$get_url_data["hierarchy_url"].$end_url_with; } 
+					elseif($sites["url_structure"] == 'Flat') { $final_url = $domain.INSTALLATION_URL_PATH."/".$get_url_data["flat_url"].$end_url_with; }
 				}
 				else
 				{
@@ -87,7 +87,7 @@ else
 				
 				if($home_page == $get_url_data["id"] && empty($get_url_data["custom_link"]))
 				{
-					$final_url = $domain."/";
+					$final_url = $domain.INSTALLATION_URL_PATH."/";
 				}
 				
 				$displaying_as_type = $assignments_row['type'];
@@ -95,7 +95,7 @@ else
 				{
 					$displaying_as_type = 'Product List';
 				}
-				elseif($assignments_row['assignment_table_name'] == 'sub_items')
+				elseif($assignments_row['assignment_table_name'] == 'design_blocks')
 				{
 					$displaying_as_type = 'Sub Item';
 				}

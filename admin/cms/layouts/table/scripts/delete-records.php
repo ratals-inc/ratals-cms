@@ -32,19 +32,19 @@ elseif(!empty($_SESSION['admin_js_name']))
 				$ajax_url_request = ''; 
 				if(file_exists(INSTALLATION_ROOT.'/admin/cms/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php')) 
 				{
-					$ajax_url_request = '/'.$_SESSION['admin_directory'].'/cms/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php';
+					$ajax_url_request = INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/cms/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php';
 				}
 				elseif(file_exists(INSTALLATION_ROOT.'/admin/commerce/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php')) 
 				{
-					$ajax_url_request = '/'.$_SESSION['admin_directory'].'/commerce/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php';
+					$ajax_url_request = INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/commerce/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php';
 				}
 				elseif(file_exists(INSTALLATION_ROOT.'/admin/erp/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php')) 
 				{
-					$ajax_url_request = '/'.$_SESSION['admin_directory'].'/erp/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php';
+					$ajax_url_request = INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/erp/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php';
 				}
 				elseif(file_exists(INSTALLATION_ROOT.'/admin/ai/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php')) 
 				{
-					$ajax_url_request = '/'.$_SESSION['admin_directory'].'/ai/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php';
+					$ajax_url_request = INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/ai/layouts/table/ajax/'.$_SESSION['admin_js_name'].'.php';
 				}
 				?>
 				<?php if(!empty($ajax_url_request)) { ?>

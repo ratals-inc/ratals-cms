@@ -32,7 +32,7 @@ else
 				elseif($key_2 == 'updated_by' || $key_2 == 'created_by')
 				{
 					$column_placeholders .= '?,';
-					$column_value[] = $_SESSION['user_first_last_name'];
+					$column_value[] = $_SESSION['user_username'];
 				}
 				elseif($key_2 == 'site_id')
 				{
@@ -205,15 +205,15 @@ else
 		
 		if(!empty($row['save_url']) && !empty(trim($_GET["rid"] ?? '')) && !empty(trim($_GET["sub-rid"] ?? '')))
 		{
-			header("Location: /".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&sub-rid=".trim($_GET["sub-rid"] ?? '')."&created=success"); exit();
+			header("Location: ".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&sub-rid=".trim($_GET["sub-rid"] ?? '')."&created=success"); exit();
 		}
 		elseif(!empty($row['save_url']) && !empty(trim($_GET["rid"] ?? '')) && empty(trim($_GET["sub-rid"] ?? '')))
 		{
-			header("Location: /".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&created=success"); exit();
+			header("Location: ".$_SESSION['admin_save_url']."/?rid=".trim($_GET["rid"] ?? '')."&created=success"); exit();
 		}
 		elseif(!empty($row['save_url']))
 		{
-			header("Location: /".$_SESSION['admin_save_url']."/?created=success"); exit();
+			header("Location: ".$_SESSION['admin_save_url']."/?created=success"); exit();
 		}
 	}
 }

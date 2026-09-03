@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -33,7 +34,7 @@ else
 				$sql_sub_item_count = $results->getSelectCountRecords(__LINE__, __FILE__, '*', $_SESSION['admin_table_name'], 'WHERE `'.$_SESSION['admin_table_link_column'].'` = ? AND (`site_id` = ? OR `site_id` = 0)', [$get_rid, $_SESSION["site_set_for_editing"]]);
 				
 				//Update parent table with sub items left.
-				$results->getUpdateRecord(__LINE__, __FILE__, $_SESSION['admin_parent_table_name'], '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(), `updated_by` = ?', 'WHERE `id` = ?', [$sql_sub_item_count, $_SESSION['user_first_last_name'], $get_rid]);
+				$results->getUpdateRecord(__LINE__, __FILE__, $_SESSION['admin_parent_table_name'], '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(), `updated_by` = ?', 'WHERE `id` = ?', [$sql_sub_item_count, $_SESSION['user_username'], $get_rid]);
 			}
 		}
 		

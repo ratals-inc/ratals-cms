@@ -130,7 +130,7 @@ else
 				
 				let xhr = new XMLHttpRequest();
 				
-				xhr.open("POST", "/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/add-media.php", true);
+				xhr.open("POST", "<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/add-media.php", true);
 				
 				xhr.upload.onprogress = function(event)
 				{
@@ -153,7 +153,7 @@ else
 					let overall = ((index - 1) / totalFiles) + (0.80 / totalFiles);
 					
 					_("progressBar").value = Math.round(overall * 100);
-					_("statuss").innerHTML = "Processing file " + index + " / " + totalFiles;
+					_("statuss").innerHTML = "Processing file " + index + " / " + totalFiles + ". Please wait...";
 				};
 				
 				xhr.onload = function()

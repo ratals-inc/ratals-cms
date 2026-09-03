@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
@@ -121,7 +122,7 @@ else
 				{
 					$default_admin_url = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'admin_pages', 'WHERE `id` = ?', [$permissions_admin_pages_ids['default_admin_page']]);
 					
-					$_SESSION['user_admin_permissions_default_url'] = $domain.'/'.$_SESSION['admin_directory'].'/'.$default_admin_url['url'].'/';
+					$_SESSION['user_admin_permissions_default_url'] = $domain.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$default_admin_url['url'].'/';
 				}
 			}
 			$_SESSION['user_site_permissions_id'] = $admin_user_row['site_permissions_id'];
@@ -141,9 +142,9 @@ else
 			$_SESSION["site_set_for_editing"] = $new_site_ids[0];
 		}
 	
-		//If logged in and revisit /$_SESSION['admin_directory']/ send to default admin page.
+		//If logged in and revisit INSTALLATION_URL_PATH./$_SESSION['admin_directory']/ send to default admin page.
 		$current_url = explode('?', $url);
-		if($current_url[0] == $domain.'/'.$_SESSION['admin_directory'].'/')
+		if($current_url[0] == $domain.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/')
 		{
 			//If permissions id is set on user, send to default admin page set on the permission. 
 			if(!empty($_SESSION['user_admin_permissions_default_url']))
@@ -154,13 +155,23 @@ else
 			//If no permissions id is set on user, send to dashboard. 
 			else
 			{
-				header("Location: ".$domain."/".$_SESSION['admin_directory']."/dashboard/"); 
+				header("Location: ".$domain.INSTALLATION_URL_PATH."/".$_SESSION['admin_directory']."/dashboard/"); 
 				exit();
 			}
 		}
 		
 		//Get admin url being requested and see if its in admin_pages table to load admin page.
-		$admin_url = trim(ltrim($path_url ?? '', $_SESSION['admin_directory']), '/');
+		$installation_path_url = trim(INSTALLATION_URL_PATH, '/');
+		$admin_prefix = ltrim($installation_path_url.'/'.$_SESSION['admin_directory'].'/', '/');
+		if(strpos($path_url, $admin_prefix) === 0)
+		{
+			$admin_url = substr($path_url, strlen($admin_prefix));
+		}
+		else
+		{
+			$admin_url = $path_url;
+		}
+		$admin_url = trim($admin_url, '/');
 		
 		$row = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', 'admin_pages', 'WHERE `url` = ?', [$admin_url]);
 		
@@ -174,16 +185,16 @@ else
 			}
 			
 			$_SESSION['admin_id'] = $row['id'];
-			$_SESSION['admin_title'] = str_replace('[ADMIN_DIRECTORY]', $_SESSION['admin_directory'], $row['admin_pages_name']);
-			$_SESSION['admin_url'] = $_SESSION['admin_directory'].'/'.$row['url'];
-			$_SESSION['admin_add_url'] = $_SESSION['admin_directory'].'/'.$row['add_url'];
-			$_SESSION['admin_edit_url'] = $_SESSION['admin_directory'].'/'.$row['edit_url'];
-			$_SESSION['admin_sub_items_url'] = $_SESSION['admin_directory'].'/'.$row['sub_items_url'];
-			$_SESSION['admin_sub_items_add_url'] = $_SESSION['admin_directory'].'/'.$row['sub_items_add_url'];
-			$_SESSION['admin_sub_items_edit_url'] = $_SESSION['admin_directory'].'/'.$row['sub_items_edit_url'];
-			$_SESSION['admin_save_url'] = $_SESSION['admin_directory'].'/'.$row['save_url'];
+			$_SESSION['admin_title'] = str_replace('[ADMIN_DIRECTORY]', INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'], $row['admin_pages_name']);
+			$_SESSION['admin_url'] = INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$row['url'];
+			$_SESSION['admin_add_url'] = INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$row['add_url'];
+			$_SESSION['admin_edit_url'] = INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$row['edit_url'];
+			$_SESSION['admin_sub_items_url'] = INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$row['sub_items_url'];
+			$_SESSION['admin_sub_items_add_url'] = INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$row['sub_items_add_url'];
+			$_SESSION['admin_sub_items_edit_url'] = INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$row['sub_items_edit_url'];
+			$_SESSION['admin_save_url'] = INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$row['save_url'];
 			$_SESSION['admin_url_no_records'] = '';
-			if(!empty($row['no_record_url'])){ $_SESSION['admin_url_no_records'] = '/'.$_SESSION['admin_directory'].'/'.$row['no_record_url'].'/'; }
+			if(!empty($row['no_record_url'])){ $_SESSION['admin_url_no_records'] = INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$row['no_record_url'].'/'; }
 			$_SESSION['admin_help_video_url'] = $row['help_video_url'];
 			$_SESSION['admin_type'] = $row['type'];
 			$_SESSION['admin_table_name'] = $row['table_name'];
@@ -383,7 +394,7 @@ else
 				
 				if(!empty($page_sub_url_row))
 				{
-					$page_sub_url_name = str_replace('[ADMIN_DIRECTORY]', $_SESSION['admin_directory'], $page_sub_url_row['admin_pages_name']);
+					$page_sub_url_name = str_replace('[ADMIN_DIRECTORY]', INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'], $page_sub_url_row['admin_pages_name']);
 				}
 			}
 			
@@ -457,7 +468,6 @@ else
 				else
 				{
 					$parent_table_status = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', $_SESSION['admin_parent_table_name'], 'WHERE `id` = ?', [trim($_GET["rid"] ?? '')]);
-					//echo 'here<pre>'; print_r($parent_table_status); echo '</pre>';
 				}
 				
 				if(!empty($parent_table_status))

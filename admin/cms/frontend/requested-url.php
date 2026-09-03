@@ -10,7 +10,7 @@ if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/frontend/requested-url.php'))
 else
 {
 	//Get Requested URL.
-	$url = $_SERVER['REQUEST_SCHEME']."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+	$url = getRequestScheme().'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 	
 	//Get Homepage URL.
 	if(strpos($url, 'https://www.') !== false)

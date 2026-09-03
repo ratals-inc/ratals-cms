@@ -3,13 +3,13 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/addons/sub-items.php'))
+if(file_exists(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/addons/design-blocks.php'))
 {
-	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/addons/sub-items.php');
+	require_once(INSTALLATION_ROOT.'/hooks/admin/cms/layouts/static/addons/design-blocks.php');
 }
 else
 {
-	if($_SESSION['admin_assigned_type'] == 'sub_items')
+	if($_SESSION['admin_assigned_type'] == 'design_blocks')
 	{
 		//Tables with urls_id
 		$tables_with_urls_id = $_SESSION['results']->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'database_tables', 'WHERE `admin_fields_ids` LIKE ? ORDER BY `database_table_name` ASC', ['%,'.$admin_fields_urls_id.',%']);
@@ -48,17 +48,15 @@ else
 			}
 		}
 		?>
-		
 		<div class="edit-wrapper">
+        <div class="design-blocks-intro">
+            <strong>How to Use Design Blocks</strong>
+            Design Blocks allow you to customize the design of a page. If you selected the Blank Canvas template for this page, you'll be starting from scratch and can add your header, footer, and anything else you want between them. If you selected an existing designed template, such as a 1 or 2 column layout, Design Blocks will display where they are set to output within that template. If you want them to display somewhere else, you can edit the template and move the Design Blocks code to the desired location. To create your first Design Block, enter a name for your block and click Create Block. Then select the type of block you want to use and complete the settings for that block. Drag and drop blocks to change their order, then save your changes. To create a new template file to use as an Include File block, go to the enabled Template for this site, create the Include File, then return here and select it within your Design Block.
+        </div>
 		<?php
 		if(isset($_GET["create"]) && !empty($_GET["create"]) && $_GET["create"] == "group" && empty($errors))
 		{
 			echo '<div class="changes-saved">Block has been successfully created.</div>';
-		}
-		
-		if(isset($_GET["assigned"]) && !empty($_GET["assigned"]) && $_GET["assigned"] == "items" && empty($errors))
-		{
-			echo '<div class="changes-saved">The selected items have been assigned.</div>';
 		}
 		
 		if(isset($_GET["updated"]) && !empty($_GET["updated"]) && $_GET["updated"] == "groups" && empty($errors))
@@ -70,7 +68,7 @@ else
 		
 			<!-- Start Create a Group -->
 			<div class="edit margin-top-25px">
-			  <div class="edit-label">Create a Block</div>
+			  <div class="edit-label">Create a Design Block</div>
 			  <div class="edit-field">
 				<form method="POST">
 				  <input name="create-group-name" type="text" placeholder="Block Name">
@@ -81,267 +79,32 @@ else
 			</div>
 			<!-- End Create a Group -->
 			
-			<?php if(!empty($page_groups)) { ?>
-			<div class="edit">
-			  <!-- Start Select Group -->
-			  <div class="edit-label">Assign Items to a Block</div>
-			  <div class="edit-field">
-			  <div class="edit-field-padding">
-				<select name="groups" id="groups">
-				  <option value="">Select Block</option>
-				  <?php 
-				  if(!empty($page_groups))
-				  {
-					  foreach($page_groups as $page_group)
-					  {
-						  $select_group = '';
-						  if($post_group_id == $page_group["id"]) 
-						  {
-							  $select_group = ' selected';
-						  }
-						  
-						  echo '<option value="'.$page_group["id"].'"'.$select_group.'>'.$page_group["name"].'</option>';
-					  }
-				  }
-				  ?>
-				</select>
-			  </div>
-			  <!-- End Select Group -->
-			  
-			  <!-- Start Search Table -->
-			  
-			  <?php
-			  $display_as_block_none = '';
-			  if(isset($_POST['item-search']) || isset($_POST['clear-search'])) { $display_as_block_none = ' display-as-block'; } else { $display_as_block_none = ' display-as-none'; } 
-			  ?>
-			  <div class="edit-field-padding<?php echo $display_as_block_none; ?>" id="items-toggle">
-				<form method="POST" name="items" id="items">
-				<input name="group-id" id="items-group-id" type="hidden" value="<?php echo $post_group_id; ?>">
-				<div class="assign-item">
-				  <div class="assign-item-top">
-				  <div class="headline">Select URLs to Assign<div class="note"><?php if(!isset($_POST['item-search'])) { echo '<span>Note:</span> By default, your last 100 created URLs are displaying below. If you\'re looking for a URL further back, search for it. Search will not return results for inventory items. Search for the product the inventory is attached to.'; } else { echo 'Search Results: <span>'.count($search_results).'</span> - Search returns up to 100 results that match your search. If you can\'t find what you\'re looking for and there are 100 results, narrow down your search.'; } ?></div></div>
-				  <div class="search-buttons"><button name="item-search" type="submit">Search</button><?php if(isset($_POST['item-search'])) { ?> <button name="clear-search" type="submit">Clear Search</button><?php } ?></div>
-				  </div>
-				
-				<div class="assign-item-table">
-				<?php
-				if(isset($_POST['item-search']))
+			<?php if(!empty($design_blocks)) { ?>
+			<?php
+			//Build the default list of the 100 most recently created URLs once.
+			//This list is displayed inside each Design Block that uses the Block Items type.
+			$assign_item_rows = array();
+			$all_urls = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'urls', 'WHERE `site_id` = ? ORDER BY `id` DESC LIMIT 100', [$_SESSION["site_set_for_editing"]]);
+			
+			if(!empty($all_urls))
+			{
+				foreach($all_urls as $all_url)
 				{
-					$items_counter = 0;
+					$record_data = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', $all_url['table_name'], 'WHERE `site_id` = ? AND `urls_id` = ? LIMIT 1', [$_SESSION["site_set_for_editing"], $all_url['id']]);
 					
-					echo '<ul class="header">
-					<li class="checkbox center"></li>
-					<li class="id center">ID</li>
-					<li class="item-number">URL Type</li>
-					<li>Status</li>
-					<li>Title</li>
-					<li>Flat URL</li>
-					<li>Hierarchy URL</li>
-					</ul>';
-					
-					echo '<ul class="search">
-					<li></li>
-					<li class="id"><input name="search_id" type="text" value="'.$search_id.'"></li>
-					<li><select name="type"><option value=""></option>'.$item_type_options.'</select></li>
-					<li><select name="status"><option value=""></option>'.$url_statuses.'</select></li>
-					<li><input name="search_title" type="text" value="'.$title.'"></li>
-					<li><input name="flat_url" type="text" value="'.$flat_url.'"></li>
-					<li><input name="hierarchy_url" type="text" value="'.$hierarchy_url.'"></li>
-					</ul>';
-					
-					if(!empty($search_results))
+					if(!empty($record_data))
 					{
-						foreach($search_results as $search_result)
-						{
-							if(isset($search_result['table_name']) && $search_result['table_name'] != 'inventory')
-							{
-								echo '<ul class="background-color-f5f5f5">
-								<li class="center">
-								<label>
-								<input name="items['.$items_counter.'][item_id]" type="checkbox" value="'.$search_result["urls_id"].'">
-								<input name="items['.$items_counter.'][item_type]" type="hidden" value="'.$search_result["table_name"].'">
-								<input name="items['.$items_counter.'][table_name]" type="hidden" value="'.$search_result["table_name"].'">
-								</label>
-								</li>
-								<li class="center">'.$search_result["id"].'</li>
-								<li>'.ucwords($search_result["table_name"]).'</li>
-								<li>'.$url_status_options[$search_result["url_status"]]['label'].'</li>
-								<li>'.$search_result["meta_title"].'</li>
-								<li>'.$search_result["flat_url"].'</li>
-								<li>'.$search_result["hierarchy_url"].'</li>
-								</ul>';
-							}
-							else
-							{
-								echo '<ul>
-								<li class="center">
-								<label>
-								<input name="items['.$items_counter.'][item_id]" type="checkbox" value="'.$search_result["parent_product_id"].'">
-								<input name="items['.$items_counter.'][item_type]" type="hidden" value="inventory">
-								<input name="items['.$items_counter.'][table_name]" type="hidden" value="products">
-								<input name="items['.$items_counter.'][inventory_id]" type="hidden" value="'.$search_result["id"].'">
-								</label>
-								</li>
-								<li class="center">'.$search_result["id"].'</li>
-								<li>Inventory</li>
-								<li>'.$url_status_options[$search_result["status"]]['label'].'</li>
-								<li>'.$search_result["name"].'</li>
-								<li>N/A</li>
-								<li>N/A</li>
-								</ul>';
-							}
-							$items_counter = $items_counter + 1;
-						}
-						echo "</div>";
-					}
-					else
-					{
-						echo '</div><div class="no-results">No Results</div>';
+						$assign_item_rows[] = $all_url + $record_data;
 					}
 				}
-				else
-				{
-				   $assign_item_rows = array();
-					
-					$all_urls = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'urls', 'WHERE `site_id` = ? ORDER BY `id` DESC LIMIT 100 ', [$_SESSION["site_set_for_editing"]]);
-					
-					if(!empty($all_urls))
-					{
-						foreach($all_urls as $all_url)
-						{
-							$record_data = $results->getSelectSingleRecord(__LINE__, __FILE__, '*', $all_url['table_name'], 'WHERE `site_id` = ? AND `urls_id` = ? LIMIT 1', [$_SESSION["site_set_for_editing"], $all_url['id']]);
-							
-							if(!empty($record_data))
-							{
-								$assign_item_rows[] = $all_url + $record_data; 
-							}
-						}
-					}
-					
-					$items_counter = 0;	
-					
-					echo '<ul class="header">
-					<li class="checkbox center"></li>
-					<li class="id center">ID</li>
-					<li class="item-number">URL Type</li>
-					<li>Status</li>
-					<li>Title</li>
-					<li>Flat URL</li>
-					<li>Hierarchy URL</li>
-					</ul>';
-		
-					echo '<ul class="search">
-					<li></li>
-					<li class="id"><input name="search_id" type="text"></li>
-					<li><select name="type"><option value=""></option>'.$item_type_options.'</select></li>
-					<li><select name="status"><option value=""></option>'.$url_statuses.'</select></li>
-					<li><input name="search_title" type="text"></li>
-					<li><input name="flat_url" type="text"></li>
-					<li><input name="hierarchy_url" type="text"></li>
-					</ul>';
-					
-					if($assign_item_rows)
-					{
-						foreach($assign_item_rows as $assign_item_row)
-						{
-							//echo '<pre>'; print_r($assign_item_row); echo '</pre>';
-							$inventory_ids = array();
-							$select_inventory_placeholders = '';
-							
-							echo '<ul class="background-color-f5f5f5">
-							<li class="center">
-							<label>
-							<input name="items['.$items_counter.'][item_id]" type="checkbox" value="'.$assign_item_row["urls_id"].'">
-							<input name="items['.$items_counter.'][item_type]" type="hidden" value="'.$assign_item_row["table_name"].'">
-							<input name="items['.$items_counter.'][table_name]" type="hidden" value="'.$assign_item_row["table_name"].'">
-							</label>
-							</li>
-							<li class="center">'.$assign_item_row["id"].'</li>
-							<li>'.ucwords($assign_item_row["table_name"]).'</li>
-							<li>'.$url_status_options[$assign_item_row["url_status"]]['label'].'</li>
-							<li>'.$assign_item_row["meta_title"].'</li>
-							<li>'.$assign_item_row["flat_url"].'</li>
-							<li>'.$assign_item_row["hierarchy_url"].'</li>
-							</ul>';
-							$items_counter = $items_counter + 1;
-							
-							if(!empty(trim($assign_item_row['inventory_assigned'] ?? '', ',')))
-							{
-								if(strpos(trim($assign_item_row['inventory_assigned'] ?? '', ','), ',') !== false)
-								{
-									$inventory_ids_exploded = explode(',', trim($assign_item_row['inventory_assigned'] ?? '', ','));
-									foreach($inventory_ids_exploded as $inventory_status_ids)
-									{
-										$inventory_status_id = explode('|', $inventory_status_ids);
-										$inventory_ids[] = $inventory_status_id[1];
-										$select_inventory_placeholders .= '?,';
-									}
-								}
-								else
-								{
-									$inventory_status_id = explode('|', trim($assign_item_row['inventory_assigned'] ?? '', ','));
-									$inventory_ids[] = $inventory_status_id[1];
-									$select_inventory_placeholders .= '?,';
-								}
-								
-								if(!empty($inventory_ids))
-								{
-									
-									$select_inventory_placeholders = trim($select_inventory_placeholders, ',');
-									$select_inventory_ids = array_merge($inventory_ids, $inventory_ids);
-									
-									$sql_get_inventory_assigned_row = $results->getSelectMultipleRecordsKeyName(__LINE__, __FILE__, '*', 'inventory', 'WHERE `id` IN ('.$select_inventory_placeholders.') ORDER BY FIELD(`id`, '.$select_inventory_placeholders.')', $select_inventory_ids, 'id');
-									
-									foreach($sql_get_inventory_assigned_row as $sql_get_inventory_assigned_rows)
-									{
-										if(!empty($sql_get_inventory_assigned_rows))
-										{
-											echo '<ul>
-											<li class="center"><label>
-											<input name="items['.$items_counter.'][item_id]" type="checkbox" value="'.$assign_item_row["urls_id"].'">
-											<input name="items['.$items_counter.'][item_type]" type="hidden" value="inventory">
-											<input name="items['.$items_counter.'][table_name]" type="hidden" value="products">
-											<input name="items['.$items_counter.'][inventory_id]" type="hidden" value="'.$sql_get_inventory_assigned_rows["id"].'">
-											</label>
-											</li>
-											<li class="center">'.$sql_get_inventory_assigned_rows["id"].'</li>
-											<li>Inventory</li>
-											<li>'.$url_status_options[$sql_get_inventory_assigned_rows["status"]]['label'].'</li>
-											<li>'.$sql_get_inventory_assigned_rows["name"].'</li>
-											<li>N/A</li>
-											<li>N/A</li>
-											</ul>';
-												
-											$items_counter = $items_counter + 1;
-										}
-									}
-								}
-							}
-						}
-						echo '</div>';
-					}
-					else
-					{
-						echo '</div><div class="no-results">No Results</div>';
-					}   
-				}
-				?>
-				</div>
-				<div class="edit-field-padding display-as-none" id="items-submit">
-				<button name="assign-items" type="submit">Assign Selected Items</button>
-				</div>
-			  </form>
-			</div>
-			<!-- End Search Table -->
-			</div>
-		</div>
-		
-		<form method="POST">
-            <div class="edit-label">Blocks</div>
+			}
+			?>
+			<form method="POST">
+            <div class="edit-label">Design Blocks</div>
             <div class="sortGroups">
                 <?php 
                 //Select groups assigned to page.
-                $sql_pages_groups = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'page_groups', 'WHERE `site_id` = ? AND `table_name` = ? AND `urls_id` = ? ORDER BY `sort` ASC', [$_SESSION["site_set_for_editing"], $_SESSION['admin_table_name'], trim($_GET["rid"] ?? '')]);
+                $sql_pages_groups = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'design_blocks', 'WHERE `site_id` = ? AND `table_name` = ? AND `urls_id` = ? ORDER BY `sort` ASC', [$_SESSION["site_set_for_editing"], $_SESSION['admin_table_name'], trim($_GET["rid"] ?? '')]);
                 
                 $all_group_data = array();
                 
@@ -355,13 +118,13 @@ else
                         $sql_pages_group["group_id"] = $sql_pages_groups_rows["id"];
                         $sql_pages_group["group_status"] = $sql_pages_groups_rows["status"];
                         $sql_pages_group["group_name"] = $sql_pages_groups_rows["name"];
-						$sql_pages_group["group_sub_items_type"] = $sql_pages_groups_rows["sub_items_type"];
-						$sql_pages_group["group_sub_items_code"] = $sql_pages_groups_rows["sub_items_code"];
-                        $sql_pages_group["group_sub_items_load_template_include_file"] = $sql_pages_groups_rows["sub_items_load_template_include_file"];
+						$sql_pages_group["group_design_blocks_type"] = $sql_pages_groups_rows["design_blocks_type"];
+						$sql_pages_group["group_design_blocks_code"] = $sql_pages_groups_rows["design_blocks_code"];
+                        $sql_pages_group["group_design_blocks_load_template_include_file"] = $sql_pages_groups_rows["design_blocks_load_template_include_file"];
                         $sql_pages_group["group_title"] = $sql_pages_groups_rows["title"];
                         $sql_pages_group["group_content"] = $sql_pages_groups_rows["content"];
                         $sql_pages_group["group_columns"] = $sql_pages_groups_rows["columns"];
-                        $sql_pages_group["group_display_text_from_sub_items"] = $sql_pages_groups_rows["display_text_from_sub_items"];
+                        $sql_pages_group["group_display_content_under_block_items"] = $sql_pages_groups_rows["display_content_under_block_items"];
                         $sql_pages_group["group_gap_between_items"] = $sql_pages_groups_rows["gap_between_items"];
                         $sql_pages_group["group_outter_css_box_styles"] = $sql_pages_groups_rows["outter_css_box_styles"];
                         $sql_pages_group["group_inner_css_box_styles"] = $sql_pages_groups_rows["inner_css_box_styles"];
@@ -380,9 +143,10 @@ else
                         $sql_pages_group["group_pagination_thumbnail_width"] = $sql_pages_groups_rows["pagination_thumbnail_width"];
                         $sql_pages_group["group_pagination_margin"] = $sql_pages_groups_rows["pagination_margin"];
                         $sql_pages_group["group_lazy_load_media"] = $sql_pages_groups_rows["lazy_load_media"];
+                        $sql_pages_group["group_image_fetch_priority"] = $sql_pages_groups_rows["fetch_priority"];
                         
                         //Select items assigned to the group
-                        $sql_assigned_item = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'assignments_sub_items', 'WHERE `site_id` = ? AND `pages_groups_id` = ? AND `parent_id` = ? ORDER BY `sort` ASC;', [$_SESSION["site_set_for_editing"], $sql_pages_groups_rows["id"], trim($_GET["rid"] ?? '')]);
+                        $sql_assigned_item = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'assignments_design_blocks', 'WHERE `site_id` = ? AND `design_blocks_id` = ? AND `parent_id` = ? ORDER BY `sort` ASC;', [$_SESSION["site_set_for_editing"], $sql_pages_groups_rows["id"], trim($_GET["rid"] ?? '')]);
                         
                         if(!empty($sql_assigned_item)) 
                         {
@@ -450,20 +214,22 @@ else
                             <div class="edit-field toggle-group-table toggle-group-table-<?php echo $group_counter; ?><?php echo $display_as_none; ?>">
                                 <div class="content-group">
                                     <label>
-                                        <div class="name">Sub Item Type</div>
-                                        <select name="groups[<?php echo $group_counter; ?>][group_sub_items_type]" data-sub-item-id="<?php echo $group_counter; ?>" class="sub-item-type">
-                                            <option value=""<?php if($all_groups["group_sub_items_type"] == '') { echo ' selected'; }?>>Select Sub Item Type</option>
-                                            <option value="Code (html/css)"<?php if($all_groups["group_sub_items_type"] == 'Code (html/css)') { echo ' selected'; }?>>Code (html/css)</option>
-                                            <option value="Include File"<?php if($all_groups["group_sub_items_type"] == 'Include File') { echo ' selected'; }?>>Include File</option>
-                                            <option value="Sub Items"<?php if($all_groups["group_sub_items_type"] == 'Sub Items') { echo ' selected'; }?>>Sub Items</option>
+                                        <div class="name">Design Block Type</div>
+                                        <select name="groups[<?php echo $group_counter; ?>][group_design_blocks_type]" data-design-block-id="<?php echo $group_counter; ?>" class="design-block-type">
+                                            <option value=""<?php if($all_groups["group_design_blocks_type"] == '') { echo ' selected'; }?>>Select Design Block Type</option>
+                                            <option value="Code (html/css)"<?php if($all_groups["group_design_blocks_type"] == 'Code (html/css)') { echo ' selected'; }?>>Code (html/css)</option>
+                                            <option value="Include File"<?php if($all_groups["group_design_blocks_type"] == 'Include File') { echo ' selected'; }?>>Include File</option>
+                                            <option value="Block Items"<?php if($all_groups["group_design_blocks_type"] == 'Block Items') { echo ' selected'; }?>>Block Items</option>
                                         </select>
+                                        <div class="small-text">Select how this Design Block should work. Choose Code (html/css) to create a custom block with your own code and styles, Include File to load an existing file from the selected template, or Block Items to display pages, products, inventory, or other assigned items.</div>
                                     </label>
                                 </div>
                                 <div class="code-<?php echo $group_counter; ?>">
                                     <div class="content-group">
                                         <label>
                                             <div class="name">HTML / CSS Code</div>
-                                            <textarea name="groups[<?php echo $group_counter; ?>][group_sub_items_code]" cols="" rows="20" placeholder="Add HTML and CSS code."><?php echo $all_groups["group_sub_items_code"]; ?></textarea>
+                                            <textarea name="groups[<?php echo $group_counter; ?>][group_design_blocks_code]" cols="" rows="20" placeholder="Add HTML and CSS code."><?php echo $all_groups["group_design_blocks_code"]; ?></textarea>
+                                            <div class="small-text"><strong>Important:</strong> A Content Security Policy (CSP) with a nonce is used for added security. Do not use inline styles or JavaScript, as the browser may block them. When adding custom CSS or JavaScript, use a &lt;style nonce=&quot;nonce&quot;&gt; block for CSS or a &lt;script nonce=&quot;nonce&quot;&gt; block for JavaScript. The nonce value is replaced automatically when the content is displayed.</div>
                                         </label>
                                     </div>
                                 </div>
@@ -471,15 +237,15 @@ else
                                     <div class="content-group">
                                         <label>
                                             <div class="name">Template Include File</div>
-                                            <select name="groups[<?php echo $group_counter; ?>][group_sub_items_load_template_include_file]" class="display-with-file-include">
-                                                <option value=""<?php if($all_groups["group_sub_items_load_template_include_file"] == '') { echo ' selected'; }?>>Select Include File</option>
+                                            <select name="groups[<?php echo $group_counter; ?>][group_design_blocks_load_template_include_file]" class="display-with-file-include">
+                                                <option value=""<?php if($all_groups["group_design_blocks_load_template_include_file"] == '') { echo ' selected'; }?>>Select Include File</option>
                                                 <?php 
                                                 if(!empty($template_include_files))
                                                 {
                                                     foreach($template_include_files as $template_include_file)
                                                     {
                                                         $selected = '';
-                                                        if($all_groups["group_sub_items_load_template_include_file"] == $template_include_file['filename']) { $selected = ' selected'; }
+                                                        if($all_groups["group_design_blocks_load_template_include_file"] == $template_include_file['filename']) { $selected = ' selected'; }
                                                         echo '<option value="'.$template_include_file['filename'].'"'.$selected.'>Yes: '.$template_include_file['filename'].'</option>';
                                                     }
                                                 }
@@ -488,42 +254,45 @@ else
                                         </label>
                                     </div>
                                 </div>
-                                <div class="sub-items-file-include-<?php echo $group_counter; ?>">
+                                <div class="items-block-<?php echo $group_counter; ?>">
                                     <div class="content-group">
                                         <label>
-                                            <div class="name">&lt;/h2&gt; Title for This Block</div>
+                                            <div class="name">Title for This Block</div>
                                             <input name="groups[<?php echo $group_counter; ?>][group_title]" value="<?php echo $all_groups["group_title"]; ?>" type="text">
+                                            <div class="small-text">Enter an optional heading to display with this block.</div>
                                         </label>
                                         
                                         <label>
-                                            <div class="name">Content or Code Above Block</div>
-                                            <textarea name="groups[<?php echo $group_counter; ?>][group_content]" cols="" rows="5" placeholder="Include content and HTML, as this field displays special characters."><?php echo $all_groups["group_content"]; ?></textarea>
+                                            <div class="name">Content or Code for This Block</div>
+                                            <textarea name="groups[<?php echo $group_counter; ?>][group_content]" cols="" rows="5" placeholder="Add content or HTML for this block."><?php echo $all_groups["group_content"]; ?></textarea>
+                                            <div class="small-text"><strong>Important:</strong> A Content Security Policy (CSP) with a nonce is used for added security. Do not use inline styles or JavaScript, as the browser may block them. When adding custom CSS or JavaScript, use a &lt;style nonce=&quot;nonce&quot;&gt; block for CSS or a &lt;script nonce=&quot;nonce&quot;&gt; block for JavaScript. The nonce value is replaced automatically when the content is displayed.</div>
                                         </label>
                                         
                                         <label>
-                                            <div class="name">Display Links & Text Below Sub Items</div>
-                                            <select name="groups[<?php echo $group_counter; ?>][group_display_text_from_sub_items]">
-                                              <option value="Yes"<?php if($all_groups["group_display_text_from_sub_items"] == '') { echo ' selected'; }?>>Yes</option>
-                                              <option value="No"<?php if($all_groups["group_display_text_from_sub_items"] == 'No') { echo ' selected'; }?>>No</option>
+                                            <div class="name">Display Page Name / Link Under Media</div>
+                                            <select name="groups[<?php echo $group_counter; ?>][group_display_content_under_block_items]">
+                                              <option value="Yes"<?php if($all_groups["group_display_content_under_block_items"] == '') { echo ' selected'; }?>>Yes</option>
+                                              <option value="No"<?php if($all_groups["group_display_content_under_block_items"] == 'No') { echo ' selected'; }?>>No</option>
                                             </select>
                                         </label>
+                                        <div class="small-text">Select Yes to display each item's page name as a link below its media. Select No to display only the item's image.</div>
                                         
                                         <label>
                                             <div class="name">Gap Between Items</div>
                                             <input name="groups[<?php echo $group_counter; ?>][group_gap_between_items]" value="<?php echo $all_groups["group_gap_between_items"]; ?>" type="text" placeholder="e.g., 5">
-                                            <div class="small-text"><strong>Default:</strong> 5</div>
+                                            <div class="small-text">Enter 0 for no spacing between items in this block. To add spacing, enter the desired amount in pixels, such as 10 for 10 pixels of space. The larger the number, the more space will appear between items.</div>
                                         </label>
                                         
                                         <label>
-                                            <div class="name">Outter CSS Box Styles</div>
+                                            <div class="name">Outer CSS Box Styles</div>
                                             <input name="groups[<?php echo $group_counter; ?>][group_outter_css_box_styles]" value="<?php if($all_groups["group_outter_css_box_styles"] != NULL) { echo $all_groups["group_outter_css_box_styles"]; } ?>" type="text">
-                                            <div class="small-text"><strong>Example CSS:</strong> background: repeating-linear-gradient(45deg, #ffffff, #f3f3f3 2px, #e7e7e7 2px, #ffffff 5px); border-top: 1px solid #e7e7e7; border-bottom: 1px solid #e7e7e7; margin: 50px 0px  0px 0px; padding: 50px 10px 50px 10px;</div>
+                                            <div class="small-text">Enter CSS styles here to customize the outer box of this block. You can use CSS to control the background, borders, margins, padding, and other styles. Example: background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06); margin: 50px 0; padding: 50px 30px;</div>
                                         </label>
                                         
                                         <label>
                                             <div class="name">Inner CSS Box Styles</div>
                                             <input name="groups[<?php echo $group_counter; ?>][group_inner_css_box_styles]" value="<?php if($all_groups["group_inner_css_box_styles"] != NULL) { echo $all_groups["group_inner_css_box_styles"]; } ?>" type="text">
-                                            <div class="small-text"><strong>Example CSS:</strong> background-color: #ffffff; padding: 10px 5px; border-radius: 10px;</div>
+                                            <div class="small-text">Enter CSS styles here to customize the inner content area of this block. You can use CSS to control the background, spacing, borders, text appearance, and other styles within the block. Example: background: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 30px; color: #111827;</div>
                                         </label>
                                         
                                         <label>
@@ -532,14 +301,16 @@ else
                                               <option value="Yes"<?php if($all_groups["group_lazy_load_media"] == 'Yes') { echo ' selected'; }?>>Yes</option>
                                               <option value="No"<?php if($all_groups["group_lazy_load_media"] == 'No') { echo ' selected'; }?>>No</option>
                                             </select>
+                                            <div class="small-text">Select No if this block is visible when the page first loads. Select Yes if visitors need to scroll down the page to see this block.</div>
                                         </label>
                                         
                                         <label>
                                             <div class="name">Image Fetch Priority in This Block</div>
                                             <select name="groups[<?php echo $group_counter; ?>][group_image_fetch_priority]">
-                                              <option value="Yes"<?php if($all_groups["group_lazy_load_media"] == 'Yes') { echo ' selected'; }?>>FetchPriority=High</option>
-                                              <option value="No"<?php if($all_groups["group_lazy_load_media"] == 'No') { echo ' selected'; }?>>FetchPriority=Auto</option>
+                                              <option value="Yes"<?php if($all_groups["group_image_fetch_priority"] == 'Yes') { echo ' selected'; }?>>FetchPriority=High</option>
+                                              <option value="No"<?php if($all_groups["group_image_fetch_priority"] == 'No') { echo ' selected'; }?>>FetchPriority=Auto</option>
                                             </select>
+                                            <div class="small-text">Select FetchPriority=High if this block is visible when the page first loads. Select FetchPriority=Auto if visitors need to scroll down the page to see this block.</div>
                                         </label>
                                         
                                         <?php
@@ -565,18 +336,20 @@ else
                                             <select name="groups[<?php echo $group_counter; ?>][group_columns]">
                                               <?php echo $grid_columns; ?>
                                             </select>
+                                            <div class="small-text">Enter the number of columns you want this block to display, from 1 to 10. For example, enter 5 to display five columns or 6 to display six columns. Enter 1 to display the items in a single-column list.</div>
                                         </label>
                                         
                                         <label>
-                                            <div class="name">Display Block as Slider</div>
+                                            <div class="name">Display Block as a Slider</div>
                                             <select name="groups[<?php echo $group_counter; ?>][group_display_as_slider]" id="display-as-slider-<?php echo $group_counter; ?>" data-slider-id="<?php echo $group_counter; ?>" class="display-as-slider">
                                               <option value="Yes"<?php if($all_groups["group_display_as_slider"] == 'Yes') { echo ' selected'; }?>>Yes</option>
                                               <option value="No"<?php if($all_groups["group_display_as_slider"] == 'No') { echo ' selected'; }?>>No</option>
                                             </select>
+                                            <div class="small-text">Select Yes to display this block as a slider. Visitors will then be able to scroll through the items instead of displaying them on multiple rows.</div>
                                         </label>
                                         
-                                        <div class="sub-items-slider sub-items-slider-<?php echo $group_counter; ?>">
-                                            <div class="sub-items-slider-options">Slider Options</div>
+                                        <div class="design-blocks-slider design-blocks-slider-<?php echo $group_counter; ?>">
+                                            <div class="design-blocks-slider-options">Slider Options</div>
                                             
                                             <label>
                                                 <div class="name">Slides Visible at Once</div>
@@ -592,6 +365,7 @@ else
                                                   <option value="9"<?php if($all_groups["group_slides_in_view"] == '9') { echo ' selected'; }?>>9</option>
                                                   <option value="10"<?php if($all_groups["group_slides_in_view"] == '10') { echo ' selected'; }?>>10</option>
                                                 </select>
+                                                <div class="small-text">Enter the number of slides you want visible at one time, from 1 to 10. Enter 1 to display a single slide at a time, or enter a higher number to display multiple slides at once.</div>
                                             </label>
                                             
                                             <label>
@@ -600,6 +374,7 @@ else
                                                   <option value="Yes"<?php if($all_groups["group_slide_all_at_once"] == 'Yes') { echo ' selected'; }?>>Yes</option>
                                                   <option value="No"<?php if($all_groups["group_slide_all_at_once"] == 'No') { echo ' selected'; }?>>No</option>
                                                 </select>
+                                                <div class="small-text">Select Yes to transition all visible slides together. Select No to transition one slide at a time.</div>
                                             </label>
                                             
                                             <label>
@@ -625,6 +400,7 @@ else
                                                   <option value="475"<?php if($all_groups["group_slide_minimum_width"] == '475') { echo ' selected'; }?>>475px</option>
                                                   <option value="500"<?php if($all_groups["group_slide_minimum_width"] == '500') { echo ' selected'; }?>>500px</option>
                                                 </select>
+                                                <div class="small-text">Select the minimum width each slide can become. This is especially useful on smaller screens and mobile devices. For example, a minimum width of 100 pixels may display two slides at once, while 200 pixels may display only one. A good standard minimum width is 200 pixels.</div>
                                             </label>
                                             
                                             <label>
@@ -633,6 +409,7 @@ else
                                                   <option value="Yes"<?php if($all_groups["group_auto_slide_media"] == 'Yes') { echo ' selected'; }?>>Yes</option>
                                                   <option value="No"<?php if($all_groups["group_auto_slide_media"] == 'No') { echo ' selected'; }?>>No</option>
                                                 </select>
+                                                <div class="small-text">Select Yes to have the slider automatically advance after a set amount of time. Select No to require visitors to manually navigate through the slides.</div>
                                             </label>
                                             
                                             <label>
@@ -654,6 +431,7 @@ else
                                                   <option value="25000"<?php if($all_groups["group_pause_time"] == '25000') { echo ' selected'; }?>>25 seconds</option>
                                                   <option value="30000"<?php if($all_groups["group_pause_time"] == '30000') { echo ' selected'; }?>>30 seconds</option>
                                                 </select>
+                                                <div class="small-text">If Auto-Slide Media is enabled, select the number of seconds to wait before automatically advancing to the next slide.</div>
                                             </label>
                                             
                                             <label>
@@ -674,10 +452,11 @@ else
                                                   <option value="4000"<?php if($all_groups["group_slide_speed"] == '4000') { echo ' selected'; }?>>4 seconds</option>
                                                   <option value="5000"<?php if($all_groups["group_slide_speed"] == '5000') { echo ' selected'; }?>>5 seconds</option>
                                                 </select>
+                                                <div class="small-text">Select how quickly the slides transition. For a fast transition, select 0.1 seconds. For a slower, smoother transition, select 0.5 seconds.</div>
                                             </label>
                                             
                                             <label>
-                                                <div class="name">Gap Between Items</div>
+                                                <div class="name">Gap Between Slider Items</div>
                                                 <select name="groups[<?php echo $group_counter; ?>][group_slide_margin]">
                                                   <option value="0"<?php if($all_groups["group_slide_margin"] == '0') { echo ' selected'; }?>>0px</option>
                                                   <option value="1"<?php if($all_groups["group_slide_margin"] == '1') { echo ' selected'; }?>>1px</option>
@@ -702,6 +481,7 @@ else
                                                   <option value="250"<?php if($all_groups["group_slide_margin"] == '250') { echo ' selected'; }?>>250px</option>
                                                   <option value="300"<?php if($all_groups["group_slide_margin"] == '300') { echo ' selected'; }?>>300px</option>
                                                 </select>
+                                                <div class="small-text">Select 0 for no spacing between items in this slider. To add spacing, select a higher number. The larger the number, the more space will appear between slider items.</div>
                                             </label>
                                             
                                             <label>
@@ -710,6 +490,7 @@ else
                                                   <option value="Yes"<?php if($all_groups["group_display_pagination"] == 'Yes') { echo ' selected'; }?>>Yes</option>
                                                   <option value="No"<?php if($all_groups["group_display_pagination"] == 'No') { echo ' selected'; }?>>No</option>
                                                 </select>
+                                                <div class="small-text">Select Yes to display pagination controls, such as bullets or thumbnails, for the items in the slider. Select No to hide the pagination controls.</div>
                                             </label>
                                             
                                             <label>
@@ -719,6 +500,7 @@ else
                                                   <option value="center"<?php if($all_groups["group_pagination_alignment"] == 'center') { echo ' selected'; }?>>Center</option>
                                                   <option value="right"<?php if($all_groups["group_pagination_alignment"] == 'right') { echo ' selected'; }?>>Right</option>
                                                 </select>
+                                                <div class="small-text">If Display Pagination Controls is enabled, select where you want the pagination controls to appear, such as on the left, center, or right of the slider.</div>
                                             </label>
                                             
                                             <label>
@@ -727,6 +509,7 @@ else
                                                   <option value="Yes"<?php if($all_groups["group_display_thumbnails"] == 'Yes') { echo ' selected'; }?>>Yes</option>
                                                   <option value="No"<?php if($all_groups["group_display_thumbnails"] == 'No') { echo ' selected'; }?>>No</option>
                                                 </select>
+                                                <div class="small-text">Select Yes to display each slide's image as a thumbnail in the pagination controls. Select No to display pagination bullets instead.</div>
                                             </label>
                                             
                                             <label>
@@ -743,6 +526,7 @@ else
                                                   <option value="90"<?php if($all_groups["group_pagination_thumbnail_width"] == '90') { echo ' selected'; }?>>90px</option>
                                                   <option value="100"<?php if($all_groups["group_pagination_thumbnail_width"] == '100') { echo ' selected'; }?>>100px</option>
                                                 </select>
+                                                <div class="small-text">If pagination thumbnails are enabled, select the width you want the thumbnails to display. For smaller thumbnails, select 10 or 20 pixels. For larger thumbnails, select a higher pixel value.</div>
                                             </label>
                                             
                                             <label>
@@ -762,9 +546,144 @@ else
                                                   <option value="20"<?php if($all_groups["group_pagination_margin"] == '20') { echo ' selected'; }?>>20px</option>
                                                   <option value="30"<?php if($all_groups["group_pagination_margin"] == '30') { echo ' selected'; }?>>30px</option>
                                                   <option value="50"<?php if($all_groups["group_pagination_margin"] == '50') { echo ' selected'; }?>>50px</option>
-                                                </select>  
+                                                </select>
+                                                <div class="small-text">If pagination is enabled, select the amount of space between each pagination item. Select 0 for no spacing, or select a higher pixel value to add more space between items.</div> 
                                             </label>           
                                         </div>
+                                    </div>
+                                    
+                                    <!-- Start Assign Items -->
+                                    <div class="content-group design-block-assign-items">
+                                        <div class="name">Assign Block Items to This Design Block</div>
+                                        
+                                        <div class="assign-item" data-design-block-id="<?php echo $all_groups["group_id"]; ?>" data-group-counter="<?php echo $group_counter; ?>">
+                                            <div class="assign-item-top">
+                                                <div class="headline">
+                                                    <div class="note">Select additional pages, products, inventory, or other items to display in this Design Block. The items already assigned to this block are listed directly below. New selections will be assigned when you click Save Blocks.<br><span>Note:</span> The 100 most recently created URLs are displayed by default. Use the search fields to find a specific item. Inventory items are listed beneath their parent product.</div>
+                                                </div>
+                                                <div class="search-buttons">
+                                                    <button type="button" class="design-block-item-search" data-group-counter="<?php echo $group_counter; ?>">Search</button>
+                                                    <button type="button" class="design-block-item-search-clear display-as-none" data-group-counter="<?php echo $group_counter; ?>">Clear Search</button>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="assign-item-table" id="design-block-assign-items-<?php echo $group_counter; ?>">
+                                                <ul class="header">
+                                                    <li class="checkbox center"></li>
+                                                    <li class="id center">ID</li>
+                                                    <li class="item-number">URL Type</li>
+                                                    <li>Status</li>
+                                                    <li>Title</li>
+                                                    <li>Flat URL</li>
+                                                    <li>Hierarchy URL</li>
+                                                </ul>
+                                                
+                                                <ul class="search">
+                                                    <li></li>
+                                                    <li class="id"><input name="groups[<?php echo $group_counter; ?>][item_search][search_id]" type="text" class="design-block-search-field" data-search-field="id"></li>
+                                                    <li><select name="groups[<?php echo $group_counter; ?>][item_search][type]" class="design-block-search-field" data-search-field="type"><option value=""></option><?php echo $item_type_options; ?></select></li>
+                                                    <li><select name="groups[<?php echo $group_counter; ?>][item_search][status]" class="design-block-search-field" data-search-field="status"><option value=""></option><?php echo $url_statuses; ?></select></li>
+                                                    <li><input name="groups[<?php echo $group_counter; ?>][item_search][search_title]" type="text" class="design-block-search-field" data-search-field="title"></li>
+                                                    <li><input name="groups[<?php echo $group_counter; ?>][item_search][flat_url]" type="text" class="design-block-search-field" data-search-field="flat_url"></li>
+                                                    <li><input name="groups[<?php echo $group_counter; ?>][item_search][hierarchy_url]" type="text" class="design-block-search-field" data-search-field="hierarchy_url"></li>
+                                                </ul>
+                                                
+                                                <?php
+                                                $new_item_counter = 0;
+                                                
+                                                if(!empty($assign_item_rows))
+                                                {
+                                                    foreach($assign_item_rows as $assign_item_row)
+                                                    {
+                                                        $inventory_ids = array();
+                                                        $select_inventory_placeholders = '';
+                                                        ?>
+                                                        <ul class="design-block-assign-row">
+                                                            <li class="center">
+                                                                <label>
+                                                                    <input name="groups[<?php echo $group_counter; ?>][new_items][<?php echo $new_item_counter; ?>][item_id]" type="checkbox" value="<?php echo $assign_item_row["urls_id"]; ?>">
+                                                                    <input name="groups[<?php echo $group_counter; ?>][new_items][<?php echo $new_item_counter; ?>][item_type]" type="hidden" value="<?php echo $assign_item_row["table_name"]; ?>">
+                                                                    <input name="groups[<?php echo $group_counter; ?>][new_items][<?php echo $new_item_counter; ?>][table_name]" type="hidden" value="<?php echo $assign_item_row["table_name"]; ?>">
+                                                                </label>
+                                                            </li>
+                                                            <li class="center"><?php echo $assign_item_row["id"]; ?></li>
+                                                            <li><?php echo ucwords($assign_item_row["table_name"]); ?></li>
+                                                            <li><?php echo $url_status_options[$assign_item_row["url_status"]]['label']; ?></li>
+                                                            <li><?php echo $assign_item_row["meta_title"]; ?></li>
+                                                            <li><?php echo $assign_item_row["flat_url"]; ?></li>
+                                                            <li><?php echo $assign_item_row["hierarchy_url"]; ?></li>
+                                                        </ul>
+                                                        <?php
+                                                        $new_item_counter = $new_item_counter + 1;
+                                                        
+                                                        if(!empty(trim($assign_item_row['inventory_assigned'] ?? '', ',')))
+                                                        {
+                                                            if(strpos(trim($assign_item_row['inventory_assigned'] ?? '', ','), ',') !== false)
+                                                            {
+                                                                $inventory_ids_exploded = explode(',', trim($assign_item_row['inventory_assigned'] ?? '', ','));
+                                                                foreach($inventory_ids_exploded as $inventory_status_ids)
+                                                                {
+                                                                    $inventory_status_id = explode('|', $inventory_status_ids);
+                                                                    $inventory_ids[] = $inventory_status_id[1];
+                                                                    $select_inventory_placeholders .= '?,';
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                $inventory_status_id = explode('|', trim($assign_item_row['inventory_assigned'] ?? '', ','));
+                                                                $inventory_ids[] = $inventory_status_id[1];
+                                                                $select_inventory_placeholders .= '?,';
+                                                            }
+                                                            
+                                                            if(!empty($inventory_ids))
+                                                            {
+                                                                $select_inventory_placeholders = trim($select_inventory_placeholders, ',');
+                                                                $select_inventory_ids = array_merge($inventory_ids, $inventory_ids);
+                                                                
+                                                                $sql_get_inventory_assigned_row = $results->getSelectMultipleRecordsKeyName(__LINE__, __FILE__, '*', 'inventory', 'WHERE `id` IN ('.$select_inventory_placeholders.') ORDER BY FIELD(`id`, '.$select_inventory_placeholders.')', $select_inventory_ids, 'id');
+                                                                
+                                                                foreach($sql_get_inventory_assigned_row as $sql_get_inventory_assigned_rows)
+                                                                {
+                                                                    if(!empty($sql_get_inventory_assigned_rows))
+                                                                    {
+                                                                        ?>
+                                                                        <ul class="design-block-assign-row">
+                                                                            <li class="center">
+                                                                                <label>
+                                                                                    <input name="groups[<?php echo $group_counter; ?>][new_items][<?php echo $new_item_counter; ?>][item_id]" type="checkbox" value="<?php echo $assign_item_row["urls_id"]; ?>">
+                                                                                    <input name="groups[<?php echo $group_counter; ?>][new_items][<?php echo $new_item_counter; ?>][item_type]" type="hidden" value="inventory">
+                                                                                    <input name="groups[<?php echo $group_counter; ?>][new_items][<?php echo $new_item_counter; ?>][table_name]" type="hidden" value="products">
+                                                                                    <input name="groups[<?php echo $group_counter; ?>][new_items][<?php echo $new_item_counter; ?>][inventory_id]" type="hidden" value="<?php echo $sql_get_inventory_assigned_rows["id"]; ?>">
+                                                                                </label>
+                                                                            </li>
+                                                                            <li class="center"><?php echo $sql_get_inventory_assigned_rows["id"]; ?></li>
+                                                                            <li>Inventory</li>
+                                                                            <li><?php echo $url_status_options[$sql_get_inventory_assigned_rows["status"]]['label']; ?></li>
+                                                                            <li><?php echo $sql_get_inventory_assigned_rows["name"]; ?></li>
+                                                                            <li>N/A</li>
+                                                                            <li>N/A</li>
+                                                                        </ul>
+                                                                        <?php
+                                                                        $new_item_counter = $new_item_counter + 1;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    echo '<div class="no-results">No Items Available</div>';
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Assign Items -->
+                                    
+                                    <div class="content-group">
+                                        <div class="name">Items Currently Assigned to This Design Block</div>
+                                        <div class="small-text">These items are currently displayed by this Design Block. Drag items to change their order, change their status, or remove items you no longer want displayed.</div>
                                     </div>
                                     
                                     <!-- Start Table -->
@@ -813,12 +732,12 @@ else
                                                             }
                                                             else
                                                             {
-                                                                $frontend_url = $domain.'/'.$url_name.$end_url_with;
+                                                                $frontend_url = $domain.INSTALLATION_URL_PATH.'/'.$url_name.$end_url_with;
                                                             }
                                                         }
                                                         else
                                                         {
-                                                             $frontend_url = $domain.'/';
+                                                             $frontend_url = $domain.INSTALLATION_URL_PATH.'/';
                                                         }
                                                         
                                                         $item_name = '';
@@ -850,12 +769,12 @@ else
                                                         if($items_assigned["type"] == "inventory") 
                                                         {
                                                             $item_type = "Inventory"; 
-                                                            $view_in_admin_url = '<a href="/'.$_SESSION['admin_directory'].'/purchasing/inventory/edit/?rid='.$items_assigned["inventory_id"].'" target="_blank" title="View item in admin">'.$items_assigned["inventory_id"].'</a>';
+                                                            $view_in_admin_url = '<a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/purchasing/inventory/edit/?rid='.$items_assigned["inventory_id"].'" target="_blank" title="View item in admin">'.$items_assigned["inventory_id"].'</a>';
                                                         }
                                                         elseif(isset($admin_edit_url['url']))
                                                         {
                                                             $item_type = ucwords(str_replace('_', ' ', $items_assigned["type"] ?? '')); 
-                                                            $view_in_admin_url = '<a href="/'.$_SESSION['admin_directory'].'/'.$admin_edit_url['url'].'/?rid='.$items_assigned["child_id"].'" target="_blank" title="View item in admin">'.$items_assigned["child_id"].'</a>';
+                                                            $view_in_admin_url = '<a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$admin_edit_url['url'].'/?rid='.$items_assigned["child_id"].'" target="_blank" title="View item in admin">'.$items_assigned["child_id"].'</a>';
                                                         }
                                                         ?>
                                                             <ul class="sub-categories-row row_<?php echo $row_counter; ?>">

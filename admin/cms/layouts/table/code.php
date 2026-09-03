@@ -113,15 +113,15 @@ else
 		$head_title_name = '';
 		if(isset($sql_head_title_name['name']))
 		{
-			$head_title_name = '"'.$sql_head_title_name['name'].'"';
+			$head_title_name = $sql_head_title_name['name'].' - ';
 		}
 		if(isset($sql_head_title_name['frontend_name']))
 		{
-			$head_title_name = '"'.$sql_head_title_name['frontend_name'].'"';
+			$head_title_name = $sql_head_title_name['frontend_name'].' - ';
 		}
 		elseif(isset($sql_head_title_name['admin_name']))
 		{
-			$head_title_name = '"'.$sql_head_title_name['admin_name'].'"';
+			$head_title_name = $sql_head_title_name['admin_name'].' - ';
 		}
 	}
 	
@@ -329,12 +329,12 @@ else
 			{
 				if(!empty($url_sorting) || !empty($url_search_fileds_string))
 				{ 
-					header("Location: /".$_SESSION['admin_url']."/?".trim($url_sorting.$url_search_fileds_string, '&'));
+					header("Location: ".$_SESSION['admin_url']."/?".trim($url_sorting.$url_search_fileds_string, '&'));
 					exit;
 				}
 				else
 				{
-					header("Location: /".$_SESSION['admin_url']."/");
+					header("Location: ".$_SESSION['admin_url']."/");
 					exit;
 				}
 			}
@@ -813,15 +813,15 @@ else
 						
 					if($sql_sites_in_account[$_SESSION["site_set_for_editing"]]['homepage'] == $sql_custom_fields_sorted_rows['links_to'])
 					{
-						$links_to_item_url['links_to_url'] = $view_frontend_of_site.'/';
+						$links_to_item_url['links_to_url'] = $view_frontend_of_site.INSTALLATION_URL_PATH.'/';
 					}
 					elseif($sites['url_structure'] == 'Hierarchy')
 					{
-						$links_to_item_url['links_to_url'] = $view_frontend_of_site.'/'.$sql_url_data_row['hierarchy_url'].$end_url_with;
+						$links_to_item_url['links_to_url'] = $view_frontend_of_site.INSTALLATION_URL_PATH.'/'.$sql_url_data_row['hierarchy_url'].$end_url_with;
 					}
 					elseif($sites['url_structure'] == 'Flat')
 					{
-						$links_to_item_url['links_to_url'] = $view_frontend_of_site.'/'.$sql_url_data_row['flat_url'].$end_url_with;
+						$links_to_item_url['links_to_url'] = $view_frontend_of_site.INSTALLATION_URL_PATH.'/'.$sql_url_data_row['flat_url'].$end_url_with;
 					}
 				}
 			}

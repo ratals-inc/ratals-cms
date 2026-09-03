@@ -174,18 +174,19 @@ else
     
     <?php 
     //Display "Add" for sub menu items
-    if($_SESSION['admin_sub_page'] == "Yes" && !empty($_SESSION['admin_sub_items_add_url']) && $_SESSION['admin_sub_items_add_url'] != $_SESSION['admin_directory'].'/')
+    if($_SESSION['admin_sub_page'] == "Yes" && !empty($_SESSION['admin_sub_items_add_url']) && $_SESSION['admin_sub_items_add_url'] != INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/')
     { 
         echo '<div class="sub-menu"><ul>';
-        echo '<li><a href="/'.$_SESSION['admin_sub_items_add_url_with_rid'].'">Add '.rtrim($_SESSION['admin_title'], 's').'</a></li>';
+		$admin_title_no_span = preg_replace('/<span\b[^>]*>.*$/is', '', $_SESSION['admin_title']);
+        echo '<li><a href="'.$_SESSION['admin_sub_items_add_url_with_rid'].'">Add '.rtrim($admin_title_no_span, 's').'</a></li>';
         echo '</ul></div>';
     }
     ?>
     <?php 
-    if($path_url != $_SESSION['admin_directory'].'/website/categories/assigned-products' 
-       && $path_url != $_SESSION['admin_directory'].'/website/products/assigned-inventory' 
-       && $path_url != $_SESSION['admin_directory'].'/website/products/assigned-sub-products'
-       && $path_url != $_SESSION['admin_directory'].'/accounting/accounts_payable/bills/inventory')
+    if($path_url != INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/categories/assigned-products' 
+       && $path_url != INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/products/assigned-inventory' 
+       && $path_url != INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/products/assigned-sub-products'
+       && $path_url != INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/accounting/accounts_payable/bills/inventory')
     {
         include_once INSTALLATION_ROOT.'/admin/cms/includes/sub-navigation.php';
         if(!empty($sub_menu)) { echo $sub_menu; }
@@ -254,8 +255,8 @@ else
     elseif($_SESSION['admin_class'] == "junk-leads") { $junk_leads = ' class="leads"'; }
     ?>
     <?php if($_SESSION['admin_class'] == "good-leads" || $_SESSION['admin_class'] == "junk-leads") { ?>
-    <li><a href="/<?php echo $_SESSION['admin_directory']; ?>/customers/leads/"<?php echo $good_leads; ?>>Good Leads</a></li>
-    <li><a href="/<?php echo $_SESSION['admin_directory']; ?>/customers/junk-leads/"<?php echo $junk_leads; ?>>Junk Leads</a></li>
+    <li><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/customers/leads/"<?php echo $good_leads; ?>>Good Leads</a></li>
+    <li><a href="<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/customers/junk-leads/"<?php echo $junk_leads; ?>>Junk Leads</a></li>
     <?php } ?>
     </ul>
     </div>
@@ -274,7 +275,7 @@ else
     )
     {
     ?>
-    <a href="<?php echo "/".$_SESSION['admin_url']."/"; ?>"><button>Clear Search</button></a>
+    <a href="<?php echo $_SESSION['admin_url']."/"; ?>"><button>Clear Search</button></a>
     <?php
     }
     elseif
@@ -291,7 +292,7 @@ else
     )
     {
     ?> 
-    <a href="<?php echo "/".$_SESSION['admin_url_with_rid']; ?>"><button>Clear Search</button></a>
+    <a href="<?php echo $_SESSION['admin_url_with_rid']; ?>"><button>Clear Search</button></a>
     <?php } ?>
     <button class="show-columns">Columns</button>
     <?php if($_SESSION['admin_class'] == "junk-leads") { ?>
@@ -546,28 +547,28 @@ else
             {
                 $add_all_inventory_items = '<br><span class="assign-all-inventory-items assignInventoryToCategory" data-click="'.trim($_GET["rid"] ?? '').','.$sql_custom_fields_rows['id'].','.$inventory_id_set.',2">Assign All '.$total_inventory_assigned.' Inventory Items</span>';
                 
-                echo '<li class="table-cell-results"><a class="button" href="/'.$_SESSION['admin_directory'].'/website/categories/assign-products-to-category/inventory/?rid='.trim($_GET["rid"] ?? '').'&sub-rid='.$sql_custom_fields_rows['id'].'">Assign Inventory Items</a>'.$add_all_inventory_items.'</li>';
+                echo '<li class="table-cell-results"><a class="button" href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/categories/assign-products-to-category/inventory/?rid='.trim($_GET["rid"] ?? '').'&sub-rid='.$sql_custom_fields_rows['id'].'">Assign Inventory Items</a>'.$add_all_inventory_items.'</li>';
             }
             
             //When the admin page for website/urls is loaded, the "Edit link" links to each url page type such as products, pages, post, etc. 
             //Example: website/pages/edit/?rid=1&display-url=yes
             if($_SESSION['admin_table_name'] == "urls" && isset($tables_with_urls_id[$sql_custom_fields_rows['table_name']]['url'])&& !empty($tables_with_urls_id[$sql_custom_fields_rows['table_name']]['url']))
             {
-                $edit_url = '/'.$_SESSION['admin_directory'].'/'.$tables_with_urls_id[$sql_custom_fields_rows['table_name']]['url'].'/?rid='.$sql_custom_fields_rows['id'].'&display-url=yes';
+                $edit_url = INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$tables_with_urls_id[$sql_custom_fields_rows['table_name']]['url'].'/?rid='.$sql_custom_fields_rows['id'].'&display-url=yes';
             }
             elseif($_SESSION['admin_sub_page'] == "Yes" && !empty(trim($_GET["rid"] ?? '')) && !empty(trim($_GET["sub-rid"] ?? '')))
             {
-                $edit_url = "/".$_SESSION['admin_sub_items_edit_url']."/?sub-page-rid=".trim($_GET["rid"] ?? '')."&sub-rid=".trim($_GET["sub-rid"] ?? '')."&rid=".$sql_custom_fields_rows['id'];
+                $edit_url = $_SESSION['admin_sub_items_edit_url']."/?sub-page-rid=".trim($_GET["rid"] ?? '')."&sub-rid=".trim($_GET["sub-rid"] ?? '')."&rid=".$sql_custom_fields_rows['id'];
             }
             //customers/customer-accounts/addresses
             //customers/customer-accounts/license-keys
             elseif($_SESSION['admin_sub_page'] == "Yes" && !empty(trim($_GET["rid"] ?? '')))
             {
-                $edit_url = "/".$_SESSION['admin_sub_items_edit_url']."/?sub-page-rid=".trim($_GET["rid"] ?? '')."&rid=".$sql_custom_fields_rows['id'];
+                $edit_url = $_SESSION['admin_sub_items_edit_url']."/?sub-page-rid=".trim($_GET["rid"] ?? '')."&rid=".$sql_custom_fields_rows['id'];
             }
             elseif(!empty($_SESSION['admin_edit_url']))
             {
-                $edit_url = '/'.$_SESSION['admin_edit_url']."/?rid=".$sql_custom_fields_rows['id'];
+                $edit_url = $_SESSION['admin_edit_url']."/?rid=".$sql_custom_fields_rows['id'];
             }
             else
             {

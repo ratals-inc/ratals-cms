@@ -9,6 +9,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -164,7 +165,7 @@ else
 					if($media_data !== false && !empty($media_extension) && !empty($mime_file_type) && array_key_exists($media_extension, $accepted_image_extension_types) && in_array($mime_file_type, $accepted_image_extension_types))
 					{
 						//Insert Image or PDF
-						$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'Yes', NULL, $cleaned_media_url, $meta_tag, $size_other, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+						$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'Yes', NULL, $cleaned_media_url, $meta_tag, $size_other, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 						//Get media id just created.
 						$get_media_just_added = $_SESSION['results']->getSelectSingleRecord(__LINE__, __FILE__, '*', 'media', 'WHERE `original_media` = ? AND `media_url` = ? ORDER BY `id` DESC LIMIT 1', ['Yes', $cleaned_media_url]);
 						//Update media that was just created with its id in the column of original_media_id.					
@@ -172,7 +173,7 @@ else
 						$_SESSION['results']->getUpdateRecord(__LINE__, __FILE__, 'media', '`original_media_id` = ?', 'WHERE `id` = ?', [$original_media_id, $original_media_id]);
 						
 						$path = INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$cleaned_media_url;
-						$display = '/sites/media/images/'.$original_media_id.'/'.$cleaned_media_url;
+						$display = INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.$cleaned_media_url;
 						
 						//If the media file name exist, remove the image that was just added and continue the loop to the next media image to upload.
 						if(file_exists($path))
@@ -241,7 +242,7 @@ else
 										if($media_size_gif !== false) { $size_gif = convertBytesToSize($media_size_gif); } else { $size_gif = ''; }
 										
 										//Insert Image
-										$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.gif', $meta_tag, $size_gif, $media_width, $media_height, '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+										$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.gif', $meta_tag, $size_gif, $media_width, $media_height, '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 										
 										imagedestroy($image);
 										imagedestroy($resized_image);
@@ -267,7 +268,7 @@ else
 									$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media',
 									'`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`',
 									'?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?',
-									[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'.webp', $meta_tag, $size_webp, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+									[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'.webp', $meta_tag, $size_webp, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 								}
 								elseif(file_exists($webp_path))
 								{
@@ -305,7 +306,7 @@ else
 												$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media',
 												'`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`',
 												'?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?',
-												[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.webp', $meta_tag, $size_webp, $media_width, $media_height, '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+												[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.webp', $meta_tag, $size_webp, $media_width, $media_height, '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 											}
 											elseif(file_exists($webp_resize_path))
 											{
@@ -337,7 +338,7 @@ else
 									$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media',
 									'`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`',
 									'?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?',
-									[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'.avif', $meta_tag, $size_avif, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+									[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'.avif', $meta_tag, $size_avif, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 								}
 								elseif(file_exists($avif_path))
 								{
@@ -375,7 +376,7 @@ else
 												$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media',
 												'`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`',
 												'?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?',
-												[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.avif', $meta_tag, $size_avif, $media_width, $media_height, '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+												[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.avif', $meta_tag, $size_avif, $media_width, $media_height, '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 											}
 											elseif(file_exists($avif_resize_path))
 											{
@@ -409,7 +410,7 @@ else
 										if(isset($media_size_jpeg)) { $size_jpeg = convertBytesToSize($media_size_jpeg); } else { $size_jpeg = ''; }
 										
 										//Insert Image
-										$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.'.$media_extension, $meta_tag, $size_jpeg, $media_width, $media_height, '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+										$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.'.$media_extension, $meta_tag, $size_jpeg, $media_width, $media_height, '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 										
 										imagedestroy($image);
 										imagedestroy($resized_image);
@@ -435,7 +436,7 @@ else
 									$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media',
 									'`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`',
 									'?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?',
-									[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'.webp', $meta_tag, $size_webp, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+									[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'.webp', $meta_tag, $size_webp, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 								}
 								elseif(file_exists($webp_path))
 								{
@@ -469,7 +470,7 @@ else
 												$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media',
 												'`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`',
 												'?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?',
-												[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.webp', $meta_tag, $size_webp, $media_width, $media_height, '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+												[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.webp', $meta_tag, $size_webp, $media_width, $media_height, '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 											}
 											elseif(file_exists($webp_resize_path))
 											{
@@ -501,7 +502,7 @@ else
 									$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media',
 									'`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`',
 									'?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?',
-									[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'.avif', $meta_tag, $size_avif, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+									[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'.avif', $meta_tag, $size_avif, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 								}
 								elseif(file_exists($avif_path))
 								{
@@ -535,7 +536,7 @@ else
 												$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media',
 												'`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`',
 												'?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?',
-												[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.avif', $meta_tag, $size_avif, $media_width, $media_height, '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+												[$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.avif', $meta_tag, $size_avif, $media_width, $media_height, '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 											}
 											elseif(file_exists($avif_resize_path))
 											{
@@ -574,7 +575,7 @@ else
 										if(isset($media_size_png)) { $size_png = convertBytesToSize($media_size_png); } else { $size_png = ''; }
 										
 										//Insert Image
-										$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.png', $meta_tag, $size_png, $media_width, $media_height, '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+										$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.png', $meta_tag, $size_png, $media_width, $media_height, '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 										
 										imagedestroy($image);
 										imagedestroy($resized_image);
@@ -597,7 +598,7 @@ else
 									$media_size_webp = filesize($webp_path);
 									$size_webp = convertBytesToSize($media_size_webp);
 									
-									$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'.webp', $meta_tag, $size_webp, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+									$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'.webp', $meta_tag, $size_webp, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 								}
 								elseif(file_exists($webp_path))
 								{
@@ -631,7 +632,7 @@ else
 												$media_size_webp = filesize($webp_resize_path);
 												$size_webp = convertBytesToSize($media_size_webp);
 												
-												$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.webp', $meta_tag, $size_webp, $media_width, $media_height, '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+												$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.webp', $meta_tag, $size_webp, $media_width, $media_height, '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 											}
 											elseif(file_exists($webp_resize_path))
 											{
@@ -660,7 +661,7 @@ else
 									$media_size_avif = filesize($avif_path);
 									$size_avif = convertBytesToSize($media_size_avif);
 									
-									$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'.avif', $meta_tag, $size_avif, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+									$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'.avif', $meta_tag, $size_avif, $media_data[0], $media_data[1], '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 								}
 								elseif(file_exists($avif_path))
 								{
@@ -694,7 +695,7 @@ else
 												$media_size_avif = filesize($avif_resize_path);
 												$size_avif = convertBytesToSize($media_size_avif);
 												
-												$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.avif', $meta_tag, $size_avif, $media_width, $media_height, '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+												$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Image', 'No', $original_media_id, $media_type[0].'-'.$media_width.'w-'.$media_height.'h.avif', $meta_tag, $size_avif, $media_width, $media_height, '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 											}
 											elseif(file_exists($avif_resize_path))
 											{
@@ -715,7 +716,7 @@ else
 						$path = INSTALLATION_ROOT.'/sites/media/videos/'.$cleaned_media_url;
 						
 						$display = '';
-						$display = '/sites/media/videos/'.$cleaned_media_url;
+						$display = INSTALLATION_URL_PATH.'/sites/media/videos/'.$cleaned_media_url;
 						
 						if(!file_exists($path) && empty($media_exists_in_db))
 						{
@@ -725,7 +726,7 @@ else
 							if(isset($media_size_video) && !empty($media_size_video)) { $size_video = convertBytesToSize($media_size_video); } else { $size_video = ''; }
 							
 							//Insert Video
-							$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Video', 'Yes', NULL, $cleaned_media_url, $meta_tag, $size_video, '', '', '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+							$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'Video', 'Yes', NULL, $cleaned_media_url, $meta_tag, $size_video, '', '', '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 						}
 						else
 						{
@@ -739,7 +740,7 @@ else
 						$path = INSTALLATION_ROOT.'/sites/media/files/'.$cleaned_media_url;
 						
 						$display = '';
-						$display = '/sites/media/files/'.$cleaned_media_url;
+						$display = INSTALLATION_URL_PATH.'/sites/media/files/'.$cleaned_media_url;
 						
 						if(!file_exists($path) && empty($media_exists_in_db))
 						{
@@ -749,7 +750,7 @@ else
 							if(isset($media_size_file) && !empty($media_size_file)) { $size_file = convertBytesToSize($media_size_file); } else { $size_file = ''; }
 							
 							//Insert Video
-							$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'File', 'Yes', NULL, $cleaned_media_url, $meta_tag, $size_file, '', '', '', '', '{}', $_SESSION['user_first_last_name'], $_SESSION['user_first_last_name']]);
+							$_SESSION['results']->getInsertRecord(__LINE__, __FILE__, 'media', '`site_id`, `media_type`, `original_media`, `original_media_id`, `media_url`, `media_tag`, `media_size`, `width`, `height`, `video_poster`, `embed_media`, `custom_fields`, `updated_date`, `updated_by`, `created_date`, `created_by`', '?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?', [$_SESSION["site_set_for_editing"], 'File', 'Yes', NULL, $cleaned_media_url, $meta_tag, $size_file, '', '', '', '', '{}', $_SESSION['user_username'], $_SESSION['user_username']]);
 						}
 						else
 						{

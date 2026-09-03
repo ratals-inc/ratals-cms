@@ -8,6 +8,6 @@ $column_names = '`id`, `site_id`, `status`, `first_name`, `last_name`, `street_a
 $placeholders = 'NULL,0,?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP()';
 
 $parameters = array();
-$parameters[] = [$new_user_id, $first_name, $last_name, $street_address, '', $city, $country, $state, $postal_code, $phone_number, '', $site_language, NULL, '', $username, $password, $user_email, '', '', '<p>Thank you,<br>'.$first_last_name.'<br>'.$phone_number.'</p>', 'Yes', '{}', $first_last_name, $first_last_name];
+$parameters[] = [$new_user_id, $first_name, $last_name, $street_address, '', $city, $country, $state, $postal_code, $phone_number, '', $site_language, NULL, '', $username, $password, $user_email, '', '', '<p>Thank you,<br>'.$first_last_name.'<br>'.$phone_number.'</p>', 'Yes', '{}', $install_update_username, $install_update_username];
 
 $results->getinsertMultipleRecords(__LINE__, __FILE__, 'users', $column_names, $placeholders, $parameters);

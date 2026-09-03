@@ -17,9 +17,15 @@ else
 			{
 				if(!isset($admin_field['embed_custom_field']))
 				{
+					$field_required = '';
+					if($admin_field["required"] == 'Yes')
+					{
+						$field_required = ' <span class="required-asterisk">*</span>';
+					}
+					
 					echo '
 					<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-					<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+					<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 					<div class="small-text">'.$admin_field["notes"].'</div>
 					<div class="edit-field text">
 					';

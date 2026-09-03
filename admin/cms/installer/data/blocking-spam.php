@@ -8,6 +8,6 @@ $column_names = '`id`, `site_id`, `comments_blocked_keywords`, `comments_block_l
 $placeholders = 'NULL,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP()';
 
 $parameters = array();
-$parameters[] = [$site_id, '', 'No', '', 'No', '0', '1', '{}', $first_last_name, $first_last_name];
+$parameters[] = [$site_id, '', 'No', '', 'No', '0', '1', '{}', $install_update_username, $install_update_username];
 
 $results->getinsertMultipleRecords(__LINE__, __FILE__, 'blocking_spam', $column_names, $placeholders, $parameters);

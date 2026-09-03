@@ -36,12 +36,42 @@ else
 					$admin_field['frontend_name'] = $custom_field_name[$_SESSION['admin_language']]['frontend_name'] ?? '';
 				}
 				
+				$field_required = '';
+				if($admin_field["required"] == 'Yes')
+				{
+					$field_required = ' <span class="required-asterisk">*</span>';
+				}
+				
+				if($_SESSION['admin_url'] == INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/menus/add' || $_SESSION['admin_url'] == INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/menus/edit')
+				{
+					if($admin_field["column_name"] == 'name')
+					{
+						$field_label = 'Admin Name';
+						$field_notes = 'The name used to identify this menu within the admin. This name is not displayed on the frontend.';
+					}
+					elseif($admin_field["column_name"] == 'frontend_name')
+					{
+						$field_label = 'Frontend Name';
+						$field_notes = 'The name that can be used to display this menu on the frontend, such as a heading above the menu.';
+					}
+					else
+					{
+						$field_label = ((isset($admin_field["name"])) ? htmlspecialchars($admin_field["name"] ?? '') : htmlspecialchars($admin_field["frontend_name"] ?? ''));
+						$field_notes = $admin_field["notes"];
+					}
+				}
+				else
+				{
+					$field_label = ((isset($admin_field["name"])) ? htmlspecialchars($admin_field["name"] ?? '') : htmlspecialchars($admin_field["frontend_name"] ?? ''));
+					$field_notes = $admin_field["notes"];
+				}
+				
 				echo '
 				<div class="edit'.$last_class_for_urls_table_fields.$url_name_class.'">
-				<div class="edit-label">'.((isset($admin_field["name"])) ? htmlspecialchars($admin_field["name"] ?? '') : htmlspecialchars($admin_field["frontend_name"] ?? '')).'</div>
+				<div class="edit-label">'.$field_label.$field_required.'</div>
 				<div class="edit-field">
 				<input type="text" name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'" value="'.htmlspecialchars($field_value ?? '').'" id="'.htmlspecialchars($table_name.'_'.$admin_field["column_name"] ?? '').'" placeholder="'.htmlspecialchars($admin_field["placeholder"] ?? '').'">
-				<div class="small-text">'.$admin_field["notes"].'</div>
+				<div class="small-text">'.$field_notes.'</div>
 				</div>';
 				if(isset($errors[$table_name][$admin_field["column_name"]])) { echo '<div class="validation">'.htmlspecialchars($errors[$table_name][$admin_field["column_name"]] ?? '').'</div>'; }
 				echo '</div>';

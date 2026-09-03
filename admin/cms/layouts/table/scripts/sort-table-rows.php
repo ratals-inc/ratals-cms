@@ -67,7 +67,7 @@ else
 				$(".pending-ajax").show();
 				
 				var order = $(this).sortable("serialize") + '&sub_rid=<?php if(isset($_GET["rid"])) { echo trim($_GET["rid"] ?? ''); } ?>' + '&sortrows_update=' + update + '&sort_counter=<?php echo $sort_counter_starting_point; ?>'; 
-				$.post("/<?php echo $_SESSION['admin_directory']; ?>/cms/layouts/table/ajax/sort-table-rows.php", order, function(theResponse)
+				$.post("<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/cms/layouts/table/ajax/sort-table-rows.php", order, function(theResponse)
 				{
 					//alert(theResponse);
 					location.reload();

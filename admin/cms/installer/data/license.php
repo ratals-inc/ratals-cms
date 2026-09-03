@@ -22,6 +22,6 @@ catch(Exception $e)
 }
 
 $parameters = array();
-$parameters[] = ['', $install_id, 'Active', 'CMS', NULL, NULL, 0, '', '{}', $first_last_name, $first_last_name];
+$parameters[] = ['', $install_id, 'Active', 'CMS', NULL, NULL, 0, '', '{}', $install_update_username, $install_update_username];
 
 $results->getinsertMultipleRecords(__LINE__, __FILE__, 'license', $column_names, $placeholders, $parameters);

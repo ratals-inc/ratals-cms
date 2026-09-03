@@ -13,7 +13,7 @@ else
 	{
 		$sql_get_assignments_posts_check = 0;
 		$sql_get_assignments_products_check = 0;
-		$sql_get_assignments_sub_items_check = 0;
+		$sql_get_assignments_design_blocks_check = 0;
 		$sql_get_menu_items_check = 0;
 		$sql_get_sliders_items_check = 0;
 		
@@ -36,7 +36,7 @@ else
 					$sql_get_assignments_products_check = $results->getSelectCountRecords(__LINE__, __FILE__, '*', 'assignments_products', 'WHERE `child_id` = ? AND `site_id` = ? AND `status` = ?', [$sql_get_all_pages_rows["id"], $_SESSION["site_set_for_editing"], '1']);
 				}
 				
-				$sql_get_assignments_sub_items_check = $results->getSelectCountRecords(__LINE__, __FILE__, '*', 'assignments_sub_items', 'WHERE `child_id` = ? AND `site_id` = ? AND `status` = ?', [$sql_get_all_pages_rows["id"], $_SESSION["site_set_for_editing"], '1']);
+				$sql_get_assignments_design_blocks_check = $results->getSelectCountRecords(__LINE__, __FILE__, '*', 'assignments_design_blocks', 'WHERE `child_id` = ? AND `site_id` = ? AND `status` = ?', [$sql_get_all_pages_rows["id"], $_SESSION["site_set_for_editing"], '1']);
 				
 				$sql_get_menus = $results->getSelectMultipleRecords(__LINE__, __FILE__, '*', 'menus', 'WHERE `site_id` = ? AND `status` = ?', [$_SESSION["site_set_for_editing"], '1']);
 				$sql_get_menu_items_check = 0;
@@ -67,7 +67,7 @@ else
 					}
 				}
 				
-				if($sql_get_assignments_posts_check == 0 && $sql_get_assignments_products_check == 0 && $sql_get_assignments_sub_items_check == 0 && $sql_get_menu_items_check == 0 && $sql_get_sliders_items_check == 0)
+				if($sql_get_assignments_posts_check == 0 && $sql_get_assignments_products_check == 0 && $sql_get_assignments_design_blocks_check == 0 && $sql_get_menu_items_check == 0 && $sql_get_sliders_items_check == 0)
 				{
 					$unassigned_ids[] = $sql_get_all_pages_rows["id"];
 				}
@@ -90,7 +90,7 @@ else
 			$category_message = 'product category, ';
 		}
 		?>
-		<div class="edit-label">These are the <?php echo str_replace('_', ' ', $_SESSION['admin_table_name'] ?? ''); ?> that are not assigned to a <?php echo $category_message; ?>menu, slider, or sub item. In other words, there is nothing linking to these <?php echo $_SESSION['admin_table_name']; ?> for visitors or search engines to find them.</div>
+		<div class="edit-label">These are the <?php echo str_replace('_', ' ', $_SESSION['admin_table_name'] ?? ''); ?> that are not assigned to a <?php echo $category_message; ?>menu, slider, or design block. In other words, nothing within your site's design or navigation currently links to these <?php echo str_replace('_', ' ', $_SESSION['admin_table_name'] ?? ''); ?>, making them more difficult for visitors and search engines to discover. Some pages, such as a 404 page or XML sitemap, may not need internal links. If you notice URLs that should be linked, add internal links to improve page relevance and discovery.</div>
 		<div class="edit-field">
 		<!-- Start Unassigned In Table -->
 		<div class="table-overfollow fixed-scrollbar">
@@ -112,7 +112,7 @@ else
 				elseif($url_record_data["url_status"] == 2) { $status = '<span class="unassignedStatus" data-click="'.$assignments_row.','.$url_record_data["id"].','.$url_record_data["url_status"].'">Disabled</span>'; }
 				elseif($url_record_data["url_status"] == 3) { $status = '<span class="unassignedStatus" data-click="'.$assignments_row.','.$url_record_data["id"].','.$url_record_data["url_status"].'">Draft</span>'; }
 				elseif($url_record_data["url_status"] == 4) { $status = '<span class="unassignedStatus" data-click="'.$assignments_row.','.$url_record_data["id"].','.$url_record_data["url_status"].'">Scheduled</span>'; }
-				$admin_edit_page = '/'.$_SESSION['admin_edit_url'].'/?rid=';
+				$admin_edit_page = $_SESSION['admin_edit_url'].'/?rid=';
 				
 				if(empty($url_record_data["custom_link"])) 
 				{
@@ -123,11 +123,11 @@ else
 					
 					if($url_structure == 'Hierarchy')
 					{
-						$final_url = $view_frontend_of_site."/".$url_record_data["hierarchy_url"].$end_url_with;
+						$final_url = $view_frontend_of_site.INSTALLATION_URL_PATH."/".$url_record_data["hierarchy_url"].$end_url_with;
 					}
 					elseif($url_structure == 'Flat')
 					{
-						$final_url = $view_frontend_of_site."/".$url_record_data["flat_url"].$end_url_with;
+						$final_url = $view_frontend_of_site.INSTALLATION_URL_PATH."/".$url_record_data["flat_url"].$end_url_with;
 					}
 				}
 				else
@@ -136,7 +136,7 @@ else
 				}
 				if($home_page == $url_record_data["id"] && empty($url_record_data["custom_link"]))
 				{
-					$final_url = $view_frontend_of_site."/";
+					$final_url = $view_frontend_of_site.INSTALLATION_URL_PATH."/";
 				} 
 				?>
 				<ul class="unassigned-table-row">

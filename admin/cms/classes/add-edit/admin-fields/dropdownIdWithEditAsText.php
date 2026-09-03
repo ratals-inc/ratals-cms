@@ -15,6 +15,12 @@ else
 		{
 			public function dropdownIdWithEditAsTextAeaf($table_name, $admin_field, $field_value, &$errors, &$post_values, $column_data_dynamic_lists, $label_names, $current_values)
 			{
+				$field_required = '';
+				if($admin_field["required"] == 'Yes')
+				{
+					$field_required = ' <span class="required-asterisk">*</span>';
+				}
+				
 				if($_SESSION['admin_type'] == 'add')
 				{
 					if(isset($admin_field["admin_fields_lists_system_code"]))
@@ -42,7 +48,7 @@ else
 					
 					echo '
 					<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-					<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+					<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 					<div class="edit-field">
 					<select name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'" id="'.htmlspecialchars($table_name.'_'.$admin_field["column_name"] ?? '').'">
 					<option value=""></option>
@@ -145,7 +151,7 @@ else
 					
 					echo '
 					<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-					<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+					<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 					<div class="edit-field text">
 					'.htmlspecialchars($display_field_value ?? '').'
 					<input name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'" type="hidden" value="'.htmlspecialchars($field_value ?? '').'" id="'.htmlspecialchars($table_name.'_'.$admin_field["column_name"] ?? '').'">

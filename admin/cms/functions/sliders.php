@@ -132,7 +132,7 @@ else
 							
 							if($url_structure == 'Hierarchy')
 							{
-								$sql_sliders_rows["slider_url"] = $domain."/".$sql_slider_items_pages_url_rows["hierarchy_url"].$silder_end_url_with;
+								$sql_sliders_rows["slider_url"] = $domain.INSTALLATION_URL_PATH."/".$sql_slider_items_pages_url_rows["hierarchy_url"].$silder_end_url_with;
 								
 								if(!empty($sql_sliders_rows["link_type"]))
 								{
@@ -145,7 +145,7 @@ else
 							}
 							elseif($url_structure == 'Flat')
 							{
-								$sql_sliders_rows["slider_url"] = $domain."/".$sql_slider_items_pages_url_rows["flat_url"].$silder_end_url_with;
+								$sql_sliders_rows["slider_url"] = $domain.INSTALLATION_URL_PATH."/".$sql_slider_items_pages_url_rows["flat_url"].$silder_end_url_with;
 								
 								if(!empty($sql_sliders_rows["link_type"]))
 								{
@@ -159,7 +159,7 @@ else
 							
 							if($home_page == $sql_slider_items_pages_url_rows["id"])
 							{
-								$sql_sliders_rows["slider_url"] = $domain."/";
+								$sql_sliders_rows["slider_url"] = $domain.INSTALLATION_URL_PATH."/";
 								
 								if(!empty($sql_sliders_rows["link_type"]))
 								{

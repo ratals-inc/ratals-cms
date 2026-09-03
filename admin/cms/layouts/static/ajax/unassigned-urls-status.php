@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -25,7 +26,7 @@ else
 		$url_id = htmlspecialchars($_POST['urlId'] ?? '');
 		$value = htmlspecialchars($_POST['value'] ?? '');
 		
-		$results->getUpdateRecord(__LINE__, __FILE__, $_SESSION['admin_table_name'], '`updated_by` = ?, `updated_date` = UTC_TIMESTAMP()', 'WHERE `id` = ? AND `site_id` = ?', [$_SESSION['user_first_last_name'], $_POST['recordId'], $_SESSION["site_set_for_editing"]]);
+		$results->getUpdateRecord(__LINE__, __FILE__, $_SESSION['admin_table_name'], '`updated_by` = ?, `updated_date` = UTC_TIMESTAMP()', 'WHERE `id` = ? AND `site_id` = ?', [$_SESSION['user_username'], $_POST['recordId'], $_SESSION["site_set_for_editing"]]);
 		
 		$results->getUpdateRecord(__LINE__, __FILE__, 'urls', '`url_status` = ?', 'WHERE `id` = ? AND `site_id` = ? AND `table_name` = ? ', [$_POST['value'], $_POST['urlId'], $_SESSION["site_set_for_editing"], $_SESSION['admin_table_name']]);
 		

@@ -58,7 +58,7 @@ else
 				}
 				else
 				{
-					echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><a href="/'.$_SESSION['admin_sub_items_url'].'/?'.$sub_items.'">'.$table_menu_items.' '.htmlspecialchars($sub_items_label ?? '').'</a></li>';
+					echo '<li class="table-cell-results '.$sql_account_columns_active["css_class"].'"><a href="'.$_SESSION['admin_sub_items_url'].'/?'.$sub_items.'">'.$table_menu_items.' '.htmlspecialchars($sub_items_label ?? '').'</a></li>';
 				}
 			}
 		}

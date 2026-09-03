@@ -56,7 +56,7 @@ else
 				
 				$.ajax(
 				{
-					url: '/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/template-files.php',
+					url: '<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/cms/includes/admin-fields/ajax/template-files.php',
 					method: 'POST',
 					data:
 					{

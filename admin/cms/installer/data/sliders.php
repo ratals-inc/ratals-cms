@@ -7,6 +7,6 @@ $column_names = '`id`, `site_id`, `status`, `name`, `sub_items`, `slides_in_view
 $placeholders = '?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP(),?';
 
 $parameters = array();
-$parameters[] = [$_SESSION['install_ids'][$site_id]['slider_id'] ?? NULL, $site_id, 1, 'Homepage Slider', 2, '1', 'No', '200', 'Yes', '8000', '500', '0', 'Yes', 'center', 'Yes', 'No', '60', '5', 'No', 'Yes', '', '{}', $first_last_name, $first_last_name];
+$parameters[] = [$_SESSION['install_ids'][$site_id]['slider_id'] ?? NULL, $site_id, 1, 'Homepage Slider', 2, '1', 'No', '200', 'Yes', '8000', '500', '0', 'Yes', 'center', 'Yes', 'No', '60', '5', 'No', 'Yes', '', '{}', $install_update_username, $install_update_username];
 
 $results->getinsertMultipleRecords(__LINE__, __FILE__, 'sliders', $column_names, $placeholders, $parameters);

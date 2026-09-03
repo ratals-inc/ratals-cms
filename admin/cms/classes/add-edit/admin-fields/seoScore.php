@@ -229,7 +229,7 @@ else
 					//SEO Keyword in URL
 					if($sites["url_structure"] == 'Hierarchy')
 					{
-						if(strpos(strtolower(str_replace(array("/","-",":","."), " ", $domain.'/'.$hierarchy_url_path.$hierarchy_url.$display_url_extension)), $seo_keyword_focus) !== false) 
+						if(strpos(strtolower(str_replace(array("/","-",":","."), " ", $domain.INSTALLATION_URL_PATH.'/'.$hierarchy_url_path.$hierarchy_url.$display_url_extension)), $seo_keyword_focus) !== false) 
 						{ 
 							$seo_score = $seo_score + 15;
 							$url_checkmark = "Yes";
@@ -241,7 +241,7 @@ else
 					}
 					else
 					{
-						if(strpos(strtolower(str_replace(array("/","-",":","."), " ", $domain.'/'.$field_value.$display_url_extension)), $seo_keyword_focus) !== false) 
+						if(strpos(strtolower(str_replace(array("/","-",":","."), " ", $domain.INSTALLATION_URL_PATH.'/'.$field_value.$display_url_extension)), $seo_keyword_focus) !== false) 
 						{ 
 							$seo_score = $seo_score + 15;
 							$url_checkmark = "Yes";
@@ -264,8 +264,14 @@ else
 					if($alt_tag_checkmark == "Yes") { $seo_alt_tag = 'check'; }
 				}
 				
+				$field_required = '';
+				if($admin_field["required"] == 'Yes')
+				{
+					$field_required = ' <span class="required-asterisk">*</span>';
+				}
+				
 				echo '<div class="edit">
-				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 				<div class="edit-field">
 				<div class="seo-score">'.htmlspecialchars($seo_score ?? '').' out of 100%</div>
 				<div class="seo-score-breakdown">

@@ -91,13 +91,13 @@ else
 	$last_custom_field_id = 0;
 }
 
-//Get last page_groups id
-$sql_last_page_group_id_row = $results->getSelectSingleRecord(__LINE__, __FILE__, '`id`', 'page_groups', 'ORDER BY `id` DESC LIMIT 1', []);
-if(!empty($sql_last_page_group_id_row)) 
+//Get last design_blocks id
+$sql_last_design_block_id_row = $results->getSelectSingleRecord(__LINE__, __FILE__, '`id`', 'design_blocks', 'ORDER BY `id` DESC LIMIT 1', []);
+if(!empty($sql_last_design_block_id_row)) 
 {
-	$last_page_group_id = $sql_last_page_group_id_row['id'];
+	$last_design_block_id = $sql_last_design_block_id_row['id'];
 }
 else
 {
-	$last_page_group_id = 0;
+	$last_design_block_id = 0;
 }

@@ -3,27 +3,27 @@
 //Licensed under the Apache License, Version 2.0
 //Full License & Terms: https://www.ratals.com/license/
 
-if(in_array('sub-items.php', $data_array['active_template_includes'])) { ?>
+if(in_array('design-blocks.php', $data_array['active_template_includes'])) { ?>
 <?php 
 $slider_unqiue_counter = 10000;
-foreach($data_array['sub_items'] as $group) 
+foreach($data_array['design_blocks'] as $group) 
 {
-	if($group['sub_items_type'] == 'Code (html/css)')
+	if($group['design_blocks_type'] == 'Code (html/css)')
 	{
-		echo $group['sub_items_code'];
+		echo $group['design_blocks_code'];
 	}
-	elseif($group['sub_items_type'] == 'Include File')
+	elseif($group['design_blocks_type'] == 'Include File')
 	{
-		if(!empty($group['sub_items_load_template_include_file']) && file_exists(INSTALLATION_ROOT.'/sites/'.$site_id.'/templates/'.$active_template_path.'/'.$group['sub_items_load_template_include_file']))
+		if(!empty($group['design_blocks_load_template_include_file']) && file_exists(INSTALLATION_ROOT.'/sites/'.$site_id.'/templates/'.$active_template_path.'/'.$group['design_blocks_load_template_include_file']))
 		{
-			include(INSTALLATION_ROOT.'/sites/'.$site_id.'/templates/'.$active_template_path.'/'.$group['sub_items_load_template_include_file']);
+			include(INSTALLATION_ROOT.'/sites/'.$site_id.'/templates/'.$active_template_path.'/'.$group['design_blocks_load_template_include_file']);
 		}
 		else
 		{
-			echo 'The template file for the sub item doesn\'t exist: /sites/'.$site_id.'/templates/'.$active_template_path.'/'.$group['sub_items_load_template_include_file'];
+			echo 'The template file for the sub item doesn\'t exist: /sites/'.$site_id.'/templates/'.$active_template_path.'/'.$group['design_blocks_load_template_include_file'];
 		}
 	}
-	elseif($group['sub_items_type'] == 'Sub Items')
+	elseif($group['design_blocks_type'] == 'Block Items')
 	{
 		$slider_unqiue_counter ++;
 		//Open - display as slider
@@ -69,12 +69,13 @@ foreach($data_array['sub_items'] as $group)
 			
 			echo "
 			<style nonce=\"".NONCE."\">
-			.sub-items-outter-wrapper-".$slider_unqiue_counter." { ".$group['outter_css_box_styles']." }
-			.sub-items-inner-wrapper-".$slider_unqiue_counter." { ".$group['inner_css_box_styles']." }
-			.slider_".$slider_unqiue_counter.".sub-items ul.flex-".$columns_to_display." { display: flex; align-items: flex-start; gap: ".$sub_items_grid_gap."px; padding: 0; margin: 0; }
-			.slider_".$slider_unqiue_counter.".sub-items ul.flex-".$columns_to_display." > li { list-style-type: none; background-color: transparent; }
+			.design-blocks-outter-wrapper-".$slider_unqiue_counter." { ".$group['outter_css_box_styles']." }
+			.design-blocks-inner-wrapper-".$slider_unqiue_counter." { ".$group['inner_css_box_styles']." }
+			.slider_".$slider_unqiue_counter.".design-blocks ul.flex-".$columns_to_display." { display: flex; align-items: flex-start; gap: ".$sub_items_grid_gap."px; padding: 0; margin: 0; }
+			.slider_".$slider_unqiue_counter.".design-blocks ul.flex-".$columns_to_display." > li { list-style-type: none; background-color: transparent; }
+			.slider_".$slider_unqiue_counter.".design-blocks ul.flex-".$columns_to_display." > li .img { border-radius: var(--border-radius-1); }
 			.slider_".$slider_unqiue_counter." .container { width: ".$calculate_columns_based_on_device."%; }
-			.slider_".$slider_unqiue_counter.".sub-items .img a { background-color: #f3f3f3; border-radius: 10px; }
+			.slider_".$slider_unqiue_counter.".design-blocks .img a { background-color: #f3f3f3; border-radius: 10px; }
 			".$set_pagination_over_image."
 			".$set_pagination_alignment."
 			.slider_".$slider_unqiue_counter." .thumbnail { width: ".$group['pagination_thumbnail_width']."px; } 
@@ -90,7 +91,7 @@ foreach($data_array['sub_items'] as $group)
 			});
 			</script>";
 			
-			echo '<div class="grid-text '.$data_array['flat_url'].' sub-items-outter-wrapper-'.$slider_unqiue_counter.' slider-wrapper">';
+			echo '<div class="grid-text '.$data_array['flat_url'].' design-blocks-outter-wrapper-'.$slider_unqiue_counter.' slider-wrapper">';
 				if(!empty($group['title']) || !empty($group['content']))
 				{
 					echo '<div class="top-text container-width">
@@ -98,7 +99,7 @@ foreach($data_array['sub_items'] as $group)
 						<div class="sub-text">'.$group['content'].'</div>
 					</div>';
 				}
-				echo '<div class="slider_'.$slider_unqiue_counter.' sub-items container-width sub-items-inner-wrapper-'.$slider_unqiue_counter.'">';
+				echo '<div class="slider_'.$slider_unqiue_counter.' design-blocks container-width design-blocks-inner-wrapper-'.$slider_unqiue_counter.'">';
 					echo '<div class="slider">
 						<div class="prev">&#8249;</div>
 						<div class="next">&#8250;</div>
@@ -112,19 +113,19 @@ foreach($data_array['sub_items'] as $group)
 			$columns_to_display = $group['columns'];
 
 			$sub_items_grid_gap = '';
-			if(is_numeric($group['gap_between_items'])) { $sub_items_grid_gap = '.sub-items-inner-wrapper-'.$slider_unqiue_counter.' ul.grid-'.$columns_to_display.' { gap: '.$group['gap_between_items'].'px; }'; }
+			if(is_numeric($group['gap_between_items'])) { $sub_items_grid_gap = '.design-blocks-inner-wrapper-'.$slider_unqiue_counter.' ul.grid-'.$columns_to_display.' { --grid-gap: '.$group['gap_between_items'].'px; }'; }
 			
-			$display_text_from_sub_items = '';
-			if($group['display_text_from_sub_items'] == 'No') { $display_text_from_sub_items = '.sub-items-inner-wrapper-'.$slider_unqiue_counter.' li.container { grid-template-rows: auto; grid-row: auto; }'; }
+			$display_content_under_block_items = '';
+			if($group['display_content_under_block_items'] == 'No') { $display_content_under_block_items = '.design-blocks-inner-wrapper-'.$slider_unqiue_counter.' li.container { grid-template-rows: auto; grid-row: auto; }'; }
 			
 			echo "<style nonce=\"".NONCE."\">
-			.sub-items-outter-wrapper-".$slider_unqiue_counter." { ".$group['outter_css_box_styles']." }
-			.sub-items-inner-wrapper-".$slider_unqiue_counter." { ".$group['inner_css_box_styles']." }
+			.design-blocks-outter-wrapper-".$slider_unqiue_counter." { ".$group['outter_css_box_styles']." }
+			.design-blocks-inner-wrapper-".$slider_unqiue_counter." { ".$group['inner_css_box_styles']." }
 			".$sub_items_grid_gap."
-			".$display_text_from_sub_items."
+			".$display_content_under_block_items."
 			</style>";
 			
-			echo '<div class="grid-text '.$data_array['flat_url'].' sub-items-outter-wrapper-'.$slider_unqiue_counter.'">';
+			echo '<div class="grid-text '.$data_array['flat_url'].' design-blocks-outter-wrapper-'.$slider_unqiue_counter.'">';
 				if(!empty($group['title']) || !empty($group['content']))
 				{
 					echo '<div class="top-text container-width">
@@ -132,7 +133,7 @@ foreach($data_array['sub_items'] as $group)
 							<div class="sub-text">'.$group['content'].'</div>
 						  </div>';
 				}
-				echo '<div class="sub-items container-width sub-items-inner-wrapper-'.$slider_unqiue_counter.'">
+				echo '<div class="design-blocks container-width design-blocks-inner-wrapper-'.$slider_unqiue_counter.'">
 					<ul class="grid-'.$columns_to_display.'">';
 		}
 		
@@ -187,7 +188,7 @@ foreach($data_array['sub_items'] as $group)
 				<li class="container">
 					
 						<div class="img"><a href="'.$group_items["url"].'"'.$link_type.'>'.$sub_item_media.'</a></div>';
-						if($group['display_text_from_sub_items'] == 'Yes')
+						if($group['display_content_under_block_items'] == 'Yes')
 						{
 							echo '<div class="text-product">
 								<h2 class="title"><a href="'.$group_items["url"].'"'.$link_type.'>'.$group_items['meta_title'].'</a></h2>
@@ -240,7 +241,7 @@ foreach($data_array['sub_items'] as $group)
 				<li class="container">
 					
 					  <div class="img"><a href="'.$group_items["url"].'"'.$link_type.'>'.$sub_item_media.'</a></div>';
-					  if($group['display_text_from_sub_items'] == 'Yes')
+					  if($group['display_content_under_block_items'] == 'Yes')
 					  {
 						  echo '<div class="text-product">
 							<h2 class="title"><a href="'.$group_items["url"].'"'.$link_type.'>'.$group_items['meta_title'].'</a></h2>
@@ -279,7 +280,7 @@ foreach($data_array['sub_items'] as $group)
 				<li class="container">
 				  
 					  <div class="img"><a href="'.$group_items["url"].'"'.$link_type.'>'.$sub_item_media.'</a></div>';
-					  if($group['display_text_from_sub_items'] == 'Yes')
+					  if($group['display_content_under_block_items'] == 'Yes')
 					  {
 						echo '<div class="text-product">
 							<h2 class="title"><a href="'.$group_items["url"].'"'.$link_type.'>'.$group_items['meta_title'].'</a></h2>
@@ -302,7 +303,7 @@ foreach($data_array['sub_items'] as $group)
 				<li class="container">
 				  
 				    <div class="img"><a href="'.$group_items["url"].'"'.$link_type.'>'.$sub_item_media.'</a></div>';
-				    if($group['display_text_from_sub_items'] == 'Yes')
+				    if($group['display_content_under_block_items'] == 'Yes')
 				    {
 					  echo'<div class="text">
 					  	<h2 class="title"><a href="'.$group_items["url"].'"'.$link_type.'>'.$group_items['meta_title'].'</a></h2>

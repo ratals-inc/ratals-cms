@@ -59,24 +59,26 @@ else
 				{
 					$media_result = $media_results[$media_array_item[0]];
 					
+					$installation_path_url = trim(INSTALLATION_URL_PATH, '/');
+					
 					if(!empty($media_result))
 					{
 						if($media_result['media_type'] == 'Image')
 						{
 							$original_media_id = $media_result["original_media_id"];
 							
-							$media_result['path_url'] = 'sites/media/images/'.$original_media_id.'/'.$media_result['media_url'];
-							$media_result['full_url'] = $domain.'/sites/media/images/'.$original_media_id.'/'.$media_result['media_url'];
+							$media_result['path_url'] = $installation_path_url.'/sites/media/images/'.$original_media_id.'/'.$media_result['media_url'];
+							$media_result['full_url'] = $domain.INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.$media_result['media_url'];
 						}
 						elseif($media_result['media_type'] == 'Video')
 						{
-							$media_result['path_url'] = 'sites/media/videos/'.$media_result['media_url'];
-							$media_result['full_url'] = $domain.'/sites/media/videos/'.$media_result['media_url'];
+							$media_result['path_url'] = $installation_path_url.'/sites/media/videos/'.$media_result['media_url'];
+							$media_result['full_url'] = $domain.INSTALLATION_URL_PATH.'/sites/media/videos/'.$media_result['media_url'];
 						}
 						elseif($media_result['media_type'] == 'File')
 						{
-							$media_result['path_url'] = 'sites/media/files/'.$media_result['media_url'];
-							$media_result['full_url'] = $domain.'/sites/media/files/'.$media_result['media_url'];
+							$media_result['path_url'] = $installation_path_url.'/sites/media/files/'.$media_result['media_url'];
+							$media_result['full_url'] = $domain.INSTALLATION_URL_PATH.'/sites/media/files/'.$media_result['media_url'];
 						}
 						
 						if(!empty($media_result))
@@ -102,7 +104,7 @@ else
 	
 	if(!function_exists('mediaId'))
 	{
-		function mediaId($media_id, $lazy_load, $fetch_priority, $custom_media_tag) 
+		function mediaId($media_id, $lazy_load = '', $fetch_priority = '', $max_display_width = '', $custom_media_tag = '')
 		{
 			global $domain;
 			
@@ -118,19 +120,21 @@ else
 					
 					foreach($embed_media_array as $media_array)
 					{
-						//Check if string has lazyloadyes, lazyloadno, fetchpriorityhigh, fetchpriorityauto, or alttitletag(" to know if its media in the string of content.
+						//Check if string has lazyloadyes, lazyloadno, fetchpriorityhigh, fetchpriorityauto, maxdisplaypixelwidth(", or alttitletag(" to know if its media in the string of content.
 						if(strpos(strtolower(str_replace(' ', '', $media_array)), 'lazyloadyes') !== false 
 							|| strpos(strtolower(str_replace(' ', '', $media_array)), 'lazyloadno') !== false
 							|| strpos(strtolower(str_replace(' ', '', $media_array)), 'fetchpriorityhigh') !== false
 							|| strpos(strtolower(str_replace(' ', '', $media_array)), 'fetchpriorityauto') !== false
+							|| strpos(strtolower(str_replace(' ', '', $media_array)), 'maxdisplaypixelwidth("') !== false
 							|| strpos(strtolower(str_replace(' ', '', $media_array)), 'alttitletag("') !== false)
 						{
-							$media_id_lazy_load_media_tag = explode(',', $media_array ?? '', 4);
+							$media_id_lazy_load_media_tag = explode(',', $media_array ?? '', 5);
 							
 							$requested_media_id = strtolower(str_replace(' ', '', trim($media_id_lazy_load_media_tag[0] ?? '')));
 							$lazy_load = strtolower(str_replace(' ', '', trim($media_id_lazy_load_media_tag[1] ?? '')));
 							$fetch_priority = strtolower(str_replace(' ', '', trim($media_id_lazy_load_media_tag[2] ?? '')));
-							$custom_media_tag = trim($media_id_lazy_load_media_tag[3] ?? '');
+							$max_display_width = trim($media_id_lazy_load_media_tag[3] ?? '');
+							$custom_media_tag = trim($media_id_lazy_load_media_tag[4] ?? '');
 							
 							$sql_media_rows = array();
 							if(is_numeric($requested_media_id))
@@ -158,10 +162,16 @@ else
 								$custom_media_tag_set = str_replace(array('altTitleTag("','")'), '', $custom_media_tag);
 							}
 							
+							$max_display_width_set = '';
+							if(isset($max_display_width) && !empty($max_display_width) && $max_display_width != 'maxDisplayPixelWidth("")')
+							{
+								$max_display_width_set = str_replace(array('maxDisplayPixelWidth("','")'), '', $max_display_width);
+							}
+							
 							$media_output = '';
 							if(!empty($sql_media_rows))
 							{
-								$media_output = displayMedia($sql_media_rows, $domain, $lazy_load_set, $fetch_priority_set, $custom_media_tag_set);
+								$media_output = displayMedia($sql_media_rows, $domain, $lazy_load_set, $fetch_priority_set, $custom_media_tag_set, $max_display_width_set);
 							}
 							
 							if(!empty($media_output))
@@ -209,9 +219,11 @@ else
 					$fetch_priority_set = 'yes';
 				}
 				
+				$max_display_width = trim($max_display_width ?? '');
+				
 				if(!empty($sql_media_rows))
 				{
-					$return_media = displayMedia($sql_media_rows, $domain, $lazy_load_set, $fetch_priority_set, $custom_media_tag);
+					$return_media = displayMedia($sql_media_rows, $domain, $lazy_load_set, $fetch_priority_set, $custom_media_tag, $max_display_width);
 				}
 			}
 			
@@ -221,7 +233,7 @@ else
 	
 	if(!function_exists('displayMedia'))
 	{
-		function displayMedia($sql_media_rows, $domain, $lazy_load, $fetch_priority, $custom_media_tag)
+		function displayMedia($sql_media_rows, $domain, $lazy_load, $fetch_priority, $custom_media_tag, $max_display_width)
 		{
 			$display_media = '';
 			$lazy_load_image_iframe = '';
@@ -254,6 +266,8 @@ else
 					$original_media = '';
 					$original_image_file_type = '';
 					$media_sizes = '';
+					$media_css = '';
+					$media_class_name = '';
 					$original_image_size = '';
 					
 					foreach($sql_media_rows as $sql_media_row)
@@ -278,18 +292,25 @@ else
 						{
 							if($media_output_data[1] == 'avif' && file_exists(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_output_data[0].'.avif'))
 							{
-								$media_output_srcset_avif .= $domain.'/sites/media/images/'.$original_media_id.'/'.$media_output_data[0].'.avif '.$width.'w, ';
+								$media_output_srcset_avif .= $domain.INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.$media_output_data[0].'.avif '.$width.'w, ';
 							}
 							elseif($media_output_data[1] == 'webp' && file_exists(INSTALLATION_ROOT.'/sites/media/images/'.$original_media_id.'/'.$media_output_data[0].'.webp'))
 							{
-								$media_output_srcset_webp .= $domain.'/sites/media/images/'.$original_media_id.'/'.$media_output_data[0].'.webp '.$width.'w, ';
+								$media_output_srcset_webp .= $domain.INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.$media_output_data[0].'.webp '.$width.'w, ';
 							}
 							else
 							{
-								$media_output_srcset_other .= $domain.'/sites/media/images/'.$original_media_id.'/'.$file_name.' '.$width.'w, ';
+								$media_output_srcset_other .= $domain.INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.$file_name.' '.$width.'w, ';
 								
-								//Width of 240px is the smallest variant image created by befault.
-								if($width >= 240)
+								//Width of 240px is the smallest variant image created by default.
+								if(!empty($max_display_width) && is_numeric($max_display_width) && $max_display_width > 0)
+								{
+									$max_display_width = intval($max_display_width);
+									$media_sizes = $max_display_width.'px';
+									$media_css = '<style nonce="'.NONCE.'">.max-width-'.$max_display_width.', .max-width-'.$max_display_width.' img { max-width: '.$max_display_width.'px; }</style>';
+									$media_class_name = ' class="max-width-'.$max_display_width.'"';
+								}
+								elseif($width >= 240)
 								{
 									$media_sizes .= '(max-width: '.$width.'px) 100vw, ';
 								}
@@ -298,31 +319,40 @@ else
 								{
 									$original_image_file_type = $media_output_data[1];
 									
-									$original_media = '<img'.$lazy_load_image_iframe.$image_fetch_priority.' src="'.$domain.'/sites/media/images/'.$original_media_id.'/'.$file_name.'" alt="'.$alt_title.'" aria-label="'.$alt_title.'" width="'.$width.'" height="'.$height.'" class="max-width-height-display" />';
+									$original_media = '<img'.$lazy_load_image_iframe.$image_fetch_priority.' src="'.$domain.INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.$file_name.'" alt="'.$alt_title.'" aria-label="'.$alt_title.'" width="'.$width.'" height="'.$height.'" class="max-width-height-display" />';
 								}
 							}
 						}
 					}
 					
+					if(!empty($max_display_width) && is_numeric($max_display_width) && $max_display_width > 0)
+					{
+						$media_sizes_output = trim($media_sizes, ', ');
+					}
+					else
+					{
+						$media_sizes_output = trim($media_sizes, ', ').$original_image_size;
+					}
+					
 					if(!empty($media_output_srcset_avif))
 					{
-						$media_output_avif = '<source type="image/avif" srcset="'.trim($media_output_srcset_avif, ', ' ?? '').'" 
-						sizes="'.trim($media_sizes, ', ' ?? '').$original_image_size.'">';
+						$media_output_avif = '<source type="image/avif" srcset="'.trim($media_output_srcset_avif, ', ').'" 
+						sizes="'.$media_sizes_output.'">';
 					}
 					
 					if(!empty($media_output_srcset_webp))
 					{
-						$media_output_webp = '<source type="image/webp" srcset="'.trim($media_output_srcset_webp, ', ' ?? '').'" 
-						sizes="'.trim($media_sizes, ', ' ?? '').$original_image_size.'">';
+						$media_output_webp = '<source type="image/webp" srcset="'.trim($media_output_srcset_webp, ', ').'" 
+						sizes="'.$media_sizes_output.'">';
 					}
 					
 					if(!empty($media_output_srcset_other))
 					{
-						$media_output_other = '<source type="image/'.$original_image_file_type.'" srcset="'.trim($media_output_srcset_other, ', ' ?? '').'" 
-						sizes="'.trim($media_sizes, ', ' ?? '').$original_image_size.'">';
+						$media_output_other = '<source type="image/'.$original_image_file_type.'" srcset="'.trim($media_output_srcset_other, ', ').'" 
+						sizes="'.$media_sizes_output.'">';
 					}
 					
-					$display_media = '<picture>'.$media_output_avif.$media_output_webp.$media_output_other.$original_media.'</picture>';
+					$display_media = $media_css.'<picture'.$media_class_name.'>'.$media_output_avif.$media_output_webp.$media_output_other.$original_media.'</picture>';
 				}
 				elseif($sql_media_rows[0]['media_type'] == 'Video')
 				{
@@ -354,7 +384,7 @@ else
 							{
 								$original_media_id = $sql_media_rows["original_media_id"];
 								
-								$media_poster_url = '/sites/media/images/'.$original_media_id.'/'.$sql_media_rows['media_url'];
+								$media_poster_url = INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.$sql_media_rows['media_url'];
 							}
 						}
 					}
@@ -365,7 +395,7 @@ else
 						$video_poster = ' poster="'.$domain.$media_poster_url.'"';
 					}
 					
-					$display_media = '<video controls'.$lazy_load_video.$video_poster.'><source src="'.$domain.'/sites/media/videos/'.$file_name.'" title="'.$alt_title.'" type="video/'.$media_output_data[1].'"><track kind="captions">Your browser does not support the video tag.</video>';
+					$display_media = '<video controls'.$lazy_load_video.$video_poster.'><source src="'.$domain.INSTALLATION_URL_PATH.'/sites/media/videos/'.$file_name.'" title="'.$alt_title.'" type="video/'.$media_output_data[1].'"><track kind="captions">Your browser does not support the video tag.</video>';
 				}
 				elseif($sql_media_rows[0]['media_type'] == 'File')
 				{
@@ -381,7 +411,7 @@ else
 					$file_name = $sql_media_rows[0]["media_url"];
 					$media_output_data = explode('.', $sql_media_rows[0]["media_url"] ?? '');
 					
-					$display_media = '<object data="'.$domain.'/sites/media/files/'.$file_name.'" type="application/'.$media_output_data[1].'" title="'.$alt_title.'" aria-label="'.$alt_title.'" width="100%" height="100%">Your browser does not support PDFs. You can <a href="'.$domain.'/sites/media/files/'.$file_name.'">download the PDF here</a></object>';
+					$display_media = '<object data="'.$domain.INSTALLATION_URL_PATH.'/sites/media/files/'.$file_name.'" type="application/'.$media_output_data[1].'" title="'.$alt_title.'" aria-label="'.$alt_title.'" width="100%" height="100%">Your browser does not support PDFs. You can <a href="'.$domain.INSTALLATION_URL_PATH.'/sites/media/files/'.$file_name.'">download the PDF here</a></object>';
 				}
 				elseif($sql_media_rows[0]['media_type'] == 'Video Embed')
 				{

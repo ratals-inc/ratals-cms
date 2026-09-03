@@ -22,10 +22,26 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
-				$select_record_array = $stmt->fetch();
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
+				
+				$select_record_array = $stmt->fetch(\PDO::FETCH_ASSOC);
+				
+				if(is_array($select_record_array))
+				{
+					$select_record_array = array_change_key_case($select_record_array, CASE_LOWER);
+				}
 				
 				return $select_record_array;
 			}
@@ -42,10 +58,27 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
-				$select_record_array = $stmt->fetchAll();
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
+				
+				$select_records = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+				$select_record_array = array();
+				
+				foreach($select_records as $select_record)
+				{
+					$select_record_array[] = array_change_key_case($select_record, CASE_LOWER);
+				}
 				
 				return $select_record_array;
 			}
@@ -62,18 +95,29 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
-				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
-				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[] = $select_record[$column_one];
-					}
+					$query_start = microtime(true);
+				}
+				
+				$stmt->execute($parameters);
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
+				
+				$select_record_array = array();
+				$column_one = strtolower($column_one);
+				
+				$select_records = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+				
+				foreach($select_records as $select_record)
+				{
+					$select_record = array_change_key_case($select_record, CASE_LOWER);
+					$select_record_array[] = $select_record[$column_one];
 				}
 				
 				return $select_record_array;
@@ -91,19 +135,29 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
 				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				$key_name = strtolower($key_name);
+				
+				$select_records = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+				
+				foreach($select_records as $select_record)
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[$select_record[$key_name]] = $select_record;
-					}
+					$select_record = array_change_key_case($select_record, CASE_LOWER);
+					$select_record_array[$select_record[$key_name]] = $select_record;
 				}
 				
 				return $select_record_array;
@@ -121,19 +175,29 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
 				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				$key_name = strtolower($key_name);
+				
+				$select_records = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+				
+				foreach($select_records as $select_record)
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[$select_record[$key_name]][] = $select_record;
-					}
+					$select_record = array_change_key_case($select_record, CASE_LOWER);
+					$select_record_array[$select_record[$key_name]][] = $select_record;
 				}
 				
 				return $select_record_array;

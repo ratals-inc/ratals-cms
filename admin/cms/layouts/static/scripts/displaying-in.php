@@ -34,7 +34,7 @@ else
 				value = 1;
 			}
 			
-			$.post("/<?php echo $_SESSION['admin_directory']; ?>/cms/layouts/static/ajax/displaying-in.php",{type:'displayingInStatus',id:id,value:value,counter:counter,assignment:assignment},
+			$.post("<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/cms/layouts/static/ajax/displaying-in.php",{type:'displayingInStatus',id:id,value:value,counter:counter,assignment:assignment},
 			function(theResponse)
 			{
 				$(".status_"+counter).html(theResponse);
@@ -52,7 +52,7 @@ else
 			
 			if(confirm('Are you sure you want to remove ID '+pId+'?') == true)
 			{
-				$.post("/<?php echo $_SESSION['admin_directory']; ?>/cms/layouts/static/ajax/displaying-in.php",{type:'displayingInRemove',id:id,assignment:assignment},
+				$.post("<?php echo INSTALLATION_URL_PATH; ?>/<?php echo $_SESSION['admin_directory']; ?>/cms/layouts/static/ajax/displaying-in.php",{type:'displayingInRemove',id:id,assignment:assignment},
 				function(theResponse)
 				{
 					location.reload();

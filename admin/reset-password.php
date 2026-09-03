@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 require_once(INSTALLATION_ROOT.'/core/session-check-admin.php');
 
@@ -118,7 +119,7 @@ else
 			
 			$results->getDeleteRecord(__LINE__, __FILE__, 'password_reset_tokens', 'WHERE `user_email` = ?', [$row['user_email']]);
 			
-			header("Location: /".$_SESSION['admin_directory']."/?password-updated=success"); exit();
+			header("Location: ".INSTALLATION_URL_PATH."/".$_SESSION['admin_directory']."/?password-updated=success"); exit();
 		}
 	}
 	?>

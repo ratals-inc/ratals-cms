@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -72,7 +73,7 @@ else
 				$sql_menu_items_check = $results->getSelectCountRecords(__LINE__, __FILE__, '*', 'admin_menu_items', 'WHERE `admin_menus_id` = ?', [$get_rid]);
 				
 				//Update number of menu items left under menu
-				$results->getUpdateRecord(__LINE__, __FILE__, 'admin_menus', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(), `updated_by` = ?', 'WHERE `id` = ?', [$sql_menu_items_check, $_SESSION['user_first_last_name'], $get_rid]);
+				$results->getUpdateRecord(__LINE__, __FILE__, 'admin_menus', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(), `updated_by` = ?', 'WHERE `id` = ?', [$sql_menu_items_check, $_SESSION['user_username'], $get_rid]);
 			
 				if(!empty(trim($get_sub_rid ?? '')))
 				{
@@ -80,7 +81,7 @@ else
 					$sql_menu_items_check = $results->getSelectCountRecords(__LINE__, __FILE__, '*', 'admin_menu_items', 'WHERE `admin_menus_id` = ? AND `parent_id` = ?', [$get_rid, trim($get_sub_rid ?? '')]);
 					
 					//Update number of menu items left under a sub sub menu item
-					$results->getUpdateRecord(__LINE__, __FILE__, 'admin_menu_items', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(), `updated_by` = ?', 'WHERE `admin_menus_id` = ? AND `id` = ?', [$sql_menu_items_check, $_SESSION['user_first_last_name'], $get_rid, trim($get_sub_rid ?? '')]);
+					$results->getUpdateRecord(__LINE__, __FILE__, 'admin_menu_items', '`sub_items` = ?, `updated_date` = UTC_TIMESTAMP(), `updated_by` = ?', 'WHERE `admin_menus_id` = ? AND `id` = ?', [$sql_menu_items_check, $_SESSION['user_username'], $get_rid, trim($get_sub_rid ?? '')]);
 				}
 			}
 		}

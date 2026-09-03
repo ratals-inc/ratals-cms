@@ -44,7 +44,7 @@ RewriteEngine on
 #-------------------
 #CMS
 #-------------------
-RewriteCond %{REQUEST_URI} /cms/includes/notices/(ajax|start-update|update|update-progress|unset-progress-session)\.php$ [NC]
+RewriteCond %{REQUEST_URI} /cms/includes/notices/(ajax|start-update|update|update-progress|unset-progress-session|fallback-cleanup)\.php$ [NC]
 RewriteRule .* - [L]
 
 RewriteCond %{THE_REQUEST} /YOUR_ADMIN_URL_PATH/

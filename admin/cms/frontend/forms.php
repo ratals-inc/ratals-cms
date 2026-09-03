@@ -220,11 +220,11 @@ else
 								{
 									$original_media_id = $form_media_data["original_media_id"];
 									
-									$first_media = $domain.'/sites/media/images/'.$original_media_id.'/'.$form_media_data['media_url'];
+									$first_media = $domain.INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.$form_media_data['media_url'];
 								}
 								elseif($form_media_data['media_type'] == 'Video')
 								{
-									$first_media = $domain.'/sites/media/videos/'.$form_media_data['media_url'];
+									$first_media = $domain.INSTALLATION_URL_PATH.'/sites/media/videos/'.$form_media_data['media_url'];
 								}
 							}
 							
@@ -569,7 +569,7 @@ else
 									
 									if($get_media_swatch['media_type'] == 'Image')
 									{
-										$swatch_media = mediaId($get_media_swatch['id'], 'lazyLoadNo', 'fetchPriorityAuto', $get_media_swatch['media_tag']);
+										$swatch_media = mediaId($get_media_swatch['id'], 'lazyLoadNo', 'fetchPriorityAuto', '', $get_media_swatch['media_tag']);
 									}
 									elseif($get_media_swatch['media_type'] == 'File')
 									{
@@ -882,7 +882,7 @@ else
 						
 						foreach($main_value as $key => $value)
 						{
-							$slider_media_output = mediaId($value['id'], 'lazyLoadNo', 'fetchPriorityAuto', $value['media_tag']);
+							$slider_media_output = mediaId($value['id'], 'lazyLoadNo', 'fetchPriorityAuto', '', $value['media_tag']);
 							
 							$media_output = str_replace(' class="max-width-height-display"', '', $slider_media_output);
 							$slider_media_items .= '<div class="container">'.$media_output.'</div>';
@@ -1122,7 +1122,7 @@ else
 				
 				foreach($product_media_array_form as $product_media_array)
 				{
-					$slider_media_output = mediaId($product_media_array['id'], 'lazyLoadNo', 'fetchPriorityAuto', $product_media_array['media_tag']);
+					$slider_media_output = mediaId($product_media_array['id'], 'lazyLoadNo', 'fetchPriorityAuto', '', $product_media_array['media_tag']);
 					
 					$media_output = str_replace(' class="max-width-height-display"', '', $slider_media_output);
 					$slider_media_items .= '<div class="container">'.$media_output.'</div>';

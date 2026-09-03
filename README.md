@@ -81,20 +81,22 @@ Ratals can be installed in two ways depending on your experience level.
 
 3. Upload the contents of the extracted Ratals folder to your website's document root (`public_html` or equivalent). Do not upload the containing Ratals folder (`ratals-cms-main`) unless your domain is configured to use that folder as its document root.
 
-4. Make sure your domain's document root points to the directory containing the Ratals files.
+4. Make sure the extracted Ratals files and folders have the correct permissions for your web server. Some extraction or file transfer methods may change permissions and prevent Ratals from creating or modifying required files and directories during installation. If you experience permission-related installation errors, verify the file and folder permissions with your hosting provider.
 
-5. Open your browser and visit your domain.
+5. Make sure your domain's document root points to the directory containing the Ratals files.
 
-6. Server Configuration (Nginx Users Only):
+6. Open your browser and visit your domain.
+
+7. Server Configuration (Nginx Users Only):
    - **Nginx Users:** You must manually configure your server block for routing to work. [Get the Nginx Configuration Guide here](https://www.ratals.com/tutorials/installation/setting-up-ratals-on-nginx/).
 
-7. The installer will automatically load and guide you through:
+8. The installer will automatically load and guide you through:
    - Database connection setup
    - Initial system configuration
    - Email account configuration - Have an email account set up for your domain with login credentials. Ratals uses SMTP email delivery to send security alerts and other system notifications.
    - Admin account creation
 
-8. Once completed, you will be redirected to your admin dashboard.
+9. Once completed, you will be redirected to your admin dashboard.
 
 > If the installer does not appear, verify that your domain's document root points to the directory containing the Ratals files and that all files were uploaded correctly.
 

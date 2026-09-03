@@ -7,8 +7,8 @@ $warp_with_email_template = 'Yes';
 
 $subject = "Max Failed Login Attempts - ".$site_name;
 
-$url_failed_logins = $domain."/".$_SESSION['admin_directory']."/security/failed-logins/";
-$url_empty_failed_logins = $domain."/".$_SESSION['admin_directory']."/security/site-security/";
+$url_failed_logins = $domain.INSTALLATION_URL_PATH."/".$_SESSION['admin_directory']."/security/failed-logins/";
+$url_empty_failed_logins = $domain.INSTALLATION_URL_PATH."/".$_SESSION['admin_directory']."/security/site-security/";
 
 $message = "<p>A visitor to ".$site_name." has had ".($number_of_failed_login_attempts + 1)." failed login attempts in the past 60 minutes from IP Address ".$_SERVER['REMOTE_ADDR'].".</p><p>To view the failed login attempts in the admin area, go here: ";
 $message .= '<a href="'.$url_failed_logins.'" target="_blank" style="word-break: break-all;">'.$url_failed_logins.'</a></p>';

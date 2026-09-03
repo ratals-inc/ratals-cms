@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 5));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -50,7 +51,7 @@ else
 						$existing_column_ids = str_replace($row_id.',', '',$all_datbase_tables_using_column['admin_fields_ids']);
 					}
 					
-					$results->getUpdateRecord(__LINE__, __FILE__, 'database_tables', '`admin_fields_ids` = ?, `updated_date` = UTC_TIMESTAMP(), `updated_by` = ?', 'WHERE `id` = ?', [$existing_column_ids, $_SESSION['user_first_last_name'], $all_datbase_tables_using_column['id']]);
+					$results->getUpdateRecord(__LINE__, __FILE__, 'database_tables', '`admin_fields_ids` = ?, `updated_date` = UTC_TIMESTAMP(), `updated_by` = ?', 'WHERE `id` = ?', [$existing_column_ids, $_SESSION['user_username'], $all_datbase_tables_using_column['id']]);
 					
 					$results->getAlterDatabaseTable(__LINE__, __FILE__, $all_datbase_tables_using_column['database_table_name'], 'DROP '.$all_datbase_column_name['column_name']);
 				}

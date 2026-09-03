@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__, 3));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 //This file is accessed directly via HTTP (AJAX/cURL) and does not inherit session or authentication context.
 //We must explicitly include the admin session check to initialize the session, load config, and enforce that the user is authenticated.
@@ -80,20 +81,20 @@ else
 				{
 					$original_media_id = $all_media_popup_row["original_media_id"];
 					
-					echo '<li><div class="wrapper pointer selectMedia" data-click="'.htmlspecialchars($all_media_popup_row["id"] ?? '').'"><img src="/sites/media/images/'.$original_media_id.'/'.htmlspecialchars($all_media_popup_row["media_url"] ?? '').'" alt="'.htmlspecialchars($all_media_popup_row["media_tag"] ?? '').'" id="selected_image_'.htmlspecialchars($all_media_popup_row["id"] ?? '').'"/><div class="alt" id="selected_tag_'.htmlspecialchars($all_media_popup_row["id"] ?? '').'">'.htmlspecialchars($all_media_popup_row["media_tag"] ?? '').'</div>'.htmlspecialchars($all_media_popup_row["media_url"] ?? '').'</div></li>';
+					echo '<li><div class="wrapper pointer selectMedia" data-click="'.htmlspecialchars($all_media_popup_row["id"] ?? '').'"><img src="'.INSTALLATION_URL_PATH.'/sites/media/images/'.$original_media_id.'/'.htmlspecialchars($all_media_popup_row["media_url"] ?? '').'" alt="'.htmlspecialchars($all_media_popup_row["media_tag"] ?? '').'" id="selected_image_'.htmlspecialchars($all_media_popup_row["id"] ?? '').'"/><div class="alt" id="selected_tag_'.htmlspecialchars($all_media_popup_row["id"] ?? '').'">'.htmlspecialchars($all_media_popup_row["media_tag"] ?? '').'</div>'.htmlspecialchars($all_media_popup_row["media_url"] ?? '').'</div></li>';
 				}
 				elseif($all_media_popup_row["media_type"] == 'File')
 				{
 					$media_popup_file_array = explode('.', $all_media_popup_row["media_url"]);
 					echo '<li><div class="wrapper pointer selectMedia" data-click="'.htmlspecialchars($all_media_popup_row["id"] ?? '').'">
-					<object loading="lazy" decoding="async" data="/sites/media/files/'.htmlspecialchars($all_media_popup_row["media_url"] ?? '').'" type="application/'.$media_popup_file_array[1].'" id="selected_image_'.htmlspecialchars($all_media_popup_row["id"] ?? '').'" width="100%" height="100%"></object>
+					<object loading="lazy" decoding="async" data="'.INSTALLATION_URL_PATH.'/sites/media/files/'.htmlspecialchars($all_media_popup_row["media_url"] ?? '').'" type="application/'.$media_popup_file_array[1].'" id="selected_image_'.htmlspecialchars($all_media_popup_row["id"] ?? '').'" width="100%" height="100%"></object>
 			<div class="alt" id="selected_tag_'.htmlspecialchars($all_media_popup_row["id"] ?? '').'">'.htmlspecialchars($all_media_popup_row["media_tag"] ?? '').'</div>'.htmlspecialchars($all_media_popup_row["media_url"] ?? '').'</div></li>';
 				}
 				elseif($all_media_popup_row["media_type"] == 'Video')
 				{
 					$media_popup_video_array = explode('.', $all_media_popup_row["media_url"]);
 					echo '<li><div class="wrapper pointer selectMedia" data-click="'.htmlspecialchars($all_media_popup_row["id"] ?? '').'">
-			<video loading="lazy" decoding="async" width="100%" height="auto" controls="controls" muted><source src="/sites/media/videos/'.htmlspecialchars($all_media_popup_row["media_url"] ?? '').'" type="video/'.$media_popup_video_array[1].'" title="'.htmlspecialchars($all_media_popup_row["media_tag"] ?? '').'" id="selected_image_'.htmlspecialchars($all_media_popup_row["id"] ?? '').'"></video>
+			<video loading="lazy" decoding="async" width="100%" height="auto" controls="controls" muted><source src="'.INSTALLATION_URL_PATH.'/sites/media/videos/'.htmlspecialchars($all_media_popup_row["media_url"] ?? '').'" type="video/'.$media_popup_video_array[1].'" title="'.htmlspecialchars($all_media_popup_row["media_tag"] ?? '').'" id="selected_image_'.htmlspecialchars($all_media_popup_row["id"] ?? '').'"></video>
 			<div class="alt" id="selected_tag_'.htmlspecialchars($all_media_popup_row["id"] ?? '').'">'.htmlspecialchars($all_media_popup_row["media_tag"] ?? '').'</div>'.htmlspecialchars($all_media_popup_row["media_url"] ?? '').'</div></li>';
 				}
 				elseif($all_media_popup_row["media_type"] == 'Video Embed')

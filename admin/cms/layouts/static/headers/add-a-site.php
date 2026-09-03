@@ -300,7 +300,7 @@ else
 				
 				$first_last_name = trim($_SESSION['user_first_last_name']);
 				$to_email_name = $first_last_name ?: 'Site Administrator';
-				$first_last_name = $first_last_name ?: 'Ratals Installer';
+				$install_update_username = $_SESSION['user_username'] ?: 'Ratals Installer';
 				$user_email = $_SESSION['user_email_address'];
 				$site_name = $new_site_name;
 				$tld = trim($tld, '/');
@@ -352,14 +352,14 @@ else
 				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/template.php');
 				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/template-files.php'); //template-files.php must run first as template-files.php sets URL IDs.
 				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/sites.php');
-				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/assignments-sub-items.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/assignments-design-blocks.php');
 				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/blocking-spam.php');
 				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/currency.php');
 				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/custom-fields-global.php');
 				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/custom-fields.php');
 				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/menus.php'); //menus.php must run before menus-items.php
 				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/menus-items.php');
-				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/page-groups.php');
+				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/design-blocks.php');
 				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/urls.php'); //urls.php must run before pages.php as the pages need the URL IDs.
 				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/pages.php');
 				require_once(INSTALLATION_ROOT.'/admin/cms/installer/data/search-engines.php');
@@ -389,7 +389,7 @@ else
 					require_once(rtrim(INSTALLATION_ROOT, '/').'/admin/cms/api/connect.php');
 				}
 				
-				header("Location: /".$_SESSION['admin_directory']."/add-a-site/?created=success");
+				header("Location: ".INSTALLATION_URL_PATH."/".$_SESSION['admin_directory']."/add-a-site/?created=success");
 				exit();
 			}
 		}

@@ -49,9 +49,15 @@ else
 					}
 				}
 				
+				$field_required = '';
+				if($admin_field["required"] == 'Yes')
+				{
+					$field_required = ' <span class="required-asterisk">*</span>';
+				}
+				
 				echo '
 				<div class="edit'.$class_for_urls_table_fields.' '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').'</div>
+				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$field_required.'</div>
 				<div class="edit-field">';
 				//This code gets sub categories when creating a Hierarchy URL. The else statement below getd the default top level category that displays.
 				$path_level = '';
@@ -195,7 +201,7 @@ else
 				echo '<div class="edit-field-padding">
 				<input type="text" name="'.htmlspecialchars($table_name.'['.$admin_field["column_name"].']' ?? '').'" value="'.htmlspecialchars($hierarchy_url ?? '').'" id="'.htmlspecialchars($table_name.'_'.$admin_field["column_name"] ?? '').'">
 				</div>
-				<div class="edit-field-padding edit-field-url"><a href="'.$_SESSION['view_frontend_of_site'].'/'.$hierarchy_url_path.$hierarchy_url.$display_url_extension.'" target="_blank" id="href_hierarchy_url">'.$_SESSION['view_frontend_of_site'].'/<span id="display-hierarchy-url">'.$hierarchy_url_path.'</span><span id="display-url-name">'.$hierarchy_url.'</span><span id="display_url_extension">'.$display_url_extension.'</span></a></div>
+				<div class="edit-field-padding edit-field-url"><a href="'.$_SESSION['view_frontend_of_site'].INSTALLATION_URL_PATH.'/'.$hierarchy_url_path.$hierarchy_url.$display_url_extension.'" target="_blank" id="href_hierarchy_url">'.$_SESSION['view_frontend_of_site'].INSTALLATION_URL_PATH.'/<span id="display-hierarchy-url">'.$hierarchy_url_path.'</span><span id="display-url-name">'.$hierarchy_url.'</span><span id="display_url_extension">'.$display_url_extension.'</span></a></div>
 				<div class="small-text">'.$admin_field["notes"].'</div>
 				</div>';
 				if(isset($errors[$table_name][$admin_field["column_name"]])) { echo '<div class="validation">'.htmlspecialchars($errors[$table_name][$admin_field["column_name"]] ?? '').'</div>'; }

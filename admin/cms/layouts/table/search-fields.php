@@ -146,7 +146,7 @@ else
 			{
 				foreach($all_table_names as $all_table_name)
 				{
-					$search_type .= '<option value="'.htmlspecialchars($all_table_name['TABLE_NAME'] ?? '').'"'.(($search_query_dropdown_name == $all_table_name['TABLE_NAME']) ? ' selected' : '').'>'.htmlspecialchars($all_table_name['TABLE_NAME'] ?? '').'</option>';
+					$search_type .= '<option value="'.htmlspecialchars($all_table_name['table_name'] ?? '').'"'.(($search_query_dropdown_name == $all_table_name['table_name']) ? ' selected' : '').'>'.htmlspecialchars($all_table_name['table_name'] ?? '').'</option>';
 				}
 			}
 			$search_type .= '</select>';

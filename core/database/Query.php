@@ -20,12 +20,23 @@ else
 			{
 				$sql = $raw_query;
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
-	
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
+				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				
+				if($stmt->columnCount() > 0)
 				{
 					$select_record_array = $stmt->fetchAll();
 				}
@@ -45,14 +56,25 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
-				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
-	
-				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
 				{
-					$select_record_array = $stmt->fetch();
+					$query_start = microtime(true);
+				}
+				
+				$stmt->execute($parameters);
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
+				
+				$select_record_array = $stmt->fetch();
+				
+				if($select_record_array === false)
+				{
+					$select_record_array = array();
 				}
 				
 				return $select_record_array;
@@ -70,14 +92,25 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause." ORDER BY `id` DESC LIMIT 1;";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
-				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
 				
-				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
 				{
-					$select_record_array = $stmt->fetch();
+					$query_start = microtime(true);
+				}
+				
+				$stmt->execute($parameters);
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
+				
+				$select_record_array = $stmt->fetch();
+				
+				if($select_record_array === false)
+				{
+					$select_record_array = array();
 				}
 				
 				return $select_record_array;
@@ -95,15 +128,21 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
-				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
 				
-				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
 				{
-					$select_record_array = $stmt->fetchAll();
+					$query_start = microtime(true);
 				}
+				
+				$stmt->execute($parameters);
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
+				
+				$select_record_array = $stmt->fetchAll();
 				
 				return $select_record_array;
 			}
@@ -120,11 +159,22 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
-				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
 				
-				$select_records = $stmt->rowCount();
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
+				$stmt->execute($parameters);
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
+				
+				$select_records = $stmt->fetchAll();
+				$select_records = count($select_records);
 				
 				return $select_records;
 			}
@@ -141,19 +191,26 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
 				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				$select_records = $stmt->fetchAll();
+				
+				foreach($select_records as $select_record)
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[] = $select_record[$column_one];
-					}
+					$select_record_array[] = $select_record[$column_one];
 				}
 				
 				return $select_record_array;
@@ -171,19 +228,26 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
 				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				$select_records = $stmt->fetchAll();
+				
+				foreach($select_records as $select_record)
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[$select_record[$key_name]] = $select_record;
-					}
+					$select_record_array[$select_record[$key_name]] = $select_record;
 				}
 				
 				return $select_record_array;
@@ -201,19 +265,26 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
 				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				$select_records = $stmt->fetchAll();
+				
+				foreach($select_records as $select_record)
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[$select_record[$key_name]] = $select_record[$column_one];
-					}
+					$select_record_array[$select_record[$key_name]] = $select_record[$column_one];
 				}
 				
 				return $select_record_array;
@@ -231,19 +302,26 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
 				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				$select_records = $stmt->fetchAll();
+				
+				foreach($select_records as $select_record)
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[$select_record[$key_name]][] = $select_record;
-					}
+					$select_record_array[$select_record[$key_name]][] = $select_record;
 				}
 				
 				return $select_record_array;
@@ -261,19 +339,26 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
 				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				$select_records = $stmt->fetchAll();
+				
+				foreach($select_records as $select_record)
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[$select_record[$key_name]] = $select_record[$key_name_2];
-					}
+					$select_record_array[$select_record[$key_name]] = $select_record[$key_name_2];
 				}
 				
 				return $select_record_array;
@@ -291,19 +376,26 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
 				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				$select_records = $stmt->fetchAll();
+				
+				foreach($select_records as $select_record)
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[$select_record[$key_name]][$select_record[$key_name_2]] = $select_record;
-					}
+					$select_record_array[$select_record[$key_name]][$select_record[$key_name_2]] = $select_record;
 				}
 				
 				return $select_record_array;
@@ -321,19 +413,26 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
 				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				$select_records = $stmt->fetchAll();
+				
+				foreach($select_records as $select_record)
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[$select_record[$key_name]][$select_record[$key_name_2]][] = $select_record;
-					}
+					$select_record_array[$select_record[$key_name]][$select_record[$key_name_2]][] = $select_record;
 				}
 				
 				return $select_record_array;
@@ -351,19 +450,26 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
 				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				$select_records = $stmt->fetchAll();
+				
+				foreach($select_records as $select_record)
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[$key_name][$select_record[$key_name_2]] = $select_record[$key_name_3];
-					}
+					$select_record_array[$key_name][$select_record[$key_name_2]] = $select_record[$key_name_3];
 				}
 				
 				return $select_record_array;
@@ -381,14 +487,25 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` LEFT JOIN ".$join_on." ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
-				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
 				
-				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
 				{
-					$select_record_array = $stmt->fetch();
+					$query_start = microtime(true);
+				}
+				
+				$stmt->execute($parameters);
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
+				
+				$select_record_array = $stmt->fetch();
+				
+				if($select_record_array === false)
+				{
+					$select_record_array = array();
 				}
 				
 				return $select_record_array;
@@ -406,15 +523,21 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` LEFT JOIN ".$join_on." ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
-				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
 				
-				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
 				{
-					$select_record_array = $stmt->fetchAll();
+					$query_start = microtime(true);
 				}
+				
+				$stmt->execute($parameters);
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
+				
+				$select_record_array = $stmt->fetchAll();
 				
 				return $select_record_array;
 			}
@@ -431,19 +554,26 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` LEFT JOIN ".$join_on." ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
 				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				$select_records = $stmt->fetchAll();
+				
+				foreach($select_records as $select_record)
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[$select_record[$key_name]] = $select_record;
-					}
+					$select_record_array[$select_record[$key_name]] = $select_record;
 				}
 				
 				return $select_record_array;
@@ -461,19 +591,26 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` LEFT JOIN ".$join_on." ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
 				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				$select_records = $stmt->fetchAll();
+				
+				foreach($select_records as $select_record)
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[$select_record[$key_name]] = $select_record[$key_name_two];
-					}
+					$select_record_array[$select_record[$key_name]] = $select_record[$key_name_two];
 				}
 				
 				return $select_record_array;
@@ -491,19 +628,26 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` LEFT JOIN ".$join_on." ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
 				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				$select_records = $stmt->fetchAll();
+				
+				foreach($select_records as $select_record)
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[$select_record[$key_name]][] = $select_record;
-					}
+					$select_record_array[$select_record[$key_name]][] = $select_record;
 				}
 				
 				return $select_record_array;
@@ -521,19 +665,26 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` LEFT JOIN ".$join_on." ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
 				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
 				
 				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				$select_records = $stmt->fetchAll();
+				
+				foreach($select_records as $select_record)
 				{
-					$select_records = $stmt->fetchAll();
-					
-					foreach($select_records as $select_record)
-					{
-						$select_record_array[$select_record[$key_name]][$select_record[$key_name_2]] = $select_record;
-					}
+					$select_record_array[$select_record[$key_name]][$select_record[$key_name_2]] = $select_record;
 				}
 				
 				return $select_record_array;
@@ -551,11 +702,22 @@ else
 			{
 				$sql = "SELECT ".$table_columns." FROM `".$table_name."` LEFT JOIN ".$join_on." ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
-				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
 				
-				$select_records = $stmt->rowCount();
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_start = microtime(true);
+				}
+				
+				$stmt->execute($parameters);
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
+				
+				$select_records = $stmt->fetchAll();
+				$select_records = count($select_records);
 				
 				return $select_records;
 			}
@@ -572,14 +734,25 @@ else
 			{
 				$sql = "SELECT * FROM (SELECT ".$table_columns." FROM `".$table_name_1."` UNION SELECT ".$table_columns." FROM `".$table_name_2."`) both_tables ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
-				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
 				
-				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
 				{
-					$select_record_array = $stmt->fetch();
+					$query_start = microtime(true);
+				}
+				
+				$stmt->execute($parameters);
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
+				
+				$select_record_array = $stmt->fetch();
+				
+				if($select_record_array === false)
+				{
+					$select_record_array = array();
 				}
 				
 				return $select_record_array;
@@ -597,15 +770,21 @@ else
 			{
 				$sql = "SELECT * FROM (SELECT ".$table_columns." FROM `".$table_name_1."` UNION SELECT ".$table_columns." FROM `".$table_name_2."`) both_tables ".$where_clause.";";
 				$stmt = $this->connect()->prepare($sql);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_start = microtime(true); }
-				$stmt->execute($parameters);
-				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes') { $query_end = microtime(true); all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file); }
 				
-				$select_record_array = array();
-				if($stmt->rowCount() > 0)
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
 				{
-					$select_record_array = $stmt->fetchAll();
+					$query_start = microtime(true);
 				}
+				
+				$stmt->execute($parameters);
+				
+				if(isset($_SESSION['display_sql_queries']) && $_SESSION['display_sql_queries'] == 'Yes')
+				{
+					$query_end = microtime(true);
+					all_sql_queries($query_start, $query_end, $sql, $parameters, $line, $file);
+				}
+				
+				$select_record_array = $stmt->fetchAll();
 				
 				return $select_record_array;
 			}

@@ -42,19 +42,23 @@ else
           </script>
           <form method="post">
           <select name="change_site" class="change_site">';
-		  
+		  $installation_path_with_ending_slash = '';
+		  if(!empty(INSTALLATION_URL_PATH))
+		  {
+			  $installation_path_with_ending_slash = INSTALLATION_URL_PATH.'/';
+		  }
           foreach($all_sites_in_account_rows as $all_sites_in_account_row) 
           {
               if(empty($_SESSION['user_site_permissions_id']) || (!empty($_SESSION['user_site_permissions_id']) && strpos($_SESSION['user_site_permissions_id'], ','.$all_sites_in_account_row["id"].',') !== false))
               {
-                  echo '<option value="'.$all_sites_in_account_row["id"].'"'.(($_SESSION["site_set_for_editing"] == $all_sites_in_account_row["id"]) ? ' selected' : '').'>'.$all_sites_in_account_row["domain"].'</option>';
+                  echo '<option value="'.$all_sites_in_account_row["id"].'"'.(($_SESSION["site_set_for_editing"] == $all_sites_in_account_row["id"]) ? ' selected' : '').'>'.$all_sites_in_account_row["domain"].$installation_path_with_ending_slash.'</option>';
               }
           }
           echo '</select>
           </form>';
       }
       ?>
-      <div class="visit-frontend"><a href="<?php echo $view_frontend_of_site; ?>" target="_blank">View Frontend of Site</a></div>
+      <div class="visit-frontend"><a href="<?php echo $view_frontend_of_site.$installation_path_with_ending_slash; ?>" target="_blank">View Frontend of Site</a></div>
       </div>
       <div class="navigation">
       <script nonce="<?php echo NONCE; ?>">
@@ -255,7 +259,7 @@ else
       
       $active_blocks = array();
       
-      $admin_url_set = substr_replace($path_url, '', 0, strlen($_SESSION['admin_directory'].'/'));
+      $admin_url_set = substr_replace($path_url, '', 0, strlen(INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'));
       
 	  //Set admin_pages ID. If there is no $_SESSION['admin_pages_parent_code'], the current admin page id is used to keep the menu open.
 	  $menu_items_parent_id_row = array();
@@ -293,15 +297,15 @@ else
                   if(!empty($_SESSION['admin_menu_all_admin_pages'][$_SESSION['admin_pages_parent_code']]['url']))
                   {
                       //$_SESSION['admin_menu_all_admin_pages'][$_SESSION['admin_pages_parent_code']]['url'] This will make it get the parent URL, that is set on $menu['url'], so they match to make menu highlight for subpages.
-                      $path_url_match = trim($_SESSION['admin_directory'].'/'.$_SESSION['admin_menu_all_admin_pages'][$_SESSION['admin_pages_parent_code']]['url'], '/');
+                      $path_url_match = trim(INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$_SESSION['admin_menu_all_admin_pages'][$_SESSION['admin_pages_parent_code']]['url'], '/');
                   }
                   else
                   {
                       $path_url_match = $path_url;
                   }
-                  
+				  
                   $selected_page = '';
-                  if(isset($menu['url']) && $_SESSION['admin_directory']."/".$menu['url'] == $path_url_match) { $selected_page = ' class="selected-page"'; }
+                  if(isset($menu['url']) && trim(INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory']."/".$menu['url'], '/') == $path_url_match) { $selected_page = ' class="selected-page"'; }
                   
                   $add_slash = '';
                   if(isset($menu['url']) && strpos($menu['url'], '.') === false) { $add_slash = '/'; }
@@ -316,7 +320,7 @@ else
                   echo "
                   <li".$selected_page.">"; 
                   
-                  if(isset($menu['url'])) { echo '<a href="/'.$_SESSION['admin_directory'].'/'.$menu['url'].$add_slash.'"'.$selected_page.$link_target.'>'.$menu['name'].$sub_items_arrow.'</a>'; }
+                  if(isset($menu['url'])) { echo '<a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/'.$menu['url'].$add_slash.'"'.$selected_page.$link_target.'>'.$menu['name'].$sub_items_arrow.'</a>'; }
                   
                   else { echo '
                   <div class="toggleMenu" data-click="'.$menu['id'].'"><span class="label">'.$menu['name'].' <i class="arrow menuArrow'.$menu['id'].$arrow_class.'"><svg viewBox="0 0 512 512"><path d="M12 127A19 19 0 0 0 12 154L242 385A19 19 0 0 0 270 385L500 154A19 19 0 0 0 473 127L256 344 39 127A19 19 0 0 0 12 127"></path></svg></i></span></div>'; }

@@ -34,7 +34,7 @@ if(in_array('analytics.php', $data_array['active_template_includes']))
 				var eventValue = dataArray[1];
 				
 				var post = 'event_name=' + eventName + '&event_value=' + eventValue; 
-				$.post("/sites/event.php", post, function(theResponse){ /*alert(theResponse);*/ });
+				$.post("<?php echo INSTALLATION_URL_PATH; ?>/sites/event.php", post, function(theResponse){ /*alert(theResponse);*/ });
 			}
 		});
 	});

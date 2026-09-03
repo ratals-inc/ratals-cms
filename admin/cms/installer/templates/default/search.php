@@ -66,7 +66,7 @@ include_once('sites/functions.php');
 <?php
 if(isset($_SESSION['user_id'])) 
 {
-	echo '<div class="edit-page"><a href="/'.$_SESSION['admin_directory'].'/website/'.$pages_data['table_name'].'/edit/?rid='.$id.'" target="_blank">Edit in Admin</a></div>';
+	echo '<div class="edit-page"><a href="'.INSTALLATION_URL_PATH.'/'.$_SESSION['admin_directory'].'/website/'.$pages_data['table_name'].'/edit/?rid='.$id.'" target="_blank">Edit in Admin</a></div>';
 }
 ?>
 <!-- End Edit Admin Page --><?php //END CAUTION! ?>
@@ -97,8 +97,8 @@ if(isset($_SESSION['user_id']))
             <?php
             if(!empty($search_results))
             {
-                echo '<div class="sub-items sub-items-bottom-padding padding-0px">
-                <div class="sub-items-wrap container-width">';
+                echo '<div class="design-blocks design-blocks-bottom-padding padding-0px">
+                <div class="design-blocks-wrap container-width">';
                 echo '<ul class="grid-'.$grid_columns.'">';
                 $lazy_load_item_counter = 0;
                 $fetch_priority_high_counter = 0;
@@ -153,7 +153,7 @@ if(isset($_SESSION['user_id']))
                     $search_link_and_media = '';
                     if(isset($search_result['media_data'][0]) && !empty($search_result['media_data'][0]))
                     {
-                        $search_link_and_media = mediaId($search_result['media_data'][0]['id'], $lazy_load_item, $fetch_priority_sub_products, '');
+                        $search_link_and_media = mediaId($search_result['media_data'][0]['id'], $lazy_load_item, $fetch_priority_sub_products, '', '');
                         $search_link_and_media = '<div class="img"><a href="'.$search_result["url_data"].'">'.$search_link_and_media.'</a></div>';
                     }
                 
@@ -342,12 +342,12 @@ if(isset($_SESSION['user_id']))
     }
     ?>
     <!-- End Pagination -->
-    <?php if(!empty($data_array['sub_items'])) { ?>
-        <!-- Start Sub Items -->
-        <div class="pages-sub-items-style">
-            <?php include('sub-items.php'); ?>
+    <?php if(!empty($data_array['design_blocks'])) { ?>
+        <!-- Start Design Blocks -->
+        <div class="pages-design-blocks-style">
+            <?php include('design-blocks.php'); ?>
         </div>
-        <!-- End Sub Items -->
+        <!-- End Design Blocks -->
     <?php } ?>
     <?php if(!empty($bottom_content)) { ?>
         <!-- Start Bottom Content -->

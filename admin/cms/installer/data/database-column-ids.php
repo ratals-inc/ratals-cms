@@ -7,15 +7,15 @@
 $parameters = array();
 $sql_all_admin_fields = $results->getSelectMultipleRecordsKeyName(__LINE__, __FILE__, '*', 'admin_fields', '', [], 'column_name');
 
-$sql_all_database_tables = $results_schema->getSchemaSelectMultipleRecords(__LINE__, __FILE__, '`TABLE_NAME`', 'tables', 'WHERE table_schema = ? ORDER BY table_name ASC', [$database_name]);
+$sql_all_database_tables = $results_schema->getSchemaSelectMultipleRecords(__LINE__, __FILE__, '`table_name`', 'tables', 'WHERE table_schema = ? ORDER BY table_name ASC', [$database_name]);
 
 if(!empty($sql_all_database_tables))
 {
 	foreach($sql_all_database_tables as $sql_all_database_table)
 	{
-		if(!empty($sql_all_database_table['TABLE_NAME']))
+		if(!empty($sql_all_database_table['table_name']))
 		{
-			$sql_all_column_names_in_table = $results_schema->getSchemaSelectMultipleRecordsOneColumn(__LINE__, __FILE__, '`COLUMN_NAME`', 'columns', 'WHERE `table_schema` = ? AND `table_name` = ? ORDER BY `ORDINAL_POSITION` ASC', [$database_name, $sql_all_database_table['TABLE_NAME']], 'COLUMN_NAME');
+			$sql_all_column_names_in_table = $results_schema->getSchemaSelectMultipleRecordsOneColumn(__LINE__, __FILE__, '`column_name`', 'columns', 'WHERE `table_schema` = ? AND `table_name` = ? ORDER BY `ordinal_position` ASC', [$database_name, $sql_all_database_table['table_name']], 'column_name');
 			
 			if(!empty($sql_all_column_names_in_table))
 			{
@@ -30,7 +30,7 @@ if(!empty($sql_all_database_tables))
 				{
 					$database_assigned_fields_column_ids = trim($database_assigned_fields_column_ids, ',');
 					
-					$parameters[] = array($sql_all_database_table['TABLE_NAME'], ','.$database_assigned_fields_column_ids.',', '{}', $first_last_name, $first_last_name);
+					$parameters[] = array($sql_all_database_table['table_name'], ','.$database_assigned_fields_column_ids.',', '{}', $install_update_username, $install_update_username);
 				}
 			}
 		}

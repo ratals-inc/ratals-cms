@@ -7,6 +7,7 @@ if(!defined('INSTALLATION_ROOT'))
 {
 	define('INSTALLATION_ROOT', dirname(__DIR__));
 }
+require_once(INSTALLATION_ROOT.'/core/installation-paths.php');
 
 if(file_exists(INSTALLATION_ROOT.'/hooks/core/session-check-admin.php'))
 {
@@ -14,6 +15,7 @@ if(file_exists(INSTALLATION_ROOT.'/hooks/core/session-check-admin.php'))
 }
 else
 {
+	require_once(INSTALLATION_ROOT.'/admin/cms/functions/http-or-https.php');
 	require_once(INSTALLATION_ROOT.'/admin/cms/frontend/requested-url.php');
 	require_once('session-setting.php');
 	
@@ -43,13 +45,13 @@ else
 	}
 	
 	//Get the path part and collapse multiple slashes to one slash.
-	$admin_cleaned_path = preg_replace('#/+#', '/', $_SERVER['REQUEST_URI']);
+	$admin_cleaned_path = preg_replace('#/+#', '/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 	
-	//Get Requested admin URL.
-	$admin_url_check = $_SERVER['REQUEST_SCHEME']."://".$_SERVER['HTTP_HOST'].$admin_cleaned_path;
+	//Get real admin path.
+	$real_admin_path = INSTALLATION_URL_PATH.'/admin';
 	
 	//Block direct access to the admin directory if they try going to /admin or /admin/*.
-	if($domain.'/'.$path_url === $domain.'/admin' || strpos($admin_url_check, $domain.'/admin/') !== false)
+	if($admin_cleaned_path === $real_admin_path || strpos($admin_cleaned_path, $real_admin_path.'/') === 0)
 	{
 		http_response_code(403);
 		die('Forbidden');
@@ -57,7 +59,7 @@ else
 	
 	if(!isset($_SESSION['admin_directory']))
 	{
-		header('Location: '.$domain.'/');
+		header('Location: '.$domain.INSTALLATION_URL_PATH.'/');
 		exit();
 	}
 }

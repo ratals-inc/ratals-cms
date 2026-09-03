@@ -33,9 +33,15 @@ else
 					$code_in_file = file_get_contents(INSTALLATION_ROOT."/sites/".$_SESSION["site_set_for_editing"]."/templates/".$active_template['directory_folder_name']."/".$current_values[$table_name]['filename']); 
 				}
 				
+				$field_required = '';
+				if($admin_field["required"] == 'Yes')
+				{
+					$field_required = ' <span class="required-asterisk">*</span>';
+				}
+				
 				echo '
 				<div class="edit '.htmlspecialchars($admin_field["url_name"] ?? '').'">
-				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$filename_editing.'</div>
+				<div class="edit-label">'.htmlspecialchars($admin_field["name"] ?? '').$filename_editing.$field_required.'</div>
 				<div class="edit-field">';
 				include_once INSTALLATION_ROOT.'/admin/cms/includes/code-editor/code-editor.php';
 				echo '<div class="small-text">'.$admin_field["notes"].'</div>

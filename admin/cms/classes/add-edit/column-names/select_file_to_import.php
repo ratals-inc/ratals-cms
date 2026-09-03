@@ -82,7 +82,7 @@ else
 							
 							if(!empty($export_table_setup))
 							{
-								$export_table_columns = $_SESSION['results_schema']->getSchemaSelectMultipleRecords(__LINE__, __FILE__, '*', 'columns', 'WHERE `table_schema` = ? AND `table_name` = ? ORDER BY `columns`.`ORDINAL_POSITION` ASC', [$_SESSION['site_db_name'], $export_table_setup['TABLE_NAME']]);
+								$export_table_columns = $_SESSION['results_schema']->getSchemaSelectMultipleRecords(__LINE__, __FILE__, '*', 'columns', 'WHERE `table_schema` = ? AND `table_name` = ? ORDER BY `columns`.`ordinal_position` ASC', [$_SESSION['site_db_name'], $export_table_setup['table_name']]);
 							}
 							else
 							{
@@ -95,9 +95,9 @@ else
 								$column_counter = 0;
 								foreach($export_table_columns as $export_table_column)
 								{
-									$column_table_layout[] = $export_table_column['COLUMN_NAME'];
+									$column_table_layout[] = $export_table_column['column_name'];
 									
-									if($export_table_column['COLUMN_NAME'] == 'id')
+									if($export_table_column['column_name'] == 'id')
 									{
 										$id_column_count = $column_counter;
 									}

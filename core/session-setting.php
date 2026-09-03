@@ -18,12 +18,7 @@ else
 	//Setting $cookie_session_max to 0 means the session cookie will expire when the browser is closed.
 	$cookie_session_max = 0;
 	
-	$is_https = (
-		(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
-		(!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ||
-		(!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on') ||
-		(!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)
-	);
+	$is_https = getRequestScheme() === 'https';
 	
 	session_set_cookie_params([
 		'lifetime' => $cookie_session_max,
