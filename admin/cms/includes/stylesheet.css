@@ -1133,6 +1133,10 @@ ul.orders-boxes li.three-column { grid-column: span 3; }
 .notices .spacer { margin: 0px 2px; }
 .notices button { background-color: var(--button-primary-bg-color); border: 1px solid var(--button-primary-border-color); padding: 7px 10px; color: var(--button-primary-text-color); border-radius: var(--main-border-radius); cursor: pointer; font-size: 14px; vertical-align: top; white-space: nowrap; transition: background-color 150ms ease, border-color 150ms ease; }
 .notices button:hover { background-color: var(--button-primary-hover-bg-color); border-color: var(--button-primary-hover-border-color); }
+.ratals-getting-started { display: flex; gap: 25px; align-items: flex-start; flex-wrap: wrap; }
+.ratals-getting-started-content { flex: 1; min-width: 280px; }
+.ratals-getting-started-video { width: 300px; max-width: 100%; }
+.ratals-getting-started-video iframe { width: 100%; aspect-ratio: 16 / 9; display: block; border: 0; }
 
 /* Accounting */
 .accounting-statements-account-type { background-color: var(--accounting-type-bg-color) !important; }
